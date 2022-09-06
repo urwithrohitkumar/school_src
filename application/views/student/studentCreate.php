@@ -1165,4 +1165,4 @@
 
     });
 </script>
-<script type="text/javascript" src="<?php 
+<script type="text/javascript" src="<?php echo base_url(); ?>backend/dist/js/savemode.js"></script>
