@@ -71,7 +71,7 @@ class Customlib
         $gender           = array();
         $gender['Male']   = $this->CI->lang->line('male');
         $gender['Female'] = $this->CI->lang->line('female');
-        $gender['Other'] = $this->CI->lang->line('other');
+        $gender['Transgender'] = $this->CI->lang->line('transgender');
         return $gender;
     }
 

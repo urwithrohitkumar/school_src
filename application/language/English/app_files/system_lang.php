@@ -1750,3 +1750,15 @@ $lang['sikh'] = "Sikh";
 $lang['buddhists'] = "Buddhists";
 $lang['parsi'] = "Parsi";
 $lang['jain'] = "Jain";
+$lang['student_age_report'] = "Students Age Reports";
+$lang['student_category_report'] = "Students Categories Reports";
+$lang['transgender'] = "Transgender";
+
+
+
+
+// $lang['student_category_report'] = "Students Categories Reports";
+// $lang['student_category_report'] = "Students Categories Reports";
+
+
+

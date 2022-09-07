@@ -11,9 +11,26 @@
                     <?php
                     if ($this->rbac->hasPrivilege('student_report', 'can_view')) {
                         ?>
-                        <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/student_report'); ?>"><a href="<?php echo base_url(); ?>student/studentreport"><i class="fa fa-file-text-o"></i> <?php echo $this->lang->line('student_report'); ?></a></li>
+                        
+                        <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/student_report'); ?>">
+                            <a href="<?php echo base_url(); ?>student/studentreport">
+                            <i class="fa fa-file-text-o"></i> 
+                            <?php echo $this->lang->line('student_report'); ?>
+                            </a>
+                        </li>
 						
                           <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/classsectionreport'); ?>"><a href="<?php echo site_url('student/classsectionreport'); ?>"><i class="fa fa-file-text-o"></i>  <?php echo $this->lang->line('class_section_report'); ?></a></li>
+
+                          <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/studentsagereport'); ?>">
+                                <a href="<?php echo site_url('student/studentsagereport'); ?>">
+                                <i class="fa fa-file-text-o"></i> 
+                                <?php echo $this->lang->line('student_age_report'); ?>
+                            </a>
+                        </li>
+                             <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/studentscategoriesreport'); ?>"><a href="<?php echo site_url('student/studentscategoriesreport'); ?>">
+                          <i class="fa fa-file-text-o"></i>  <?php echo $this->lang->line('student_category_report'); ?>
+                        </a>
+                        </li>
 						  
 						  
                         <?php
@@ -53,12 +70,17 @@
                     ?>
                         <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/evaluation_report'); ?>"><a href="<?php echo base_url(); ?>homework/evaluation_report"><i class="fa fa-file-text-o"></i> <?php echo $this->lang->line('homework') . " " . $this->lang->line('evaluation_report'); ?></a></li>
 
-                    <?php }if ($this->rbac->hasPrivilege('student_gender_ratio_report', 'can_view')) {
+                    <?php }
+                    if ($this->rbac->hasPrivilege('student_gender_ratio_report', 'can_view')) {
                         ?>
-                        <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/boys_girls_ratio'); ?>"><a href="<?php echo base_url(); ?>report/boys_girls_ratio"><i class="fa fa-file-text-o"></i> <?php echo $this->lang->line('student') . " " . $this->lang->line('gender') . " " . $this->lang->line('ratio') . " " . $this->lang->line('report'); ?></a></li>
-                        <?php }if ($this->rbac->hasPrivilege('student_teacher_ratio_report', 'can_view')) { ?>
+                       
+                       <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/boys_girls_ratio'); ?>"><a href="<?php echo base_url(); ?>report/boys_girls_ratio"><i class="fa fa-file-text-o"></i> <?php echo $this->lang->line('student') . " " . $this->lang->line('gender') . " " . $this->lang->line('ratio') . " " . $this->lang->line('report'); ?></a></li>
+                        
+                        <?php }
+                        if ($this->rbac->hasPrivilege('student_teacher_ratio_report', 'can_view')) { ?>
                         <li class="col-lg-4 col-md-4 col-sm-6 <?php echo set_SubSubmenu('Reports/student_information/student_teacher_ratio'); ?>"><a href="<?php echo base_url(); ?>report/student_teacher_ratio"><i class="fa fa-file-text-o"></i> <?php echo $this->lang->line('student') . " " . $this->lang->line('teacher') . " " . $this->lang->line('ratio') . " " . $this->lang->line('report'); ?></a></li>
-<?php } ?>
+                        <?php } ?>
+                        
                 </ul>
             </div>
         </div> 

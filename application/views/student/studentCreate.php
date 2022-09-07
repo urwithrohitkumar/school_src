@@ -22,6 +22,7 @@
                             <div class="bozero">
                                 <h4 class="pagetitleh-whitebg"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('admission'); ?> </h4>
                                 <div class="around10">
+                                    <div class="text-danger"><?= validation_errors(); ?></div>
                                     <?php if ($this->session->flashdata('msg')) { ?>
                                         <?php echo $this->session->flashdata('msg') ?>
                                     <?php } ?>
@@ -162,7 +163,7 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('religion'); ?></label><small class="req"> *</small>
-                                                    <select id="category_id" name="category_id" class="form-control">
+                                                    <select id="religion" name="religion" class="form-control">
                                                         <option value="1"><?php echo $this->lang->line('hindu'); ?></option>
                                                         <option value="2"><?php echo $this->lang->line('muslim'); ?></option>
                                                         <option value="3"><?php echo $this->lang->line('christian'); ?></option>
@@ -171,6 +172,7 @@
                                                         <option value="6"><?php echo $this->lang->line('parsi'); ?></option>
                                                         <option value="7"><?php echo $this->lang->line('jain'); ?></option>
                                                         <span class="text-danger"><?php echo form_error('religion'); ?></span>
+                                                    </select>
                                                 </div>
                                             </div>
                                         <?php }

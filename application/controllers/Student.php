@@ -87,6 +87,53 @@ class Student extends Admin_Controller
         $this->load->view('layout/footer', $data);
     }
 
+    /**
+     * This function is used to show student age reports.
+     *
+     * @return html
+     */
+    public function studentsagereport()
+    {
+        if (!$this->rbac->hasPrivilege('student_age_report', 'can_view')) {
+            access_denied();
+        }
+
+        $this->session->set_userdata('top_menu', 'Reports');
+        $this->session->set_userdata('sub_menu', 'Reports/student_information');
+        $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
+        $data['title']              = 'Students Age Report';
+
+        // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
+
+        $this->load->view('layout/header', $data);
+        $this->load->view('reports/studentsagereports', $data);
+        $this->load->view('layout/footer', $data);
+    }
+
+
+    /**
+     * This function is used to show student categories reports.
+     *
+     * @return html
+     */
+    public function studentscategoriesreport()
+    {
+        if (!$this->rbac->hasPrivilege('student_categories_report', 'can_view')) {
+            access_denied();
+        }
+
+        $this->session->set_userdata('top_menu', 'Reports');
+        $this->session->set_userdata('sub_menu', 'Reports/student_information');
+        $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
+        $data['title']              = 'Students Categories Report';
+
+        // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
+
+        $this->load->view('layout/header', $data);
+        $this->load->view('reports/studentcategoriesreports', $data);
+        $this->load->view('layout/footer', $data);
+    }
+
     public function studentreport()
     {
         if (!$this->rbac->hasPrivilege('student_report', 'can_view')) {
@@ -279,11 +326,15 @@ class Student extends Admin_Controller
         }
         $this->form_validation->set_rules('file', $this->lang->line('image'), 'callback_handle_upload');
 
+     
+
+
         if ($this->form_validation->run() == false) {
 
             $this->load->view('layout/header', $data);
             $this->load->view('student/studentCreate', $data);
             $this->load->view('layout/footer', $data);
+            
         } else {
 
             $custom_field_post  = $this->input->post("custom_fields[students]");
@@ -969,6 +1020,9 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('file', $this->lang->line('image'), 'callback_handle_csv_upload');
+
+
+
         if ($this->form_validation->run() == false) {
             $this->load->view('layout/header', $data);
             $this->load->view('student/import', $data);
@@ -991,6 +1045,7 @@ class Student extends Admin_Controller
                 if ($ext == 'csv') {
                     $file = $_FILES['file']['tmp_name'];
                     $this->load->library('CSVReader');
+
                     $result = $this->csvreader->parse_file($file);
 
                     if (!empty($result)) {
