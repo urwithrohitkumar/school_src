@@ -17,9 +17,4 @@ class School extends CI_Controller {
 
 
 
-dfshghsdghfghsdghfgdshgfjgjsdgfj
-sdfgusdgfgdshgfhgdsfj
-sgdjfgdsfgsdgjhfgsjdgfj
-sgdfgsdgfgsdjgfgsdhf
-sgfhgsdjfgsdhgfhdsghfgsd
-sdhfjhdsfhdkshfdhsdkjhksdfj
+gddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
