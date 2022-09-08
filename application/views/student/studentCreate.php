@@ -22,7 +22,7 @@
                             <div class="bozero">
                                 <h4 class="pagetitleh-whitebg"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('admission'); ?> </h4>
                                 <div class="around10">
-                                    <div class="text-danger"><?= validation_errors(); ?></div>
+                               
                                     <?php if ($this->session->flashdata('msg')) { ?>
                                         <?php echo $this->session->flashdata('msg') ?>
                                     <?php } ?>
