@@ -101,9 +101,12 @@ class Student extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
-        $data['title']              = 'Students Age Report';
+        $data['title'] = 'Students Age Report';
+        
+        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         
         // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
+
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
@@ -127,7 +130,6 @@ class Student extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
 
-        // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);
@@ -541,6 +543,7 @@ class Student extends Admin_Controller
             } else {
                 $data_insert['admission_no'] = $this->input->post('admission_no');
             }
+
             if ($insert) {
                 $insert_id = $this->student_model->add($data_insert, $data_setting);
                 if (!empty($custom_value_array)) {
@@ -553,6 +556,7 @@ class Student extends Admin_Controller
                     'session_id'    => $session,
                     'fees_discount' => $fees_discount,
                 );
+                
                 $this->student_model->add_student_session($data_new);
                 // $user_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                 $user_password = '123456';
@@ -2295,6 +2299,7 @@ class Student extends Admin_Controller
                 $error             = array();
                 $error['class_id'] = form_error('class_id');
                 $array             = array('status' => 0, 'error' => $error);
+                
                 echo json_encode($array);
             }
         } else {

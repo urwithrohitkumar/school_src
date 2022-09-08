@@ -1754,11 +1754,28 @@ $lang['student_age_report'] = "Students Age Reports";
 $lang['student_category_report'] = "Students Categories Reports";
 $lang['transgender'] = "Transgender";
 
+$lang['age_report_title'] = "Part-F: Enrollment in current Academic Session(By Social Category,Grade)(B= Boys, G= Girls, T= Transgender)";
+$lang['age'] = "Age";
+$lang['pre_nur'] = "Pre/Nur";
+$lang['pp_kg'] = "PP/KG";
 
+$lang['class_1'] = "I";
+$lang['class_2'] = "II";
+$lang['class_3'] = "III";
+$lang['class_4'] = "IV";
+$lang['class_5'] = "V";
+$lang['class_6'] = "VI";
+$lang['class_7'] = "VII";
+$lang['class_8'] = "VIII";
+$lang['class_9'] = "IX";
+$lang['class_10'] = "X";
+$lang['class_11'] = "XI";
+$lang['class_12'] = "XII";
 
+$lang['b'] = "B";
+$lang['t'] = "T";
+$lang['g'] = "G";
 
-// $lang['student_category_report'] = "Students Categories Reports";
-// $lang['student_category_report'] = "Students Categories Reports";
 
 
 
