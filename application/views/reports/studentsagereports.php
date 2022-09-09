@@ -21,79 +21,25 @@
                         ?>
                             <div class="download_label"><?php echo $this->lang->line('student_age_report'); ?></div>
                             <table class="table table-striped table-bordered table-hover example">
+                                <caption class="text text-center h4"><?php echo $this->lang->line('age_report_title'); ?>
+                                    <span class="text text-center h4" style="color: red; display:inline;"> (B= Boys, G= Girls, T= Transgender)</span>
+                                </caption>
                                 <thead>
                                     <tr>
-                                        <th class="text text-center" colspan="43"><?php echo $this->lang->line('age_report_title'); ?></th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text text-center" ><?php echo $this->lang->line('class'); ?></th>
-
+                                        <th class="text text-center"><?php echo $this->lang->line('class'); ?></th>
                                         <th class="text text-center" colspan="3"><?php echo $this->lang->line('pre_nur'); ?></th>
-
                                         <th class="text text-center" colspan="3"><?php echo $this->lang->line('pp_kg'); ?></th>
-                                        
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_1'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_2'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_3'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_4'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_5'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_6'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_7'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_8'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_9'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_10'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_11'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_12'); ?></th>
+                                        <?php for ($i = 1; $i <= 12; $i++) : ?>
+                                            <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_' . $i); ?></th>
+                                        <?php endfor; ?>
                                     </tr>
                                     <tr>
                                         <th><?php echo $this->lang->line('age'); ?></th>
-
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                        <th><?php echo $this->lang->line('b'); ?></th>
-                                        <th><?php echo $this->lang->line('g'); ?></th>
-                                        <th><?php echo $this->lang->line('t'); ?></th>
-                                   
-
+                                        <?php for ($i = 0; $i < 14; $i++) : ?>
+                                            <th><?php echo $this->lang->line('b'); ?></th>
+                                            <th><?php echo $this->lang->line('g'); ?></th>
+                                            <th><?php echo $this->lang->line('t'); ?></th>
+                                        <?php endfor; ?>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -101,7 +47,12 @@
                                     foreach ($students_list as $students_list_key => $students_list_value) {
                                     ?>
                                         <tr>
-                                            <td class="text text-center"><?php echo $students_list_key  ?></td>
+                                            <td class="text text-center"><?= $students_list_key ?></td>
+                                            <?php foreach ($students_list_value as $key => $value) :   ?>
+                                                <td class="text text-center"><?= $value['male'] ?></td>
+                                                <td class="text text-center"><?= $value['female'] ?></td>
+                                                <td class="text text-center"><?= $value['transgender'] ?></td>
+                                            <?php endforeach; ?>
                                         </tr>
                                     <?php
                                     }
@@ -113,14 +64,6 @@
                         } else {
                         ?>
                             <div class="alert alert-info">
-
-                                <?php
-                                echo '<pre>';
-                                print_r($students_list['<4']);
-                                ?>
-
-
-
                                 <?php echo $this->lang->line('no_record_found'); ?>
                             </div>
                         <?php

@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -217,8 +219,11 @@ class Classsection_model extends MY_Model
         return $query->result();
     }
 
-
-
+    /**
+     * This function is used to return student age data.
+     *
+     * @return void
+     */
     public function getStudentAgeReports()
     {
         $query = "SELECT students.id,students.gender,students.dob,classes.class,categories.category,
@@ -230,12 +235,19 @@ class Classsection_model extends MY_Model
         return $student;
     }
 
-    private function prepareReport($students = [])
+   /**
+    * This function is used to calculate report data.
+    *
+    * @param array $students
+    * @return array
+    */
+    private function prepareReport($students = []):array
     {
         $studentAgeWise = [];
-
+        /**
+         * Defining static array  for all column.
+         */
         $ageGroupArr = [
-
             '<4' => [
                 'nursery' => [
                     'male' => 0,
@@ -248,71 +260,71 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '4<5' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => 1,
+                    'female' => 1,
+                    'transgender' => 1,
                 ],
                 'lkg' => [
                     'male' => 0,
@@ -320,64 +332,64 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '5<6' => [
@@ -387,9 +399,9 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => 1,
+                    'female' => 2,
+                    'transgender' => 5,
                 ],
                 'class_1' => [
                     'male' => 0,
@@ -397,59 +409,59 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '6<7' => [
@@ -474,54 +486,54 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '7<8' => [
@@ -551,49 +563,49 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '8<9' => [
@@ -628,44 +640,44 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '9<10' => [
@@ -705,39 +717,39 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '10<11' => [
@@ -782,34 +794,34 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '11<12' => [
@@ -854,34 +866,34 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '12<13' => [
@@ -936,41 +948,41 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '13<14' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
                     'male' => 0,
@@ -1013,41 +1025,41 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '14<15' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
                     'male' => 0,
@@ -1090,36 +1102,36 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '15<16' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
                     'male' => 0,
@@ -1167,31 +1179,31 @@ class Classsection_model extends MY_Model
                     'transgender' => 0,
                 ],
                 'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
             ],
             '16<17' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
                     'male' => 0,
@@ -1246,29 +1258,29 @@ class Classsection_model extends MY_Model
             ],
             '17<18' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
                     'male' => 0,
@@ -1318,54 +1330,54 @@ class Classsection_model extends MY_Model
             ],
             '18<19' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
                     'male' => 0,
@@ -1390,54 +1402,54 @@ class Classsection_model extends MY_Model
             ],
             '19<20' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
                     'male' => 0,
@@ -1462,54 +1474,54 @@ class Classsection_model extends MY_Model
             ],
             '20<21' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
                     'male' => 0,
@@ -1534,54 +1546,54 @@ class Classsection_model extends MY_Model
             ],
             '21<22' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
                     'male' => 0,
@@ -1606,54 +1618,54 @@ class Classsection_model extends MY_Model
             ],
             '<22' => [
                 'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
+                    'male' => "",
+                    'female' => "",
+                    'transgender' => "",
                 ],
                 'class_9' => [
                     'male' => 0,
@@ -1675,77 +1687,181 @@ class Classsection_model extends MY_Model
                     'female' => 0,
                     'transgender' => 0,
                 ],
+            ],
+
+        ];
+
+        /**
+         * Defining static array  for total.
+         */
+        $total = [
+            'nursery' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'lkg' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_1' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_2' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_3' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_4' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_5' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_6' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_7' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_8' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_9' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_10' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_11' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ],
+            'class_12' => [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
             ]
         ];
 
+        // Createing agewise Array for students.
         foreach ($students as $key => $student) {
 
-            $studentAge = $student->Age;
+            $studentAge = intval($student->Age);
 
-            if ($studentAge < 3) {
+            if ($studentAge < 4) {
                 $studentAgeWise['<4'][] = $student;
-            } else if ($studentAge < 5) {
+                unset($students[$key]);
+            } else if (($studentAge < 5)) {
                 $studentAgeWise['4<5'][] = $student;
+                unset($students[$key]);
             } else if ($studentAge < 6) {
                 $studentAgeWise['5<6'][] = $student;
-            } else if ($studentAge < 7) {
+                unset($students[$key]);
+            } else if (($studentAge < 7)) {
                 $studentAgeWise['6<7'][] = $student;
-            } else if ($studentAge < 8) {
+                unset($students[$key]);
+            } else if (($studentAge < 8)) {
                 $studentAgeWise['7<8'][] = $student;
-            } else if ($studentAge < 9) {
+                unset($students[$key]);
+            } else if (($studentAge < 9)) {
                 $studentAgeWise['8<9'][] = $student;
-            } else if ($studentAge < 10) {
+                unset($students[$key]);
+            } else if (($studentAge < 10)) {
                 $studentAgeWise['9<10'][] = $student;
-            } else if ($studentAge < 11) {
+                unset($students[$key]);
+            } else if (($studentAge < 11)) {
                 $studentAgeWise['10<11'][] = $student;
-            } else if ($studentAge < 12) {
+                unset($students[$key]);
+            } else if (($studentAge < 12)) {
                 $studentAgeWise['11<12'][] = $student;
-            } else if ($studentAge < 13) {
+                unset($students[$key]);
+            } else if (($studentAge < 13)) {
                 $studentAgeWise['12<13'][] = $student;
-            } else if ($studentAge < 14) {
+                unset($students[$key]);
+            } else if (($studentAge < 14)) {
                 $studentAgeWise['13<14'][] = $student;
-            } else if ($studentAge < 15) {
+                unset($students[$key]);
+            } else if (($studentAge < 15)) {
                 $studentAgeWise['14<15'][] = $student;
-            } else if ($studentAge < 16) {
+                unset($students[$key]);
+            } else if (($studentAge < 16)) {
                 $studentAgeWise['15<16'][] = $student;
-            } else if ($studentAge < 17) {
+                unset($students[$key]);
+            } else if (($studentAge < 17)) {
                 $studentAgeWise['16<17'][] = $student;
-            } else if ($studentAge < 18) {
+                unset($students[$key]);
+            } else if (($studentAge < 18)) {
                 $studentAgeWise['17<18'][] = $student;
-            } else if ($studentAge < 19) {
+                unset($students[$key]);
+            } else if (($studentAge < 19)) {
                 $studentAgeWise['18<19'][] = $student;
-            } else if ($studentAge < 20) {
+                unset($students[$key]);
+            } else if (($studentAge < 20)) {
                 $studentAgeWise['19<20'][] = $student;
-            } else if ($studentAge < 21) {
+                unset($students[$key]);
+            } else if (($studentAge < 21)) {
                 $studentAgeWise['20<21'][] = $student;
-            } else if ($studentAge < 22) {
+                unset($students[$key]);
+            } else if (($studentAge < 22)) {
                 $studentAgeWise['21<22'][] = $student;
-            } else {
-                $studentAgeWise['<22'][] = $student;
+                unset($students[$key]);
             }
         }
 
-        $students = [];
+        // Calculating table column value by gender
         foreach ($studentAgeWise as $key => $saw) {
-            $male = 0;
-            $female = 0;
-            $transgender = 0;
-            $class = 0;
-            foreach ($studentAgeWise[$key] as $class_key => $st) {
-                if (strtolower($st->gender) == 'male') {
-                    $male++;
-                } else if (strtolower($st->gender) == 'female') {
-                    $female++;
-                } else {
-                    $transgender++;
-                }
-                $class =  strtolower(str_replace(' ', '_', $st->class));
-            }
+            foreach ($saw as $class_key => $st) {
 
-            $ageGroupArr[$key][$class]['male'] = $male;
-            $ageGroupArr[$key][$class]['female'] = $female;
-            $ageGroupArr[$key][$class]['transgender'] = $transgender;
+                $class =  strtolower(str_replace(' ', '_', $st->class));
+                if (strtolower($st->gender) == 'male') {
+
+                    $m = intval($ageGroupArr[$key][$class]['male']);
+                    $ageGroupArr[$key][$class]['male'] = $m + 1;
+                } else if (strtolower($st->gender) == 'female') {
+
+                    $f = intval($ageGroupArr[$key][$class]['female']);
+                    $ageGroupArr[$key][$class]['female'] = $f + 1;
+                } else {
+
+                    $t = intval($ageGroupArr[$key][$class]['transgender']);
+                    $ageGroupArr[$key][$class]['transgender'] = $t + 1;
+                }
+            }
         }
+
+        // Preparing data for total in footer
+        foreach ($ageGroupArr as $key => $st_class) {
+            foreach ($st_class as $_key => $value) {
+                $total[$_key]['male'] += intval($st_class[$_key]['male']);
+                $total[$_key]['female'] += intval($st_class[$_key]['female']);
+                $total[$_key]['transgender'] += intval($st_class[$_key]['transgender']);
+            }
+        }
+        $ageGroupArr['Total'] = $total;
 
         return $ageGroupArr;
     }

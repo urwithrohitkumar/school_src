@@ -1754,7 +1754,7 @@ $lang['student_age_report'] = "Students Age Reports";
 $lang['student_category_report'] = "Students Categories Reports";
 $lang['transgender'] = "Transgender";
 
-$lang['age_report_title'] = "Part-F: Enrollment in current Academic Session(By Social Category,Grade)(B= Boys, G= Girls, T= Transgender)";
+$lang['age_report_title'] = "Part-F : Enrollment in current Academic Session (By Social Category, Grade)";
 $lang['age'] = "Age";
 $lang['pre_nur'] = "Pre/Nur";
 $lang['pp_kg'] = "PP/KG";
