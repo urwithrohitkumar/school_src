@@ -58,7 +58,7 @@ class Admin_Controller extends MY_Controller
         $this->check_license();
         $this->load->library('rbac');
         $this->config->load('app-config');
-        $this->load->model(array('batchsubject_model', 'examgroup_model', 'examsubject_model', 'examgroupstudent_model', 'feereminder_model', 'filetype_model'));
+        $this->load->model(array('batchsubject_model', 'examgroup_model', 'examsubject_model', 'examgroupstudent_model', 'feereminder_model', 'filetype_model','Aadhar_card_model'));
 
         $this->config->load('ci-blog');
         $this->config->load('custom_filed-config');

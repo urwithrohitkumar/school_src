@@ -1753,6 +1753,7 @@ $lang['jain'] = "Jain";
 $lang['student_age_report'] = "Students Age Reports";
 $lang['student_category_report'] = "Students Categories Reports";
 $lang['transgender'] = "Transgender";
+$lang['certificateforaadhaaraadhaarupdate'] = "Certificate For Aadhaar Enrolment/Update";
 
 
 

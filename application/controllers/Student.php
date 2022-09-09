@@ -102,7 +102,7 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
         $data['title']              = 'Students Age Report';
-        
+
         // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
 
         $this->load->view('layout/header', $data);
@@ -111,7 +111,7 @@ class Student extends Admin_Controller
     }
 
 
-     /**
+    /**
      * This function is used to show student categories reports.
      *
      * @return html
@@ -554,7 +554,7 @@ class Student extends Admin_Controller
                     'session_id'    => $session,
                     'fees_discount' => $fees_discount,
                 );
-                
+
                 $this->student_model->add_student_session($data_new);
                 // $user_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                 $user_password = '123456';
@@ -2297,7 +2297,7 @@ class Student extends Admin_Controller
                 $error             = array();
                 $error['class_id'] = form_error('class_id');
                 $array             = array('status' => 0, 'error' => $error);
-                
+
                 echo json_encode($array);
             }
         } else {
@@ -2412,5 +2412,34 @@ class Student extends Admin_Controller
         $data['sch_setting']  = $this->sch_setting_detail;
         $page                 = $this->load->view('reports/_getStudentByClassSection', $data, true);
         echo json_encode(array('status' => 1, 'page' => $page));
+    }
+
+    /**
+     * Get student details by section and class
+     */
+
+    public function getBySectionClass()
+    {
+
+        $class_id = $this->input->get('class_id');
+        $section_id = $this->input->get('section_id');
+        $student_id     = $this->student_model->studentId($class_id, $section_id);
+        $data     = $this->student_model->getStudentsDetails($student_id);
+        echo json_encode($data);
+    }
+    /**
+     * Get student details by Student id
+     */
+    public function getStudent()
+    {
+
+        $student_id = $this->input->get('student_id');
+        $student_data     = $this->student_model->getStudentsById($student_id);
+        $student_aadhar_data     = $this->Aadhar_card_model->getStudentsAdharById($student_id);
+        $result = array(
+            'student_data' => $student_data,
+            'student_aadhar_data' => $student_aadhar_data,
+        );
+        echo json_encode($result);
     }
 }

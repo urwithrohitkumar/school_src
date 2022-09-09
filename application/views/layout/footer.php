@@ -12,6 +12,7 @@ $language      = $this->customlib->getLanguage();
 $language_name = $language["short_code"];
 ?>
 <link href="<?php echo base_url(); ?>backend/toast-alert/toastr.css" rel="stylesheet"/>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="<?php echo base_url(); ?>backend/toast-alert/toastr.js"></script>
 <script src="<?php echo base_url(); ?>backend/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>backend/plugins/select2/select2.min.css">
