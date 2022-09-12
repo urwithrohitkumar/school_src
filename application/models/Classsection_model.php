@@ -209,8 +209,6 @@ class Classsection_model extends MY_Model
     }
 
 
-
-
     public function getClassSectionStudentCount()
     {
         $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
@@ -231,17 +229,17 @@ class Classsection_model extends MY_Model
          FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id;";
 
         $query = $this->db->query($query);
-        $student =  $this->prepareReport($query->result());
+        $student =  $this->prepareAgeReport($query->result());
         return $student;
     }
 
-   /**
-    * This function is used to calculate report data.
-    *
-    * @param array $students
-    * @return array
-    */
-    private function prepareReport($students = []):array
+    /**
+     * This function is used to calculate report data.
+     *
+     * @param array $students
+     * @return array
+     */
+    private function prepareAgeReport($students = []): array
     {
         $studentAgeWise = [];
         /**
@@ -1864,5 +1862,1080 @@ class Classsection_model extends MY_Model
         $ageGroupArr['Total'] = $total;
 
         return $ageGroupArr;
+    }
+
+    /**
+     * Get student category reports 
+     *
+     * @return void
+     */
+    public function StudentCategoryReport()
+    {
+        $res = $this->prepareCategoryReport();
+
+        return $res;
+    }
+
+    /**
+     * Prepare data for students.
+     *
+     * @param array $students
+     * @return array
+     */
+    private function prepareCategoryReport($students = []): array
+    {
+
+        $category = [
+            "General" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 1,
+                        'female' => 2,
+                        'transgender' => 3,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 1,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => "2",
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => "7",
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => "6",
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "SC" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "ST" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "OBC" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Total" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+        ];
+
+        // minorities
+        $minorities = [
+            "Muslim" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 1,
+                        'female' => 2,
+                        'transgender' => 3,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 1,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => "2",
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => "7",
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => "6",
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Christian" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Sikh" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Buddhists" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Parsi" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Jain" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "Total" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+        ];
+        // Submitted documents
+        $isDocuments = [
+
+            "having_aadhar" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 1,
+                        'female' => 2,
+                        'transgender' => 3,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 1,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => "2",
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => "7",
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => "6",
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+            "BPL" => [
+                "section1" => [
+                    'nursery' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'lkg' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_1' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_2' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_3' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_4' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_5' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_6' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_7' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_8' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_9' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_10' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_11' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                    'class_12' => [
+                        'male' => 0,
+                        'female' => 0,
+                        'transgender' => 0,
+                    ],
+                ],
+            ],
+
+        ];
+
+
+
+
+        return ['category' => $category, 'minorities' => $minorities, 'documents' => $isDocuments];
     }
 }

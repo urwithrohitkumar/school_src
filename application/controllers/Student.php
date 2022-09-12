@@ -105,9 +105,6 @@ class Student extends Admin_Controller
         
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         
-        // $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
-
-
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
         $this->load->view('layout/footer', $data);
@@ -129,7 +126,7 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
-
+        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);

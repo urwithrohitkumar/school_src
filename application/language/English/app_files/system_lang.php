@@ -1755,6 +1755,9 @@ $lang['student_category_report'] = "Students Categories Reports";
 $lang['transgender'] = "Transgender";
 
 $lang['age_report_title'] = "Part-F : Enrollment in current Academic Session (By Social Category, Grade)";
+$lang['category_report_title'] ="No.of Sections & Enrolment in Current Academic Session (By Social Category,Grade)";
+$lang['minorities_category_title'] ="Minorities Enrollment,out of Total Enrollment of the school";
+
 $lang['age'] = "Age";
 $lang['pre_nur'] = "Pre/Nur";
 $lang['pp_kg'] = "PP/KG";
