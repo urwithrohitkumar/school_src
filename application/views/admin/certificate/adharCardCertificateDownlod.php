@@ -28,7 +28,7 @@ if (!empty($student_aadhar_data->stamp_img)) {
     $AdharCardStampImg = 'data:image/' . $type . ';base64,' . base64_encode($data);
 }
 if (!empty($student_aadhar_data->student_img)) {
-    $AdharCardStudImgPath ='https://thewingshield.com/school_src/uploads/aadhar_card/student_sign/' . ($student_aadhar_data->student_img);
+    $AdharCardStudImgPath ='https://thewingshield.com/school_src/uploads/aadhar_card/student_img/' . ($student_aadhar_data->student_img);
     $type = pathinfo($AdharCardStudImgPath, PATHINFO_EXTENSION);
     $data = file_get_contents($AdharCardStudImgPath);
     $AdharCardStudImg = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -295,16 +295,14 @@ if (!empty($student_data->adhar_no)) {
             <td style="border: 1px dotted #000000;" colspan=15 align="left" valign=middle>
                 <font color="#000000"><?= !empty($student_aadhar_data->post_office) ? $student_aadhar_data->post_office : '-'; ?></font>
             </td>
-            <td style="border: 1px solid #000000;" colspan=9 rowspan=9 align="left" valign=middle>
+            <td colspan=9 rowspan=9 align="left" valign=bottom <?php if(empty($AdharCardStudImg))  { ?> style="border:1px solid #000000;" <?php } ?>  >
                 <?php if (!empty($AdharCardStudImg)) { ?>
-                    <img src="<?= $AdharCardStudImg ?>" alt="" width="200" height="200">
+                    <img src="<?= $AdharCardStudImg ?>" alt=""   border=2 width=100 height=150>
                 <?php } ?>
-                <font color="#000000"></font>
             </td>
         </tr>
         <tr>
             <td height="11" colspan=26 align="left" valign=middle>
-                <font color="#000000"><br></font>
             </td>
         </tr>
         <tr>
@@ -314,9 +312,9 @@ if (!empty($student_data->adhar_no)) {
             <td style="border: 1px dotted #000000;" colspan=10 align="left" valign=middle>
                 <font color="#000000"><?= !empty($student_aadhar_data->district) ? $student_aadhar_data->district : '-'; ?></font>
             </td>
-            <td style="border: 1px solid #000000;" colspan=5 rowspan=7 align="center" valign=bottom>
+            <td colspan=5 rowspan=7 align="center" valign=bottom  <?php if(empty($studentAdharCardThumbImg))  { ?> style="border:1px solid #000000;" <?php } ?>  >
                 <?php if (!empty($studentAdharCardThumbImg)) { ?>
-                    <img src="<?= $studentAdharCardThumbImg ?>" alt="" width="200" height="200">
+                    <img src="<?= $studentAdharCardThumbImg ?>" border=2 alt="" width=100 height=150>
                 <?php } else { ?>
                     <font size=1 color="#000000">Signature of the Resident/Thumb/Finger Impression</font>
                 <?php } ?>
@@ -356,34 +354,34 @@ if (!empty($student_data->adhar_no)) {
                 <font color="#000000">Date of Birth:</font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($fdobdate) ? $fdobdate : '-'; ?></font>
+                <font color="#000000"><?= !empty($fdobdate) ? $fdobdate : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($ldobdate) ? $ldobdate : '-'; ?></font>
+                <font color="#000000"><?= !empty($ldobdate) ? $ldobdate : '0'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($fdobmonth) ? $fdobmonth : '-'; ?></font>
+                <font color="#000000"><?= !empty($fdobmonth) ? $fdobmonth : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($ldobmonth) ? $ldobmonth : '-'; ?></font>
+                <font color="#000000"><?= !empty($ldobmonth) ? $ldobmonth : '0'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($fdobyear) ? $fdobyear : '-'; ?></font>
+                <font color="#000000"><?= !empty($fdobyear) ? $fdobyear : '0'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($sdobyear) ? $sdobyear : '-'; ?></font>
+                <font color="#000000"><?= !empty($sdobyear) ? $sdobyear : '0'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($tdobyear) ? $tdobyear : '-'; ?></font>
+                <font color="#000000"><?= !empty($tdobyear) ? $tdobyear : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= !empty($frtdobyear) ? $frtdobyear : '-'; ?></font>
+                <font color="#000000"><?= !empty($frtdobyear) ? $frtdobyear : '0'; ?></font>
             </td>
         </tr>
         <tr>
@@ -520,9 +518,9 @@ if (!empty($student_data->adhar_no)) {
         <tr>
             <td colspan=9 align="center" valign=bottom>
             </td>
-            <td style="border: 1px solid #000000;" colspan=17 rowspan=6 align="center" valign=bottom>
+            <td colspan=17 rowspan=6 align="center" valign=bottom <?php if(empty($AdharCardStampImg)) { ?> style="border:1px solid #0000;" <?php } ?>>
                 <?php if (!empty($AdharCardStampImg)) { ?>
-                    <img src="<?= $AdharCardStampImg ?>" alt="" width="200" height="200">
+                    <img src="<?= $AdharCardStampImg ?>" alt="" border=2 width="200" height="200">
                 <?php } else { ?>
                     <font size=1 color="#000000">Signature &amp; Stamp of the Certifier</font>
                 <?php } ?>
