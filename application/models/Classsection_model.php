@@ -322,9 +322,9 @@ class Classsection_model extends MY_Model
             ],
             '4<5' => [
                 'nursery' => [
-                    'male' => 1,
-                    'female' => 1,
-                    'transgender' => 1,
+                    'male' => 0,
+                    'female' => 0,
+                    'transgender' => 0,
                 ],
                 'lkg' => [
                     'male' => 0,
