@@ -1753,6 +1753,7 @@ $lang['jain'] = "Jain";
 $lang['student_age_report'] = "Students Age Reports";
 $lang['student_category_report'] = "Students Categories Reports";
 $lang['transgender'] = "Transgender";
+$lang['certificateforaadhaaraadhaarupdate'] = "Certificate For Aadhaar Enrolment/Update";
 
 $lang['age_report_title'] = "Part-F : Enrollment in current Academic Session (By Social Category, Grade)";
 $lang['category_report_title'] ="No.of Sections & Enrolment in Current Academic Session (By Social Category,Grade)";
