@@ -553,11 +553,7 @@ class Student extends Admin_Controller
                     'session_id'    => $session,
                     'fees_discount' => $fees_discount,
                 );
-<<<<<<< HEAD
                 
-=======
-
->>>>>>> c4a470ce2d82c9bf833ff75b58117d35dba77cb1
                 $this->student_model->add_student_session($data_new);
                 // $user_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                 $user_password = '123456';
@@ -2300,11 +2296,6 @@ class Student extends Admin_Controller
                 $error             = array();
                 $error['class_id'] = form_error('class_id');
                 $array             = array('status' => 0, 'error' => $error);
-<<<<<<< HEAD
-                
-=======
-
->>>>>>> c4a470ce2d82c9bf833ff75b58117d35dba77cb1
                 echo json_encode($array);
             }
         } else {
