@@ -11,10 +11,17 @@
             <div class="col-md-12">
 
                 <div class="box removeboxmius">
+          
 
                     <div class="box-header ptbnull">
+                   
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_category_report'); ?> </h3>
+                   
                     </div>
+                    <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
+                    <button class="btn btn-sm mr-2 btn-primary">Download</button>
+                    </div>
+             
                     <div class="box-body table-responsive">
                         <?php
 

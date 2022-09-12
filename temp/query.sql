@@ -54,3 +54,8 @@ SELECT students.id,students.gender,students.dob,classes.class,categories.categor
 
 mysql> SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),YourDateofBirth)), '%Y')+0 AS Age from AgeCalculationFromDatetime;
 
+
+
+-- Get student with religion
+
+SELECT students.id,students.gender,students.dob,classes.class,categories.category,students.religion FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id;

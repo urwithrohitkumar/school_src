@@ -1871,7 +1871,13 @@ class Classsection_model extends MY_Model
      */
     public function StudentCategoryReport()
     {
-        $res = $this->prepareCategoryReport();
+        $query = "SELECT students.id,students.gender,students.dob,classes.class,categories.category,students.religion 
+        FROM student_session LEFT JOIN students on students.id=student_session.student_id 
+        LEFT JOIN classes on classes.id=student_session.class_id 
+        LEFT JOIN categories on categories.id=students.category_id";
+
+        $query = $this->db->query($query);
+        $res = $this->prepareCategoryReport($query->result());
 
         return $res;
     }
@@ -1885,8 +1891,9 @@ class Classsection_model extends MY_Model
     private function prepareCategoryReport($students = []): array
     {
 
-        $category = [
-            "General" => [
+
+        $categories = [
+            "general" => [
                 "section1" => [
                     'nursery' => [
                         'male' => 1,
@@ -1960,7 +1967,7 @@ class Classsection_model extends MY_Model
                     ],
                 ],
             ],
-            "SC" => [
+            "sc" => [
                 "section1" => [
                     'nursery' => [
                         'male' => 0,
@@ -2034,7 +2041,7 @@ class Classsection_model extends MY_Model
                     ],
                 ],
             ],
-            "ST" => [
+            "st" => [
                 "section1" => [
                     'nursery' => [
                         'male' => 0,
@@ -2108,7 +2115,7 @@ class Classsection_model extends MY_Model
                     ],
                 ],
             ],
-            "OBC" => [
+            "obc" => [
                 "section1" => [
                     'nursery' => [
                         'male' => 0,
@@ -2182,7 +2189,7 @@ class Classsection_model extends MY_Model
                     ],
                 ],
             ],
-            "Total" => [
+            "total" => [
                 "section1" => [
                     'nursery' => [
                         'male' => 0,
@@ -2257,7 +2264,6 @@ class Classsection_model extends MY_Model
                 ],
             ],
         ];
-
         // minorities
         $minorities = [
             "Muslim" => [
@@ -2933,9 +2939,95 @@ class Classsection_model extends MY_Model
 
         ];
 
+        // echo '<pre>';
+
+        // print_r($students);
+
+        $studentCategory = [];
+
+        // Createing category,gender Array for students.
+        foreach ($students as $key => $student) {
+
+            $category = strtolower($student->category);
+            $class = str_replace(' ', '_', strtolower($student->class));
+            $gender = strtolower($student->gender);
+
+            switch ($category) {
+                case 'general':
+                    if ($gender === 'male')
+                        $studentCategory[$class]['general']['male'][] = $student;
+                    elseif ($gender === 'female')
+                        $studentCategory[$class]['general']['female'][] = $student;
+                    else
+                        $studentCategory[$class]['general']['transgender'][] = $student;
+                    break;
+
+                case 'sc':
+                    if ($gender === 'male')
+                        $studentCategory[$class]['sc']['male'][] = $student;
+                    elseif ($gender === 'female')
+                        $studentCategory[$class]['sc']['female'][] = $student;
+                    else
+                        $studentCategory[$class]['sc']['transgender'][] = $student;
+                    break;
+
+                case 'st':
+                    if ($gender === 'male')
+                        $studentCategory[$class]['st']['male'][] = $student;
+                    elseif ($gender === 'female')
+                        $studentCategory[$class]['st']['female'][] = $student;
+                    else
+                        $studentCategory[$class]['st']['transgender'][] = $student;
+                    break;
+
+                case 'obc':
+                    if ($gender === 'male')
+                        $studentCategory[$class]['obc']['male'][] = $student;
+                    elseif ($gender === 'female')
+                        $studentCategory[$class]['obc']['female'][] = $student;
+                    else
+                        $studentCategory[$class]['obc']['transgender'][] = $student;
+                    break;
+
+                default:
+                    if ($gender === 'male')
+                        $studentCategory[$class]['na']['male'][] = $student;
+                    elseif ($gender === 'female')
+                        $studentCategory[$class]['na']['female'][] = $student;
+                    else
+                        $studentCategory[$class]['na']['transgender'][] = $student;
+                    break;
+            }
+        }
 
 
+        foreach ($studentCategory as $st_key => $st) {
+            foreach ($st as $cat_key => $cate) {
 
-        return ['category' => $category, 'minorities' => $minorities, 'documents' => $isDocuments];
+                foreach ($cate as $_gender_key => $gender) {
+                    foreach ($gender as $_st_g_key => $value) {
+                        $_gender = strtolower($value->gender);
+                        $_class = str_replace(' ', '_', strtolower($value->class));
+                        if ($_gender === 'male') {
+                            $male = $categories[$cat_key]['section1'][$_class]['male'];
+
+                            $categories[$cat_key]['section1'][$_class]['male'] = intval($male) + 1;
+                        }
+                        if ($_gender === 'female') {
+                            $fmale = $categories[$cat_key]['section1'][$_class]['female'];
+                           $categories[$cat_key]['section1'][$_class]['female'] = (intval($fmale) + 1);
+                        }
+                        if ($_gender === 'transgender') {
+                            $tmale = $categories[$cat_key]['section1'][$_class]['transgender'];
+                            $categories[$cat_key]['section1'][$_class]['transgender'] = intval($tmale) + 1;
+                            // $tmale = $categories['total']['section1'][$_class]['transgender']+1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return ['category' => $categories, 'minorities' => $minorities, 'documents' => $isDocuments];
     }
 }
