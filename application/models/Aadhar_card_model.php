@@ -33,6 +33,7 @@ class Aadhar_card_model extends MY_Model
         $data = $this->db->select('*')
         ->where('student_id', $student_id)
         ->get('aadhar_card');
+        
         $data = $data->result();
         return $data;
     }

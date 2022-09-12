@@ -1,31 +1,53 @@
 <?php
 $student_data = $student_data[0];
-$student_aadhar_data = $student_aadhar_data[0];
-$date = date('d',strtotime($student_aadhar_data->enterdate));
-$month = date('m',strtotime($student_aadhar_data->enterdate));
-$Year = date('Y',strtotime($student_aadhar_data->enterdate));
-$dobdate = date('d',strtotime($student_data->dob));
-$dobmonth = date('m',strtotime($student_data->dob));
-$dobYear = date('Y',strtotime($student_data->dob));
-$fdate = substr($date,0,1);
-$ldate = substr($date,1,2);
-$fmonth = substr($month,0,1);
-$lmonth = substr($month,1,2);
-$fyear = substr($Year,0,1);
-$syear = substr($Year,1,1);
-$tyear = substr($Year,2,1);
-$fyear = substr($Year,3,1);
+if (!empty($student_aadhar_data)) {
+    $student_aadhar_data = $student_aadhar_data[0];
+    $date = date('d', strtotime($student_aadhar_data->enterdate));
+    $month = date('m', strtotime($student_aadhar_data->enterdate));
+    $Year = date('Y', strtotime($student_aadhar_data->enterdate));
+    $fdate = substr($date, 0, 1);
+    $ldate = substr($date, 1, 2);
+    $fmonth = substr($month, 0, 1);
+    $lmonth = substr($month, 1, 2);
+    $fyear = substr($Year, 0, 1);
+    $syear = substr($Year, 1, 1);
+    $tyear = substr($Year, 2, 1);
+    $fryear = substr($Year, 3, 1);
+}
+if (!empty($student_aadhar_data->thumb_image)) {
+    $studentAdharCardThumbImgpath =   'https://thewingshield.com/school_src/uploads/aadhar_card/student_sign/' . ($student_aadhar_data->thumb_image);
+    $type = pathinfo($studentAdharCardThumbImgpath, PATHINFO_EXTENSION);
+    $data = file_get_contents($studentAdharCardThumbImgpath);
+    $studentAdharCardThumbImg = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-$fdobdate = substr($dobdate,0,1);
-$ldobdate = substr($dobdate,1,2);
-$fdobmonth = substr($dobmonth,0,1);
-$ldobmonth = substr($dobmonth,1,2);
-$fdobyear = substr($dobYear,0,1);
-$sdobyear = substr($dobYear,1,1);
-$tdobyear = substr($dobYear,2,1);
-$fdobyear = substr($dobYear,3,1);
-
-
+}
+if (!empty($student_aadhar_data->stamp_img)) {
+    $AdharCardStampImgPath ='https://thewingshield.com/school_src/uploads/aadhar_card/certifier_sign/' . ($student_aadhar_data->stamp_img);
+    $type = pathinfo($AdharCardStampImgPath, PATHINFO_EXTENSION);
+    $data = file_get_contents($AdharCardStampImgPath);
+    $AdharCardStampImg = 'data:image/' . $type . ';base64,' . base64_encode($data);
+}
+if (!empty($student_aadhar_data->student_img)) {
+    $AdharCardStudImgPath ='https://thewingshield.com/school_src/uploads/aadhar_card/student_sign/' . ($student_aadhar_data->student_img);
+    $type = pathinfo($AdharCardStudImgPath, PATHINFO_EXTENSION);
+    $data = file_get_contents($AdharCardStudImgPath);
+    $AdharCardStudImg = 'data:image/' . $type . ';base64,' . base64_encode($data);
+}
+$dobdate = date('d', strtotime($student_data->dob));
+$dobmonth = date('m', strtotime($student_data->dob));
+$dobYear = date('Y', strtotime($student_data->dob));
+$fdobdate = substr($dobdate, 0, 1);
+$ldobdate = substr($dobdate, 1, 2);
+$fdobmonth = substr($dobmonth, 0, 1);
+$ldobmonth = substr($dobmonth, 1, 2);
+$fdobyear = substr($dobYear, 0, 1);
+$sdobyear = substr($dobYear, 1, 1);
+$tdobyear = substr($dobYear, 2, 1);
+$frtdobyear = substr($dobYear, 3, 1);
+$array = [];
+if (!empty($student_data->adhar_no)) {
+    $array  = array_map('intval', str_split($student_data->adhar_no));
+}
 ?>
 
 <head>
@@ -90,34 +112,34 @@ $fdobyear = substr($dobYear,3,1);
                 <font size=1 color="#000000">Not required to print on letter head;</font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fdate ?></font>
+                <font color="#000000"><?= !empty($fdate) ? $fdate : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $ldate ?></font>
+                <font color="#000000"><?= !empty($ldate) ? $ldate : '0'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fmonth ?></font>
+                <font color="#000000"><?= !empty($fmonth) ? $fmonth : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $lmonth ?></font>
+                <font color="#000000"><?= !empty($lmonth) ? $lmonth : '0'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fyear ?></font>
+                <font color="#000000"><?= !empty($fyear) ? $fyear : '0'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $syear ?></font>
+                <font color="#000000"><?= !empty($syear) ? $syear : '0'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $tyear ?></font>
+                <font color="#000000"><?= !empty($tyear) ? $tyear : '0'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fyear ?></font>
+                <font color="#000000"><?= !empty($fryear) ? $fryear : '0'; ?></font>
             </td>
         </tr>
         <tr>
@@ -136,26 +158,26 @@ $fdobyear = substr($dobYear,3,1);
         <tr>
             <td colspan=2>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000">&radic;</font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->resident) ? 'checked' : ''; ?>>
             </td>
             <td colspan=3 align="left" valign=middle>
                 <font size=1 color="#000000">Resident </font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><br></font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->nri) ? 'checked' : ''; ?>>
             </td>
             <td colspan=5 align="left" valign=middle>
                 <font size=1 color="#000000">Non-Resident Indian (NRI)</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000">&radic;</font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->newenrolmment) ? 'checked' : ''; ?>>
             </td>
             <td colspan=4 align="left" valign=middle>
                 <font size=1 color="#000000">New Enrolment</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><br></font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->updaterequest) ? 'checked' : ''; ?>>
             </td>
             <td colspan=6 align="left" valign=middle>
                 <font size=1 color="#000000">Update Request</font>
@@ -169,44 +191,9 @@ $fdobyear = substr($dobYear,3,1);
             <td height="20" colspan=2 align="left" valign=middle>
                 <font color="#000000">Aadhaar Number:</font>
             </td>
-            <td width="20" style="border-left: 1px solid; border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px dotted; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid" align="center" valign=middle>
-            </td>
-            <td width="20" style="border-right: 1px solid;" align="center" valign=middle>
-            </td>
+            <?php foreach ($array as $adaharcardvalue) {
+                echo '<td width="20" style="border: 1px dotted;" align="center" valign=middle>' . $adaharcardvalue . '</td>';
+            } ?>
         </tr>
         <tr>
             <td height="16" colspan=26 align="left" valign=middle>
@@ -246,7 +233,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">H.No./Bldg./Apt.:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->house_no ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->house_no) ? $student_aadhar_data->house_no : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -258,7 +245,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Street/Road/Lane: </font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->street ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->street) ? $student_aadhar_data->street : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -270,7 +257,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Landmark:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->landmark ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->landmark) ? $student_aadhar_data->landmark : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -282,7 +269,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Area/Locality/Sector:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->area ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->area) ? $student_aadhar_data->area : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -294,7 +281,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Village/Town/City:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_data->city ?></font>
+                <font color="#000000"><?= !empty($student_data->city) ? $student_data->city : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -306,10 +293,13 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Post Office:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=15 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->post_office ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->post_office) ? $student_aadhar_data->post_office : '-'; ?></font>
             </td>
             <td style="border: 1px solid #000000;" colspan=9 rowspan=9 align="left" valign=middle>
-                <font color="#000000"><br></font>
+                <?php if (!empty($AdharCardStudImg)) { ?>
+                    <img src="<?= $AdharCardStudImg ?>" alt="" width="200" height="200">
+                <?php } ?>
+                <font color="#000000"></font>
             </td>
         </tr>
         <tr>
@@ -322,10 +312,14 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">District:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=10 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->district ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->district) ? $student_aadhar_data->district : '-'; ?></font>
             </td>
             <td style="border: 1px solid #000000;" colspan=5 rowspan=7 align="center" valign=bottom>
-                <font size=1 color="#000000">Signature of the Resident/Thumb/Finger Impression</font>
+                <?php if (!empty($studentAdharCardThumbImg)) { ?>
+                    <img src="<?= $studentAdharCardThumbImg ?>" alt="" width="200" height="200">
+                <?php } else { ?>
+                    <font size=1 color="#000000">Signature of the Resident/Thumb/Finger Impression</font>
+                <?php } ?>
             </td>
         </tr>
         <tr>
@@ -338,7 +332,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">State:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=10 align="left" valign=middle>
-                <font color="#000000"><?= $student_data->state ?></font>
+                <font color="#000000"><?= !empty($student_data->state) ? $student_data->state : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -350,7 +344,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Pin Code:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=10 align="left" valign=middle>
-                <font color="#000000"><?= $student_data->pincode ?></font>
+                <font color="#000000"><?= !empty($student_data->pincode) ? $student_data->pincode : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -362,34 +356,34 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Date of Birth:</font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fdobdate ?></font>
+                <font color="#000000"><?= !empty($fdobdate) ? $fdobdate : '-'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $ldobdate ?></font>
+                <font color="#000000"><?= !empty($ldobdate) ? $ldobdate : '-'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fdobmonth ?></font>
+                <font color="#000000"><?= !empty($fdobmonth) ? $fdobmonth : '-'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $ldobmonth ?></font>
+                <font color="#000000"><?= !empty($ldobmonth) ? $ldobmonth : '-'; ?></font>
             </td>
             <td align="center" valign=middle>
                 <font color="#000000"><br></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px solid #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fdobyear ?></font>
+                <font color="#000000"><?= !empty($fdobyear) ? $fdobyear : '-'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $sdobyear ?></font>
+                <font color="#000000"><?= !empty($sdobyear) ? $sdobyear : '-'; ?></font>
             </td>
             <td style="border-right: 1px dotted #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $tdobyear ?></font>
+                <font color="#000000"><?= !empty($tdobyear) ? $tdobyear : '-'; ?></font>
             </td>
             <td style="border-right: 1px solid #000000; border-left: 1px dotted #000000; border-top: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?= $fdobyear ?></font>
+                <font color="#000000"><?= !empty($frtdobyear) ? $frtdobyear : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -410,7 +404,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Name of the Certifier:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->certifier_name ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->certifier_name) ? $student_aadhar_data->certifier_name : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -422,7 +416,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Designation</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->certifier_designation ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->certifier_designation) ? $student_aadhar_data->certifier_designation : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -434,7 +428,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Office Address:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->certifier_office_add ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->certifier_office_add) ? $student_aadhar_data->certifier_office_add : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -446,7 +440,7 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000">Contact Number:</font>
             </td>
             <td style="border: 1px dotted #000000;" colspan=24 align="left" valign=middle>
-                <font color="#000000"><?= $student_aadhar_data->cerifier_contact ?></font>
+                <font color="#000000"><?= !empty($student_aadhar_data->cerifier_contact) ? $student_aadhar_data->cerifier_contact : '-'; ?></font>
             </td>
         </tr>
         <tr>
@@ -466,56 +460,56 @@ $fdobyear = substr($dobYear,3,1);
         <tr>
             <td colspan=9 align="center" valign=middle>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->overwriting)) {echo "&radic;"; } ?></font>
+            <td style="border-left: 1px solid #000000;" align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->overwriting) ? 'checked' : ''; ?>>
             </td>
             <td colspan=3 align="left" valign=middle>
                 <font size=1 color="#000000">No overwriting</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->issue_date)) {echo "&radic;"; } ?></font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->issue_date) ? 'checked' : ''; ?>>
             </td>
             <td colspan=3 align="left" valign=middle>
                 <font size=1 color="#000000">Issue date is filled</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font size=1 color="#000000"><?php if(!empty($student_aadhar_data->resident_sign)) {echo "&radic;"; } ?></font>
+            <td align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->resident_sign) ? 'checked' : ''; ?>>
             </td>
             <td colspan=8 style="border-right: 1px solid #000000" align="left" valign=middle>
                 <font size=1 color="#000000">Resident\'s Signature</font>
             </td>
         </tr>
         <tr>
-            <td width=20 style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->gajet_officer_group_A)) {echo "&radic;"; } ?></font>
+            <td align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->gajet_officer_group_A) ? 'checked' : ''; ?>>
             </td>
             <td colspan=8 align="left" valign=middle>
                 <font color="#000000">Gazetted Officer - Group -A</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->certifier_details)) {echo "&radic;"; } ?></font>
+            <td style="border-left: 1px solid #000000;" align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->certifier_details) ? 'checked' : ''; ?>>
             </td>
             <td colspan=16 style="border-right: 1px solid #000000;" align="left" valign=middle>
                 <font size=1 color="#000000">Certifier\'s details</font>
             </td>
         </tr>
         <tr>
-            <td width=20 style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->village_panchayat)) {echo "&radic;"; } ?></font>
+            <td width=20 height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->village_panchayat) ? 'checked' : ''; ?>>
             </td>
             <td colspan=8 align="left" valign=middle>
                 <font color="#000000">Village Panchayat Head or Mukhiya</font>
             </td>
-            <td style="border: 1px solid #000000;" align="center" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->cross_stamp)) {echo "&radic;"; } ?></font>
+            <td style="border-left: 1px solid #000000;border-bottom: 1px solid #000000;" align="center" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->cross_stamp) ? 'checked' : ''; ?>>
             </td>
             <td colspan=16 style="border-right: 1px solid #000000;" align="left" valign=middle>
                 <font size=1 color="#000000">Resident\'s Photo is cross signed and cross stamped</font>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->gajet_officer_group_B)) {echo "&radic;"; } ?></font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->gajet_officer_group_B) ? 'checked' : ''; ?>>
             </td>
             <td colspan=9 align="left" valign=middle>
                 <font color="#000000">Gazetted Officer - Group B</font>
@@ -527,44 +521,48 @@ $fdobyear = substr($dobYear,3,1);
             <td colspan=9 align="center" valign=bottom>
             </td>
             <td style="border: 1px solid #000000;" colspan=17 rowspan=6 align="center" valign=bottom>
-                <font size=1 color="#000000">Signature &amp; Stamp of the Certifier</font>
+                <?php if (!empty($AdharCardStampImg)) { ?>
+                    <img src="<?= $AdharCardStampImg ?>" alt="" width="200" height="200">
+                <?php } else { ?>
+                    <font size=1 color="#000000">Signature &amp; Stamp of the Certifier</font>
+                <?php } ?>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->councilor)) {echo "&radic;"; } ?></font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->councilor) ? 'checked' : ''; ?>>
             </td>
             <td align="left" valign=middle>
                 <font color="#000000">MP/MLA/MLC/Municipal Councilor</font>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->tehsildar)) {echo "&radic;"; } ?></font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->tehsildar) ? 'checked' : ''; ?>>
             </td>
             <td align="left" valign=middle>
                 <font color="#000000">Tehsildar</font>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->hrei)) {echo "&radic;"; } ?>   </font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->hrei) ? 'checked' : ''; ?>>
             </td>
             <td align="left" colspan=8 valign=middle>
                 <font color="#000000">Head of Recognised Educational Institution</font>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->swmho)) {echo "&radic;"; } ?> </font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->swmho) ? 'checked' : ''; ?>>
             </td>
             <td align="left" colspan=8 valign=middle>
                 <font color="#000000">Superintendent/Warden/Matron/Head of Institution of Recognised shelter homes/Orphanges</font>
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000;" height="20" align="left" valign=middle>
-                <font color="#000000"><?php if(!empty($student_aadhar_data->epfo)) {echo "&radic;"; } ?></font>
+            <td height="20" align="left" valign=middle>
+                <input type="checkbox" <?= !empty($student_aadhar_data->epfo) ? 'checked' : ''; ?>>
             </td>
             <td align="left" valign=middle>
                 <font color="#000000">EPFO Officer</font>
@@ -575,6 +573,9 @@ $fdobyear = substr($dobYear,3,1);
                 <font color="#000000"><br></font>
             </td>
         </tr>
+
+
+
 
         <tr>
             <td colspan="26" height="20" align="left" valign=middle>

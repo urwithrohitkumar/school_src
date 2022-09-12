@@ -575,7 +575,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        $("#successmsg").attr("style", "display: block;")
+                        $("#successmsg").attr("style", "display: block;");
+                        $("html, body").animate({
+                            scrollTop: 0
+                        }, "slow");
+                        return false;
+
                     }
                 });
             }
