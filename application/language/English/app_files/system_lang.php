@@ -319,6 +319,7 @@ $lang['hostel_rooms'] = 'Hostel Rooms';
 $lang['id'] = 'Id';
 $lang['identification'] = 'Identification';
 $lang['if_guardian_address_is_current_address'] = 'If Guardian Address is Current Address';
+$lang['bpl'] = 'BPL ( Below Poverty Line )';
 $lang['if_guardian_is'] = 'If Guardian Is';
 $lang['if_permanent_address_is_current_address'] = 'If Permanent Address is Current Address';
 $lang['ifsc_code'] = 'IFSC Code';
