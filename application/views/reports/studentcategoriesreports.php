@@ -11,17 +11,18 @@
             <div class="col-md-12">
 
                 <div class="box removeboxmius">
-          
+
 
                     <div class="box-header ptbnull">
-                   
+
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_category_report'); ?> </h3>
-                   
+
                     </div>
                     <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
-                    <button class="btn btn-sm mr-2 btn-primary">Download</button>
+                        <a href="<?php echo base_url(); ?>student/getStudentCatreportpdf" class="btn btn-sm mr-2 btn-primary">Download</a>
+                        <!-- <button class="btn btn-sm mr-2 btn-primary">Download</button> -->
                     </div>
-             
+
                     <div class="box-body table-responsive">
                         <?php
 
@@ -110,12 +111,10 @@
                                             <?php echo $this->lang->line('minorities_category_title'); ?>
                                         </td>
                                     </tr>
-                                    <?php 
-                                    // echo '<pre>';
-                                    // print_r($students_list);
+                                    <?php
                                     foreach ($students_list['documents'] as $students_list_key => $students_list_value) { ?>
                                         <tr>
-                                            <td class="text text-center"><?=  ucfirst(str_replace('_',' ',  $students_list_key)) ?></td>
+                                            <td class="text text-center"><?= ucfirst(str_replace('_', ' ',  $students_list_key)) ?></td>
                                             <?php foreach ($students_list_value as $key => $section) :
 
                                                 foreach ($section as $key => $value) : ?>

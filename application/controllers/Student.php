@@ -104,7 +104,6 @@ class Student extends Admin_Controller
         $data['title'] = 'Students Age Report';
         
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
-        
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
         $this->load->view('layout/footer', $data);
@@ -127,7 +126,6 @@ class Student extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
         $data['students_list'] = $this->classsection_model->StudentCategoryReport();
-
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);
         $this->load->view('layout/footer', $data);
@@ -365,6 +363,7 @@ class Student extends Admin_Controller
             $data_insert = array(
                 'firstname'         => $this->input->post('firstname'),
                 'rte'               => $this->input->post('rte'),
+                'bpl'               => $this->input->post('bpl'),
                 'state'             => $this->input->post('state'),
                 'city'              => $this->input->post('city'),
                 'pincode'           => $this->input->post('pincode'),
@@ -1375,6 +1374,7 @@ class Student extends Admin_Controller
                 'id'                => $id,
                 'firstname'         => $this->input->post('firstname'),
                 'rte'               => $this->input->post('rte'),
+                'bpl'               => $this->input->post('bpl'),
                 'state'             => $this->input->post('state'),
                 'city'              => $this->input->post('city'),
                 'pincode'           => $this->input->post('pincode'),
@@ -2419,7 +2419,6 @@ class Student extends Admin_Controller
 
     public function getBySectionClass()
     {
-
         $class_id = $this->input->get('class_id');
         $section_id = $this->input->get('section_id');
         $student_id     = $this->student_model->studentId($class_id, $section_id);
@@ -2440,5 +2439,23 @@ class Student extends Admin_Controller
             'student_aadhar_data' => $student_aadhar_data,
         );
         echo json_encode($result);
+    }
+    /**
+     * Downlod student age report pdf
+     */
+    public function getStudentAgereportpdf(){
+        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
+        $this->load->library('pdf');
+        $html = $this->load->view('reports/studentAgeReportPdf',$data, true);
+        $this->pdf->createPDF($html, 'mypdf', false);
+    }
+    /**
+     * Downlod student age report pdf
+     */
+    public function getStudentCatreportpdf(){
+        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
+        $this->load->library('pdf');
+        $html = $this->load->view('reports/studentcategoriesreportspdf',$data, true);
+        $this->pdf->createPDF($html, 'mypdf', false);
     }
 }

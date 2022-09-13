@@ -61,7 +61,7 @@ class Student_aadhar_card extends Admin_Controller
             'city' => $this->input->post('city'),
             'state' => $this->input->post('state'),
             'pincode' => $this->input->post('pincode'),
-            'dob' => $this->input->post('dob'),
+            'dob' =>  date("Y-m-d", strtotime($this->input->post('dob'))),
         ];
 
         $aadharCardData['student_id'] = $student_id;
@@ -92,8 +92,9 @@ class Student_aadhar_card extends Admin_Controller
         $aadharCardData['nri'] = $this->input->post('nri');
         $aadharCardData['newenrolmment'] = $this->input->post('newenrolmment');
         $aadharCardData['updaterequest'] = $this->input->post('updaterequest');
-        $aadharCardData['enterdate'] = $this->input->post('enterdate');
-
+        $enterdate =  $this->input->post('enterdate');
+        $enterdate = date("Y-m-d", strtotime($enterdate));
+        $aadharCardData['enterdate'] = $enterdate;
         $studentData = $this->student_model->update_student_data($studentData, $student_id);
         $aadharCardData = $this->Aadhar_card_model->update_student_aadhar_card_details($aadharCardData, $student_id);
         return true;

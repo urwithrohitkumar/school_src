@@ -407,6 +407,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             },
             dataType: "json",
             success: function(data) {
+               
 
                 $.each(data, function(i, obj) {
                     div_data += "<option value=" + obj.id + ">" + obj.firstname + "" + obj.lastname + "</option>";
@@ -449,6 +450,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     if (student_aadhar_data.house_no) {
                         $("#houseNo").val(student_aadhar_data.house_no);
                     }
+                   
                     if (student_aadhar_data.street) {
                         $("#street").val(student_aadhar_data.street);
                     }
@@ -526,6 +528,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     }
                     if (student_aadhar_data.updaterequest == 'on') {
                         $("#updaterequest").attr('checked', true);
+                    }
+
+                    if (student_aadhar_data.enterdate) {
+                        $("#enterdate").val(student_aadhar_data.enterdate);
                     }
 
 

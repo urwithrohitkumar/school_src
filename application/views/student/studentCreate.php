@@ -22,7 +22,7 @@
                             <div class="bozero">
                                 <h4 class="pagetitleh-whitebg"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('admission'); ?> </h4>
                                 <div class="around10">
-                               
+
                                     <?php if ($this->session->flashdata('msg')) { ?>
                                         <?php echo $this->session->flashdata('msg') ?>
                                     <?php } ?>
@@ -741,6 +741,15 @@
                                                         </div>
                                                     </div>
                                                 <?php } ?>
+
+                                                <div class="col-md-6">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="bpl" name="bpl">
+                                                            <?php echo $this->lang->line('bpl'); ?>
+                                                        </label>
+                                                    </div>
+                                                </div>
 
 
                                             </div>

@@ -15,12 +15,16 @@
                     <div class="box-header ptbnull">
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_age_report'); ?> </h3>
                     </div>
+                    <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
+                        <a href="<?php echo base_url(); ?>student/getStudentAgereportpdf" class="btn btn-sm mr-2 btn-primary">Download</a>
+
+                    </div>
                     <div class="box-body table-responsive">
                         <?php
                         if (!empty($students_list)) {
                         ?>
                             <div class="download_label"><?php echo $this->lang->line('student_age_report'); ?></div>
-                            <table class="table table-striped table-bordered table-hover example">
+                            <table class="table table-striped table-bordered table-hover ">
                                 <caption class="text text-center h4"><?php echo $this->lang->line('age_report_title'); ?>
                                     <span class="text text-center h4" style="color: red; display:inline;"> (B= Boys, G= Girls, T= Transgender)</span>
                                 </caption>
