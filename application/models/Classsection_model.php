@@ -3043,12 +3043,7 @@ class Classsection_model extends MY_Model
                         $minoritiesDetsils[$class]['Jain']['transgender'][] = $student;
                     break;
                 default:
-                    if ($gender === 'male')
-                        $minoritiesDetsils[$class]['Jain']['male'][] = $student;
-                    elseif ($gender === 'female')
-                        $minoritiesDetsils[$class]['Jain']['female'][] = $student;
-                    else
-                        $minoritiesDetsils[$class]['Jain']['transgender'][] = $student;
+
                     break;
             }
 
@@ -3069,7 +3064,7 @@ class Classsection_model extends MY_Model
                     $docDetsils[$class]['having_aadhar']['transgender'][] = $student;
             }
         }
-       
+
 
 
         foreach ($studentCategory as $st_key => $st) {
@@ -3126,7 +3121,7 @@ class Classsection_model extends MY_Model
         foreach ($docDetsils as $st_key => $st) {
             // echo "<pre>";
             // print_r($st);
-          
+
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
                     foreach ($gender as $_st_g_key => $value) {
@@ -3149,7 +3144,7 @@ class Classsection_model extends MY_Model
                 }
             }
         }
-    
+
 
         return ['category' => $categories, 'minorities' => $minorities, 'documents' => $isDocuments];
     }
