@@ -2399,6 +2399,7 @@ class Student extends Admin_Controller
         echo json_encode($json_data);
     }
 
+    
     public function getStudentByClassSection()
     {
 
