@@ -1781,6 +1781,8 @@ $lang['b'] = "B";
 $lang['t'] = "T";
 $lang['g'] = "G";
 
-
-
-
+$lang['caste'] = "Caste";
+$lang['student_religion'] = "Student Religion";
+$lang['student_caste'] = "Student Caste";
+$lang['create_caste'] = "Create Caste";
+$lang['caste_list'] = "Caste List";

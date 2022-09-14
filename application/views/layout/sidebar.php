@@ -267,25 +267,19 @@
 
                             </li>
 
-                        <?php
-
-                                            }
-
-
-
-                                            if ($this->rbac->hasPrivilege('student_categories', 'can_view')) {
-
+                        <?php } ?>
+                        <?php if ($this->rbac->hasPrivilege('student_categories', 'can_view')) {
                         ?>
-
-
-
-                            <li class="<?php echo set_Submenu('category/index'); ?>"><a href="<?php echo base_url(); ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_categories'); ?></a></li>
-
-
-
-                        <?php }
-
+                         <li class="<?php echo set_Submenu('category/index'); ?>"><a href="<?php echo base_url(); ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_categories'); ?></a></li>
+                        <?php } ?>
+                        <?php if ($this->rbac->hasPrivilege('student_religion', 'can_view')) {
                         ?>
+                         <li class="<?php echo set_Submenu('religion/index'); ?>"><a href="<?php echo base_url(); ?>religion"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_religion'); ?></a></li>
+                        <?php } ?>
+                        <?php if ($this->rbac->hasPrivilege('student_caste', 'can_view')) {
+                        ?>
+                         <li class="<?php echo set_Submenu('caste/index'); ?>"><a href="<?php echo base_url(); ?>caste"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_caste'); ?></a></li>
+                        <?php } ?>
 
                         <?php
 
