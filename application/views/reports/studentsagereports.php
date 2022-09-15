@@ -1,4 +1,7 @@
-
+<?php
+$className = !empty($students_list['<4']) ? $students_list['<4'] : [];
+$classNameCount = count($className);
+ ?>
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content-header">
         <h1>
@@ -32,16 +35,15 @@
                                 <thead>
                                     <tr>
                                         <th class="text text-center"><?php echo $this->lang->line('class'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('pre_nur'); ?></th>
-                                        <th class="text text-center" colspan="3"><?php echo $this->lang->line('pp_kg'); ?></th>
-                                        <?php for ($i = 1; $i <= 12; $i++) : ?>
-                                            <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_' . $i); ?></th>
-                                        <?php endfor; ?>
-                                         <!--<th class="text text-center" colspan="3">PCM</th>-->
+                                        <?php
+                                        foreach ($className as $key => $value) {
+                                            $key = ucfirst(str_replace('_', ' ', $key)); ?>
+                                            <th class="text text-center" colspan="3"><?= $key ?></th>
+                                        <?php } ?>
                                     </tr>
                                     <tr>
                                         <th><?php echo $this->lang->line('age'); ?></th>
-                                        <?php for ($i = 0; $i < 14; $i++) : ?>
+                                        <?php for ($i = 0; $i < $classNameCount; $i++) : ?>
                                             <th><?php echo $this->lang->line('b'); ?></th>
                                             <th><?php echo $this->lang->line('g'); ?></th>
                                             <th><?php echo $this->lang->line('t'); ?></th>
