@@ -299,6 +299,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('category_id', $this->lang->line('category_id'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('religion', $this->lang->line('religion'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
             $this->form_validation->set_rules('guardian_is', $this->lang->line('guardian'), 'trim|required|xss_clean');
@@ -1304,6 +1305,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('gender', $this->lang->line('gender'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
 
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
@@ -2399,7 +2401,6 @@ class Student extends Admin_Controller
         echo json_encode($json_data);
     }
 
-    
     public function getStudentByClassSection()
     {
 

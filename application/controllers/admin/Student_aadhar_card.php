@@ -102,13 +102,15 @@ class Student_aadhar_card extends Admin_Controller
     public function downlod($student_id)
     {
         $student_data     = $this->student_model->getStudentsById($student_id);
+        
 
         $student_aadhar_data     = $this->Aadhar_card_model->getStudentsAdharById($student_id);
         $result = array(
             'student_data' => $student_data,
             'student_aadhar_data' => $student_aadhar_data,
         );
-        $this->load->library('pdf');
+       
+        $this->load->library('Pdf');
         $html = $this->load->view('admin/certificate/adharCardCertificateDownlod',$result, true);
         $this->pdf->createPDF($html, 'mypdf', false);
     }

@@ -593,11 +593,3 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         })
     })
 </script>
-
-<!-- <script>
-    $("#downlod").on('click', function() {
-        var student_id = $("#store_student_id").val();
-        alert("asjas");
-        $("#downlod").attr('href', '<?php echo base_url(); ?>/admin/student_aadhar_card/downlod/' + student_id)
-    })
-</script> -->
