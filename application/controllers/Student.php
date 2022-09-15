@@ -2448,7 +2448,7 @@ class Student extends Admin_Controller
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentAgeReportPdf',$data, true);
-        $this->pdf->createPDF($html, 'mypdf', false);
+        $this->pdf->createPDF($html, 'mypdf', false,'A4','landscape');
     }
     /**
      * Downlod student age report pdf
@@ -2457,6 +2457,6 @@ class Student extends Admin_Controller
         $data['students_list'] = $this->classsection_model->StudentCategoryReport();
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentcategoriesreportspdf',$data, true);
-        $this->pdf->createPDF($html, 'mypdf', false);
+        $this->pdf->createPDF($html, 'mypdf', false,'A4','landscape');
     }
 }
