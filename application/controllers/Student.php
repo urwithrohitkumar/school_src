@@ -2403,7 +2403,6 @@ class Student extends Admin_Controller
 
     public function getStudentByClassSection()
     {
-
         $data                 = array();
         $cls_section_id       = $this->input->post('cls_section_id');
         $data['fields']       = $this->customfield_model->get_custom_fields('students', 1);
@@ -2426,6 +2425,7 @@ class Student extends Admin_Controller
         $data     = $this->student_model->getStudentsDetails($student_id);
         echo json_encode($data);
     }
+
     /**
      * Get student details by Student id
      */
@@ -2441,6 +2441,7 @@ class Student extends Admin_Controller
         );
         echo json_encode($result);
     }
+
     /**
      * Downlod student age report pdf
      */
@@ -2450,6 +2451,7 @@ class Student extends Admin_Controller
         $html = $this->load->view('reports/studentAgeReportPdf',$data, true);
         $this->pdf->createPDF($html, 'mypdf', false,'A4','landscape');
     }
+
     /**
      * Downlod student age report pdf
      */

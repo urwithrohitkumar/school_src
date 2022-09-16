@@ -1780,6 +1780,8 @@ $lang['class_12'] = "XII";
 $lang['b'] = "B";
 $lang['t'] = "T";
 $lang['g'] = "G";
+// Fine terms.
+$lang['fine_terms'] = "Fine Applied On";
 
 
 
