@@ -437,8 +437,8 @@ class Customlib
     }
 
     public function getLoggedInUserData()
-    {
-        $admin = $this->CI->session->userdata('admin');
+    {         
+        $admin = $this->CI->session->userdata('admin');       
         if ($admin) {
             return $admin;
         } else if ($this->CI->session->userdata('student')) {
@@ -1773,4 +1773,15 @@ class Customlib
          $status = $this->CI->onlinestudent_model->checkisenroll($refno);
          return $status ;
     }
+
+    public function getLoggedInBranchId(){
+        $status = $this->CI->branch_model->getLoggedInUserBranchId();
+        return $status;
+    }
+
+    public function getBranchNameOnly1($id){
+        $status = $this->CI->db->select('branch_name')->where("id",$id)->get("tb_branch")->row_array();
+        return $status['branch_name'];
+    }
+    
 }

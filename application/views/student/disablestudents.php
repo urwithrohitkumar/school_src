@@ -25,7 +25,23 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <div class="row">
                                     <form role="form" action="<?php echo site_url('student/disablestudentslist') ?>" method="post" class="">
                                         <?php echo $this->customlib->getCSRF(); ?>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                                    <select  id="branch_id" name="branch_id" class="form-control">
+                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids <0){  ?>
+                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                                    <?php  } else { ?>
+                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                                    <?php foreach ($all_branch as  $value) { ?>                                                        
+                                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                                    <?php } } ?>
+                                                </select>
+                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
                                             <div class="form-group"> 
                                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                                 <select autofocus="" id="class_id" name="class_id" class="form-control" >
@@ -42,9 +58,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                             </div>  
                                         </div><!--./col-md-6-->
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label><?php echo $this->lang->line('section'); ?></label>
+                                                <label><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                                 <select  id="section_id" name="section_id" class="form-control" >
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                 </select>

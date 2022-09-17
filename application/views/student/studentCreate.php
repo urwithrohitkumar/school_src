@@ -33,6 +33,7 @@
                                     <input type="hidden" name="sibling_name" value="<?php echo set_value('sibling_name'); ?>" id="sibling_name_next">
                                     <input type="hidden" name="sibling_id" value="<?php echo set_value('sibling_id', 0); ?>" id="sibling_id">
                                     <div class="row">
+
                                         <?php if (!$adm_auto_insert) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
@@ -51,23 +52,33 @@
                                                     <span class="text-danger"><?php echo form_error('roll_no'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } ?>
+                                        <?php } ?>                                        
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                                 <select  id="branch_id" name="branch_id" class="form-control">
+                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids <0){  ?>
+                                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                                    <?php  } else { foreach ($all_branch as  $value) { ?>
+                                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                                    <?php } } ?>
+                                                </select>
+                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                                 <select id="class_id" name="class_id" class="form-control">
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                    <?php
-                                                    foreach ($classlist as $class) {
-                                                    ?>
-                                                        <option value="<?php echo $class['id'] ?>" <?php
-                                                                                                    if (set_value('class_id') == $class['id']) {
-                                                                                                        echo "selected=selected";
-                                                                                                    }
-                                                                                                    ?>><?php echo $class['class'] ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
+                                                    <?php foreach ($classlist as $class) { ?>
+                                                    <option value="<?php echo $class['id'] ?>" <?php
+                                                        if (set_value('class_id') == $class['id']) {
+                                                            echo "selected=selected";
+                                                        }
+                                                        ?>><?php echo $class['class'] ?></option>
+                                                    <?php } ?>
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                             </div>
@@ -81,7 +92,9 @@
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                             </div>
-                                        </div>
+                                        </div> 
+                                        
+                                        
 
                                     </div>
                                     <div class="row">

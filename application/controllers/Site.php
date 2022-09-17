@@ -114,6 +114,7 @@ class Site extends Public_Controller
                         'is_rtl'          => $setting_result[0]['is_rtl'],
                         'theme'           => $setting_result[0]['theme'],
                         'gender'          => $result->gender,
+                        'branch_id'       => $result->branch_id,
                     );
                     $language_result1 = $this->language_model->get($lang_array['lang_id']);
                     if ($this->customlib->get_rtl_languages($language_result1['short_code'])) {

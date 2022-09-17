@@ -15,34 +15,43 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
                     <div class="box-body">
-                         <form role="form" action="<?php echo site_url('student/searchvalidation') ?>" method="post" class="class_search_form">
-                        <?php if ($this->session->flashdata('msg')) {?> <div class="alert alert-success">  <?php echo $this->session->flashdata('msg') ?> </div> <?php }?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
+                        <form role="form" action="<?php echo site_url('student/searchvalidation') ?>" method="post" class="class_search_form">
+                            <?php if ($this->session->flashdata('msg')) {?> <div class="alert alert-success">  <?php echo $this->session->flashdata('msg') ?> </div> <?php }?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
                                         <?php echo $this->customlib->getCSRF(); ?>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                                    <select  id="branch_id" name="branch_id" class="form-control">
+                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids <0){  ?>
+                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                                    <?php  } else { ?>
+                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                                    <?php foreach ($all_branch as  $value) { ?>                                                        
+                                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                                    <?php } } ?>
+                                                </select>
+                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label><?php echo $this->lang->line('class'); ?></label> <small class="req"> *</small>
                                                 <select autofocus="" id="class_id" name="class_id" class="form-control" >
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                    <?php
-$count = 0;
-foreach ($classlist as $class) {
-    ?>
-                                                        <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
-        echo "selected=selected";
-    }
-    ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-$count++;
-}
-?>
+                                                    <?php $count = 0; foreach ($classlist as $class) { ?>
+                                                    <option value="<?php echo $class['id'] ?>"
+                                                        <?php if (set_value('class_id') == $class['id']) {
+                                                        echo "selected=selected"; } ?>><?php echo $class['class'] ?></option>
+                                                    <?php $count++; } ?>
                                                 </select>
-                                                  <span class="text-danger" id="error_class_id"></span>
+                                                <span class="text-danger" id="error_class_id"></span>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label><?php echo $this->lang->line('section'); ?></label>
                                                 <select  id="section_id" name="section_id" class="form-control" >
@@ -56,14 +65,14 @@ $count++;
                                                 <button type="submit" name="search" value="search_filter" class="btn btn-primary btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                             </div>
                                         </div>
-                                </div>
-                            </div><!--./col-md-6-->
-                            <div class="col-md-6">
-                                <div class="row">
+                                    </div>
+                                </div><!--./col-md-6-->
+                                <div class="col-md-6">
+                                    <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label><?php echo $this->lang->line('search_by_keyword'); ?></label>
-                                        <input type="text" name="search_text" id="search_text" class="form-control" value="<?php echo set_value('search_text'); ?>"   placeholder="<?php echo $this->lang->line('search_by_student_name'); ?>">
+                                                    <label><?php echo $this->lang->line('search_by_keyword'); ?></label>
+                                                <input type="text" name="search_text" id="search_text" class="form-control" value="<?php echo set_value('search_text'); ?>"   placeholder="<?php echo $this->lang->line('search_by_student_name'); ?>">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
@@ -71,15 +80,15 @@ $count++;
                                                 <button type="submit" name="search" value="search_full" class="btn btn-primary pull-right btn-sm checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                           </div><!--./col-md-6-->
-                        </div><!--./row-->
-                    </div>
+                                        </form>
+                                    </div>
+                            </div><!--./col-md-6-->
+                            </div><!--./row-->
+                        </div>
 
-                <?php
-//if (isset($resultlist)) {
-?>
+                    <?php
+                        //if (isset($resultlist)) {
+                        ?>
                     <div class="nav-tabs-custom border0 navnoshadow">
                       <div class="box-header ptbnull"></div>
                         <ul class="nav nav-tabs">

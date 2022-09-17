@@ -130,10 +130,10 @@ class Studentsession_model extends CI_Model
         }
     }
 
-    public function searchMultiStudentByClassSection($class_id = null, $section_id = null)
+    public function searchMultiStudentByClassSection($branch_id = null, $class_id = null, $section_id = null)
     {
 
-        $students = $this->student_model->searchByClassSectionWithSession($class_id, $section_id);
+        $students = $this->student_model->searchByClassSectionWithSession($branch_id, $class_id, $section_id);
 
         if (!empty($students)) {
             foreach ($students as $student_key => $student_value) {

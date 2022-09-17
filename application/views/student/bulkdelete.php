@@ -17,7 +17,23 @@
                             <?php if ($this->session->flashdata('msg')) { ?> <div class="alert alert-success">  <?php echo $this->session->flashdata('msg') ?> </div> <?php } ?>
                             <form role="form" action="<?php echo site_url('student/bulkdelete') ?>" method="post" class="">
                                 <?php echo $this->customlib->getCSRF(); ?>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                            <select  id="branch_id" name="branch_id" class="form-control">
+                                            <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids <0){  ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                            <?php  } else { ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <?php foreach ($all_branch as  $value) { ?>                                                        
+                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                            <?php } } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('class'); ?></label> 
                                         <select autofocus="" id="class_id" name="class_id" class="form-control" >
@@ -38,7 +54,7 @@
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('section'); ?></label>
                                         <select  id="section_id" name="section_id" class="form-control" >
@@ -47,22 +63,17 @@
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
                                 </div>
-
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <button type="submit" name="search" value="search_filter" class="btn btn-primary btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                     </div>
                                 </div>
                             </form>
-
-
-
                         </div>  
                     </div>
 
                     <div class="box-body bordertop">
                         <div class="row">
-
                             <div class="col-md-12 col-sm-12">
                                 <form action="<?php echo site_url('student/ajax_delete') ?>" method="POST" id="deletebulk">
 
@@ -182,14 +193,11 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
     </section>
 </div>
 <script type="text/javascript">
-
-
     function getSectionByClass(class_id, section_id) {
         if (class_id != "" && section_id != "") {
             $('#section_id').html("");

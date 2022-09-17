@@ -42,12 +42,13 @@ class Student extends Admin_Controller
         }
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'student/multiclass');
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $data['title']       = 'student fees';
         $data['title']       = 'student fees';
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
-
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
 
@@ -56,14 +57,13 @@ class Student extends Admin_Controller
             $class                   = $this->class_model->get();
             $data['classlist']       = $class;
             $data['student_due_fee'] = array();
+            $branch_id               = $this->input->post('branch_id');
             $class_id                = $this->input->post('class_id');
             $section_id              = $this->input->post('section_id');
             $classes                 = $this->classsection_model->allClassSections();
-
-            $data['classes'] = $classes;
-
-            $students         = $this->studentsession_model->searchMultiStudentByClassSection($class_id, $section_id);
-            $data['students'] = $students;
+            $data['classes']         = $classes;
+            $students                = $this->studentsession_model->searchMultiStudentByClassSection($branch_id, $class_id, $section_id);
+            $data['students']        = $students;
         }
         $this->load->view('layout/header', $data);
         $this->load->view('student/multiclass', $data);
@@ -260,6 +260,7 @@ class Student extends Admin_Controller
 
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'student/create');
+        $data['all_branch']  = $this->branch_model->getBranch();       
         $genderList                 = $this->customlib->getGender();
         $data['genderList']         = $genderList;
         $data['sch_setting']        = $this->sch_setting_detail;
@@ -272,7 +273,7 @@ class Student extends Admin_Controller
         $data['studentlist']        = $student_result;
         $class                      = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']          = $class;
-        $userdata                   = $this->customlib->getUserData();
+        $userdata                   = $this->customlib->getUserData();        
         $category                   = $this->category_model->get();
         $data['categorylist']       = $category;
         $houses                     = $this->student_model->gethouselist();
@@ -283,7 +284,7 @@ class Student extends Admin_Controller
         $vehroute_result            = $this->vehroute_model->get();
         $data['vehroutelist']       = $vehroute_result;
         $custom_fields              = $this->customfield_model->getByBelong('students');
-
+       
         foreach ($custom_fields as $custom_fields_key => $custom_fields_value) {
             if ($custom_fields_value['validation']) {
                 $custom_fields_id   = $custom_fields_value['id'];
@@ -359,11 +360,10 @@ class Student extends Admin_Controller
             if (empty($hostel_room_id)) {
                 $hostel_room_id = 0;
             }
-
-            $data_insert = array(
+            // 'bpl'               => $this->input->post('bpl'),
+            $data_insert = array(   
                 'firstname'         => $this->input->post('firstname'),
-                'rte'               => $this->input->post('rte'),
-                'bpl'               => $this->input->post('bpl'),
+                'rte'               => $this->input->post('rte'),                
                 'state'             => $this->input->post('state'),
                 'city'              => $this->input->post('city'),
                 'pincode'           => $this->input->post('pincode'),
@@ -396,6 +396,7 @@ class Student extends Admin_Controller
             } else {
                 $data_insert['image'] = 'uploads/student_images/default_male.jpg';
             }
+            $branch_id         = $this->input->post('branch_id');
             $house             = $this->input->post('house');
             $blood_group       = $this->input->post('blood_group');
             $measurement_date  = $this->input->post('measure_date');
@@ -549,6 +550,7 @@ class Student extends Admin_Controller
                     'student_id'    => $insert_id,
                     'class_id'      => $class_id,
                     'section_id'    => $section_id,
+                    'branch_id'     => $branch_id,
                     'session_id'    => $session,
                     'fees_discount' => $fees_discount,
                 );
@@ -723,9 +725,6 @@ class Student extends Admin_Controller
                         'email' => $this->input->post('guardian_email'),
                         'contact_no' => $this->input->post('guardian_phone'),
                         'mobileno' => $this->input->post('mobileno'),
-
-
-
                     );
                     $this->sms_send->mailsms('login_credential', $parent_login_detail);
                 }
@@ -1612,23 +1611,31 @@ class Student extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'bulkdelete');
         $class                   = $this->class_model->get();
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $data['classlist']       = $class;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['fields']          = $this->customfield_model->get_custom_fields('students', 1);
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $branch_id   = $this->input->post('branch_id');
             $class   = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $search  = $this->input->post('search');
-
-            $data['searchby']    = "filter";
-            $data['class_id']    = $this->input->post('class_id');
-            $data['section_id']  = $this->input->post('section_id');
-            $data['search_text'] = $this->input->post('search_text');
-            $resultlist          = $this->student_model->searchByClassSection($class, $section);
-            $data['resultlist']  = $resultlist;
-            $title               = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
-            $data['title']       = 'Student Details for ' . $title['class'] . "(" . $title['section'] . ")";
+            $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
+            $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
+            $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
+            if ($this->form_validation->run() == false) {
+            } else {
+                $data['searchby']    = "filter";
+                $data['branch_id']   = $this->input->post('branch_id');
+                $data['class_id']    = $this->input->post('class_id');
+                $data['section_id']  = $this->input->post('section_id');
+                $data['search_text'] = $this->input->post('search_text');
+                $resultlist          = $this->student_model->searchByClassSection($branch_id, $class, $section);
+                $data['resultlist']  = $resultlist;
+                $title               = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
+                $data['title']       = 'Student Details for ' . $title['class'] . "(" . $title['section'] . ")";
+            }
         }
         $this->load->view('layout/header', $data);
         $this->load->view('student/bulkdelete', $data);
@@ -1649,7 +1656,7 @@ class Student extends Admin_Controller
         $data['fields']          = $this->customfield_model->get_custom_fields('students', 1);
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
-
+        $data['all_branch']      = $this->branch_model->getBranch();       
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentSearch', $data);
         $this->load->view('layout/footer', $data);
@@ -1831,6 +1838,7 @@ class Student extends Admin_Controller
         $data["resultlist"]      = array();
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting']     = $this->sch_setting_detail;
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $userdata                = $this->customlib->getUserData();
         $carray                  = array();
         $reason_list             = array();
@@ -1844,6 +1852,7 @@ class Student extends Admin_Controller
         $button = $this->input->post('search');
         if ($this->input->server('REQUEST_METHOD') == "GET") {
         } else {
+            $branch_id   = $this->input->post('branch_id');
             $class       = $this->input->post('class_id');
             $section     = $this->input->post('section_id');
             $search      = $this->input->post('search');
@@ -1851,23 +1860,25 @@ class Student extends Admin_Controller
             if (isset($search)) {
                 if ($search == 'search_filter') {
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
+                    $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
+                    $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
                     if ($this->form_validation->run() == false) {
                     } else {
                         $data['searchby']   = "filter";
                         $data['class_id']   = $this->input->post('class_id');
-                        $data['section_id'] = $this->input->post('section_id');
-
+                        $data['section_id'] = (!empty($this->input->post('section_id'))? $this->input->post('section_id'): '0');
+                        $data['branch_id']  = $this->input->post('branch_id');
                         $data['search_text'] = $this->input->post('search_text');
-                        $resultlist          = $this->student_model->disablestudentByClassSection($class, $section);
+                        $resultlist          = $this->student_model->disablestudentByClassSection($branch_id, $class, $section);                        
                         $data['resultlist']  = $resultlist;
                         $title               = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
                         $data['title']       = 'Student Details for ' . $title['class'] . "(" . $title['section'] . ")";
                     }
                 } else if ($search == 'search_full') {
                     $data['searchby'] = "text";
-
+                    $branch_id       = $this->session->admin['branch_id'];
                     $data['search_text'] = trim($this->input->post('search_text'));
-                    $resultlist          = $this->student_model->disablestudentFullText($search_text);
+                    $resultlist          = $this->student_model->disablestudentFullText($branch_id,$search_text);
 
                     $data['resultlist'] = $resultlist;
                     $data['title']      = 'Search Details: ' . $data['search_text'];
@@ -1876,14 +1887,11 @@ class Student extends Admin_Controller
         }
 
         $disable_reason = $this->disable_reason_model->get();
-
         foreach ($disable_reason as $key => $value) {
             $id               = $value['id'];
             $reason_list[$id] = $value;
         }
-
         $data['disable_reason'] = $reason_list;
-
         $this->load->view("layout/header", $data);
         $this->load->view("student/disablestudents", $data);
         $this->load->view("layout/footer", $data);
@@ -2186,8 +2194,10 @@ class Student extends Admin_Controller
     }
 
     public function dtstudentlist()
-    {
+    {   
+        
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
+        $branch_id       = $this->input->post('branch_id');
         $class           = $this->input->post('class_id');
         $section         = $this->input->post('section_id');
         $search_text     = $this->input->post('search_text');
@@ -2203,9 +2213,10 @@ class Student extends Admin_Controller
 
         $sch_setting = $this->sch_setting_detail;
         if ($search_type == "search_filter") {
-            $resultlist = $this->student_model->searchdtByClassSection($class, $section);
+            $resultlist = $this->student_model->searchdtByClassSection($branch_id,$class, $section);
         } elseif ($search_type == "search_full") {
-            $resultlist = $this->student_model->searchFullText($search_text, $carray);
+            $branch_id       = $this->session->admin['branch_id'];
+            $resultlist = $this->student_model->searchFullText($branch_id,$search_text, $carray);
         }
         $students = array();
         $students = json_decode($resultlist);
@@ -2277,7 +2288,8 @@ class Student extends Admin_Controller
 
     //datatable function to check search parameter validation
     public function searchvalidation()
-    {
+    {   
+        $branch_id   = $this->input->post('branch_id');
         $class_id   = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
 
@@ -2288,7 +2300,7 @@ class Student extends Admin_Controller
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == true) {
 
-                $params = array('srch_type' => $srch_type, 'class_id' => $class_id, 'section_id' => $section_id);
+                $params = array('srch_type' => $srch_type,'branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id);
                 $array  = array('status' => 1, 'error' => '', 'params' => $params);
                 echo json_encode($array);
             } else {
@@ -2299,7 +2311,8 @@ class Student extends Admin_Controller
                 echo json_encode($array);
             }
         } else {
-            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id);
+            $branch_id       = $this->session->admin['branch_id'];
+            $params = array('srch_type' => 'search_full','branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id);
             $array  = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }

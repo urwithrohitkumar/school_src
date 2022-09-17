@@ -1786,3 +1786,13 @@ $lang['student_religion'] = "Student Religion";
 $lang['student_caste'] = "Student Caste";
 $lang['create_caste'] = "Create Caste";
 $lang['caste_list'] = "Caste List";
+
+$lang['branch'] = "Branch";
+$lang['branch_list'] = 'Branch List';
+$lang['branch_title'] = 'Branch Title';
+$lang['create_branch'] = 'Create Branch';
+$lang['edit_branch'] = 'Edit Branch';
+
+$lang['branch_name'] = "Branch Name.";
+$lang['branchs'] = "By Branch";
+$lang['Branch'] = "Branch";

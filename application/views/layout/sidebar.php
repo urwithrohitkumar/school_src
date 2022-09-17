@@ -2387,9 +2387,12 @@ online_course_offline_payment', 'can_view')) ||
 
                             <?php
 
-                            }
+                            }?>
+                            <?php if ($this->rbac->hasPrivilege('user_status')) { ?>
+                            <li class="<?php echo set_Submenu('users/index'); ?>"><a href="<?php echo base_url(); ?>admin/branch"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('branch'); ?></a></li>
+                            <?php  } ?>
 
-                            if ($this->rbac->hasPrivilege('session_setting', 'can_view')) {
+                            <?php if ($this->rbac->hasPrivilege('session_setting', 'can_view')) {
 
                             ?>
 
