@@ -772,6 +772,7 @@ class Staff_model extends MY_Model
     {
 
         $record = $this->getByEmail($data['email']);
+        
         if ($record) {
             $pass_verify = $this->enc_lib->passHashDyc($data['password'], $record->password);
             if ($pass_verify) {

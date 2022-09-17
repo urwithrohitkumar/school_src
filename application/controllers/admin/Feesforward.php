@@ -31,7 +31,9 @@ class Feesforward extends Admin_Controller {
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting'] = $this->sch_setting_detail;
         $data['classlist'] = $class;
+        $data['all_branch']      = $this->branch_model->getBranch();
         $action = $this->input->post('action');
+        $branch_id = $this->input->post('branch_id');
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
         if ($this->input->server('REQUEST_METHOD') == "POST") {
@@ -55,19 +57,20 @@ class Feesforward extends Admin_Controller {
 
             //========================
             if ($action == 'search') {
+                $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'required');
                 $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'required');
                 $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'required');
                 if ($this->form_validation->run() == TRUE) {
                     $data['student_due_fee'] = array();
                     if (!empty($pre_session)) {
-                        $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $class_id, $section_id, $current_session));
+                        $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $branch_id, $class_id, $section_id, $current_session));
 
                         $data['student_due_fee'] = $student_Array->student_Array;
                         $data['is_update'] = $student_Array->is_update;
                     }
                 }
             } else if ($action == 'fee_submit') {
-                $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $class_id, $section_id, $current_session));
+                $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id,$branch_id, $class_id, $section_id, $current_session));
 
                 $data['student_due_fee'] = $student_Array->student_Array;
                 $data['is_update'] = $student_Array->is_update;
@@ -100,9 +103,9 @@ class Feesforward extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function findPreviousBalanceFees($session_id, $class_id, $section_id, $current_session) {
+    public function findPreviousBalanceFees($session_id,$branch_id, $class_id, $section_id, $current_session) {
 
-        $studentlist = $this->student_model->getPreviousSessionStudent($session_id, $class_id, $section_id);
+        $studentlist = $this->student_model->getPreviousSessionStudent($session_id,$branch_id, $class_id, $section_id);
 
         $is_update = false;
         $student_Array = array();
@@ -134,15 +137,11 @@ class Feesforward extends Admin_Controller {
                 }
             } else {
                 foreach ($student_Array as $stkey => $eachstudent) {
-
-
                     //==========================
                     $student_total_fees = array();
                     if ($eachstudent->student_previous_session_id != "") {
-
                         $student_total_fees = $this->studentfeemaster_model->getPreviousStudentFees($eachstudent->student_previous_session_id);
                     }
-
                     if (!empty($student_total_fees)) {
                         $totalfee = 0;
                         $deposit = 0;

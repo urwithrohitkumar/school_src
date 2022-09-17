@@ -25,7 +25,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
                                                     <select  id="branch_id" name="branch_id" class="form-control">
-                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids <0){  ?>
+                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids >0){  ?>
                                                     <option value="" ><?php echo $this->lang->line('select'); ?></option>
                                                     <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
                                                     <?php  } else { ?>

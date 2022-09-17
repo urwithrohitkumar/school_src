@@ -28,6 +28,7 @@ class Studentfee extends Admin_Controller
         $data['title']       = 'student fees';
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $this->load->view('layout/header', $data);
         $this->load->view('studentfee/studentfeeSearch', $data);
         $this->load->view('layout/footer', $data);
@@ -135,6 +136,7 @@ class Studentfee extends Admin_Controller
     {
         $search_type = $this->input->post('search_type');
         if ($search_type == "class_search") {
+            $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'required|trim|xss_clean');
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'required|trim|xss_clean');
         } elseif ($search_type == "keyword_search") {
             $this->form_validation->set_rules('search_text', 'keyword --r', 'required|trim|xss_clean');
@@ -145,33 +147,36 @@ class Studentfee extends Admin_Controller
         if ($this->form_validation->run() == false) {
             $error = array();
             if ($search_type == "class_search") {
+                $error['branch_id'] = form_error('branch_id');
                 $error['class_id'] = form_error('class_id');
             } elseif ($search_type == "keyword_search") {
                 $error['search_text'] = form_error('search_text');
             }
-
             $array = array('status' => 0, 'error' => $error);
             echo json_encode($array);
         } else {
             $search_type = $this->input->post('search_type');
             $search_text = $this->input->post('search_text');
+            $branch_id    = $this->input->post('branch_id');
             $class_id    = $this->input->post('class_id');
             $section_id  = $this->input->post('section_id');
-            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'search_type' => $search_type, 'search_text' => $search_text);
+            $params      = array('branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id, 'search_type' => $search_type, 'search_text' => $search_text);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
     }
     public function ajaxSearch()
-    {
+    {   
+        $branch_id   = $this->input->post('branch_id');
         $class       = $this->input->post('class_id');
         $section     = $this->input->post('section_id');
         $search_text = $this->input->post('search_text');
         $search_type = $this->input->post('search_type');
         if ($search_type == "class_search") {
-            $students = $this->student_model->getDatatableByClassSection($class, $section);
+            $students = $this->student_model->getDatatableByClassSection($branch_id,$class, $section);
         } elseif ($search_type == "keyword_search") {
-            $students = $this->student_model->getDatatableByFullTextSearch($search_text);
+            $branch_id       = $this->session->admin['branch_id'];
+            $students = $this->student_model->getDatatableByFullTextSearch($branch_id,$search_text);
         }
 
         $students = json_decode($students);
@@ -214,8 +219,9 @@ class Studentfee extends Admin_Controller
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $feesessiongroup     = $this->feesessiongroup_model->getFeesByGroup();
-
+        $branch_id = $this->session->admin['branch_id'];
         $data['feesessiongrouplist'] = $feesessiongroup;
         $data['fees_group']          = "";
         if (isset($_POST['feegroup_id']) && $_POST['feegroup_id'] != '') {
@@ -234,9 +240,10 @@ class Studentfee extends Admin_Controller
             $feegroup                = explode("-", $feegroup_id);
             $feegroup_id             = $feegroup[0];
             $fee_groups_feetype_id   = $feegroup[1];
+            $data['all_branch']      = $this->branch_model->getBranch(); 
             $class_id                = $this->input->post('class_id');
             $section_id              = $this->input->post('section_id');
-            $student_due_fee         = $this->studentfee_model->getDueStudentFees($feegroup_id, $fee_groups_feetype_id, $class_id, $section_id);
+            $student_due_fee         = $this->studentfee_model->getDueStudentFees($branch_id,$feegroup_id, $fee_groups_feetype_id, $class_id, $section_id);
             if (!empty($student_due_fee)) {
                 foreach ($student_due_fee as $student_due_fee_key => $student_due_fee_value) {
                     $amt_due                                                  = $student_due_fee_value['amount'];
@@ -633,11 +640,11 @@ class Studentfee extends Admin_Controller
         } else {
             $paymentid = $this->input->post('paymentid');
             $invoice   = explode("/", $paymentid);
-
             if (array_key_exists(0, $invoice) && array_key_exists(1, $invoice)) {
                 $invoice_id             = $invoice[0];
                 $sub_invoice_id         = $invoice[1];
-                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($invoice_id, $sub_invoice_id);
+                $branch_id              = $this->session->admin['branch_id'];
+                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($branch_id,$invoice_id, $sub_invoice_id);
                 $data['feeList']        = $feeList;
                 $data['sub_invoice_id'] = $sub_invoice_id;
             } else {

@@ -649,7 +649,7 @@ class Studentfeemaster_model extends MY_Model
         return $array;
     }
 
-    public function getFeeByInvoice($invoice_id, $sub_invoice_id)
+    public function getFeeByInvoice($branch_id, $invoice_id, $sub_invoice_id)
     {
         $this->db->select('`student_fees_deposite`.*,students.id as std_id,students.firstname,students.middlename,students.lastname,students.admission_no,student_session.class_id,classes.class,sections.section,student_session.section_id,student_session.student_id,`fee_groups`.`name`, `feetype`.`type`, `feetype`.`code`,student_fees_master.student_session_id')->from('student_fees_deposite');
         $this->db->join('fee_groups_feetype', 'fee_groups_feetype.id = student_fees_deposite.fee_groups_feetype_id');
@@ -660,6 +660,9 @@ class Studentfeemaster_model extends MY_Model
         $this->db->join('classes', 'classes.id= student_session.class_id');
         $this->db->join('sections', 'sections.id= student_session.section_id');
         $this->db->join('students', 'students.id=student_session.student_id');
+        if($branch_id>0){
+            $this->db->where('student_session.branch_id', $branch_id);
+        }
         $this->db->where('student_fees_deposite.id', $invoice_id);
         $q = $this->db->get();
 
@@ -694,7 +697,12 @@ class Studentfeemaster_model extends MY_Model
 
     public function getPreviousStudentFees($student_session_id)
     {
-        $sql    = "SELECT `student_fees_master`.*,fee_groups.name FROM `student_fees_master` INNER JOIN fee_session_groups on student_fees_master.fee_session_group_id=fee_session_groups.id INNER JOIN fee_groups on fee_groups.id=fee_session_groups.fee_groups_id  WHERE `student_session_id` = " . $student_session_id . " ORDER BY `student_fees_master`.`id`";
+        $sql    = "SELECT `student_fees_master`.*,fee_groups.name 
+        FROM `student_fees_master` 
+        INNER JOIN fee_session_groups 
+        on student_fees_master.fee_session_group_id=fee_session_groups.id 
+        INNER JOIN fee_groups on fee_groups.id=fee_session_groups.fee_groups_id  
+        WHERE `student_session_id` = " . $student_session_id . " ORDER BY `student_fees_master`.`id`";
         $query  = $this->db->query($sql);
         $result = $query->result();
         if (!empty($result)) {

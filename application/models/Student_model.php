@@ -419,7 +419,7 @@ class Student_model extends MY_Model
         return $query->result_array();
     }
 
-    public function getDatatableByClassSection($class_id = null, $section_id = null)
+    public function getDatatableByClassSection($branch_id = null, $class_id = null, $section_id = null)
     {
         $this->datatables
             ->select('classes.id as `class_id`,student_session.id as student_session_id,students.id,classes.class,sections.id as `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,IFNULL(students.category_id, 0) as `category_id`,IFNULL(categories.category, "") as `category`,students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.father_name,students.app_key,students.parent_app_key,students.rte,students.gender')
@@ -432,6 +432,9 @@ class Student_model extends MY_Model
             ->where('student_session.session_id', $this->current_session)
             ->where('students.is_active', "yes")
             ->sort('students.admission_no', 'asc');
+        if ($branch_id >0) {
+            $this->datatables->where('student_session.branch_id', $branch_id);
+        }
         if ($class_id != null) {
             $this->datatables->where('student_session.class_id', $class_id);
         }
@@ -444,7 +447,7 @@ class Student_model extends MY_Model
         return $this->datatables->generate('json');
     }
 
-    public function getDatatableByFullTextSearch($searchterm)
+    public function getDatatableByFullTextSearch($branch_id,$searchterm)
     {
         $this->datatables->select('`classes`.`id` as `class_id`,`students`.`id`,`student_session`.`id` as `student_session_id`,`classes`.`class`,sections.id as `section_id`,sections.section,students.id,students.admission_no, students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,IFNULL(students.category_id, 0) as `category_id`,IFNULL(categories.category, "") as `category`,      students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code ,students.father_name , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.gender,students.rte,student_session.session_id');
         $this->datatables->join('student_session', 'student_session.student_id = students.id');
@@ -455,6 +458,9 @@ class Student_model extends MY_Model
         $this->datatables->group_start();
         $this->datatables->or_like_string('students.firstname,students.middlename,students.lastname,school_houses.house_name,students.guardian_name,students.adhar_no,students.samagra_id,students.roll_no,students.admission_no,students.mobileno,students.email,students.religion,students.cast,students.gender,students.current_address,students.permanent_address,students.blood_group,students.bank_name,students.ifsc_code,students.father_name,students.father_phone,students.father_occupation,students.mother_name,students.mother_phone,students.mother_occupation,students.guardian_name,students.guardian_relation,students.guardian_phone,students.guardian_occupation,students.guardian_address,students.guardian_email,students.previous_school,students.note', $searchterm);
         $this->datatables->group_end();
+        if($branch_id>0){
+            $this->datatables->where('student_session.branch_id', $branch_id);
+        }
         $this->datatables->where('student_session.session_id', $this->current_session);
         $this->datatables->where('students.is_active', 'yes');
         $this->datatables->sort('students.admission_no', 'asc');
@@ -466,9 +472,7 @@ class Student_model extends MY_Model
 
     public function searchByClassSection($branch_id = null, $class_id = null, $section_id = null)
     {
-
         $i = 1;
-
         $custom_fields   = $this->customfield_model->get_custom_fields('students', 1);
         $field_var_array = array();
         if (!empty($custom_fields)) {
@@ -1204,14 +1208,28 @@ class Student_model extends MY_Model
 
     public function searchNonPromotedStudents($class_id = null, $section_id = null, $promoted_session_id = null, $promoted_class_id = null, $promoted_section_id = null)
     {
-        $sql = "SELECT promoted_students.id as `promoted_student_id`,`classes`.`id` AS `class_id`, `student_session`.`id` as `student_session_id`, `students`.`id`, `classes`.`class`, `sections`.`id` AS `section_id`, `sections`.`section`, `students`.`id`, `students`.`admission_no`, `students`.`roll_no`, `students`.`admission_date`, `students`.`firstname`, `students`.`middlename`, `students`.`lastname`, `students`.`image`, `students`.`mobileno`, `students`.`email`, `students`.`state`, `students`.`city`, `students`.`pincode`, `students`.`religion`, `students`.`dob`, `students`.`current_address`, `students`.`permanent_address`, IFNULL(students.category_id, 0) as `category_id`, IFNULL(categories.category, '') as `category`, `students`.`adhar_no`, `students`.`samagra_id`, `students`.`bank_account_no`, `students`.`bank_name`, `students`.`ifsc_code`, `students`.`guardian_name`, `students`.`guardian_relation`, `students`.`guardian_phone`, `students`.`guardian_address`, `students`.`is_active`, `students`.`created_at`, `students`.`updated_at`, `students`.`father_name`, `students`.`rte`, `students`.`gender` FROM `students` JOIN `student_session` ON `student_session`.`student_id` = `students`.`id` JOIN `classes` ON `student_session`.`class_id` = `classes`.`id` JOIN `sections` ON `sections`.`id` = `student_session`.`section_id` LEFT JOIN `categories` ON `students`.`category_id` = `categories`.`id` LEFT join (select * from student_session WHERE session_id=" . $promoted_session_id . " and class_id=" . $promoted_class_id . " and section_id=" . $promoted_section_id . ") as promoted_students on promoted_students.student_id=students.id WHERE `student_session`.`session_id` = " . $this->current_session . " AND `students`.`is_active` = 'yes' AND `student_session`.`class_id` = " . $class_id . " AND `student_session`.`section_id` = " . $section_id . " and promoted_students.id IS NULL ORDER BY `students`.`id`";
+        $sql = "SELECT promoted_students.id as `promoted_student_id`,`classes`.`id` AS `class_id`, `student_session`.`id` as `student_session_id`, `students`.`id`, `classes`.`class`, `sections`.`id` AS `section_id`, `sections`.`section`, `students`.`id`, `students`.`admission_no`, `students`.`roll_no`, `students`.`admission_date`, `students`.`firstname`, `students`.`middlename`, `students`.`lastname`, `students`.`image`, `students`.`mobileno`, `students`.`email`, `students`.`state`, `students`.`city`, `students`.`pincode`, `students`.`religion`, `students`.`dob`, `students`.`current_address`, `students`.`permanent_address`, IFNULL(students.category_id, 0) as `category_id`, IFNULL(categories.category, '') as `category`, `students`.`adhar_no`, `students`.`samagra_id`, `students`.`bank_account_no`, `students`.`bank_name`, `students`.`ifsc_code`, `students`.`guardian_name`, `students`.`guardian_relation`, `students`.`guardian_phone`, `students`.`guardian_address`, `students`.`is_active`, `students`.`created_at`, `students`.`updated_at`, `students`.`father_name`, `students`.`rte`, `students`.`gender` 
+        FROM `students` 
+        JOIN `student_session` ON `student_session`.`student_id` = `students`.`id` 
+        JOIN `classes` ON `student_session`.`class_id` = `classes`.`id` 
+        JOIN `sections` ON `sections`.`id` = `student_session`.`section_id` 
+        LEFT JOIN `categories` ON `students`.`category_id` = `categories`.`id` 
+        LEFT join (select * from student_session WHERE session_id=" . $promoted_session_id . " and class_id=" . $promoted_class_id . " and section_id=" . $promoted_section_id . ") as promoted_students on promoted_students.student_id=students.id WHERE `student_session`.`session_id` = " . $this->current_session . " AND `students`.`is_active` = 'yes' AND `student_session`.`class_id` = " . $class_id . " AND `student_session`.`section_id` = " . $section_id . " and promoted_students.id IS NULL ORDER BY `students`.`id`";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
 
-    public function getPreviousSessionStudent($previous_session_id, $class_id, $section_id)
-    {
-        $sql = "SELECT student_session.student_id as student_id, student_session.id as current_student_session_id, student_session.class_id as current_session_class_id ,previous_session.id as previous_student_session_id,students.firstname,students.middlename,students.lastname,students.admission_no,students.roll_no,students.father_name,students.admission_date FROM `student_session` left JOIN (SELECT * FROM `student_session` where session_id=$previous_session_id) as previous_session on student_session.student_id=previous_session.student_id INNER join students on students.id =student_session.student_id where student_session.session_id=$this->current_session and student_session.class_id=$class_id and student_session.section_id=$section_id and students.is_active='yes' ORDER BY students.firstname ASC";
+    public function getPreviousSessionStudent($previous_session_id, $branch_id, $class_id, $section_id)
+    {   
+        $branch_condition ='';
+        if($branch_id>0){
+            $branch_condition = "and student_session.branch_id=$branch_id";
+        }
+        $sql = "SELECT student_session.student_id as student_id, student_session.id as current_student_session_id, student_session.class_id as current_session_class_id ,previous_session.id as previous_student_session_id,students.firstname,students.middlename,students.lastname,students.admission_no,students.roll_no,students.father_name,students.admission_date 
+        FROM `student_session` 
+        left JOIN (SELECT * FROM `student_session` where session_id=$previous_session_id) as previous_session on student_session.student_id=previous_session.student_id 
+        INNER join students on students.id =student_session.student_id 
+        where student_session.session_id=$this->current_session and student_session.class_id=$class_id and student_session.section_id=$section_id $branch_condition and students.is_active='yes' ORDER BY students.firstname ASC";
 
         $query = $this->db->query($sql);
         return $query->result();
