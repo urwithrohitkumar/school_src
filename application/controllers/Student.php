@@ -1135,7 +1135,7 @@ class Student extends Admin_Controller
                                 );
 
                                 $this->user_model->add($data_student_login);
-                                // $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
+                                $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                                 $user_password = '123456';
 
                                 $temp              = $insert_id;

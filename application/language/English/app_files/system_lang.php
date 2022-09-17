@@ -1780,8 +1780,17 @@ $lang['class_12'] = "XII";
 $lang['b'] = "B";
 $lang['t'] = "T";
 $lang['g'] = "G";
+
+$lang['caste'] = "Caste";
+$lang['student_religion'] = "Student Religion";
+$lang['student_caste'] = "Student Caste";
+$lang['create_caste'] = "Create Caste";
+$lang['caste_list'] = "Caste List";
+
 // Fine terms.
 $lang['fine_terms'] = "Fine Applied On";
+$lang['refund_comments'] = "Reason for Revert";
+$lang['refund_comments_placeholder'] = "Enter Reason for Revert";
 
 
 
