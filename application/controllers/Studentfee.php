@@ -277,7 +277,6 @@ class Studentfee extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/finance');
         $this->session->set_userdata('subsub_menu', 'Reports/finance/reportbyname');
         $data['title']       = 'student fees';
-        $data['title']       = 'student fees';
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;

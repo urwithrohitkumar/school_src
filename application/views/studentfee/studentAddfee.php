@@ -926,8 +926,7 @@ $language_name   = $language["short_code"];
             var main_invoice = $('#main_invoice').val();
             var sub_invoice = $('#sub_invoice').val();
             var comments = $('#refund_comments').val();
-
-            console.log(comments);
+            
             $modalDiv.addClass('modalloading');
             $.ajax({
                 type: "post",
