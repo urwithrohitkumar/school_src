@@ -32,13 +32,10 @@ class Admin extends Admin_Controller
         $role            = $this->customlib->getStaffRole();
         $role_id         = json_decode($role)->id;
         $data['role_id'] = $role_id;
-
         $staffid       = $this->customlib->getStaffID();
         $notifications = $this->notification_model->getUnreadStaffNotification($staffid, $role_id);
-
         $data['notifications'] = $notifications;
         $input                 = $this->setting_model->getCurrentSessionName();
-
         list($a, $b)  = explode('-', $input);
         $Current_year = $a;
         if (strlen($b) == 2) {

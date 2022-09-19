@@ -212,16 +212,25 @@ class Expense_model extends MY_Model
 
     public function getTotalExpenseBwdate($date_from, $date_to)
     {
-        $query = 'SELECT sum(amount) as `amount` FROM `expenses` where date between ' . $this->db->escape($date_from) . ' and ' . $this->db->escape($date_to);
+        $branch_id = $this->session->admin['branch_id'];
+        $where ='';
+        if($branch_id>0){
+            $where ='And branch_id='.$branch_id;
+        }
+        $query = 'SELECT sum(amount) as `amount` FROM `expenses` where date between ' . $this->db->escape($date_from) . ' and ' . $this->db->escape($date_to) .$where;
 
         $query = $this->db->query($query);
         return $query->row();
     }
 
     public function getExpenseHeadData($start_date, $end_date)
-    {
-        $condition = "date_format(date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
+    {   
+        $branch_id = $this->session->admin['branch_id'];
+        $where='';
+        if($branch_id>0){
+            $where='expense_head.branch_id='.$branch_id.' And ';
+        }
+        $condition = $where."date_format(date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         $recorddata = $this->db->select('sum(amount) as total,exp_category')->from('expenses');
         $this->db->join('expense_head', 'expenses.exp_head_id = expense_head.id');
         $this->db->where($condition)->group_by('expense_head.id');

@@ -59,6 +59,7 @@ class Studentfee_model extends MY_Model {
     }
 
     public function getTodayStudentFees() {
+        $branch_id = $this->session->admin['branch_id'];
         $this->db->select('student_fees.date,student_fees.id,student_fees.amount,student_fees.amount_discount,student_fees.amount_fine,student_fees.created_at,classes.class,sections.section,students.firstname,students.middlename,students.lastname,students.admission_no,students.roll_no,students.dob,students.guardian_name,feetype.type')->from('student_fees');
         $this->db->join('student_session', 'student_session.id = student_fees.student_session_id');
         $this->db->join('feemasters', 'feemasters.id = student_fees.feemaster_id');
@@ -66,6 +67,9 @@ class Studentfee_model extends MY_Model {
         $this->db->join('classes', 'student_session.class_id = classes.id');
         $this->db->join('sections', 'sections.id = student_session.section_id');
         $this->db->join('students', 'students.id = student_session.student_id');
+        if($branch_id>0){
+            $this->db->where('student_session.branch_id', $branch_id);
+        }
         $this->db->where('student_fees.date', $this->current_date);
         $this->db->where('student_session.session_id', $this->current_session);
         $this->db->order_by('student_fees.id');

@@ -75,9 +75,12 @@ class Income_model extends My_Model
 
     public function getIncomeHeadsData($start_date, $end_date)
     {
-
-        $condition = "date_format(date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
+        $branch_id = $this->session->admin['branch_id'];
+        $where='';
+        if($branch_id>0){
+            $where='income_head.branch_id='.$branch_id.' And ';
+        }
+        $condition = $where."date_format(date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         $this->db->select('sum(amount) as total,income_category')->from('income');
         $this->db->join('income_head', 'income.inc_head_id = income_head.id');
         $this->db->where($condition)->group_by('income_head.id');
