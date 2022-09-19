@@ -25,6 +25,7 @@ class Expense extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'expense/index');
         $data['title']      = 'Add Expense';
         $data['title_list'] = 'Recent Expenses';
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exp_head_id', $this->lang->line('expense_head'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
@@ -35,6 +36,7 @@ class Expense extends Admin_Controller
         } else {
             $data = array(
                 'exp_head_id' => $this->input->post('exp_head_id'),
+                'branch_id'   => $this->input->post('branch_id'),
                 'name'        => $this->input->post('name'),
                 'date'        => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'amount'      => $this->input->post('amount'),
@@ -60,6 +62,7 @@ class Expense extends Admin_Controller
         $data['expenselist'] = $expense_result;
         $expnseHead          = $this->expensehead_model->get();
         $data['expheadlist'] = $expnseHead;
+        $data['all_branch']  = $this->branch_model->getBranch();       
         $this->load->view('layout/header', $data);
         $this->load->view('admin/expense/expenseList', $data);
         $this->load->view('layout/footer', $data);
@@ -191,7 +194,9 @@ class Expense extends Admin_Controller
         $data['expenselist'] = $expense_result;
         $expnseHead          = $this->expensehead_model->get();
         $data['expheadlist'] = $expnseHead;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('exp_head_id', $this->lang->line('expense_head'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('documents', $this->lang->line('documents'), 'callback_handle_upload');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
@@ -204,6 +209,7 @@ class Expense extends Admin_Controller
             $data = array(
                 'id'          => $id,
                 'exp_head_id' => $this->input->post('exp_head_id'),
+                'branch_id' => $this->input->post('branch_id'),
                 'name'        => $this->input->post('name'),
                 'invoice_no'  => $this->input->post('invoice_no'),
                 'date'        => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
@@ -240,7 +246,7 @@ class Expense extends Admin_Controller
     }
     public function getexpenselist()
     {
-        $m       = $this->expense_model->getexpenselist();
+        $m       = $this->expense_model->getexpenselist();        
         $m       = json_decode($m);
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $dt_data = array();

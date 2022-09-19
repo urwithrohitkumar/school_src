@@ -20,16 +20,23 @@ class Income_model extends My_Model
      * @return mixed
      */
     
-    public function search($text = null, $start_date = null, $end_date = null)
-    {
+    public function search($text = null, $start_date = null, $end_date = null,$branch_id = null)
+    {   
+        
+        if($branch_id>0){
+            $arr['income.branch_id'] = $branch_id;
+        }else{
+            $arr=true;
+        }
 
         if (!empty($text)) {
-
+            
             $this->datatables
             ->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')
             ->searchable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount')
             ->orderable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount')
-            ->join("income_head", "income.inc_head_id = income_head.id")
+            ->join("income_head", "income.inc_head_id = income_head.id",'left')
+            ->where($arr)          
             ->like('income.name', $text)
             ->from('income');
 
@@ -39,13 +46,12 @@ class Income_model extends My_Model
             ->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')
            ->searchable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount')
             ->orderable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount')
-            ->join("income_head", "income.inc_head_id = income_head.id")
+            ->join("income_head", "income.inc_head_id = income_head.id",'left')
+            ->where($arr)  
             ->where('income.date <=', $end_date)
             ->where('income.date >=', $start_date)
             ->from('income');
-        }
-
-      
+        }   
         return $this->datatables->generate('json');
     }
 
@@ -80,16 +86,21 @@ class Income_model extends My_Model
     }
 
     public function get($id = null)
-    {
-        $this->db->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')->from('income');
-        $this->db->join('income_head', 'income.inc_head_id = income_head.id');
+    {   
+        $branch_id = $this->session->admin['branch_id'];   
+        
+       
+        $this->db->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id,income.branch_id')->from('income');
+        $this->db->join('income_head', 'income.inc_head_id = income_head.id','left');
+        if($branch_id>0){
+            $this->db->where('income.branch_id', $branch_id);           
+        }
         if ($id != null) {
             $this->db->where('income.id', $id);
         } else {
             $this->db->order_by('income.id', 'DESC');
-        }
-
-        $query = $this->db->get();
+        }     
+        $query = $this->db->get();    
         if ($id != null) {
             return $query->row_array();
         } else {
@@ -100,13 +111,19 @@ class Income_model extends My_Model
      /**
      * This function is used to get income list by using datatable
      */
-     public function getincomelist()
-    {
+    public function getincomelist()
+    {       
+        $branch_id = $this->session->admin['branch_id'];
+        $arr=[];
+        if($branch_id>0){
+            $arr['income.branch_id']=$branch_id;
+        }
         $this->datatables
             ->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')
             ->searchable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount,income.note')
             ->orderable('income.name,income.note,income.invoice_no,income.date,income_head.income_category,income.amount')
             ->join("income_head", "income.inc_head_id = income_head.id")
+            ->where($arr)
             ->sort('income.id', 'desc')
             ->from('income');
         return $this->datatables->generate('json');
@@ -151,7 +168,9 @@ class Income_model extends My_Model
      * @param $data
      */
     public function add($data)
-    {
+    {   
+        // print_r($data);
+        // die;
 
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well

@@ -22,35 +22,47 @@ class Expense_model extends MY_Model
     public function search($text = null, $start_date = null, $end_date = null)
     
     {
+        $branch_id = $this->session->admin['branch_id'];
+        $arr =[];
+        if($branch_id>0){
+            $arr['expenses.branch_id']= $branch_id;
+        }
+
         if (!empty($text)) {
            
              $this->datatables
-            ->select('expenses.id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
-             ->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
+            ->select('expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
+            ->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
-            ->join('expense_head', 'expenses.exp_head_id = expense_head.id')
+            ->join('expense_head', 'expenses.exp_head_id = expense_head.id','left')
+            ->where($arr)
             ->like('expenses.name', $text)
             ->from('expenses');
             
         } else {
             
             $this->datatables
-            ->select('expenses.id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
+            ->select('expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
             ->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
-            ->join('expense_head', 'expenses.exp_head_id = expense_head.id')
+            ->join('expense_head', 'expenses.exp_head_id = expense_head.id','left')
+            ->where($arr)
             ->where('expenses.date <=', $end_date)
             ->where('expenses.date >=', $start_date)
             ->from('expenses');
-        }
-         return $this->datatables->generate('json');
+        }       
+        return $this->datatables->generate('json');
          
     }
 
     public function get($id = null)
     {
-        $this->db->select('expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')->from('expenses');
-        $this->db->join('expense_head', 'expenses.exp_head_id = expense_head.id');
+        $branch_id = $this->session->admin['branch_id'];
+        $this->db->select('expenses.id,expenses.date,expenses.name,expenses.branch_id,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')->from('expenses');
+        $this->db->join('expense_head', 'expenses.exp_head_id = expense_head.id','left');
+        if($branch_id>0){
+            $this->db->where('expenses.branch_id', $branch_id);
+        }
         if ($id != null) {
             $this->db->where('expenses.id', $id);
         } else {
@@ -66,12 +78,18 @@ class Expense_model extends MY_Model
     }
 
     public function getexpenselist($id = null)
-    {
-         $this->datatables
+    {   
+        $branch_id = $this->session->admin['branch_id'];
+        $arr =[];
+        if($branch_id>0){
+            $arr['expenses.branch_id']= $branch_id;
+        }
+        $this->datatables
             ->select('expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
             ->searchable('expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
             ->orderable('expenses.name,expenses.note,expenses.invoice_no,expenses.date,expense_head.exp_category,expenses.amount')
-            ->join("expense_head", "expenses.exp_head_id = expense_head.id")
+            ->join("expense_head", "expenses.exp_head_id = expense_head.id",'left')
+            ->where($arr)
             ->sort('expenses.id', 'desc')
             ->from('expenses');
         return $this->datatables->generate('json');

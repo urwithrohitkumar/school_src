@@ -12,8 +12,12 @@ class Expensehead_model extends MY_Model {
 
      public function getDatatableExpenseHead()
     {
-
-        $sql="SELECT * FROM `expense_head`  ";
+        $branch_id = $this->session->admin['branch_id'];   
+        $where = '';   
+        if($branch_id>0){
+            $where= "where branch_id=".$branch_id;
+        }    
+        $sql="SELECT * FROM `expense_head` $where";
         $this->datatables->query($sql)
         ->searchable('expense_head.exp_category')
         ->orderable('`expense_head`.`id`,`expense_head`.`exp_category`')
@@ -22,7 +26,11 @@ class Expensehead_model extends MY_Model {
     }
 
     public function get($id = null) {
+        $branch_id = $this->session->admin['branch_id'];
         $this->db->select()->from('expense_head');
+        if($branch_id>0){
+            $this->db->where('branch_id', $branch_id);
+        }
         if ($id != null) {
             $this->db->where('id', $id);
         } else {

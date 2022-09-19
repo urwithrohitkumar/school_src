@@ -23,6 +23,20 @@
                                 <?php echo validation_errors(); ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select  id="branch_id" name="branch_id" class="form-control">
+                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <?php  } else { ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>                                                        
+                                        <option value="<?php echo $value["id"] ?>" <?php if ($expensehead['branch_id'] == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                </div>
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('expense_head'); ?></label><small class="req"> *</small>
                                     <input autofocus="" id="expensehead" name="expensehead" placeholder="expensehead" type="text" class="form-control"  value="<?php echo set_value('expensehead', $expensehead['exp_category']); ?>" />
                                     <span class="text-danger"><?php echo form_error('expensehead'); ?></span>

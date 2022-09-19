@@ -16,7 +16,12 @@ class Incomehead_model extends My_Model {
      * @return mixed
      */
     public function get($id = null) {
+        $branch_id = $this->session->admin['branch_id'];
+        $arr=[];       
         $this->db->select()->from('income_head');
+        if($branch_id>0){
+            $this->db->where('branch_id', $branch_id);
+        }
         if ($id != null) {
             $this->db->where('id', $id);
         } else {

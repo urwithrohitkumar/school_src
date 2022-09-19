@@ -518,23 +518,19 @@ class Staff_model extends MY_Model
 
     public function allotedLeaveType($id)
     {
-
         $query = $this->db->select('staff_leave_details.*,leave_types.type')->where(array('staff_id' => $id))->join("leave_types", "staff_leave_details.leave_type_id = leave_types.id")->get("staff_leave_details");
-
         return $query->result_array();
     }
 
     public function getAllotedLeave($staff_id)
     {
-
         $query = $this->db->select('*')->join("leave_types", "staff_leave_details.leave_type_id = leave_types.id")->where("staff_id", $staff_id)->get("staff_leave_details");
-
         return $query->result_array();
     }
 
     public function getEmployee($role, $active = 1, $class_id = null)
     {
-        $i             = 1;
+        $i = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
 
         $field_k_array = array();

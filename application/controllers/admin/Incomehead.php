@@ -19,6 +19,7 @@ class Incomehead extends Admin_Controller {
         $data['title'] = 'Income Head List';
         $category_result = $this->incomehead_model->get();
         $data['categorylist'] = $category_result;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/incomehead/incomeheadList', $data);
         $this->load->view('layout/footer', $data);
@@ -52,6 +53,7 @@ class Incomehead extends Admin_Controller {
         $data['title'] = 'Add Income Head';
         $category_result = $this->incomehead_model->get();
         $data['categorylist'] = $category_result;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('incomehead', $this->lang->line('income_head'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('layout/header', $data);
@@ -60,6 +62,7 @@ class Incomehead extends Admin_Controller {
         } else {
             $data = array(
                 'income_category' => $this->input->post('incomehead'),
+                'branch_id' => $this->input->post('branch_id'),
                 'description' => $this->input->post('description'),
             );
             $this->incomehead_model->add($data);
@@ -78,6 +81,7 @@ class Incomehead extends Admin_Controller {
         $data['id'] = $id;
         $category = $this->incomehead_model->get($id);
         $data['incomehead'] = $category;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('incomehead', $this->lang->line('income_head'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('layout/header', $data);
@@ -86,6 +90,7 @@ class Incomehead extends Admin_Controller {
         } else {
             $data = array(
                 'id' => $id,
+                'branch_id' => $this->input->post('branch_id'),
                 'income_category' => $this->input->post('incomehead'),
                 'description' => $this->input->post('description'),
             );

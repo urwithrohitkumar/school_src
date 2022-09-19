@@ -38,6 +38,20 @@
                                     <span class="text-danger"><?php echo form_error('incomehead'); ?></span>
                                 </div>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select  id="branch_id" name="branch_id" class="form-control">
+                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <?php  } else { ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>                                                        
+                                        <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                </div>
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('description'); ?></label>
                                     <textarea class="form-control" id="description" name="description" placeholder="" rows="3" placeholder="Enter ..."><?php echo set_value('description'); ?></textarea>
                                     <span class="text-danger"><?php echo form_error('description'); ?></span>
@@ -52,7 +66,7 @@
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('income_head', 'can_add')) {
+            if ($this->rbac->hasPrivilege('income_head', 'can_add')) {  
                 echo "8";
             } else {
                 echo "12";
@@ -74,55 +88,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (!empty($categorylist)) {
-                                        
-                                        $count = 1;
-                                        foreach ($categorylist as $category) {
-                                            ?>
-                                            <tr>                                               
-                                                <td class="mailbox-name">
-                                                    <a href="#" data-toggle="popover" class="detail_popover" >
-                                                        <?php echo $category['income_category'] ?>
-                                                    </a>
+                                    <?php if (!empty($categorylist)) {  $count = 1;
+                                        foreach ($categorylist as $category) { ?>
+                                        <tr>                                               
+                                        <td class="mailbox-name">
+                                            <a href="#" data-toggle="popover" class="detail_popover" >
+                                                <?php echo $category['income_category'] ?>
+                                            </a>
 
-                                                    <div class="fee_detail_popover" style="display: none">
-                                                        <?php
-                                                        if ($category['description'] == "") {
-                                                            ?>
-                                                            <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                            <?php
-                                                        } else {
-                                                            ?>
-                                                            <p class="text text-info"><?php echo $category['description']; ?></p>
-                                                            <?php
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-date pull-right no-print">
+                                            <div class="fee_detail_popover" style="display: none">
+                                                <?php
+                                                if ($category['description'] == "") {
+                                                    ?>
+                                                    <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
                                                     <?php
-                                                    if ($this->rbac->hasPrivilege('income_head', 'can_edit')) {
-                                                        ?>
-
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/incomehead/edit/<?php echo $category['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </a>
-                                                        <?php
-                                                    }
-                                                    if ($this->rbac->hasPrivilege('income_head', 'can_delete')) {
-                                                        ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/incomehead/delete/<?php echo $category['id'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
-                                                            <i class="fa fa-remove"></i>
-                                                        </a>
-                                                    <?php } ?>
-                                                </td>
-                                            </tr>
+                                                } else {
+                                                    ?>
+                                                    <p class="text text-info"><?php echo $category['description']; ?></p>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </td>
+                                        <td class="mailbox-date pull-right no-print">
                                             <?php
-                                        }
-                                        $count++;
-                                    }
-                                    ?>
+                                            if ($this->rbac->hasPrivilege('income_head', 'can_edit')) {
+                                                ?>
 
+                                                <a data-placement="left" href="<?php echo base_url(); ?>admin/incomehead/edit/<?php echo $category['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <?php
+                                            }
+                                            if ($this->rbac->hasPrivilege('income_head', 'can_delete')) {
+                                                ?>
+                                                <a data-placement="left" href="<?php echo base_url(); ?>admin/incomehead/delete/<?php echo $category['id'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                            <?php } ?>
+                                        </td>
+                                        </tr>
+                                    <?php } $count++;  }  ?>
                                 </tbody>
                             </table><!-- /.table -->
                         </div><!-- /.mail-box-messages -->

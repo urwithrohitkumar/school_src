@@ -11,8 +11,7 @@
     <section class="content">
         <div class="row">
             <?php
-            if ($this->rbac->hasPrivilege('expense', 'can_add')) {
-                ?>
+            if ($this->rbac->hasPrivilege('expense', 'can_add')) { ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
@@ -51,7 +50,20 @@
                                     </select>
                                     <span class="text-danger"><?php echo form_error('exp_head_id'); ?></span>
                                 </div>
-
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select  id="branch_id" name="branch_id" class="form-control">
+                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <?php  } else { ?>
+                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>                                                        
+                                        <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
                                     <input id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
@@ -89,7 +101,6 @@
                             </div>
                         </form>
                     </div>
-
                 </div><!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>

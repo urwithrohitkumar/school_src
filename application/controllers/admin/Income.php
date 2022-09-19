@@ -28,6 +28,7 @@ class Income extends Admin_Controller
         $data['title_list'] = 'Recent Incomes';
         $this->form_validation->set_rules('inc_head_id', $this->lang->line('income_head'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('date', $this->lang->line('date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('documents', $this->lang->line('documents'), 'callback_handle_upload');
@@ -36,6 +37,7 @@ class Income extends Admin_Controller
         } else {
             $data = array(
                 'inc_head_id' => $this->input->post('inc_head_id'),
+                'branch_id'   => $this->input->post('branch_id'),
                 'name'        => $this->input->post('name'),
                 'date'        => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'amount'      => $this->input->post('amount'),
@@ -59,6 +61,7 @@ class Income extends Admin_Controller
         $data['incomelist']  = $income_result;
         $incomeHead          = $this->incomehead_model->get();
         $data['incheadlist'] = $incomeHead;
+        $data['all_branch']  = $this->branch_model->getBranch();        
         $this->load->view('layout/header', $data);
         $this->load->view('admin/income/incomeList', $data);
         $this->load->view('layout/footer', $data);
@@ -187,6 +190,7 @@ class Income extends Admin_Controller
         $data['title_list']  = 'Fees Master List';
         $expnseHead          = $this->incomehead_model->get();
         $data['incheadlist'] = $expnseHead;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('inc_head_id', $this->lang->line('income_head'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
@@ -200,6 +204,7 @@ class Income extends Admin_Controller
             $data = array(
                 'id'          => $id,
                 'inc_head_id' => $this->input->post('inc_head_id'),
+                'branch_id'   => $this->input->post('branch_id'),
                 'name'        => $this->input->post('name'),
                 'date'        => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'amount'      => $this->input->post('amount'),
@@ -340,6 +345,7 @@ class Income extends Admin_Controller
         $res         = explode("-", $str);
         $search_type = $res[0];
         $search      = $res[1];
+        $branch_id      = $this->session->admin['branch_id'];
         if (count($res) == 4) {
             $date_from = $res[2];
             $date_to   = $res[3];
@@ -379,12 +385,12 @@ class Income extends Admin_Controller
 
             $date_from  = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_from));
             $date_to    = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_to));
-            $resultList = $this->income_model->search("", $date_from, $date_to);
+            $resultList = $this->income_model->search("", $date_from, $date_to,$branch_id);
             $resultList = $resultList;
         } else {
 
             $search_text = $search_type;
-            $resultList  = $this->income_model->search($search_text, "", "");
+            $resultList  = $this->income_model->search($search_text, "", "",$branch_id);
             $resultList  = $resultList;
         }
         $m               = json_decode($resultList);

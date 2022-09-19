@@ -20,6 +20,7 @@ class Expensehead extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Expenses');
         $this->session->set_userdata('sub_menu', 'expenseshead/index');
         $data['title'] = 'Expense Head List';
+        $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/expensehead/expenseheadList', $data);
         $this->load->view('layout/footer', $data);
@@ -28,8 +29,7 @@ class Expensehead extends Admin_Controller
     public function ajaxSearch()
     {
 
-        $expense_head = $this->expensehead_model->getDatatableExpenseHead();
-
+        $expense_head = $this->expensehead_model->getDatatableExpenseHead();       
         $expense_head = json_decode($expense_head);
         $dt_data      = array();
 
@@ -109,6 +109,8 @@ class Expensehead extends Admin_Controller
         $data['title']        = 'Add Expense Head';
         $category_result      = $this->expensehead_model->get();
         $data['categorylist'] = $category_result;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('expensehead', $this->lang->line('expense_head'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
             $this->load->view('layout/header', $data);
@@ -116,6 +118,7 @@ class Expensehead extends Admin_Controller
             $this->load->view('layout/footer', $data);
         } else {
             $data = array(
+                'branch_id' => $this->input->post('branch_id'),
                 'exp_category' => $this->input->post('expensehead'),
                 'description'  => $this->input->post('description'),
             );
@@ -136,6 +139,8 @@ class Expensehead extends Admin_Controller
         $data['id']           = $id;
         $category             = $this->expensehead_model->get($id);
         $data['expensehead']  = $category;
+        $data['all_branch']  = $this->branch_model->getBranch(); 
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('expensehead', $this->lang->line('expense_head'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
             $this->load->view('layout/header', $data);
@@ -144,6 +149,7 @@ class Expensehead extends Admin_Controller
         } else {
             $data = array(
                 'id'           => $id,
+                'branch_id'    => $this->input->post('branch_id'),
                 'exp_category' => $this->input->post('expensehead'),
                 'description'  => $this->input->post('description'),
             );
