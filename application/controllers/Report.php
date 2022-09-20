@@ -2663,8 +2663,24 @@ class Report extends Admin_Controller
     }
 
 
+
+    /**
+     * This function is used to get list of all the refunded list.
+     *
+     * @return html
+     */
     public function feerefund()
     {
+
+        $class_id = $this->input->post('class_id');
+        $section_id = $this->input->post('section_id');
+        $student_id = $this->input->post('student_id');
+
+        if ($class_id) {
+            $data['refund_list'] = $this->studentfee_model->getRefund($class_id, $section_id, $student_id);
+        } else {
+            $data['refund_list'] = $this->studentfee_model->getRefund();
+        }
 
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');
@@ -2672,6 +2688,7 @@ class Report extends Admin_Controller
         $data['title']       = 'student fees';
         $data['classlist']            = $this->class_model->get();
         $data['sch_setting'] = $this->sch_setting_detail;
+
         $this->load->view('layout/header', $data);
         $this->load->view('reports/refundReport', $data);
         $this->load->view('layout/footer', $data);

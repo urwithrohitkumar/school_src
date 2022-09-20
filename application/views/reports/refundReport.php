@@ -18,7 +18,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                    <form action="<?php echo site_url('studentfee/reportbyname') ?>" method="post" accept-charset="utf-8">
+                    <form action="<?= site_url('report/feerefund') ?>" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
@@ -72,26 +72,60 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="">
                         <div class="box-header ptbnull"></div>
                         <div class="box-header ptbnull">
-                            <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('expense') . " " . $this->lang->line('report'); ?></h3>
+                            <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('refund') . " " . $this->lang->line('report'); ?></h3>
                         </div>
                         <div class="box-body table-responsive">
-                            <div class="download_label"><?php echo $this->lang->line('expense') . " " . $this->lang->line('report');
+                            <div class="download_label"><?php echo $this->lang->line('refund') . " " . $this->lang->line('report');
                                                         $this->customlib->get_postmessage();
                                                         ?></div>
 
-                            <table class="table table-striped table-bordered table-hover expense-list" data-export-title="<?php echo $this->lang->line('expense') . " " . $this->lang->line('report');
-                                                                                                                            $this->customlib->get_postmessage();   ?>">
+                            <table class="table table-striped table-bordered table-hover example" data-export-title="<?php echo $this->lang->line('expense') . " " . $this->lang->line('report');
+                                                                                                                        $this->customlib->get_postmessage(); ?>">
                                 <thead>
                                     <tr>
-
                                         <th><?php echo $this->lang->line('date'); ?></th>
                                         <th><?php echo $this->lang->line('receipt_number'); ?></th>
+                                        <th><?php echo $this->lang->line('fee_group'); ?></th>
                                         <th><?php echo $this->lang->line('name'); ?></th>
-                                      
                                         <th class="text text-right"><?php echo $this->lang->line('amount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                        <th><?php echo $this->lang->line('remark'); ?></span></th>
+                                        <th><?php echo $this->lang->line('refund_by'); ?></span></th>
+                                        <th class="text text-right"><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+                                    // echo '<pre>';
+                                    if ($refund_list) : foreach ($refund_list as $key => $row) :
+
+                                            $amountArr = json_decode($row->amount_detail, true);
+                                            $fine = 0;
+                                            $total = 0;
+                                            if (count($amountArr) > 0) {
+                                                foreach ($amountArr as $key => $amount) {
+                                                    $total += intval($amount['amount']);
+                                                    $fine += intval($amount['amount_fine']);
+                                                }
+                                            }
+                                            $totaAmount = $total . '+' .  $fine;
+                                    ?>
+                                            <tr>
+                                                <td><?= $row->created_at ?></td>
+                                                <td><?= $row->receipt_number ?></td>
+                                                <td><?= $row->type ?></td>
+                                                <td><?= $row->student_name ?></td>
+                                                <td class="text text-right"><?= $totaAmount ?></td>
+                                                <td><?= $row->remark ?></td>
+                                                <td><?= $row->refund_by ?></td>
+                                                <td class="text text-right">
+                                                    <button class="btn btn-xs btn-default printInv" data-fee_master_id="321" data-fee_session_group_id="3" data-fee_groups_feetype_id="37" title="Print" autocomplete="off"><i class="fa fa-print"></i> </button>
+                                                </td>
+                                            </tr>
+
+                                    <?php endforeach;
+                                    endif; ?>
+
+
                                 </tbody>
                             </table>
                         </div>
@@ -323,5 +357,72 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             bSort: false,
             info: false
         });
+    });
+</script>
+
+<script>
+    var base_url = '<?php echo base_url() ?>';
+
+    function Popup(data, winload = false) {
+        var frame1 = $('<iframe />').attr("id", "printDiv");
+        frame1[0].name = "frame1";
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html>');
+        frameDoc.document.write('<head>');
+        frameDoc.document.write('<title></title>');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/bootstrap/css/bootstrap.min.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/dist/css/font-awesome.min.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/dist/css/ionicons.min.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/dist/css/AdminLTE.min.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/dist/css/skins/_all-skins.min.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/plugins/iCheck/flat/blue.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/plugins/morris/morris.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/plugins/jvectormap/jquery-jvectormap-1.2.2.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/plugins/datepicker/datepicker3.css">');
+        frameDoc.document.write('<link rel="stylesheet" href="' + base_url + 'backend/plugins/daterangepicker/daterangepicker-bs3.css">');
+        frameDoc.document.write('</head>');
+        frameDoc.document.write('<body>');
+        frameDoc.document.write(data);
+        frameDoc.document.write('</body>');
+        frameDoc.document.write('</html>');
+        frameDoc.document.close();
+        setTimeout(function() {
+            document.getElementById('printDiv').contentWindow.focus();
+            document.getElementById('printDiv').contentWindow.print();
+            $("#printDiv", top.document).remove();
+            // frame1.remove();
+            if (winload) {
+                window.location.reload(true);
+            }
+        }, 500);
+
+        return true;
+    }
+
+
+    $(document).on('click', '.printInv', function() {
+        var fee_master_id = $(this).data('fee_master_id');
+        var fee_session_group_id = $(this).data('fee_session_group_id');
+        var fee_groups_feetype_id = $(this).data('fee_groups_feetype_id');
+        $.ajax({
+            url: '<?php echo site_url("studentfee/printFeesByGroup") ?>',
+            type: 'post',
+            data: {
+                'fee_groups_feetype_id': fee_groups_feetype_id,
+                'fee_master_id': fee_master_id,
+                'fee_session_group_id': fee_session_group_id
+            },
+            success: function(response) {
+                Popup(response);
+            }
+        });
+        
     });
 </script>

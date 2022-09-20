@@ -1792,7 +1792,8 @@ $lang['fine_terms'] = "Fine Applied On";
 $lang['refund_comments'] = "Reason for Revert";
 $lang['refund_comments_placeholder'] = "Enter Reason for Revert";
 $lang['refund'] = "Refund";
-$lang['receipt_number'] = "Receipt number";
+$lang['receipt_number'] = "Receipt Number";
+$lang['refund_by'] = "Refund By";
 
 
 

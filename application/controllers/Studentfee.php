@@ -361,11 +361,13 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_delete')) {
             access_denied();
         }
+
         $invoice_id  = $this->input->post('main_invoice');
         $sub_invoice = $this->input->post('sub_invoice');
         $comments = $this->input->post('comments');
+        $student_id = $this->input->post('student_id');
         if (!empty($invoice_id)) {
-            $this->studentfee_model->remove($invoice_id, $sub_invoice,$comments);
+            $this->studentfee_model->remove($invoice_id, $sub_invoice, $comments, $student_id);
         }
         $array = array('status' => 'success', 'result' => 'success');
         echo json_encode($array);
@@ -418,7 +420,7 @@ class Studentfee extends Admin_Controller
         $student              = $this->student_model->getByStudentSession($id);
         $data['student']      = $student;
         $student_due_fee      = $this->studentfeemaster_model->getStudentFees($id);
-        
+
         $student_discount_fee = $this->feediscount_model->getStudentFeesDiscount($id);
 
         $data['student_discount_fee'] = $student_discount_fee;
@@ -430,6 +432,11 @@ class Studentfee extends Admin_Controller
         $session                      = $this->setting_model->getCurrentSession();
         $studentlistbysection         = $this->student_model->getStudentClassSection($student["class_id"], $session);
         $data["studentlistbysection"] = $studentlistbysection;
+
+        // echo '<pre>';
+        // // print_r($data);
+        // print_r( $student_due_fee);
+        // die;
 
         $this->load->view('layout/header', $data);
         $this->load->view('studentfee/studentAddfee', $data);

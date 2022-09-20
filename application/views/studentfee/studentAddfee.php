@@ -17,7 +17,6 @@ $language_name   = $language["short_code"];
                     <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?><small><?php echo $this->lang->line('student_fee'); ?></small>
                 </h1>
             </section>
-
         </div>
         <div>
             <a id="sidebarCollapse" class="studentsideopen"><i class="fa fa-navicon"></i></a>
@@ -268,12 +267,12 @@ $language_name   = $language["short_code"];
                                                     if ($feetype_balance == 0) {
                                                     ?><span class="label label-success"><?php echo $this->lang->line('paid'); ?></span>
                                                     <?php
-                                                                                                                                    } else if (!empty($fee_value->amount_detail)) {
-                                                                                                                                        ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
-                                                                                                                                                                                                                            } else {
-                                                                                                                                                                                                                                ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
-                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                    ?>
+                                                    } else if (!empty($fee_value->amount_detail)) {
+                                                    ?><span class="label label-warning"><?php echo $this->lang->line('partial'); ?></span><?php
+                                                                                                                                        } else {
+                                                                                                                                            ?><span class="label label-danger"><?php echo $this->lang->line('unpaid'); ?></span><?php
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                ?>
 
                                                 </td>
                                                 <td class="text text-right">
@@ -700,8 +699,11 @@ $language_name   = $language["short_code"];
                 <p class="debug-url"></p>
                 <input type="hidden" name="main_invoice" id="main_invoice" value="">
                 <input type="hidden" name="sub_invoice" id="sub_invoice" value="">
+                <input type="hidden" name="student_id" id="student_id" value="<?= $student['id'] ?? 0 ?>">
+
                 <label for="refund_comments"><?php echo $this->lang->line('refund_comments'); ?></label>
                 <textarea name="refund_comments" id="refund_comments" cols="30" rows="5" class="form-control" placeholder="<?= $this->lang->line('refund_comment_placeholder'); ?>"></textarea>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang->line('cancel'); ?></button>
@@ -893,6 +895,7 @@ $language_name   = $language["short_code"];
 
         return true;
     }
+    
     $(document).ready(function() {
         $('.delmodal').modal({
             backdrop: 'static',
@@ -926,7 +929,8 @@ $language_name   = $language["short_code"];
             var main_invoice = $('#main_invoice').val();
             var sub_invoice = $('#sub_invoice').val();
             var comments = $('#refund_comments').val();
-            
+            var student_id = $('#student_id').val();
+
             $modalDiv.addClass('modalloading');
             $.ajax({
                 type: "post",
@@ -935,6 +939,7 @@ $language_name   = $language["short_code"];
                 data: {
                     'main_invoice': main_invoice,
                     'sub_invoice': sub_invoice,
+                    'student_id': student_id,
                     'comments': comments
                 },
                 success: function(data) {
@@ -968,6 +973,8 @@ $language_name   = $language["short_code"];
             var $modalDiv = $(e.delegateTarget);
             var main_invoice = $('#main_invoice').val();
             var sub_invoice = $('#sub_invoice').val();
+            var comments = $('#refund_comments').val();
+            var student_id = $('#student_id').val();
 
             $modalDiv.addClass('modalloading');
             $.ajax({
@@ -976,7 +983,9 @@ $language_name   = $language["short_code"];
                 dataType: 'JSON',
                 data: {
                     'main_invoice': main_invoice,
-                    'sub_invoice': sub_invoice
+                    'sub_invoice': sub_invoice,
+                    'student_id': student_id,
+                    'comments': comments
                 },
                 success: function(data) {
                     $modalDiv.modal('hide').removeClass('modalloading');
@@ -998,6 +1007,7 @@ $language_name   = $language["short_code"];
     });
     var fee_amount = 0;
 </script>
+
 <script type="text/javascript">
     $("#myFeesModal").on('shown.bs.modal', function(e) {
         e.stopPropagation();

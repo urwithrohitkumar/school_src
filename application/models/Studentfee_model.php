@@ -82,7 +82,7 @@ class Studentfee_model extends MY_Model
         return $query->result_array();
     }
 
-    public function remove($id, $sub_invoice, $comments = '')
+    public function remove($id, $sub_invoice, $comments = '', $student_id)
     {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
@@ -91,7 +91,6 @@ class Studentfee_model extends MY_Model
         $q = $this->db->get('student_fees_deposite');
         if ($q->num_rows() > 0) {
             $result = $q->row();
-
             // r_data for refund record
             $r_data['receipt_number'] = $this->getRefundReceiptNumber();
             $r_data['student_fees_master_id'] = $result->student_fees_master_id;
@@ -99,8 +98,8 @@ class Studentfee_model extends MY_Model
             $r_data['amount_detail'] = $result->amount_detail;
             $r_data['is_active'] = 'yes';
             $r_data['remark'] = $comments;
+            $r_data['student_id'] = $student_id;
             $r_data['refund_by'] = $this->current_user_id;
-
             $a = json_decode($result->amount_detail, true);
 
             unset($a[$sub_invoice]);
@@ -189,7 +188,9 @@ class Studentfee_model extends MY_Model
     public function getDueFeeBystudent($class_id = null, $section_id = null, $student_id = null)
     {
         $query = "SELECT feemasters.id as feemastersid, feemasters.amount as amount,IFNULL(student_fees.id, 'xxx') as invoiceno,IFNULL(student_fees.amount_discount, 'xxx') as discount,IFNULL(student_fees.amount_fine, 'xxx') as fine,IFNULL(student_fees.payment_mode, 'xxx') as payment_mode,IFNULL(student_fees.date, 'xxx') as date,feetype.type ,feecategory.category,student_fees.description FROM feemasters LEFT JOIN (select student_fees.id,student_fees.feemaster_id,student_fees.payment_mode,student_fees.amount_fine,student_fees.amount_discount,student_fees.date,student_fees.student_session_id,student_fees.description  from student_fees , student_session where student_fees.student_session_id=student_session.id and student_session.student_id=" . $this->db->escape($student_id) . " and student_session.class_id=" . $this->db->escape($class_id) . " and student_session.section_id=" . $this->db->escape($section_id) . ") as student_fees ON student_fees.feemaster_id=feemasters.id JOIN feetype ON feemasters.feetype_id = feetype.id JOIN feecategory ON feetype.feecategory_id = feecategory.id  where  feemasters.class_id=" . $this->db->escape($class_id) . " and feemasters.session_id=" . $this->db->escape($this->current_session);
+
         $query = $this->db->query($query);
+
         return $query->result_array();
     }
 
@@ -253,5 +254,35 @@ class Studentfee_model extends MY_Model
             }
         }
         return $receiptNumber;
+    }
+
+
+    /**
+     * This function is used to get list of refund.
+     *
+     * @param integer $class_id
+     * @param integer $section_id
+     * @param integer $student_id
+     * @return mixed
+     */
+    public function getRefund($class_id = 0, $section_id = 0, $student_id = 0)
+    {
+
+        $this->db->select("concat(students.firstname,' ',students.lastname) as student_name,student_fees_refund.*, DATE_FORMAT(student_fees_refund.created_at, '%d-%m-%Y') as created_at, student_fees_master.student_session_id,fee_groups_feetype.fee_session_group_id, fee_groups_feetype.fee_groups_id,fee_groups_feetype.feetype_id,fee_groups_feetype.session_id,feetype.type, concat(staff.name,' ',staff.surname) as refund_by,student_session.class_id,student_session.section_id");
+        $this->db->join('student_fees_master', 'student_fees_master.id=student_fees_refund.student_fees_master_id');
+        $this->db->join('fee_groups_feetype', 'fee_groups_feetype.id=student_fees_refund.fee_groups_feetype_id');
+        $this->db->join('feetype', 'fee_groups_feetype.feetype_id=feetype.id');
+        $this->db->join('staff', 'staff.id = student_fees_refund.refund_by');
+        $this->db->join('students', 'students.id = student_fees_refund.student_id');
+        $this->db->join('student_session', 'students.id = student_session.student_id');
+
+        if ($class_id && $section_id && $student_id) {
+            $condition = array('student_session.class_id' => $class_id, 'student_session.section_id' => $section_id, 'student_session.student_id' => $student_id);
+            $this->db->where($condition);
+        }
+
+        $this->db->order_by('student_fees_refund.id');
+        $res = $this->db->get('student_fees_refund');
+        return $res->result();
     }
 }
