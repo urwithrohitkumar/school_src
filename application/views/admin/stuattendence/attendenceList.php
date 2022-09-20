@@ -98,15 +98,29 @@
                     </div>
                     <form id='form1' action="<?php echo site_url('admin/stuattendence/index') ?>"  method="post" accept-charset="utf-8">
                         <div class="box-body">
-                            <?php
-                            if ($this->session->flashdata('msg')) {
+                            <?php if ($this->session->flashdata('msg')) {
                                 echo $this->session->flashdata('msg');
-                            }
-                            ?>
-
+                            } ?>
                             <?php echo $this->customlib->getCSRF(); ?>
+                             
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                            <select  id="branch_id" name="branch_id" class="form-control">
+                                            <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                            <?php  } else { ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <?php foreach ($all_branch as  $value) { ?>                                                        
+                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                            <?php } } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
 
@@ -128,7 +142,7 @@
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                         <select  id="section_id" name="section_id" class="form-control" >
@@ -137,7 +151,7 @@
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">
                                             <?php echo $this->lang->line('attendance'); ?>
@@ -215,6 +229,7 @@
                                                 ?>
                                             </div>
                                         </div>
+                                        <input type="hidden" name="branch_id" value="<?php echo $branch_id; ?>">
                                         <input type="hidden" name="class_id" value="<?php echo $class_id; ?>">
                                         <input type="hidden" name="section_id" value="<?php echo $section_id; ?>">
                                         <input type="hidden" name="date" value="<?php echo $date; ?>">
@@ -247,7 +262,7 @@
                                                             <td>
                                                                 <input type="hidden" name="student_session[]" value="<?php echo $value['student_session_id']; ?>">
                                                                 <input  type="hidden" value="<?php echo $value['attendence_id']; ?>"  name="attendendence_id<?php echo $value['student_session_id']; ?>">
-            <?php echo $row_count; ?>
+                                                                <?php echo $row_count; ?>
                                                             </td>
                                                             <td>
                                                             <?php echo $value['admission_no']; ?>
@@ -267,13 +282,13 @@
                                                             }
                                                              ?>
                                                             <td>
-            <?php echo $value['roll_no']; ?>
+                                                                    <?php echo $value['roll_no']; ?>
                                                             </td>
 
                                                             <td>
 
-            <?php 
-            echo $this->customlib->getFullName($value['firstname'],$value['middlename'],$value['lastname'],$sch_setting->middlename,$sch_setting->lastname);  ?>
+                                                     <?php 
+                                                        echo $this->customlib->getFullName($value['firstname'],$value['middlename'],$value['lastname'],$sch_setting->middlename,$sch_setting->lastname);  ?>
                                                             </td>
                                                             <td>
                                                                 <?php
@@ -288,7 +303,7 @@
                                                                                 <input <?php if ($value['attendence_type_id'] == $type['id']) echo "checked"; ?> type="radio" id="attendencetype<?php echo $value['student_session_id'] . "-" . $count; ?>" value="<?php echo $type['id'] ?>" name="attendencetype<?php echo $value['student_session_id']; ?>" >
 
                                                                                 <label for="attendencetype<?php echo $value['student_session_id'] . "-" . $count; ?>">
-                        <?php echo $this->lang->line($att_type); ?> 
+                                                                                <?php echo $this->lang->line($att_type); ?> 
                                                                                 </label>
 
                                                                             </div>
@@ -310,7 +325,7 @@
 
 
                                                                                 <label for="attendencetype<?php echo $value['student_session_id'] . "-" . $count; ?>"> 
-                        <?php echo $this->lang->line($att_type); ?> 
+                                                                        <?php echo $this->lang->line($att_type); ?> 
                                                                                 </label>
                                                                             </div>
                                                                             <?php
@@ -324,7 +339,7 @@
                                                             </td>
                                                             <?php if ($date == 'xxx') { ?> 
                                                                 <td class="text-right"><input type="text" class="noteinput" name="remark<?php echo $value["student_session_id"] ?>" ></td>
-            <?php } else { ?>
+                                                            <?php } else { ?>
 
                                                                 <td class="text-right"><input type="text" class="noteinput" name="remark<?php echo $value["student_session_id"] ?>" value="<?php echo $value["remark"]; ?>" ></td>
                                                         <?php } ?>

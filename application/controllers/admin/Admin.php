@@ -23,9 +23,7 @@ class Admin extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('unauthorized', $data);
         $this->load->view('layout/footer', $data);
-    } 
-
-
+    }  
  
     public function dashboard()
     {
@@ -356,7 +354,7 @@ class Admin extends Admin_Controller
         }
         $data['sessionList'] = $session;
         $this->load->view('admin/partial/_session', $data);
-    }
+    }   
 
     public function updateSession()
     {

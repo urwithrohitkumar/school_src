@@ -16,8 +16,14 @@ class apply_leave_model extends MY_Model
 
     public function get($id = null, $carray = null, $section_array = null)
     {
-
-        $this->db->select('student_applyleave.*,students.firstname,students.middlename,students.lastname,staff.name as staff_name,students.id as stud_id,staff.surname,classes.id as class_id,sections.id as section_id,classes.class,sections.section')->from('student_applyleave')->join('student_session', 'student_session.id = student_applyleave.student_session_id')->join('students', 'students.id=student_session.student_id', 'inner')->join('staff', 'staff.id=student_applyleave.approve_by', 'left')->join('classes', 'student_session.class_id = classes.id')->join('sections', 'sections.id = student_session.section_id');
+        $branch_id = $this->session->admin['branch_id'];        
+        $this->db->select('student_applyleave.*,students.firstname,students.middlename,students.lastname,staff.name as staff_name,students.id as stud_id,staff.surname,classes.id as class_id,sections.id as section_id,classes.class,sections.section')
+        ->from('student_applyleave')
+        ->join('student_session', 'student_session.id = student_applyleave.student_session_id')
+        ->join('students', 'students.id=student_session.student_id', 'inner')
+        ->join('staff', 'staff.id=student_applyleave.approve_by', 'left')
+        ->join('classes', 'student_session.class_id = classes.id')
+        ->join('sections', 'sections.id = student_session.section_id');        
         $this->db->where('students.is_active', 'yes');
         if ($carray != null) {
             $this->db->where_in('classes.id', $carray);
@@ -33,6 +39,9 @@ class apply_leave_model extends MY_Model
         } else {
 
             $this->db->order_by('student_applyleave.id', 'desc');
+        }
+        if($branch_id>0){ 
+            $this->db->where('student_session.branch_id', $branch_id);
         }
 
         $this->db->where('student_session.session_id', $this->current_session);

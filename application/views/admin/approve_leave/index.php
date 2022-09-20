@@ -25,6 +25,22 @@
                         </div>
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select  id="branch_id" name="branch_id" class="form-control">
+                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                    <?php  } else { ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <?php foreach ($all_branch as  $value) { ?>                                                        
+                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                    <?php } } ?>
+                                </select>
+                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-6">
+                            <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                 <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value)"  class="form-control" >
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
@@ -52,7 +68,6 @@
                                 <span class="class_id_error text-danger"><?php echo form_error('section_id'); ?></span>
                             </div>
                         </div>
-
                     </div>
                     <button type="submit" id="search_filter" name="search" value="search_filter" class="btn btn-primary btn-sm checkbox-toggle pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                 </div>
@@ -172,17 +187,28 @@
                              <!--    <input type="hidden" id="leave_id"  name="leave_id"> -->
                                 <div class="col-sm-4">
                                     <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                            <select  id="branch_id2" name="branch_id" class="form-control">
+                                            <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                            <?php  } else { ?>
+                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <?php foreach ($all_branch as  $value) { ?>                                                        
+                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                            <?php } } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select type="text" onchange="get_section(this.value)" name="class" id="class" class="form-control ">
                                             <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                            <?php foreach ($classlist as $value) {
-                                                ?>
+                                            <?php foreach ($classlist as $value) { ?>
                                                 <option value="<?php echo $value['id']; ?>"><?php echo $value['class']; ?></option>
-<?php }
-?>
-
-
-
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -425,9 +451,10 @@
 
         $('#student').html("");
         var class_id = $('#class').val();
-
+        var branch_id2 = $('#branch_id2').val();
+        
         $.ajax({
-            url: "<?php echo site_url("admin/approve_leave/searchByClassSection") ?>/" + class_id + "/" + student_id,
+            url: "<?php echo site_url("admin/approve_leave/searchByClassSection") ?>/" + branch_id2 + "/" + class_id + "/" + student_id,
             type: "POST",
             data: {section_id: id},
             success: function (res)

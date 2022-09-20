@@ -25,12 +25,17 @@ class approve_leave extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Attendance');
         $this->session->set_userdata('sub_menu', 'Attendance/approve_leave');
         $class = $this->class_model->get();
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $data['classlist'] = $class;
+        $data['branch_id'] = $branch_id = '';
         $data['class_id'] = $class_id = '';
         $data['section_id'] = $section_id = '';
         $data['sch_setting']     = $this->setting_model->getSetting();
         $data['results'] = array();
         $listaudit = $this->apply_leave_model->get(null, null, null);
+        if (isset($_POST['branch_id']) && $_POST['branch_id'] != '') {
+            $data['branch_id'] = $branch_id = $_POST['branch_id'];
+        }
         if (isset($_POST['class_id']) && $_POST['class_id'] != '') {
             $data['class_id'] = $class_id = $_POST['class_id'];
         }
@@ -38,16 +43,15 @@ class approve_leave extends Admin_Controller {
         if (isset($_POST['section_id']) && $_POST['section_id'] != '') {
             $data['section_id'] = $section_id = $_POST['section_id'];
         }
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
-        if ($this->form_validation->run() == FALSE) {
-            
+        if ($this->form_validation->run() == FALSE) {            
         } else {
             $listaudit = $this->apply_leave_model->get(null, $class_id, $section_id);
         }
 
-        $data['results'] = $listaudit;
-       
+        $data['results'] = $listaudit;       
         $this->load->view('layout/header');
         $this->load->view('admin/approve_leave/index', $data);
         $this->load->view('layout/footer');
@@ -106,9 +110,9 @@ class approve_leave extends Admin_Controller {
             $student_session_id = $this->apply_leave_model->get_studentsessionId($_POST['class'], $_POST['section'], $_POST['student']);
 
             $data = array(
-    'apply_date' =>  date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('apply_date'))),
-    'from_date' =>  date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('from_date'))),
-    'to_date' => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('to_date'))),
+                'apply_date' =>  date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('apply_date'))),
+                'from_date' =>  date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('from_date'))),
+                'to_date' => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('to_date'))),
                 'student_session_id' => $student_session_id['id'],
                 'reason' => $this->input->post('message'),
                 'request_type' => '1'
@@ -133,14 +137,13 @@ class approve_leave extends Admin_Controller {
 
             $array = array('status' => 'success', 'error' => '', 'message' => $this->lang->line('success_message'));
         }
-
         echo json_encode($array);
     }
 
-    public function searchByClassSection($class_id, $student_id) {
+    public function searchByClassSection($branch_id,$class_id, $student_id) {
 
         $section_id = $_REQUEST['section_id'];
-        $resultlist = $this->student_model->searchByClassSection($class_id, $section_id);
+        $resultlist = $this->student_model->searchByClassSection($branch_id,$class_id, $section_id);
 
         $data['resultlist'] = $resultlist;
         $data['select_id'] = $student_id;
