@@ -42,7 +42,7 @@ class Examgroup extends Admin_Controller
             echo json_encode($array);
         } else {
             $return_array = array();
-//====================
+            //====================
             if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
 
                 $fileName = $_FILES["file"]["tmp_name"];
@@ -123,6 +123,8 @@ class Examgroup extends Admin_Controller
         $data['title']      = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
         $data['examType']   = $this->exam_type;
+        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_type', $this->lang->line('exam') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
 
@@ -134,6 +136,7 @@ class Examgroup extends Admin_Controller
             $data = array(
                 'name'        => $this->input->post('name'),
                 'exam_type'   => $this->input->post('exam_type'),
+                'branch_id'   => $this->input->post('branch_id'),
                 'is_active'   => $is_active,
                 'description' => $this->input->post('description'),
             );

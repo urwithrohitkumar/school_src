@@ -18,13 +18,18 @@ class Examgroup_model extends MY_Model {
      */
     public function get($id = null) {
 
+        $branch_id = $this->session->admin['branch_id'];
         $this->db->select('exam_groups.*,(select count(*) from exam_group_class_batch_exams WHERE exam_group_class_batch_exams.exam_group_id=exam_groups.id) as `counter`')->from('exam_groups');
+        if($branch_id>0){
+            $this->db->where('branch_id', $branch_id);
+        }
         if ($id != null) {
             $this->db->where('id', $id);
         } else {
             $this->db->order_by('id');
         }
         $query = $this->db->get();
+
         if ($id != null) {
             return $query->row();
         } else {

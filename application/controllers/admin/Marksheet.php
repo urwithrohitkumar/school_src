@@ -18,11 +18,10 @@ class Marksheet extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Examinations');
         $this->session->set_userdata('sub_menu', 'Examinations/marksheet');
         $data['title'] = 'Add Library';
-
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->data['certificateList'] = $this->marksheet_model->get();
-
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
-
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('left_logo', $this->lang->line('left') . " " . $this->lang->line('logo'), 'callback_handle_upload[left_logo]');
         $this->form_validation->set_rules('right_logo', $this->lang->line('right') . " " . $this->lang->line('logo'), 'callback_handle_upload[right_logo]');
         $this->form_validation->set_rules('background_img', $this->lang->line('background') . " " . $this->lang->line('image'), 'callback_handle_upload[background_img]');
@@ -108,6 +107,7 @@ class Marksheet extends Admin_Controller {
             }
             $insert_data = array(
                 'template' => $this->input->post('template'),
+                'branch_id'  => $this->input->post('branch_id'),
                 'heading' => $this->input->post('heading'),
                 'title' => $this->input->post('title'),
                 'exam_name' => $this->input->post('exam_name'),
@@ -178,7 +178,6 @@ class Marksheet extends Admin_Controller {
             }
             
             $this->marksheet_model->add($insert_data);
-
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
             redirect('admin/marksheet/index');
         }

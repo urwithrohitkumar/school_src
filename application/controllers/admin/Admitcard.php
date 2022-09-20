@@ -22,9 +22,9 @@ class Admitcard extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Examinations');
         $this->session->set_userdata('sub_menu', 'Examinations/admitcard');
         $this->data['admitcardList'] = $this->admitcard_model->get();
-
+        $data['all_branch']      = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
-
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('left_logo', $this->lang->line('left') . " " . $this->lang->line('logo'), 'callback_handle_upload[left_logo]');
         $this->form_validation->set_rules('right_logo', $this->lang->line('right') . " " . $this->lang->line('logo'), 'callback_handle_upload[right_logo]');
         $this->form_validation->set_rules('background_img', $this->lang->line('background') . " " . $this->lang->line('image'), 'callback_handle_upload[background_img]');
@@ -99,6 +99,7 @@ class Admitcard extends Admin_Controller
             }
 
             $insert_data = array(
+                'branch_id'       => $this->input->post('branch_id'),
                 'template'        => $this->input->post('template'),
                 'heading'         => $this->input->post('heading'),
                 'title'           => $this->input->post('title'),
@@ -215,9 +216,9 @@ class Admitcard extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Examinations/admitcard');
         $this->data['admitcardList'] = $this->admitcard_model->get();
         $this->data['admitcard']     = $this->admitcard_model->get($id);
-
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
-
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('left_logo', $this->lang->line('left') . " " . $this->lang->line('logo'), 'callback_handle_upload[left_logo]');
         $this->form_validation->set_rules('right_logo', $this->lang->line('right') . " " . $this->lang->line('logo'), 'callback_handle_upload[right_logo]');
         $this->form_validation->set_rules('background_img', $this->lang->line('background') . " " . $this->lang->line('image'), 'callback_handle_upload[background_img]');
@@ -292,6 +293,7 @@ class Admitcard extends Admin_Controller
             }
             $insert_data = array(
                 'id'              => $this->input->post('id'),
+                'branch_id'       => $this->input->post('branch_id'),
                 'template'        => $this->input->post('template'),
                 'heading'         => $this->input->post('heading'),
                 'title'           => $this->input->post('title'),
