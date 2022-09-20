@@ -269,6 +269,7 @@ class Studentfee_model extends MY_Model
     {
 
         $this->db->select("concat(students.firstname,' ',students.lastname) as student_name,student_fees_refund.*, DATE_FORMAT(student_fees_refund.created_at, '%d-%m-%Y') as created_at, student_fees_master.student_session_id,fee_groups_feetype.fee_session_group_id, fee_groups_feetype.fee_groups_id,fee_groups_feetype.feetype_id,fee_groups_feetype.session_id,feetype.type, concat(staff.name,' ',staff.surname) as refund_by,student_session.class_id,student_session.section_id");
+        
         $this->db->join('student_fees_master', 'student_fees_master.id=student_fees_refund.student_fees_master_id');
         $this->db->join('fee_groups_feetype', 'fee_groups_feetype.id=student_fees_refund.fee_groups_feetype_id');
         $this->db->join('feetype', 'fee_groups_feetype.feetype_id=feetype.id');

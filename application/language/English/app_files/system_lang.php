@@ -1794,6 +1794,8 @@ $lang['refund_comments_placeholder'] = "Enter Reason for Revert";
 $lang['refund'] = "Refund";
 $lang['receipt_number'] = "Receipt Number";
 $lang['refund_by'] = "Refund By";
+$lang['refund_date'] = "Refund Date";
+
 
 
 

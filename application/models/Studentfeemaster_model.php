@@ -905,4 +905,50 @@ class Studentfeemaster_model extends MY_Model
         }
         return $fine;
     }
+
+
+    /**
+     * This function is used to get student record by condition.
+     *
+     * @param integer $fee_groups_feetype_id
+     * @param integer $receipt_number
+     * @param integer $student_session_id
+     * @return mixed
+     */
+    public function getRefundFeeByFeeSessionGroupFeetype($fee_groups_feetype_id = 0, $receipt_number = 0, $student_session_id = 0)
+    {
+
+        // $sql = "SELECT student_fees_master.id,student_fees_master.is_system,student_fees_master.student_session_id,student_fees_master.fee_session_group_id,student_fees_master.amount as `student_fees_master_amount`,fee_groups_feetype.id as `fee_groups_feetype_id`,students.id as student_id,students.firstname,students.middlename,students.admission_no,students.lastname,student_session.class_id,classes.class,sections.section,students.guardian_name,students.father_name,student_session.section_id,student_session.student_id,fee_groups_feetype.amount,fee_groups_feetype.due_date,fee_groups_feetype.fine_amount,fee_groups_feetype.fee_groups_id,fee_groups_feetype.fine_term_id,fee_groups.name,fee_groups_feetype.feetype_id,feetype.code,feetype.type, IFNULL(student_fees_deposite.id,0) as `student_fees_deposite_id`, IFNULL(student_fees_deposite.amount_detail,0) as `amount_detail` FROM `student_fees_master` INNER JOIN fee_session_groups on fee_session_groups.id = student_fees_master.fee_session_group_id INNER JOIN fee_groups_feetype on  fee_groups_feetype.fee_session_group_id = fee_session_groups.id  INNER JOIN fee_groups on fee_groups.id=fee_groups_feetype.fee_groups_id INNER JOIN feetype on feetype.id=fee_groups_feetype.feetype_id LEFT JOIN student_fees_deposite on student_fees_deposite.student_fees_master_id=student_fees_master.id and student_fees_deposite.fee_groups_feetype_id=fee_groups_feetype.id INNER JOIN student_session on student_session.id= student_fees_master.student_session_id INNER JOIN classes on classes.id= student_session.class_id INNER JOIN sections on sections.id= student_session.section_id INNER JOIN students on students.id=student_session.student_id  
+        // WHERE student_fees_master.fee_session_group_id =" . $fee_session_groups_id . " and student_fees_master.id=" . $student_fees_master_id . " and fee_groups_feetype.id= " . $fee_groups_feetype_id;
+
+
+        $this->db->select("students.firstname,students.middlename,students.lastname,student_fees_refund.*, DATE_FORMAT(student_fees_refund.created_at, '%d-%m-%Y') as created_at, student_fees_master.student_session_id,fee_groups_feetype.fee_session_group_id, fee_groups_feetype.fee_groups_id,fee_groups_feetype.feetype_id,fee_groups_feetype.session_id,feetype.type,feetype.code, feetype.is_system, concat(staff.name,' ',staff.surname) as refund_by,student_session.class_id,student_session.section_id,students.admission_no,students.father_name,classes.class,sections.section");
+
+        $this->db->join('student_fees_master', 'student_fees_master.id=student_fees_refund.student_fees_master_id');
+        $this->db->join('fee_groups_feetype', 'fee_groups_feetype.id=student_fees_refund.fee_groups_feetype_id');
+        $this->db->join('feetype', 'fee_groups_feetype.feetype_id=feetype.id');
+        $this->db->join('staff', 'staff.id = student_fees_refund.refund_by');
+        $this->db->join('students', 'students.id = student_fees_refund.student_id');
+        $this->db->join('student_session', 'students.id = student_session.student_id');
+        $this->db->join('classes', 'classes.id= student_session.class_id');
+        $this->db->join('sections', 'sections.id= student_session.section_id');
+      
+
+        // if ($class_id && $section_id && $student_id) {
+        //     $condition = array('student_session.class_id' => $class_id, 'student_session.section_id' => $section_id, 'student_session.student_id' => $student_id);
+        //     $this->db->where($condition);
+        // }
+
+        $this->db->order_by('student_fees_refund.id');
+
+        $res = $this->db->get('student_fees_refund');
+
+    //    echo $this->db->last_query();die;
+
+
+
+
+        // $query = $this->db->query($sql);
+        return $res->row();
+    }
 }

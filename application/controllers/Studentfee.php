@@ -1085,4 +1085,24 @@ class Studentfee extends Admin_Controller
         }
         return $fine;
     }
+
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function printRefundFeesByGroup()
+    {
+        $fee_groups_feetype_id = $this->input->post('fee_groups_feetype_id');
+        $receipt_number         = $this->input->post('receipt_number');
+        $student_session_id  = $this->input->post('student_session_id');
+        $setting_result        = $this->setting_model->get();
+        $data['settinglist']   = $setting_result;
+        $data['feeList'] = [];
+        $data['feeList']       = $this->studentfeemaster_model->getRefundFeeByFeeSessionGroupFeetype($fee_groups_feetype_id, $receipt_number, $student_session_id);
+
+        $data['sch_setting']   = $this->sch_setting_detail;
+        $this->load->view('print/printFeesRefund', $data);
+    }
 }

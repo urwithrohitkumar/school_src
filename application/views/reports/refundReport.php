@@ -95,9 +95,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    // echo '<pre>';
-                                    if ($refund_list) : foreach ($refund_list as $key => $row) :
 
+                                    if ($refund_list) : foreach ($refund_list as $key => $row) :
                                             $amountArr = json_decode($row->amount_detail, true);
                                             $fine = 0;
                                             $total = 0;
@@ -118,7 +117,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <td><?= $row->remark ?></td>
                                                 <td><?= $row->refund_by ?></td>
                                                 <td class="text text-right">
-                                                    <button class="btn btn-xs btn-default printInv" data-fee_master_id="321" data-fee_session_group_id="3" data-fee_groups_feetype_id="37" title="Print" autocomplete="off"><i class="fa fa-print"></i> </button>
+                                                    <button class="btn btn-xs btn-default printInv" data-fee_groups_feetype_id="<?= $row->fee_groups_feetype_id ?>" data-student_session_id="<?= $row->student_session_id ?>" data-receipt_number=<?= $row->receipt_number ?>" title="Print" autocomplete="off"><i class="fa fa-print"></i> </button>
                                                 </td>
                                             </tr>
 
@@ -408,21 +407,21 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
 
     $(document).on('click', '.printInv', function() {
-        var fee_master_id = $(this).data('fee_master_id');
-        var fee_session_group_id = $(this).data('fee_session_group_id');
+        var receipt_number = $(this).data('receipt_number');
+        var student_session_id = $(this).data('student_session_id');
         var fee_groups_feetype_id = $(this).data('fee_groups_feetype_id');
         $.ajax({
-            url: '<?php echo site_url("studentfee/printFeesByGroup") ?>',
+            url: '<?php echo site_url("studentfee/printRefundFeesByGroup") ?>',
             type: 'post',
             data: {
                 'fee_groups_feetype_id': fee_groups_feetype_id,
-                'fee_master_id': fee_master_id,
-                'fee_session_group_id': fee_session_group_id
+                'receipt_number': receipt_number,
+                'fee_groups_feetype_id': fee_groups_feetype_id
             },
             success: function(response) {
                 Popup(response);
             }
         });
-        
+
     });
 </script>

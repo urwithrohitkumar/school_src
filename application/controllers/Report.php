@@ -2676,16 +2676,12 @@ class Report extends Admin_Controller
         $section_id = $this->input->post('section_id');
         $student_id = $this->input->post('student_id');
 
-        if ($class_id) {
-            $data['refund_list'] = $this->studentfee_model->getRefund($class_id, $section_id, $student_id);
-        } else {
-            $data['refund_list'] = $this->studentfee_model->getRefund();
-        }
+        $data['refund_list'] = $this->studentfee_model->getRefund($class_id, $section_id, $student_id);
 
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');
         $this->session->set_userdata('subsub_menu', 'Reports/finance/feerefund');
-        $data['title']       = 'student fees';
+        $data['title']       = 'student refund fees';
         $data['classlist']            = $this->class_model->get();
         $data['sch_setting'] = $this->sch_setting_detail;
 
