@@ -54,13 +54,9 @@ class Teacher_model extends CI_Model {
     }
 
     public function getLibraryTeacher() {
-        $this->db->select('staff.*, IFNULL(libarary_members.id,0) as `libarary_member_id`, IFNULL(libarary_members.library_card_no,0) as `library_card_no`')->from('staff');
-
-        $this->db->join('libarary_members', 'libarary_members.member_id = staff.id and libarary_members.member_type = "teacher"', 'left');
-        $this->db->where('staff.is_active', 1);
-        $this->db->order_by('staff.id');
-
-        $query = $this->db->get();
+        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id']);
+        $query = 'SELECT `staff`.*, IFNULL(libarary_members.id, 0) as `libarary_member_id`, IFNULL(libarary_members.library_card_no, 0) as `library_card_no` FROM `staff` LEFT JOIN `libarary_members` ON `libarary_members`.`member_id` = `staff`.`id` and `libarary_members`.`member_type` = "teacher" WHERE `staff`.`is_active` = 1 '.$branchWhere.' ORDER BY `staff`.`id`';
+        $query = $this->db->query($query);
         return $query->result_array();
     }
 

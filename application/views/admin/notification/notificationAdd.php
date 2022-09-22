@@ -56,6 +56,19 @@
                                             <input id="publish_date" name="publish_date"  placeholder="" type="text" class="form-control date"  value="<?php echo set_value('publish_date'); ?>" />
                                             <span class="text-danger"><?php echo form_error('publish_date'); ?></span>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Publish To</label>
+                                            <select name="branch_id" id="branch_id" class="form-control">
+                                                <?php
+                                                if(empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0)
+                                                {
+                                                    echo "<option value=''>All</option>";
+                                                }
+                                                foreach ($branch as  $branchValue) { ?>
+                                                    <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
                                         <div class="form-horizontal">
                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('message_to'); ?></label>
                                             <div class="checkbox">
@@ -68,15 +81,15 @@
                                             foreach ($roles as $role_key => $role_value) {
                                                 $userdata = $this->customlib->getUserData();
                                                 $role_id = $userdata["role_id"];
-                                                ?>
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox" name="visible[]" value="<?php echo $role_value['id']; ?>" <?php
-                                                        if ($role_value["id"] == $role_id) {
-                                                            echo "checked";
-                                                        }
-                                                        ?>  <?php echo set_checkbox('visible[]', $role_value['id'], false) ?> /> <b><?php echo $role_value['name']; ?></b> </label>
+                                            ?>
+                                                <div class="checkbox" <?php
+                                                                        if ($role_value["id"] == $role_id) {
+                                                                            echo 'style="display: none;"';
+                                                                        }
+                                                                        ?>>
+                                                    <label><input type="checkbox" name="visible[]" value="<?php echo $role_value['id']; ?>" <?php echo set_checkbox('visible[]', $role_value['id'], false) ?> /> <b><?php echo $role_value['name']; ?></b> </label>
                                                 </div>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
 

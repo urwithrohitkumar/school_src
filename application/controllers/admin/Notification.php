@@ -76,7 +76,7 @@ class Notification extends Admin_Controller
         $data['title']      = 'Add Notification';
         $data['title_list'] = 'Notification List';
         $data['roles']      = $this->role_model->get();
-
+        $data["branch"]     = $this->staff_model->getBranch();
         $this->form_validation->set_rules('title', $this->lang->line('title'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('message', $this->lang->line('message'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('date', $this->lang->line('date'), 'trim|required|xss_clean');
@@ -108,6 +108,7 @@ class Notification extends Admin_Controller
             $data = array(
                 'message'         => $this->input->post('message'),
                 'title'           => $this->input->post('title'),
+                'branch_id'           => $this->input->post('branch_id'),
                 'date'            => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'created_by'      => $userdata["user_type"],
                 'created_id'      => $this->customlib->getStaffID(),

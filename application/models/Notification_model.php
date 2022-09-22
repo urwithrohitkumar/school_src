@@ -19,15 +19,18 @@ class Notification_model extends MY_Model {
      */
     public function get($id = null) {
 
+        $branchWhere = '';
+        if(!empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] != 0)
+        {
+            $branchWhere = 'AND branch_id = '.$this->session->userdata['admin']['branch_id'].'';
+        }
         $userdata = $this->customlib->getUserData();
         $role_id = $userdata["role_id"];
-        $sql = "SELECT * from send_notification left JOIN (SELECT send_notification_id, GROUP_CONCAT(role_id) as roles  FROM notification_roles  group by send_notification_id) as notification_roles on notification_roles.send_notification_id = send_notification.id ";
-
+        $sql = "SELECT * from send_notification left JOIN (SELECT send_notification_id, GROUP_CONCAT(role_id) as roles  FROM notification_roles  group by send_notification_id) as notification_roles on notification_roles.send_notification_id = send_notification.id WHERE is_active IS NOT NULL ".$branchWhere."";
         if ($id != null) {
 
-            $sql .= "where send_notification.id =" . $id;
+            $sql .= "AND send_notification.id =" . $id."";
         }
-
         $query = $this->db->query($sql);
         if ($id != null) {
             return $query->row_array();
