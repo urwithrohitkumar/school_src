@@ -36,7 +36,7 @@ class Syllabus extends Admin_Controller
         $this_week_end           = date("Y-m-d", $sunday);
         $data['this_week_start'] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($this_week_start));
         $data['this_week_end']   = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($this_week_end));
-        $data['staff_id']        = $this->staff_id;
+        $data['staff_id']        = $this->staff_id;      
         $this->load->view('layout/header', $data);
         $this->load->view('admin/syllabus/index', $data);
         $this->load->view('layout/footer', $data);
@@ -312,6 +312,7 @@ class Syllabus extends Admin_Controller
         $this->session->set_userdata('top_menu', 'lessonplan');
         $this->session->set_userdata('sub_menu', 'admin/lessonplan');
         $data                     = array();
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['no_record']        = '0';
         $class                    = $this->class_model->get();
         $data['classlist']        = $class;
@@ -321,6 +322,7 @@ class Syllabus extends Admin_Controller
         $data['subject_id']       = "";
         $data['subject_name']     = "";
         $data['lessons']          = array();
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('subject_group_id', $this->lang->line('subject') . " " . $this->lang->line('group'), 'trim|required|xss_clean');
@@ -329,6 +331,7 @@ class Syllabus extends Admin_Controller
         if ($this->form_validation->run() == false) {
 
         } else {
+            $data['branch_id']              = $_POST['branch_id'];
             $data['class_id']               = $_POST['class_id'];
             $data['section_id']             = $_POST['section_id'];
             $data['subject_group_id']       = $_POST['subject_group_id'];
@@ -351,7 +354,7 @@ class Syllabus extends Admin_Controller
                 }
             }
         }
-
+      
         $data['status'] = array('1' => '<span class="label " style="background:#0e0e0e">' . $this->lang->line('complete') . '</span>', '0' => '<span class="label " style="background:#b3b3b3">' . $this->lang->line('incomplete') . '</span>');
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/index', $data);

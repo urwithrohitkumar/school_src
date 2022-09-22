@@ -59,7 +59,17 @@ class Lessonplan_model extends MY_model {
     }
 
     public function getlessonBysubjectid($sub_id, $getlessonBysubjectid) {
-        return $this->db->select('*')->from('lesson')->where('subject_group_subject_id', $sub_id)->where('subject_group_class_sections_id', $getlessonBysubjectid)->get()->result_array();
+        $branch_id = $this->session->admin['branch_id'];
+        $arr=[];
+        if($branch_id>0){
+            $arr=['branch_id'=>$branch_id];
+        }
+        return $this->db->select('*')
+        ->from('lesson')
+        ->where('subject_group_subject_id', $sub_id)
+        ->where('subject_group_class_sections_id', $getlessonBysubjectid)
+        ->where($arr)
+        ->get()->result_array();
     }
 
     public function getlessonBylessonid($lesson_id) {
@@ -253,6 +263,10 @@ class Lessonplan_model extends MY_model {
         if ($subject_group_subject_id != null) {
             $this->db->where('subject_group_subjects.id', $subject_group_subject_id);
         }
+        $branch_id = $this->session->admin['branch_id'];     
+        if($branch_id>0){           
+            $this->db->where('lesson.branch_id', $branch_id);
+        }
 
 
         $this->db->where('lesson.session_id', $session);
@@ -276,7 +290,9 @@ class Lessonplan_model extends MY_model {
 
     public function getsubject_group_class_sectionsId($class_id, $section_id, $subject_group_id) {
 
-        $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.id=" . $this->db->escape($subject_group_id) . "and subject_groups.session_id=" . $this->db->escape($this->current_session) . " ORDER by subject_groups.id DESC";
+        $sql = "SELECT subject_groups.name, subject_group_class_sections.* 
+        from subject_group_class_sections 
+        INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.id=" . $this->db->escape($subject_group_id) . "and subject_groups.session_id=" . $this->db->escape($this->current_session) . " ORDER by subject_groups.id DESC";
         $query = $this->db->query($sql);
 
         return $query->row_array();
@@ -334,6 +350,11 @@ class Lessonplan_model extends MY_model {
     }
 
     public function gettopiclist($session) {
+        $branch_id = $this->session->admin['branch_id'];
+        $arr=[];
+        if($branch_id>0){
+            $arr=['lesson.branch_id'=>$branch_id];
+        }
 
        
         $this->datatables
@@ -348,7 +369,8 @@ class Lessonplan_model extends MY_model {
         ->join("class_sections", "class_sections.id = subject_group_class_sections.class_section_id")
         ->join("sections", "sections.id = class_sections.section_id")
         ->join("classes", "classes.id = class_sections.class_id")
-        ->where('topic.session_id', $session)
+        ->where('topic.session_id', $session)   
+        ->where($arr)
         ->group_by("lesson.subject_group_subject_id")
         ->group_by("topic.lesson_id")
         ->from('topic');
@@ -357,8 +379,13 @@ class Lessonplan_model extends MY_model {
     }
     public function getlessonlist($session, $id = null) 
     {
+        $branch_id = $this->session->admin['branch_id'];
+        $arr=[];
+        if($branch_id>0){
+            $arr=['lesson.branch_id'=>$branch_id];
+        }
 
-         $this->datatables
+        $this->datatables
             ->select('lesson.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid')
             ->searchable('classes.class,sections.section,subject_groups.name,subjects.name,lesson.name')
             ->orderable('classes.class,sections.section,subject_groups.name,subjects.name,lesson.name')
@@ -370,6 +397,7 @@ class Lessonplan_model extends MY_model {
         ->join("sections", "sections.id = class_sections.section_id")
         ->join("classes", "classes.id = class_sections.class_id")
         ->where('lesson.session_id', $session)
+        ->where($arr)
         ->group_by("lesson.subject_group_subject_id")
         ->group_by("lesson.subject_group_class_sections_id")
         ->from('lesson');

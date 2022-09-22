@@ -27,7 +27,23 @@ $language_name = $language["short_code"];
                             <?php } ?>
                             <?php echo $this->customlib->getCSRF(); ?>
                         </div> 
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-2">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select  id="branch_id" name="branch_id" class="form-control">
+                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                    <?php  } else { ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <?php foreach ($all_branch as  $value) { ?>                                                        
+                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                    <?php } } ?>
+                                </select>
+                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                 <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')"  class="form-control" >
@@ -47,7 +63,7 @@ $language_name = $language["short_code"];
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                 <select  id="secid" name="section_id" class="form-control" >
@@ -56,7 +72,7 @@ $language_name = $language["short_code"];
                                 <span class="class_id_error text-danger"><?php echo form_error('section_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label><small class="req"> *</small>
                                 <select  id="subject_group_id" name="subject_group_id" class="form-control" >
@@ -65,7 +81,7 @@ $language_name = $language["short_code"];
                                 <span class="class_id_error text-danger"><?php echo form_error('subject_group_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-4 col-lg-4 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject'); ?></label><small class="req"> *</small>
                                 <select  id="subid" name="subject_id" class="form-control" >
@@ -80,11 +96,7 @@ $language_name = $language["short_code"];
             </form>
 
 
-            <?php if (!empty($lessons)) {
-                ?>
-
-
-
+            <?php if (!empty($lessons)) { ?>
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('syllabus') . " " . $this->lang->line('status') . " " . $this->lang->line('for') . ": " . $subject_name; ?></h3>
                 </div>
@@ -213,8 +225,7 @@ $language_name = $language["short_code"];
                     </div>
                 <?php
                 }
-            }
-            ?>
+            } ?>
     </section>
 </div>
 <div id="topic_status" class="modal fade " role="dialog">

@@ -47,7 +47,6 @@
                             </form>
                         <?php } ?>
                         <div id="weekdates_result"></div>
-
                     </div>
                 </div>
             </div>

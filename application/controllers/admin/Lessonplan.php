@@ -80,6 +80,7 @@ class Lessonplan extends Admin_Controller
             $data['class_array'][] = $class_value['id'];
         }
         $carray                   = array();
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['class_id']         = "";
         $data['section_id']       = "";
         $data['subject_group_id'] = "";
@@ -116,8 +117,8 @@ class Lessonplan extends Admin_Controller
                 $condition = " and subject_timetable.id in(" . $timetableid . ") ";
             }
             $where_in = explode(',', $timetableid);
-        }
-
+        }  
+       
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/lesson', $data);
         $this->load->view('layout/footer');
@@ -221,14 +222,14 @@ class Lessonplan extends Admin_Controller
 		
 		$editresult = $this->lessonplan_model->get($this->sch_current_session, $id, $subject_group_subject_id);
         $editlesson = $this->lessonplan_model->getlesson($editresult["subject_group_subject_id"], $editresult["subject_group_class_sections_id"], $this->sch_current_session);
-
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['editlessonname']                 = $editlesson;
+        $data['branch_id']                      = $editresult['branch_id'];
         $data['class_id']                       = $editresult['classid'];
         $data['section_id']                     = $editresult['sectionid'];
         $data['subject_group_id']               = $editresult['subjectgroupsid'];
         $data['subject_id']                     = $editresult['subjectid'];
-        $data['lesson_subject_group_subjectid'] = $editresult['subject_group_subject_id'];
-
+        $data['lesson_subject_group_subjectid'] = $editresult['subject_group_subject_id'];        
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/editlesson', $data);
         $this->load->view('layout/footer');
@@ -708,6 +709,7 @@ class Lessonplan extends Admin_Controller
             $class_array[] = $class_value['id'];
         }
         $result  = $this->lessonplan_model->getlessonlist($this->sch_current_session, '');
+     
         $m       = json_decode($result);
         $dt_data = array();
         if (!empty($m->data)) {
