@@ -566,4 +566,23 @@ if ( ! function_exists('redirect'))
 		}
 		exit;
 	}
+
+	
+	// ------------------------------------------------------------------------
+
+
+	if (!function_exists('branch_id')) {
+		
+		function check_branch_id_data($branch_id = NULL)
+		{
+			$branchWhere = '';
+			$session = $_SESSION;
+			
+			
+			if (empty(($session['admin']['roles']['Super Admin']))) {
+				$branchWhere .= 'AND staff.branch_id = '. $branch_id.'';
+			}
+			return $branchWhere;
+		}
+	}
 }

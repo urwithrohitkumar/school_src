@@ -396,7 +396,8 @@ class Staff extends Admin_Controller
         $data["department"]     = $department;
         $marital_status         = $this->marital_status;
         $data["marital_status"] = $marital_status;
-
+        $branch                 = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
         $data['title']               = 'Add Staff';
         $data["contract_type"]       = $this->contract_type;
         $data['sch_setting']         = $this->sch_setting_detail;
@@ -456,6 +457,7 @@ class Staff extends Admin_Controller
             $gender            = $this->input->post("gender");
             $marital_status    = $this->input->post("marital_status");
             $dob               = $this->input->post("dob");
+            $branch               = $this->input->post("branch");
             $contact_no        = $this->input->post("contactno");
             $emergency_no      = $this->input->post("emergency_no");
             $email             = $this->input->post("email");
@@ -515,6 +517,10 @@ class Staff extends Admin_Controller
             if (isset($mother_name)) {
 
                 $data_insert['mother_name'] = $mother_name;
+            }
+            if (isset($branch)) {
+
+                $data_insert['branch_id'] = $branch;
             }
 
             if (isset($father_name)) {
@@ -1085,6 +1091,7 @@ class Staff extends Admin_Controller
             $gender            = $this->input->post("gender");
             $marital_status    = $this->input->post("marital_status");
             $dob               = $this->input->post("dob");
+            $branch               = $this->input->post("branch");
             $contact_no        = $this->input->post("contactno");
             $emergency_no      = $this->input->post("emergency_no");
             $email             = $this->input->post("email");

@@ -62,6 +62,21 @@
                                                 <span class="text-danger"><?php echo form_error('role'); ?></span>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label>
+
+                                                <select id="branch" name="branch" placeholder="" type="text" class="form-control">
+                                                    
+                                                    <?php foreach ($branch as $key => $value) {
+                                                    ?>
+                                                        <option value="<?php echo $value["id"] ?>" <?php echo set_select('branch', $value['id'], set_value('branch')); ?>><?php echo $value["branch_name"] ?></option>
+                                                    <?php }
+                                                    ?>
+                                                </select>
+                                                <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                            </div>
+                                        </div>
                                         <?php if ($sch_setting->staff_designation) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">

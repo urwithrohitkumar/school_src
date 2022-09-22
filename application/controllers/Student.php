@@ -126,6 +126,7 @@ class Student extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
         $data['students_list'] = $this->classsection_model->StudentCategoryReport();
+        $data['section_list'] = $this->classsection_model->sectionList();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);
         $this->load->view('layout/footer', $data);
@@ -2292,7 +2293,7 @@ class Student extends Admin_Controller
         $branch_id   = $this->input->post('branch_id');
         $class_id   = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
-
+        $search_text = $this->input->post('search_text');
         $srch_type = $this->input->post('search_type');
 
         if ($srch_type == 'search_filter') {
@@ -2312,7 +2313,7 @@ class Student extends Admin_Controller
             }
         } else {
             $branch_id       = $this->session->admin['branch_id'];
-            $params = array('srch_type' => 'search_full','branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id);
+            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id,'search_text' => $search_text);
             $array  = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -2459,7 +2460,8 @@ class Student extends Admin_Controller
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentAgeReportPdf',$data, true);
-        $this->pdf->createPDF($html, 'mypdf', false);
+        $this->pdf->createPDF($html, 'mypdf', false,'A4','landscape');
+        // $this->pdf->createPDF($html, 'mypdf', false);
     }
     /**
      * Downlod student age report pdf

@@ -7,12 +7,9 @@ class Leaverequest_model extends MY_model {
 
     public function staff_leave_request($id = null) {
 
-        if ($id != null) {
-            $this->db->where("staff_leave_request.staff_id", $id);
-        }
-
-        $query = $this->db->select('staff.name,staff.surname,staff.employee_id,staff_leave_request.*,leave_types.type')->join("staff", "staff.id = staff_leave_request.staff_id")->join("leave_types", "leave_types.id = staff_leave_request.leave_type_id")->where("staff.is_active", "1")->order_by("staff_leave_request.id", "desc")->get("staff_leave_request");
-
+        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id']);        
+        $query = "SELECT `staff`.`name`, `staff`.`surname`, `staff`.`employee_id`, `staff_leave_request`.*, `leave_types`.`type` FROM `staff_leave_request` JOIN `staff` ON `staff`.`id` = `staff_leave_request`.`staff_id` JOIN `leave_types` ON `leave_types`.`id` = `staff_leave_request`.`leave_type_id` WHERE `staff`.`is_active` = '1' ".$branchWhere." ORDER BY `staff_leave_request`.`id` DESC";
+        $query = $this->db->query($query);
         return $query->result_array();
     }
 
