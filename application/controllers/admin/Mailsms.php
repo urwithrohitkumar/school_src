@@ -43,25 +43,24 @@ class Mailsms extends Admin_Controller
         $sch_setting = $this->setting_model->getSetting();
         if ($keyword != "" and $category != "") {
             if ($category == "student") {
-              $result = $this->student_model->searchNameLike($keyword,$branch_id);
+                $result = $this->student_model->searchNameLike($keyword, $branch_id);
                 foreach ($result as $key => $value) {
                     $result[$key]['fullname'] = $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $sch_setting->middlename, $sch_setting->lastname);
                 }
             } elseif ($category == "student_guardian") {
-              $result = $this->student_model->searchNameLike($keyword,$branch_id);
+                $result = $this->student_model->searchNameLike($keyword, $branch_id);
                 foreach ($result as $key => $value) {
                     $result[$key]['fullname'] = $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $sch_setting->middlename, $sch_setting->lastname);
                 }
             } elseif ($category == "parent") {
 
-                $result = $this->student_model->searchGuardianNameLike($keyword);
-            } elseif ($category == "staff") {
-                $result = $this->staff_model->searchNameLike($keyword);
+                $result = $this->student_model->searchGuardianNameLike($keyword, $branch_id);
+            } elseif ($category == 1) {
+                $result = $this->staff_model->searchNameLike($keyword, $branch_id);
             } else {
-
+                $result = $this->staff_model->searchNameLike($keyword, $branch_id);
             }
         }
-
         echo json_encode($result);
     }
 
@@ -229,28 +228,30 @@ class Mailsms extends Admin_Controller
                 $user_array[] = $array;
             }
 
-            $sms_mail = $this->input->post('individual_send_by');
-            if ($sms_mail == "sms") {
-                $send_sms  = 1;
-                $send_mail = 0;
-            } else {
-                $send_sms  = 0;
-                $send_mail = 1;
+            foreach ($user_array as $key => $value) {
+                $sms_mail = $this->input->post('individual_send_by');
+                if ($sms_mail == "sms") {
+                    $send_sms  = 1;
+                    $send_mail = 0;
+                } else {
+                    $send_sms  = 0;
+                    $send_mail = 1;
+                }
+                $message       = $this->input->post('individual_message');
+                $message_title = $this->input->post('individual_title');
+                $data          = array(
+                    'is_individual' => 1,
+                    'title'         => $message_title,
+                    'message'       => $message,
+                    'branch_id'   => $this->input->post('branch_id'),
+                    'send_mail'     => $send_mail,
+                    'send_sms'      => $send_sms,
+                    'user_id'     =>  $value['user_id'],
+                    'user_list'     => json_encode($user_array),
+                    'created_at'    => date('Y-m-d H:i:s'),
+                );
+                $this->messages_model->add($data);
             }
-            $message       = $this->input->post('individual_message');
-            $message_title = $this->input->post('individual_title');
-            $data          = array(
-                'is_individual' => 1,
-                'title'         => $message_title,
-                'message'       => $message,
-                'branch_id'   => $this->input->post('branch_id'),
-                'send_mail'     => $send_mail,
-                'send_sms'      => $send_sms,
-                'user_list'     => json_encode($user_array),
-                'created_at'    => date('Y-m-d H:i:s'),
-            );
-
-            $this->messages_model->add($data);
             if (!empty($user_array)) {
                 if ($send_mail) {
                     if (!empty($this->mail_config)) {
@@ -377,21 +378,26 @@ class Mailsms extends Admin_Controller
                 $send_sms  = 0;
                 $send_mail = 1;
             }
+            $userlisting = $this->input->post('user[]');
             $message       = $this->input->post('group_message');
             $message_title = $this->input->post('group_title');
-            $data          = array(
-                'is_group'   => 1,
-                'title'      => $message_title,
-                'message'    => $message,
-                'send_mail'  => $send_mail,
-                'branch_id'   => $this->input->post('branch_id'),
-                'send_sms'   => $send_sms,
-                'group_list' => json_encode(array()),
-                'created_at' => date('Y-m-d H:i:s'),
-            );
-            $this->messages_model->add($data);
+            for ($i = 0; $i < count($userlisting); $i++) {
+                $data          = array(
+                    'is_group'   => 1,
+                    'title'      => $message_title,
+                    'message'    => $message,
+                    'send_mail'  => $send_mail,
+                    'send_sms'   => $send_sms,
+                    'branch_id'   => $this->input->post('branch_id'),
+                    'role_id'   => $userlisting[$i],
+                    'group_list' => json_encode(array()),
+                    'created_at' => date('Y-m-d H:i:s'),
+                );
+                $this->messages_model->add($data);
+            }
 
-            $userlisting = $this->input->post('user[]');
+
+            $userlisting = $this->input->post('user[]');    
             foreach ($userlisting as $users_key => $users_value) {
                 if ($users_value == "student") {
                     $student_array = $this->student_model->get();
@@ -480,21 +486,25 @@ class Mailsms extends Admin_Controller
             $user_array = array();
 
             $sms_mail = $this->input->post('group_send_by');
-
+            $userlisting = $this->input->post('user[]');
             $message       = $this->input->post('group_message');
             $message_title = $this->input->post('group_title');
-            $data          = array(
-                'is_group'    => 1,
-                'title'       => $message_title,
-                'message'     => $message,
-                'branch_id'   => $this->input->post('branch_id'),
-                'send_mail'   => 0,
-                'send_sms'    => 1,
-                'group_list'  => json_encode(array()),
-                'created_at'  => date('Y-m-d H:i:s'),
-                'template_id' => $template_id,
-            );
-            $this->messages_model->add($data);
+            for ($i = 0; $i < count($userlisting); $i++) {
+                $data          = array(
+                    'is_group'    => 1,
+                    'title'       => $message_title,
+                    'message'     => $message,
+                    'branch_id'   => $this->input->post('branch_id'),
+                    'send_mail'   => 0,
+                    'send_sms'    => 1,
+                    'group_list'  => json_encode(array()),
+                    'role_id'   => $userlisting[$i],
+                    'created_at'  => date('Y-m-d H:i:s'),
+                    'template_id' => $template_id,
+                );
+                $this->messages_model->add($data);
+            }
+
 
             $userlisting = $this->input->post('user[]');
             foreach ($userlisting as $users_key => $users_value) {
@@ -547,7 +557,7 @@ class Mailsms extends Admin_Controller
                 foreach ($user_array as $user_mail_key => $user_mail_value) {
                     if (in_array("sms", $sms_mail)) {
                         if ($user_mail_value['mobileno'] != "") {
-                            $this->smsgateway->sendSMS($user_mail_value['mobileno'],$message, $template_id,"" );
+                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], $message, $template_id, "");
                         }
                     }
                     if (in_array("push", $sms_mail)) {
@@ -626,7 +636,7 @@ class Mailsms extends Admin_Controller
                 foreach ($user_array as $user_mail_key => $user_mail_value) {
                     if (in_array("sms", $sms_mail)) {
                         if ($user_mail_value['mobileno'] != "" && $user_mail_value['mobileno'] != 0) {
-                            $this->smsgateway->sendSMS($user_mail_value['mobileno'],($message), $template_id, "");
+                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], ($message), $template_id, "");
                         }
                     }
                 }
@@ -689,20 +699,23 @@ class Mailsms extends Admin_Controller
             }
 
             $sms_mail = $this->input->post('individual_send_by');
-
-            $message       = $this->input->post('individual_message');
-            $message_title = $this->input->post('individual_title');
-            $data          = array(
-                'is_individual' => 1,
-                'title'         => $message_title,
-                'message'       => $message,
-                'send_mail'     => 0,
-                'send_sms'      => 1,
-                'user_list'     => json_encode($user_array),
-                'created_at'    => date('Y-m-d H:i:s'),
-            );
-
-            $this->messages_model->add($data);
+            foreach ($user_array as $key => $value) {
+                $message       = $this->input->post('individual_message');
+                $message_title = $this->input->post('individual_title');
+                $data          = array(
+                    'is_individual' => 1,
+                    'title'         => $message_title,
+                    'message'       => $message,
+                    'branch_id'   => $this->input->post('branch_id'),
+                    'send_mail'     => 0,
+                    'send_sms'      => 1,
+                    'user_id'     =>  $value['user_id'],
+                    'user_list'     => json_encode($user_array),
+                    'created_at'    => date('Y-m-d H:i:s'),
+                );
+    
+                $this->messages_model->add($data);
+            }
             if (!empty($user_array)) {
 
                 foreach ($user_array as $user_mail_key => $user_mail_value) {
@@ -710,7 +723,7 @@ class Mailsms extends Admin_Controller
 
                         if ($user_mail_value['mobileno'] != "") {
 
-                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], $message,$template_id,"");
+                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], $message, $template_id, "");
                         }
                     }
                     if (in_array("push", $sms_mail)) {
@@ -791,7 +804,7 @@ class Mailsms extends Admin_Controller
                     if (in_array("sms", $sms_mail)) {
                         if ($user_mail_value['mobileno'] != "") {
 
-                            $this->smsgateway->sendSMS($user_mail_value['mobileno'],$message,$template_id,"");
+                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], $message, $template_id, "");
                         }
                     }
                     if (in_array("push", $sms_mail)) {

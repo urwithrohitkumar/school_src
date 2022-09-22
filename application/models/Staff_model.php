@@ -571,10 +571,12 @@ class Staff_model extends MY_Model
         return $query->result_array();
     }
     
-    public function getEmployeeByRoleID($role, $active = 1)
+    public function getEmployeeByRoleID($role, $branch_id = 1)
     {
+      
+        $active = 1;
 
-        $query = $this->db->select("staff.*,staff_designation.designation,department.department_name as department, roles.id as role_id, roles.name as role")->join('staff_designation', "staff_designation.id = staff.designation", "left")->join('staff_roles', "staff_roles.staff_id = staff.id", "left")->join('roles', "roles.id = staff_roles.role_id", "left")->join('department', "department.id = staff.department", "left")->where("staff.is_active", $active)->where("roles.id", $role)->get("staff");
+        $query = $this->db->select("staff.*,staff_designation.designation,department.department_name as department, roles.id as role_id, roles.name as role")->join('staff_designation', "staff_designation.id = staff.designation", "left")->join('staff_roles', "staff_roles.staff_id = staff.id", "left")->join('roles', "roles.id = staff_roles.role_id", "left")->join('department', "department.id = staff.department", "left")->where("staff.branch_id", $branch_id)->where("staff.is_active", $active)->where("roles.id", $role)->get("staff");
 
         return $query->result_array();
     }

@@ -118,7 +118,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         </td>
                                                         <td><?php echo $student['class'] . "(" . $student['section'] . ")" ?></td>
                                                         <td><?php echo $student['father_name']; ?></td>
-                                                        <td><?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student['dob'])); ?></td>
+                                                        <!-- <td><?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student['dob'])); ?></td> -->
+                                                        <td><?php echo $student['dob']; ?></td>
                                                         <td><?php echo $student['gender']; ?></td>
 
                                                         <td><?php echo $student['mobileno']; ?></td>

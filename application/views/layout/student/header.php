@@ -392,17 +392,17 @@ if($this->studentmodule_lib->hasActive('multi_class')){
 
                                    
 
-                                    $file = $student_data["image"];
+                                  //  $file = $student_data["image"];
 
 
 
-                                    $image = $student_data["image"];
+                                   // $image = $student_data["image"];
 
                                     if (!empty($image)) {
 
 
 
-                                        $file = $image; 
+                                        //$file = $image; 
 
                                     } else {
 

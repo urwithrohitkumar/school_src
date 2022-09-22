@@ -30,10 +30,12 @@ class Issueitem extends Admin_Controller {
         $data['title_list'] = 'Recent Issue items';
         $roles = $this->role_model->get();
         $data['roles'] = $roles;
+        $branch                 = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
 
         $itemcategory = $this->itemcategory_model->get();
         $data['itemcatlist'] = $itemcategory;
-        $data['staff'] = $this->staff_model->inventry_staff();
+        $data['staff'] = $this->staff_model->issueItemby();
 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/issueitem/issueitemCreate', $data);
@@ -54,6 +56,7 @@ class Issueitem extends Admin_Controller {
         if ($this->form_validation->run() == false) {
             $data = array(
                 'account_type' => form_error('account_type'),
+                'branch_id' => $this->input->post('branch'),
                 'issue_to' => form_error('issue_to'),
                 'issue_by' => form_error('issue_by'),
                 'issue_date' => form_error('issue_date'),
@@ -114,12 +117,12 @@ class Issueitem extends Admin_Controller {
     public function getUser() {
 
         $usertype = $this->input->post('usertype');
-
+        $branch_id = $this->input->post('branch_id');
 
         $result_final = array();
         $result = array();
         if ($usertype != "") {
-            $result = $this->staff_model->getEmployeeByRoleID($usertype);
+            $result = $this->staff_model->getEmployeeByRoleID($usertype,$branch_id);
         }
 
         $result_final = array('usertype' => $usertype, 'result' => $result);

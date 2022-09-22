@@ -108,7 +108,8 @@ class Messages_model extends MY_Model {
     }
 
     public function get_subject_name($id) {
-        $filter_get_subject_name = $this->db->select('subjects.name')->from('subject_group_subjects')->join('subjects', 'subject_group_subjects.subject_id=subjects.id', 'inner')->where('subject_group_subjects.id', $id)->get()->row_array();
+        $filter_get_subject_name = $this->db->select('subjects.name')->from('subject_group_subjects')
+        ->join('subjects', 'subject_group_subjects.subject_id=subjects.id', 'inner')->where('subject_group_subjects.id', $id)->get()->row_array();
         return $this->lang->line('subject') . " " . $this->lang->line('name') . " : " . $filter_get_subject_name['name'];
     }
 
