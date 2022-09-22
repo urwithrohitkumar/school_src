@@ -226,13 +226,12 @@ class Staff extends Admin_Controller
                 $att_dates        = $year . "-" . $datemonth . "-" . sprintf("%02d", $n);
                 $date_array[]     = $att_dates;
                 $staff_attendence = $this->staffattendancemodel->searchStaffattendance($att_dates, $id, false);
-				if(!empty($staff_attendence)){
-					if ($staff_attendence['att_type'] != "") {
-                    $attendence_count[$staff_attendence['att_type']][] = 1;
-					}
-				}else{
-					
-				}
+                if (!empty($staff_attendence)) {
+                    if ($staff_attendence['att_type'] != "") {
+                        $attendence_count[$staff_attendence['att_type']][] = 1;
+                    }
+                } else {
+                }
                 $res[$att_dates] = $staff_attendence;
             }
         }
@@ -421,7 +420,10 @@ class Staff extends Admin_Controller
         $this->form_validation->set_rules('third_doc', $this->lang->line('image'), 'callback_handle_third_upload');
         $this->form_validation->set_rules('fourth_doc', $this->lang->line('image'), 'callback_handle_fourth_upload');
         $this->form_validation->set_rules(
-            'email', $this->lang->line('email'), array('required', 'valid_email',
+            'email',
+            $this->lang->line('email'),
+            array(
+                'required', 'valid_email',
                 array('check_exists', array($this->staff_model, 'valid_email_id')),
             )
         );
@@ -1072,7 +1074,10 @@ class Staff extends Admin_Controller
         }
 
         $this->form_validation->set_rules(
-            'email', $this->lang->line('email'), array('required', 'valid_email',
+            'email',
+            $this->lang->line('email'),
+            array(
+                'required', 'valid_email',
                 array('check_exists', array($this->staff_model, 'valid_email_id')),
             )
         );

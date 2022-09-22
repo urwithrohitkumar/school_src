@@ -16,7 +16,7 @@ class Payroll_model extends MY_Model
     public function searchEmployee($month, $year, $emp_name, $role)
     {
         $staff_info    = $this->staff_model->getProfile($this->current_session);
-        $where = check_branch_id_data($this->session->userdata['admin']['branch_id']);
+        $where = check_branch_id_data($this->session->userdata['admin']['branch_id'] ,'staff');
 
         $date_month = date("m", strtotime($year));
         if (!empty($role) && !empty($emp_name)) {

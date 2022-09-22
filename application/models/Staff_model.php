@@ -629,7 +629,7 @@ class Staff_model extends MY_Model
 
     public function searchFullText($searchterm, $active)
     {
-        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id']);
+        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id'] ,'staff');
         $i             = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
 
@@ -799,13 +799,21 @@ class Staff_model extends MY_Model
         return $query->result_array();
     }
 
-    public function searchNameLike($searchterm)
+    public function searchNameLike($searchterm,$branch_id)
     {
+        $category = $this->input->post('category');
+        
         $this->db->select('staff.*')->from('staff');
+        $this->db->join("staff_roles", "staff_roles.staff_id = staff.id", "left");
         $this->db->group_start();
         $this->db->like('staff.name', $searchterm);
         $this->db->group_end();
         $this->db->where("staff.is_active", "1");
+        $this->db->where("staff_roles.role_id ", $category);
+        if(!empty($branch_id))
+        {
+            $this->db->where('staff.branch_id', $branch_id);
+        }
         $this->db->order_by('staff.id');
         $query = $this->db->get();
         return $query->result_array();

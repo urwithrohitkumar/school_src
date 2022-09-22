@@ -13,6 +13,12 @@ class Messages_model extends MY_Model {
 
     public function get($id = null) {
         $this->db->select()->from('messages');
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+            $this->db->where('messages.branch_id', $this->session->userdata['admin']['branch_id']);
+            $this->db->where('messages.role_id', $this->session->userdata['admin']['role_id']);
+            $this->db->or_where('messages.user_id', $this->session->userdata['admin']['id']);
+        }   
         if ($id != null) {
             $this->db->where('messages.id', $id);
         } else {

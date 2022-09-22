@@ -2,7 +2,8 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-bullhorn"></i> <?php echo $this->lang->line('communicate'); ?></h1>
+            <i class="fa fa-bullhorn"></i> <?php echo $this->lang->line('communicate'); ?>
+        </h1>
     </section>
     <section class="content">
 
@@ -49,6 +50,21 @@
 
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="groupbranch_id" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('message_to'); ?></label><small class="req"> *</small>
@@ -56,24 +72,28 @@
                                                     <div class="checkbox mt0">
                                                         <label><input type="checkbox" name="user[]" value="student"> <b><?php echo $this->lang->line('students'); ?></b> </label>
                                                     </div>
-                                                    <?php 
-                                                    if($sch_setting->guardian_name){ ?>
-                                                    <div class="checkbox">
-                                                        <label><input type="checkbox" name="user[]" value="parent"> <b><?php echo $this->lang->line('guardians'); ?></b></label>
-                                                    </div>
+                                                    <?php
+                                                    if ($sch_setting->guardian_name) { ?>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="user[]" value="parent"> <b><?php echo $this->lang->line('guardians'); ?></b></label>
+                                                        </div>
                                                     <?php }
                                                     ?>
-                                                    
+
                                                     <?php
                                                     foreach ($roles as $role_key => $role_value) {
-                                                        ?>
+                                                        $userdata = $this->customlib->getUserData();
+                                                        $role_id = $userdata["role_id"];
+                                                    ?>
 
-                                                        <div class="checkbox">
+                                                        <div class="checkbox" <?php if ($role_value["id"] == $role_id) {
+                                                                                    echo 'style="display: none;"';
+                                                                                } ?>>
                                                             <label><input type="checkbox" name="user[]" value="<?php echo $role_value['id']; ?>"> <b><?php echo $role_value['name']; ?></b></label>
                                                         </div>
 
 
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
 
@@ -87,7 +107,7 @@
                                 <!-- /.box-body -->
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary submit_group" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending" ><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
+                                        <button type="submit" class="btn btn-primary submit_group" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending"><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
 
                                     </div>
 
@@ -125,12 +145,26 @@
 
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="indbranch_id" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value='0'>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
 
                                             <div class="form-group">
                                                 <label for="inpuFname"><?php echo $this->lang->line('message_to'); ?></label><small class="req"> *</small>
                                                 <div class="input-group">
                                                     <div class="input-group-btn bs-dropdown-to-select-group">
-                                                        <button type="button" class="btn btn-default btn-searchsm dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
+                                                        <button type="button" class="form-control btn btn-default btn-searchsm dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
                                                             <span data-bind="bs-drp-sel-label"><?php echo $this->lang->line('select'); ?></span>
                                                             <input type="hidden" name="selected_value" data-bind="bs-drp-sel-value" value="">
                                                             <span class="caret"></span>
@@ -138,21 +172,22 @@
                                                         </button>
                                                         <ul class="dropdown-menu" role="menu" style="">
 
-                                                            <li data-value="student"><a href="#" ><?php echo $this->lang->line('students'); ?></a></li>
-                                                            <?php 
-                                                            if($sch_setting->guardian_name){
-                                                                ?>
+                                                            <li data-value="student"><a href="#"><?php echo $this->lang->line('students'); ?></a></li>
+                                                            <?php
+                                                            if ($sch_setting->guardian_name) {
+                                                            ?>
                                                                 <li data-value="parent"><a href="#"><?php echo $this->lang->line('guardians'); ?></a></li>
-                                                            <li data-value="student_guardian"><a href="#" ><?php echo $this->lang->line('students') . " - " . $this->lang->line('guardians'); ?></a></li>
-                                                                <?php
+                                                                <li data-value="student_guardian"><a href="#"><?php echo $this->lang->line('students') . " - " . $this->lang->line('guardians'); ?></a></li>
+                                                            <?php
                                                             }
                                                             ?>
-                                                            
+
                                                             <?php
                                                             foreach ($roles as $role_key => $role_value) {
-                                                                ?>
-                                                                <li data-value="staff"><a href="#"><?php echo $role_value['name']; ?></a></li>
-                                                                <?php
+                                                                
+                                                            ?>
+                                                                <li data-value="<?php echo $role_value['id']; ?>"><a href="#"><?php echo $role_value['name']; ?></a></li>
+                                                            <?php
                                                             }
                                                             ?>
                                                         </ul>
@@ -161,7 +196,7 @@
 
                                                     <div id="suggesstion-box"></div>
                                                     <span class="input-group-btn">
-                                                        <button  class="btn btn-primary btn-searchsm add-btn" type="button"><?php echo $this->lang->line('add') ?></button>
+                                                        <button class="btn btn-primary btn-searchsm add-btn form-control" type="button"><?php echo $this->lang->line('add') ?></button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -187,7 +222,7 @@
                                 <!-- /.box-body -->
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary submit_individual" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending" ><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
+                                        <button type="submit" class="btn btn-primary submit_individual" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending"><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
                                     </div>
 
                                 </div>
@@ -221,22 +256,36 @@
 
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="classGroupBranchId" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="row">
                                                 <div class="form-group col-xs-10 col-sm-12 col-md-12 col-lg-12">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('message_to'); ?></label><small class="req"> *</small>
-                                                    <select  id="class_id" name="class_id" class="form-control"  >
+                                                    <select id="class_id" name="class_id" class="form-control">
                                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                         <?php
                                                         foreach ($classlist as $class) {
-                                                            ?>
-                                                            <option value="<?php echo $class['id'] ?>"<?php
-                                                            if (set_value('class_id') == $class['id']) {
-                                                                echo "selected=selected";
-                                                            }
-                                                            ?>><?php echo $class['class'] ?></option>
-                                                                    <?php
-                                                                }
-                                                                ?>
+                                                        ?>
+                                                            <option value="<?php echo $class['id'] ?>" <?php
+                                                                                                        if (set_value('class_id') == $class['id']) {
+                                                                                                            echo "selected=selected";
+                                                                                                        }
+                                                                                                        ?>><?php echo $class['class'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -256,7 +305,7 @@
                                 <!-- /.box-body -->
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary submit_class" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending" ><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
+                                        <button type="submit" class="btn btn-primary submit_class" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending"><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
                                     </div>
                                 </div>
                             </form>
@@ -290,7 +339,21 @@
 
                                             </div>
 
- 
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="birthdayBranchId" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
 
@@ -302,42 +365,42 @@
                                                     if (!empty($birthDaysList)) {
 
                                                         if (isset($birthDaysList['students'])) {
-                                                            ?>
+                                                    ?>
                                                             <h4><?php echo $this->lang->line('students'); ?></h4>
-                                                            <div class="wellscroll">   
+                                                            <div class="wellscroll">
                                                                 <?php
                                                                 foreach ($birthDaysList['students'] as $student_key => $student_value) {
-                                                                    ?>
+                                                                ?>
                                                                     <div class="checkbox">
                                                                         <label><input type="checkbox" name="user[]" value="<?php echo $student_value['email'] ?>" checked> <b><?php echo $student_value['name']; ?></b></label>
                                                                     </div>
-                                                                    <?php
+                                                                <?php
                                                                 }
                                                                 ?>
                                                             </div>
-                                                            <?php
+                                                        <?php
                                                         }
 
                                                         if (isset($birthDaysList['staff'])) {
-                                                            ?>
+                                                        ?>
 
 
 
                                                             <h4><?php echo $this->lang->line('staff'); ?> </h4>
-                                                            <div class="wellscroll">   
+                                                            <div class="wellscroll">
                                                                 <?php
                                                                 foreach ($birthDaysList['staff'] as $staff_key => $staff_value) {
-                                                                    ?>
+                                                                ?>
                                                                     <div class="checkbox">
                                                                         <label><input type="checkbox" name="user[]" value="<?php echo $staff_value['email'] ?>" checked> <b><?php echo $staff_value['name']; ?></b></label>
                                                                     </div>
-                                                                    <?php
+                                                                <?php
                                                                 }
                                                                 ?>
                                                             </div><?php
-                                                        }
-                                                    }
-                                                    ?>
+                                                                }
+                                                            }
+                                                                    ?>
 
 
 
@@ -351,7 +414,7 @@
                                 <!-- /.box-body -->
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary submit_birthday" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending" ><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
+                                        <button type="submit" class="btn btn-primary submit_birthday" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending"><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?></button>
 
                                     </div>
 
@@ -366,19 +429,19 @@
     </section>
 </div>
 <script>
-    $(document).on('click', '.dropdown-menu li', function () {
+    $(document).on('click', '.dropdown-menu li', function() {
         $("#suggesstion-box ul").empty();
         $("#suggesstion-box").hide();
     });
-    $(document).ready(function (e) {
-        $(document).on('click', '.bs-dropdown-to-select-group .dropdown-menu li', function (event) {
+    $(document).ready(function(e) {
+        $(document).on('click', '.bs-dropdown-to-select-group .dropdown-menu li', function(event) {
             var $target = $(event.currentTarget);
             $target.closest('.bs-dropdown-to-select-group')
-                    .find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
-                    .end()
-                    .children('.dropdown-toggle').dropdown('toggle');
+                .find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
+                .end()
+                .children('.dropdown-toggle').dropdown('toggle');
             $target.closest('.bs-dropdown-to-select-group')
-                    .find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
+                .find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
             return false;
         });
 
@@ -388,58 +451,65 @@
 <script type="text/javascript">
     var attr = {};
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        $("#search-query").keyup(function () {
+        $("#search-query").keyup(function() {
 
             $("#search-query").attr('data-record', "");
             $("#search-query").attr('data-email', "");
             $("#search-query").attr('data-mobileno', "");
             $("#suggesstion-box").hide();
             var category_selected = $("input[name='selected_value']").val();
-
+            var branch_id = $('#indbranch_id').find(":selected").val();
             $.ajax({
                 type: "POST",
                 url: "<?php echo site_url('admin/mailsms/search') ?>",
-                data: {'keyword': $(this).val(), 'category': category_selected},
+                data: {
+                    'keyword': $(this).val(),
+                    'category': category_selected,
+                    'branch_id': branch_id,
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     $("#search-query").css("background", "#FFF url(../../backend/images/loading.gif) no-repeat 165px");
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.length > 0) {
-                        setTimeout(function () {
+                        setTimeout(function() {
                             $("#suggesstion-box").show();
                             var cList = $('<ul/>').addClass('selector-list');
-                            $.each(data, function (i, obj)
-                            {
+                            $.each(data, function(i, obj) {
 
                                 if (category_selected == "student") {
                                     var email = obj.email;
                                     var contact = obj.mobileno;
-                                    var name = obj.fullname +  "(" + obj.admission_no + ")";
+                                    var name = obj.fullname + "(" + obj.admission_no + ")";
                                 } else if (category_selected == "student_guardian") {
                                     var email = obj.email;
                                     var guardian_email = obj.guardian_email;
                                     var contact = obj.mobileno;
-                                    var name =  obj.fullname + "(" + obj.admission_no + ")";
+                                    var name = obj.fullname + "(" + obj.admission_no + ")";
                                 } else if (category_selected == "parent") {
                                     var email = obj.guardian_email;
                                     var contact = obj.guardian_phone;
                                     var name = obj.guardian_name;
-                                } else if (category_selected == "staff") {
+                                } else if (category_selected == "1") {
+                                    var email = obj.email;
+                                    var contact = obj.contact_no;
+                                    var name = obj.name + ' ' + obj.surname + '(' + obj.employee_id + ')';
+                                }else {
                                     var email = obj.email;
                                     var contact = obj.contact_no;
                                     var name = obj.name + ' ' + obj.surname + '(' + obj.employee_id + ')';
                                 }
 
                                 var li = $('<li/>')
-                                        .addClass('ui-menu-item')
-                                        .attr('category', category_selected)
-                                        .attr('record_id', obj.id)
-                                        .attr('email', email)
-                                        .attr('mobileno', contact)
-                                        .text(name);
+                                    .addClass('ui-menu-item')
+                                    .attr('category', category_selected)
+                                    .attr('record_id', obj.id)
+                                    .attr('email', email)
+                                    .attr('mobileno', contact)
+                                    .text(name);
 
                                 if (category_selected == "student_guardian") {
                                     li.attr('data-guardian-email', guardian_email);
@@ -451,8 +521,7 @@
 
                             $("#search-query").css("background", "#FFF");
 
-                        }
-                        , 1000);
+                        }, 1000);
                     } else {
                         $("#suggesstion-box").hide();
                         $("#search-query").css("background", "#FFF");
@@ -464,7 +533,7 @@
     });
 
 
-    $(document).on('click', '.selector-list li', function () {
+    $(document).on('click', '.selector-list li', function() {
         var val = $(this).text();
         var record_id = $(this).attr('record_id');
         var email = $(this).attr('email');
@@ -483,7 +552,7 @@
     });
 
 
-    $(document).on('click', '.add-btn', function () {
+    $(document).on('click', '.add-btn', function() {
 
         var guardianEmail = "";
         var value = $("#search-query").val();
@@ -526,11 +595,12 @@
 <script type="text/javascript">
     function getTotalRecord() {
 
-        $.each(attr, function (key, value) {
+        $.each(attr, function(key, value) {
             //  console.log(value);
 
         });
     }
+
     function checkRecordExists(find) {
 
         if (find in attr) {
@@ -539,10 +609,10 @@
         return true;
     }
 
-    $(function () {
+    $(function() {
 
 
-        $('[name="SearchDualList"]').keyup(function (e) {
+        $('[name="SearchDualList"]').keyup(function(e) {
             var code = e.keyCode || e.which;
             if (code == '9')
                 return;
@@ -550,24 +620,24 @@
                 $(this).val(null);
             var $rows = $(this).closest('.dual-list').find('.list-group li');
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-            $rows.show().filter(function () {
+            $rows.show().filter(function() {
                 var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
                 return !~text.indexOf(val);
             }).hide();
         });
 
     });
+
     function delete_record(record) {
         delete attr[record];
         $('#' + record).remove();
         getTotalRecord();
         return false;
 
-    }
-    ;
+    };
 
 
-    $("#individual_form").submit(function (event) {
+    $("#individual_form").submit(function(event) {
         event.preventDefault();
         for (var instanceName in CKEDITOR.instances) {
             CKEDITOR.instances[instanceName].updateElement();
@@ -575,10 +645,10 @@
         // var logoImg = $('input[name="individual_attachment"]').get(0).files[0];
         var formData = new FormData();
         var other_data = $(this).serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
-//For image file
+        //For image file
         // formData.append('logo', logoImg);
 
         var ins = document.getElementById('individual_file').files.length;
@@ -591,7 +661,7 @@
         var user_list = (!jQuery.isEmptyObject(attr)) ? JSON.stringify(attr) : "";
         formData.append('user_list', user_list);
         var $form = $(this),
-                url = $form.attr('action');
+            url = $form.attr('action');
         var $this = $('.submit_individual');
         $this.button('loading');
 
@@ -603,14 +673,14 @@
             contentType: false,
             processData: false,
 
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 1) {
                     var message = "";
-                    $.each(data.msg, function (index, value) {
+                    $.each(data.msg, function(index, value) {
 
                         message += value;
                     });
@@ -625,9 +695,10 @@
                     successMsg(data.msg);
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
 
-            }, complete: function (data) {
+            },
+            complete: function(data) {
                 $this.button('reset');
             }
         })
@@ -639,7 +710,7 @@
 
 
 
-    $("#group_form").submit(function (event) {
+    $("#group_form").submit(function(event) {
 
 
         event.preventDefault();
@@ -649,20 +720,20 @@
         // var logoImg = $('input[name="group_attachment"]').get(0).files[0];
         var formData = new FormData();
         var other_data = $(this).serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
 
-//===========
+        //===========
 
         var ins = document.getElementById('group_file').files.length;
         for (var x = 0; x < ins; x++) {
             formData.append("files[]", document.getElementById('group_file').files[x]);
         }
-//==========
+        //==========
 
         var $form = $(this),
-                url = $form.attr('action');
+            url = $form.attr('action');
         var $this = $('.submit_group');
         $this.button('loading');
 
@@ -675,14 +746,14 @@
             contentType: false,
             processData: false,
 
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 1) {
                     var message = "";
-                    $.each(data.msg, function (index, value) {
+                    $.each(data.msg, function(index, value) {
 
                         message += value;
                     });
@@ -695,9 +766,10 @@
                     successMsg(data.msg);
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
 
-            }, complete: function (data) {
+            },
+            complete: function(data) {
                 $this.button('reset');
             }
         })
@@ -705,7 +777,7 @@
     });
 
 
-    $("#birthday_form").submit(function (event) {
+    $("#birthday_form").submit(function(event) {
 
 
         event.preventDefault();
@@ -715,20 +787,20 @@
         // var logoImg = $('input[name="group_attachment"]').get(0).files[0];
         var formData = new FormData();
         var other_data = $(this).serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
 
-//===========
+        //===========
 
         var ins = document.getElementById('group_file').files.length;
         for (var x = 0; x < ins; x++) {
             formData.append("files[]", document.getElementById('group_file').files[x]);
         }
-//==========
+        //==========
 
         var $form = $(this),
-                url = $form.attr('action');
+            url = $form.attr('action');
         var $this = $('.submit_birthday');
         $this.button('loading');
 
@@ -741,14 +813,14 @@
             contentType: false,
             processData: false,
 
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 1) {
                     var message = "";
-                    $.each(data.msg, function (index, value) {
+                    $.each(data.msg, function(index, value) {
 
                         message += value;
                     });
@@ -762,9 +834,10 @@
                     successMsg(data.msg);
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
 
-            }, complete: function (data) {
+            },
+            complete: function(data) {
                 $this.button('reset');
             }
         })
@@ -773,27 +846,28 @@
 
 
 
-    $(document).on('change', '#class_id', function (e) {
+    $(document).on('change', '#class_id', function(e) {
         $('.section_list').html("");
         var class_id = $(this).val();
         var base_url = '<?php echo base_url() ?>';
         var url = "<?php
-                                                    $userdata = $this->customlib->getUserData();
-                                                    if (($userdata["role_id"] == 2)) {
-                                                        echo "getClassTeacherSection";
-                                                    } else {
-                                                        echo "getByClass";
-                                                    }
-                                                    ?>";
+                    $userdata = $this->customlib->getUserData();
+                    if (($userdata["role_id"] == 2)) {
+                        echo "getClassTeacherSection";
+                    } else {
+                        echo "getByClass";
+                    }
+                    ?>";
         var div_data = '';
         $.ajax({
             type: "GET",
             url: base_url + "sections/getByClass",
-            data: {'class_id': class_id},
+            data: {
+                'class_id': class_id
+            },
             dataType: "json",
-            success: function (data) {
-                $.each(data, function (i, obj)
-                {
+            success: function(data) {
+                $.each(data, function(i, obj) {
                     div_data += '<li class="checkbox"><a href="#" class="small"><label><input type="checkbox" name="user[]" value ="' + obj.section_id + '"/>' + obj.section + '</label></a></li>';
 
 
@@ -803,7 +877,7 @@
         });
     });
 
-    $("#class_form").submit(function (event) {
+    $("#class_form").submit(function(event) {
         event.preventDefault();
         for (var instanceName in CKEDITOR.instances) {
             CKEDITOR.instances[instanceName].updateElement();
@@ -811,7 +885,7 @@
         // var logoImg = $('input[name="class_attachment"]').get(0).files[0];
         var formData = new FormData();
         var other_data = $(this).serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
         //For image file
@@ -822,7 +896,7 @@
         }
 
         var $form = $(this),
-                url = $form.attr('action');
+            url = $form.attr('action');
         var $this = $('.submit_class');
         $this.button('loading');
 
@@ -834,14 +908,14 @@
             contentType: false,
             processData: false,
 
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 1) {
                     var message = "";
-                    $.each(data.msg, function (index, value) {
+                    $.each(data.msg, function(index, value) {
 
                         message += value;
                     });
@@ -855,9 +929,10 @@
                     successMsg(data.msg);
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
 
-            }, complete: function (data) {
+            },
+            complete: function(data) {
                 $this.button('reset');
             }
         });
@@ -892,14 +967,12 @@
 
     //     }
     // });
-
-
 </script>
 
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         CKEDITOR.replaceClass = 'ckeditor';
     });
 </script>

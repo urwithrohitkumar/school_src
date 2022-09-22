@@ -33,7 +33,7 @@ class Staffattendancemodel extends MY_Model {
 
     public function searchAttendenceUserType($user_type, $date) {
        
-        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id']);
+        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id'] , 'staff');
 
         if ($user_type == "select") {
 

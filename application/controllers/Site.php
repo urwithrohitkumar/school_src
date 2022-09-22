@@ -90,6 +90,7 @@ class Site extends Public_Controller
             }
 
             if ($result) {
+                $idrole = $this->staff_model->roleid($result->id);
                 if ($result->is_active) {
                     if ($result->surname != "") {
                         $logusername = $result->name . " " . $result->surname;
@@ -115,6 +116,7 @@ class Site extends Public_Controller
                         'theme'           => $setting_result[0]['theme'],
                         'gender'          => $result->gender,
                         'branch_id'       => $result->branch_id,
+                        'role_id'       => $idrole->role_id,
                     );
                     $language_result1 = $this->language_model->get($lang_array['lang_id']);
                     if ($this->customlib->get_rtl_languages($language_result1['short_code'])) {

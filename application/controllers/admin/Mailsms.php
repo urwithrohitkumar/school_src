@@ -38,16 +38,17 @@ class Mailsms extends Admin_Controller
     {
         $keyword     = $this->input->post('keyword');
         $category    = $this->input->post('category');
+        $branch_id    = $this->input->post('branch_id');
         $result      = array();
         $sch_setting = $this->setting_model->getSetting();
         if ($keyword != "" and $category != "") {
             if ($category == "student") {
-                $result = $this->student_model->searchNameLike($keyword);
+              $result = $this->student_model->searchNameLike($keyword,$branch_id);
                 foreach ($result as $key => $value) {
                     $result[$key]['fullname'] = $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $sch_setting->middlename, $sch_setting->lastname);
                 }
             } elseif ($category == "student_guardian") {
-                $result = $this->student_model->searchNameLike($keyword);
+              $result = $this->student_model->searchNameLike($keyword,$branch_id);
                 foreach ($result as $key => $value) {
                     $result[$key]['fullname'] = $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $sch_setting->middlename, $sch_setting->lastname);
                 }
@@ -104,7 +105,7 @@ class Mailsms extends Admin_Controller
             }
             $birthDaysList['staff'] = $array;
         }
-
+        $data["branch"]     = $this->staff_model->getBranch();
         $data['roles']         = $this->role_model->get();
         $data['birthDaysList'] = $birthDaysList;
         $data['sch_setting']   = $this->sch_setting_detail;
@@ -122,6 +123,7 @@ class Mailsms extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'mailsms/compose_sms');
         $data['title']     = 'Add Mailsms';
         $class             = $this->class_model->get();
+        $data["branch"]     = $this->staff_model->getBranch();
         $data['classlist'] = $class;
         $userdata          = $this->customlib->getUserData();
         $carray            = array();
@@ -241,6 +243,7 @@ class Mailsms extends Admin_Controller
                 'is_individual' => 1,
                 'title'         => $message_title,
                 'message'       => $message,
+                'branch_id'   => $this->input->post('branch_id'),
                 'send_mail'     => $send_mail,
                 'send_sms'      => $send_sms,
                 'user_list'     => json_encode($user_array),
@@ -381,6 +384,7 @@ class Mailsms extends Admin_Controller
                 'title'      => $message_title,
                 'message'    => $message,
                 'send_mail'  => $send_mail,
+                'branch_id'   => $this->input->post('branch_id'),
                 'send_sms'   => $send_sms,
                 'group_list' => json_encode(array()),
                 'created_at' => date('Y-m-d H:i:s'),
@@ -483,6 +487,7 @@ class Mailsms extends Admin_Controller
                 'is_group'    => 1,
                 'title'       => $message_title,
                 'message'     => $message,
+                'branch_id'   => $this->input->post('branch_id'),
                 'send_mail'   => 0,
                 'send_sms'    => 1,
                 'group_list'  => json_encode(array()),
@@ -675,6 +680,7 @@ class Mailsms extends Admin_Controller
                     'category'      => $userlisting_value[0]->category,
                     'user_id'       => $userlisting_value[0]->record_id,
                     'email'         => $userlisting_value[0]->email,
+                    'branch_id'   => $this->input->post('branch_id'),
                     'guardianEmail' => $userlisting_value[0]->guardianEmail,
                     'mobileno'      => $userlisting_value[0]->mobileno,
                     'app_key'       => $userlisting_value[0]->app_key,
@@ -772,6 +778,7 @@ class Mailsms extends Admin_Controller
                 'is_class'   => 1,
                 'title'      => $message_title,
                 'message'    => $message,
+                'branch_id'   => $this->input->post('branch_id'),
                 'send_mail'  => 0,
                 'send_sms'   => 1,
                 'user_list'  => json_encode($user_array),
@@ -858,6 +865,7 @@ class Mailsms extends Admin_Controller
                 'is_class'   => 1,
                 'title'      => $message_title,
                 'message'    => $message,
+                'branch_id'   => $this->input->post('branch_id'),
                 'send_mail'  => $send_mail,
                 'send_sms'   => $send_sms,
                 'user_list'  => json_encode($user_array),

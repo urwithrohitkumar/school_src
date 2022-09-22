@@ -56,6 +56,20 @@
 
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="groupbranch_id" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('message_to'); ?></label><small class="req"> *</small>
@@ -142,12 +156,26 @@
 
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="indbranch_id" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value='0'>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
 
                                             <div class="form-group">
                                                 <label for="inpuFname"><?php echo $this->lang->line('message_to'); ?></label><small class="req"> *</small>
                                                 <div class="input-group">
                                                     <div class="input-group-btn bs-dropdown-to-select-group">
-                                                        <button type="button" class="btn btn-default btn-searchsm dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
+                                                        <button type="button" class="btn btn-default btn-searchsm dropdown-toggle as-is bs-dropdown-to-select form-control" data-toggle="dropdown">
                                                             <span data-bind="bs-drp-sel-label"><?php echo $this->lang->line('select'); ?></span>
                                                             <input type="hidden" name="selected_value" data-bind="bs-drp-sel-value" value="">
                                                             <span class="caret"></span>
@@ -166,7 +194,7 @@
                                                             <?php
                                                             foreach ($roles as $role_key => $role_value) {
                                                                 ?>
-                                                                <li data-value="staff"><a href="#"><?php echo $role_value['name']; ?></a></li>
+                                                                <li data-value="<?php echo $role_value['id']; ?>"><a href="#"><?php echo $role_value['name']; ?></a></li>
                                                                 <?php
                                                             }
                                                             ?>
@@ -176,7 +204,7 @@
 
                                                     <div id="suggesstion-box"></div>
                                                     <span class="input-group-btn">
-                                                        <button  class="btn btn-primary btn-searchsm add-btn" type="button"><?php echo $this->lang->line('add'); ?></button>
+                                                        <button  class="btn btn-primary btn-searchsm add-btn  form-control" type="button"><?php echo $this->lang->line('add'); ?></button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -244,6 +272,20 @@
                                                 <span class="text-muted tot_count_class_msg_text pull-right word_counter"><?php echo $this->lang->line('character') . " " . $this->lang->line('count') ?>: 0</span>
                                             </div>
 
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="classGroupBranchId" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="row">
@@ -323,6 +365,20 @@
                                             </div>
 
 
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Publish To</label>
+                                                <select name="branch_id" id="birthdayBranchId" class="form-control">
+                                                    <?php
+                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                        echo "<option value=''>All</option>";
+                                                    }
+                                                    foreach ($branch as  $branchValue) { ?>
+                                                        <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
 
@@ -430,11 +486,11 @@
             $("#search-query").attr('data-mobileno', "");
             $("#suggesstion-box").hide();
             var category_selected = $("input[name='selected_value']").val();
-
+            var branch_id = $('#indbranch_id').find(":selected").val();
             $.ajax({
                 type: "POST",
                 url: "<?php echo site_url('admin/mailsms/search') ?>",
-                data: {'keyword': $(this).val(), 'category': category_selected},
+                data: {'keyword': $(this).val(), 'category': category_selected,'branch_id': branch_id},
                 dataType: 'JSON',
                 beforeSend: function () {
                     $("#search-query").css("background", "#FFF url(../../backend/images/loading.gif) no-repeat 165px");
@@ -469,8 +525,12 @@
                                     var email = obj.guardian_email;
                                     var contact = obj.guardian_phone;
                                     var name = obj.guardian_name;
-                                } else if (category_selected == "staff") {
+                                } else if (category_selected == "1") {
                                     var app_key = '';
+                                    var email = obj.email;
+                                    var contact = obj.contact_no;
+                                    var name = obj.name + ' ' + obj.surname + '(' + obj.employee_id + ')';
+                                }else {
                                     var email = obj.email;
                                     var contact = obj.contact_no;
                                     var name = obj.name + ' ' + obj.surname + '(' + obj.employee_id + ')';
