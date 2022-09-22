@@ -366,14 +366,12 @@ class Lessonplan extends Admin_Controller
     {
         $subject_group_class_sectionsId = $this->lessonplan_model->getsubject_group_class_sectionsId($_POST['class_id'], $_POST['section_id'], $_POST['subject_group_id']);
         $data                           = $this->lessonplan_model->getlessonBysubjectid($sub_id, $subject_group_class_sectionsId['id']);
-
         echo json_encode($data);
     }
 
     public function getlessonBylessonid($lesson_id)
     {
         $data = $this->lessonplan_model->getlessonBylessonid($lesson_id);
-
         echo json_encode($data);
     }
 
@@ -466,11 +464,12 @@ class Lessonplan extends Admin_Controller
         }
 
         $data['result'] = $result;
-        if (!empty($topicresult)) {
+        if (!empty($topicresult)) { 
             $data['topicresult'] = $topicresult;
         }
 
         $editresult                              = $this->lessonplan_model->gettopic($id, $this->sch_current_session);
+
         $edittopic                               = $this->lessonplan_model->gettopicBylessonid($editresult["lesson_id"], $this->sch_current_session);
         $data['lesson_id']                       = $editresult["lesson_id"];
         $data['topic_lesson_id']                 = $id;

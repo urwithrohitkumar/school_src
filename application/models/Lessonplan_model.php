@@ -59,10 +59,10 @@ class Lessonplan_model extends MY_model {
     }
 
     public function getlessonBysubjectid($sub_id, $getlessonBysubjectid) {
-        $branch_id = $this->session->admin['branch_id'];
-        $arr=[];
+        $branch_id = $this->session->admin['branch_id'];    
+        $arr = [];
         if($branch_id>0){
-            $arr=['branch_id'=>$branch_id];
+            $arr = ['branch_id'=>$branch_id];
         }
         return $this->db->select('*')
         ->from('lesson')
@@ -126,13 +126,12 @@ class Lessonplan_model extends MY_model {
     }
 
     public function gettopic($session, $id = null) {
-
-        $this->db->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id')->from('topic');
-
+     
+        $this->db->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id,lesson.branch_id')->from('topic');
         if ($id != null) {
             $this->db->where('topic.lesson_id', $id);
         }
-        $this->db->where('topic.session_id', $session);
+        $this->db->where('topic.session_id', $session);     
 
         $this->db->join("lesson", "lesson.id = topic.lesson_id");
         $this->db->join("subject_group_subjects", "subject_group_subjects.id = lesson.subject_group_subject_id");
@@ -143,9 +142,9 @@ class Lessonplan_model extends MY_model {
 
         $this->db->join("sections", "sections.id = class_sections.section_id");
         $this->db->join("classes", "classes.id = class_sections.class_id");
+       
         $this->db->group_by("lesson.subject_group_subject_id");
         $this->db->group_by("topic.lesson_id");
-
         $query = $this->db->get();
         if ($id != null) {
             return $query->row_array();
@@ -263,10 +262,6 @@ class Lessonplan_model extends MY_model {
         if ($subject_group_subject_id != null) {
             $this->db->where('subject_group_subjects.id', $subject_group_subject_id);
         }
-        $branch_id = $this->session->admin['branch_id'];     
-        if($branch_id>0){           
-            $this->db->where('lesson.branch_id', $branch_id);
-        }
 
 
         $this->db->where('lesson.session_id', $session);
@@ -350,15 +345,14 @@ class Lessonplan_model extends MY_model {
     }
 
     public function gettopiclist($session) {
-        $branch_id = $this->session->admin['branch_id'];
-        $arr=[];
-        if($branch_id>0){
-            $arr=['lesson.branch_id'=>$branch_id];
-        }
 
-       
+        $branch_id = $this->session->admin['branch_id'];    
+        $arr = [];
+        if($branch_id>0){
+            $arr = ['lesson.branch_id'=>$branch_id];
+        }
         $this->datatables
-            ->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id')
+            ->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id,lesson.branch_id')
             ->searchable('classes.class,sections.section,subjects.name,subject_groups.name,classes.class,lesson.name')
             ->orderable('cname,sname,sgname,subname,lessonname," " ')
         ->join("lesson", "lesson.id = topic.lesson_id")
@@ -369,8 +363,8 @@ class Lessonplan_model extends MY_model {
         ->join("class_sections", "class_sections.id = subject_group_class_sections.class_section_id")
         ->join("sections", "sections.id = class_sections.section_id")
         ->join("classes", "classes.id = class_sections.class_id")
-        ->where('topic.session_id', $session)   
         ->where($arr)
+        ->where('topic.session_id', $session)
         ->group_by("lesson.subject_group_subject_id")
         ->group_by("topic.lesson_id")
         ->from('topic');
@@ -380,12 +374,11 @@ class Lessonplan_model extends MY_model {
     public function getlessonlist($session, $id = null) 
     {
         $branch_id = $this->session->admin['branch_id'];
-        $arr=[];
+            $arr =[];
         if($branch_id>0){
-            $arr=['lesson.branch_id'=>$branch_id];
+            $arr=['lesson.branch_id'=> $branch_id];
         }
-
-        $this->datatables
+         $this->datatables
             ->select('lesson.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid')
             ->searchable('classes.class,sections.section,subject_groups.name,subjects.name,lesson.name')
             ->orderable('classes.class,sections.section,subject_groups.name,subjects.name,lesson.name')
