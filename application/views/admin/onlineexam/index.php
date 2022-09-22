@@ -90,92 +90,100 @@ function findOption($questionOpt, $find)
                     <input type="hidden" name="recordid" value="0">
                  <div>
                      <div class="row">
-                    <div class="col-sm-12">
-                       
-                    <div class="form-group">
-                  <label class="checkbox-inline"><input type="checkbox" class="is_quiz" value="1" name="is_quiz"><?php  echo $this->lang->line('quiz'); ?></label>
-                  <span class="help-block"><?php echo $this->lang->line('check_on_quiz_message'); ?></span>
-                 </div>
-
-                     </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12">                       
                         <div class="form-group">
-                            <label for="exam"><?php echo $this->lang->line('exam') . " " . $this->lang->line('title'); ?></label><small class="req"> *</small>
-                            <input type="text" class="form-control" id="exam" name="exam">
-                            <span class="text text-danger exam_error"></span>
+                            <label class="checkbox-inline"><input type="checkbox" class="is_quiz" value="1" name="is_quiz"><?php  echo $this->lang->line('quiz'); ?></label>
+                            <span class="help-block"><?php echo $this->lang->line('check_on_quiz_message'); ?></span>
                         </div>
                      </div>
-
                     </div>
                     <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label for="exam"><?php echo $this->lang->line('exam') . " " . $this->lang->line('title'); ?></label><small class="req"> *</small>
+                                <input type="text" class="form-control" id="exam" name="exam">
+                                <span class="text text-danger exam_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select  id="branch_id" name="branch_id" class="form-control">
+                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                    <?php  } else { ?>
+                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                    <?php foreach ($all_branch as  $value) { ?>                                                        
+                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                    <?php } } ?>
+                                </select>
+                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="exam_from"><?php echo $this->lang->line('exam') . " " . $this->lang->line('from') ?></label><small class="req"> *</small>
+                                    <div class="input-group">
+                                    <input class="form-control tddm200 datetime_twelve_hour" name="exam_from" type="text" id="exam_from" name="exam_from">
+                                    <span class="input-group-addon" id="basic-addon2">
+                                        <i class="fa fa-calendar">
+                                        </i>
+                                    </span>
+                                </div>
+                                <span class="text text-danger exam_from_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="exam_to"><?php echo $this->lang->line('exam') . " " . $this->lang->line('to'); ?></label><small class="req"> *</small>
 
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="exam_from"><?php echo $this->lang->line('exam') . " " . $this->lang->line('from') ?></label><small class="req"> *</small>
                             <div class="input-group">
-                            <input class="form-control tddm200 datetime_twelve_hour" name="exam_from" type="text" id="exam_from" name="exam_from">
-                            <span class="input-group-addon" id="basic-addon2">
-                                <i class="fa fa-calendar">
-                                </i>
-                            </span>
-
+                                    <input class="form-control tddm200 datetime_twelve_hour" name="exam_to" type="text" id="exam_to" name="exam_to">
+                                    <span class="input-group-addon" id="basic-addon2">
+                                        <i class="fa fa-calendar">
+                                        </i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text text-danger exam_from_error"></span>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="exam_to"><?php echo $this->lang->line('exam') . " " . $this->lang->line('to'); ?></label><small class="req"> *</small>
-
-                     <div class="input-group">
-                            <input class="form-control tddm200 datetime_twelve_hour" name="exam_to" type="text" id="exam_to" name="exam_to">
-                            <span class="input-group-addon" id="basic-addon2">
-                                <i class="fa fa-calendar">
-                                </i>
-                            </span>
+                        <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="exam_to"> <?php echo $this->lang->line('auto_result_publish_date')?></label>
+                            <div class="input-group">
+                                <input class="form-control tddm200 datetime_twelve_hour" name="auto_publish_date" type="text" id="auto_publish_date" name="auto_publish_date">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="fa fa-calendar">
+                                    </i>
+                                </span>
+                            </div>                       
                         </div>
                     </div>
-                </div>
-                    <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="exam_to"> <?php echo $this->lang->line('auto_result_publish_date')?></label>
-                          <div class="input-group">
-                            <input class="form-control tddm200 datetime_twelve_hour" name="auto_publish_date" type="text" id="auto_publish_date" name="auto_publish_date">
-                            <span class="input-group-addon" id="basic-addon2">
-                                <i class="fa fa-calendar">
-                                </i>
-                            </span>
-                        </div>
-                       
-                    </div>
-                </div>
                     </div>
                     <div class="row">
-
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="duration"><?php echo $this->lang->line('time') . " " . $this->lang->line('duration') ?></label><small class="req"> *</small>
-                        <input type="text" class="form-control timepicker" id="duration" name="duration">
-                        <!-- <span class="text text-primary">Use 00:00:00 for no time limit</span> -->
-                    </div>
-                </div>
-
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="attempt"><?php echo $this->lang->line('attempt'); ?></label><small class="req"> *</small>
-                        <input type="number" min="1" class="form-control" id="attempt" name="attempt" value="1">
-                        <span class="text text-danger attempt_error"></span>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                      <div class="form-group">
-                        <label for="attempt"><?php echo $this->lang->line('passing') . " " . $this->lang->line('percentage') ?></label><small class="req"> *</small>
-                        <input type="number" min="1" max="100" class="form-control" id="passing_percentage" name="passing_percentage">
-                        <span class="text text-danger passing_percentage_error"></span>
-                    </div>
-                </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="duration"><?php echo $this->lang->line('time') . " " . $this->lang->line('duration') ?></label><small class="req"> *</small>
+                                <input type="text" class="form-control timepicker" id="duration" name="duration">
+                                <!-- <span class="text text-primary">Use 00:00:00 for no time limit</span> -->
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="attempt"><?php echo $this->lang->line('attempt'); ?></label><small class="req"> *</small>
+                                <input type="number" min="1" class="form-control" id="attempt" name="attempt" value="1">
+                                <span class="text text-danger attempt_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="attempt"><?php echo $this->lang->line('passing') . " " . $this->lang->line('percentage') ?></label><small class="req"> *</small>
+                                <input type="number" min="1" max="100" class="form-control" id="passing_percentage" name="passing_percentage">
+                                <span class="text text-danger passing_percentage_error"></span>
+                            </div>
+                        </div>
                     </div>
                 <div class="row">
                    <div class="form-group col-sm-12">
@@ -468,11 +476,11 @@ $(document).on('submit','#delete_question',function(e) {
     });
 
 
-        $('#mydeleteModal').on('shown.bs.modal', function (e) {
-          var question_id = $(e.relatedTarget).data('onlineexamQuestionId');
-          $("#mydeleteModal input[id='question_id']").val(question_id);
+    $('#mydeleteModal').on('shown.bs.modal', function (e) {
+        var question_id = $(e.relatedTarget).data('onlineexamQuestionId');
+        $("#mydeleteModal input[id='question_id']").val(question_id);
 
-        })
+    })
 
 
 
@@ -540,13 +548,13 @@ $(document).on('submit','#delete_question',function(e) {
         });
 
 
- $(document).on('click', '.generate_rank', function () {
-     var $this = $(this);
-     examid=$this.data('recordid');
-     examtitle=$this.data('examTitle');
-      $('#myGenerateRankModal').modal('show');
-   getRankRecord(examid,examtitle);
- });
+        $(document).on('click', '.generate_rank', function () {
+            var $this = $(this);
+            examid=$this.data('recordid');
+            examtitle=$this.data('examTitle');
+            $('#myGenerateRankModal').modal('show');
+        getRankRecord(examid,examtitle);
+        });
 
         $('#myQuestionModal').on('hidden.bs.modal', function (e) {
 

@@ -49,9 +49,8 @@ class Question extends Admin_Controller
         $data['subjectlist']    = $subjectlist;
         $data['question_type']  = $this->config->item('question_type');
         $data['question_level'] = $this->config->item('question_level');
-        $questionList           = $this->question_model->get();
-       
-     
+        $questionList           = $this->question_model->get(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('admin/question/question', $data);
         $this->load->view('layout/footer', $data);
@@ -101,7 +100,7 @@ class Question extends Admin_Controller
             echo json_encode($array);
         } else {
             $insert_array = array();
-//====================
+            //====================
             if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
 
                 $fileName = $_FILES["file"]["tmp_name"];
@@ -189,6 +188,7 @@ class Question extends Admin_Controller
         if (!$this->rbac->hasPrivilege('question_bank', 'can_add')) {
             access_denied();
         }
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('subject_id', $this->lang->line('subject'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('question', $this->lang->line('question'), 'trim|required');
         $this->form_validation->set_rules('question_type', $this->lang->line('question_type'), 'trim|required|xss_clean');
@@ -209,6 +209,7 @@ class Question extends Admin_Controller
         if ($this->form_validation->run() == false) {
 
             $msg = array(
+                'branch_id'     => form_error('branch_id'),                
                 'subject_id'     => form_error('subject_id'),
                 'question'       => form_error('question'),
                 'question_type'  => form_error('question_type'),
@@ -233,6 +234,7 @@ class Question extends Admin_Controller
         } else {
 
             $insert_data = array(
+                'branch_id'     => $this->input->post('branch_id'),
                 'subject_id'    => $this->input->post('subject_id'),
                 'question'      => $this->input->post('question'),
                 'question_type' => $this->input->post('question_type'),
@@ -280,9 +282,7 @@ class Question extends Admin_Controller
             if ($id != 0) {
                 $insert_data['id'] = $id;
             }
-
             $this->question_model->add($insert_data);
-
             $array = array('status' => 1, 'error' => '', 'message' => $this->lang->line('success_message'));
 
         }
@@ -303,6 +303,7 @@ class Question extends Admin_Controller
     public function addform()
     {
         $data                        = array();
+        $data['all_branch']          = $this->branch_model->getBranch();
         $data['classList']           = $this->class_model->get();
         $subject_result              = $this->subject_model->get();
         $data['subjectlist']         = $subject_result;
@@ -319,6 +320,7 @@ class Question extends Admin_Controller
     public function editform()
     {
         $data                        = array();
+        $data['all_branch']          = $this->branch_model->getBranch();
         $data['recordid']            = $this->input->post('recordid');
         $question_result             = $this->question_model->get($data['recordid']);
         $data['question_result']     = $question_result;
@@ -490,26 +492,23 @@ class Question extends Admin_Controller
                 $row[] = readmorelink($value->question,site_url('admin/question/read/'.$value->id));
                 if ($this->rbac->hasPrivilege('question_bank', 'can_edit')) {
                 $row[] ='<a target="_blank" href="'.site_url('admin/question/read/'.$value->id).'" class="btn btn-default btn-xs"  data-toggle="tooltip" title='.$this->lang->line("view").' ><i class="fa fa-eye"></i></a><button type="button" data-placement="left" class="btn btn-default btn-xs question-btn-edit" data-toggle="tooltip" id="load" data-recordid="'.$value->id.'" title="'.$this->lang->line("edit").'" ><i class="fa fa-pencil"></i></button><a data-placement="left" href="'.base_url().'admin/question/delete/'.$value->id.'" class="btn btn-default btn-xs"  data-toggle="tooltip" title='.$delete_title.' onclick="return confirm('.$delete.')"><i class="fa fa-remove"></i></a>';
-            }
-           
+            }          
 
-                if($role_id==2){
-             $my_section=array();
-             if($this->sch_setting_detail->class_teacher=='yes' && $this->sch_setting_detail->my_question=='1'){
+            if($role_id==2){
+                $my_section=array();
+                if($this->sch_setting_detail->class_teacher=='yes' && $this->sch_setting_detail->my_question=='1'){
                 $my_class=$this->class_model->get();
-            foreach ($my_class as $class_key => $class_value) {
-              $section_id= $this->teacher_model->get_teacherrestricted_modesections($this->customlib->getStaffID(), $class_value['id']);
-              foreach ($section_id as $section_idkey => $section_idvalue) {
-                  $my_section[]=$section_idvalue['section_id'];
-              }
-             
-              if(in_array($value->section_id, $my_section, TRUE) && $class_value['id']==$value->class_id){
-                 $dt_data[] = $row;
-          
-              }elseif(($class_value['id']==$value->class_id) && $value->section_id=='0'){
-                   $dt_data[] = $row;
-                    
-              }
+                foreach ($my_class as $class_key => $class_value) {
+                $section_id= $this->teacher_model->get_teacherrestricted_modesections($this->customlib->getStaffID(), $class_value['id']);
+                foreach ($section_id as $section_idkey => $section_idvalue) {
+                    $my_section[]=$section_idvalue['section_id'];
+                }
+                
+                if(in_array($value->section_id, $my_section, TRUE) && $class_value['id']==$value->class_id){
+                    $dt_data[] = $row;          
+                }elseif(($class_value['id']==$value->class_id) && $value->section_id=='0'){
+                    $dt_data[] = $row;                    
+                }
             }
 
         }elseif($this->sch_setting_detail->class_teacher=='yes' && $this->sch_setting_detail->my_question=='0'){
@@ -524,8 +523,7 @@ class Question extends Admin_Controller
                  $dt_data[] = $row;
           
               }elseif(($class_value['id']==$value->class_id) && $value->section_id=='0'){
-                   $dt_data[] = $row;
-                     
+                   $dt_data[] = $row;                     
               }
             }
             

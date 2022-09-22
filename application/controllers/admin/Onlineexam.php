@@ -33,6 +33,7 @@ class Onlineexam extends Admin_Controller
         $data['question_type']  = $this->config->item('question_type');
         $data['question_level'] = $this->config->item('question_level');
         $data['classList']      = $this->class_model->get();
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('admin/onlineexam/index', $data);
         $this->load->view('layout/footer', $data);
@@ -627,7 +628,8 @@ class Onlineexam extends Admin_Controller
     }
 
     public function add()
-    {
+    {   
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam', $this->lang->line('exam'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('attempt', $this->lang->line('attempt'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_from', $this->lang->line('exam') . " " . $this->lang->line('from'), 'trim|required|xss_clean');
@@ -679,6 +681,7 @@ class Onlineexam extends Admin_Controller
             }
 
             $insert_data = array(
+                'branch_id'          => $this->input->post('branch_id'),
                 'exam'               => $this->input->post('exam'),
                 'attempt'            => $this->input->post('attempt'),
                 'exam_from'          => date('Y-m-d H:i:s', $this->customlib->dateTimeformatTwentyfourhour($this->input->post('exam_from'), false)),

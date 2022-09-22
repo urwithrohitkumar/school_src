@@ -47,7 +47,11 @@ class Onlineexam_model extends MY_model
 
     public function get($id = null, $publish = null)
     {
+        $branch_id = $this->session->admin['branch_id'];
         $this->db->select('onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')->from('onlineexam');
+        if($branch_id>0){
+            $this->db->where('onlineexam.branch_id', $branch_id);
+        }   
         if ($id != null) {
             $this->db->where('onlineexam.id', $id);
             $this->db->where('onlineexam.session_id', $this->current_session);
@@ -58,6 +62,7 @@ class Onlineexam_model extends MY_model
         if ($publish != null) {
             $this->db->where('is_active', ($publish == "publish") ? 1 : 0);
         }
+
         $query = $this->db->get();
         if ($id != null) {
             return $query->row();
@@ -67,15 +72,21 @@ class Onlineexam_model extends MY_model
     }
 
     public function getexamlist()
-    {
-       
-         $this->datatables
+    { 
+        $branch_id = $this->session->admin['branch_id'];
+        $arr = [];
+        if($branch_id>0){
+            $arr = ['onlineexam.branch_id'=>$branch_id];
+        }
+        $this->datatables
             ->select('onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')
-            ->searchable('onlineexam.exam,onlineexam.attempt,exam_from,exam_to,duration')
-             ->orderable('onlineexam.exam," ",total_ques,attempt,exam_from,exam_to,duration," "," " ')
-            ->sort('onlineexam.exam_from','desc')
+            ->searchable('onlineexam.exam,onlineexam.attempt,exam_from,exam_to,duration')            
+            ->orderable('onlineexam.exam," ",total_ques,attempt,exam_from,exam_to,duration," "," " ')
+            ->sort('onlineexam.exam_from','desc')  
+            ->where($arr)         
             ->from('onlineexam');
-       return $this->datatables->generate('json');
+
+        return $this->datatables->generate('json');
 
     }
 

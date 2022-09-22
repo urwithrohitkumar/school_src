@@ -132,7 +132,11 @@ class Question_model extends MY_model
             }
 
         }
-
+        $branch_id = $this->session->admin['branch_id'];
+        $arr = [];
+        if($branch_id>0){
+            $arr = ['questions.branch_id'=>$branch_id];
+        }
         $this->datatables->select('questions.*,subjects.name,classes.class as `class_name`,sections.section as `section_name`');
         $this->datatables->join('subjects', 'subjects.id = questions.subject_id');
         $this->datatables->join('classes', 'classes.id = questions.class_id', 'left');
@@ -141,6 +145,7 @@ class Question_model extends MY_model
         $this->datatables->searchable('questions.id,subjects.name,questions.question_type,questions.level,questions.question,classes.class');
         $this->datatables->orderable('questions.id,subjects.name,questions.question_type,questions.level,questions.question,classes.class');
         $this->datatables->from('questions');
+        $this->datatables->where($arr);
         return $this->datatables->generate('json');
     }
 

@@ -118,25 +118,23 @@ function findOption($questionOpt, $find)
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><?php echo $this->lang->line('question') ?></h4>
+                <h4 class="modal-title"><?php echo $this->lang->line('question')?></h4>
             </div>
             <form action="<?php echo site_url('admin/question/add'); ?>" method="POST" id="formsubject">
                 <div class="modal-body add_question_body">
-
 
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Saving..."><?php echo $this->lang->line('save') ?></button>
                 </div>
+                </div>
+            </form>
         </div>
-        </form>
     </div>
-</div>
 
 
 <!-- Modal -->
@@ -187,45 +185,31 @@ function findOption($questionOpt, $find)
             </div>
             <form action="<?php echo site_url('admin/question/uploadfile'); ?>" method="POST" id="formimportquestion">
                 <div class="modal-body add_question_import_body">
-                       <div class="form-group">
-                            <label><?php echo $this->lang->line('subject'); ?></label><small class="req"> *</small>
-                            <select autofocus="" id="subject_id" name="subject_id" class="form-control" >
-                                <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                <?php
-foreach ($subjectlist as $subject) {
-    $sub_code=($subject['code'] != "") ? " (".$subject['code'].")":"";
-    ?>
-         
-
-                                    <option value="<?php echo $subject['id'] ?>" <?php
-if (set_value('subject_id') == $subject['id']) {
-        echo "selected=selected";
-    }
-    ?>><?php echo $subject['name'].$sub_code; ?></option>
-                                            <?php
-}
-?>
+                    <div class="form-group">
+                        <label><?php echo $this->lang->line('subject'); ?></label><small class="req"> *</small>
+                        <select autofocus="" id="subject_id" name="subject_id" class="form-control" >
+                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                            <?php  foreach ($subjectlist as $subject) {
+                            $sub_code=($subject['code'] != "") ? " (".$subject['code'].")":""; ?>         
+                            <option value="<?php echo $subject['id'] ?>" <?php
+                            if (set_value('subject_id') == $subject['id']) {
+                            echo "selected=selected";  } ?>><?php echo $subject['name'].$sub_code; ?></option>
+                            <?php } ?>
                             </select>
                             <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                         </div>
-                 <div class="form-group">
+                        <div class="form-group">
                             <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                             <select autofocus="" id="class_id" name="class_id" class="form-control" >
                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                <?php
-foreach ($classlist as $class) {
-    ?>
+                                <?php foreach ($classlist as $class) {  ?>
                                     <option value="<?php echo $class['id'] ?>" <?php
-if (set_value('class_id') == $class['id']) {
-        echo "selected=selected";
-    }
-    ?>><?php echo $class['class'] ?></option>
-                                            <?php
-}
-?>
+                                        if (set_value('class_id') == $class['id']) {
+                                            echo "selected=selected";  } ?>><?php echo $class['class'] ?></option>
+                                    <?php } ?>
                             </select>
                             <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                        </div>
+                            </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                 <select  id="section_id" name="section_id" class="form-control" >
@@ -321,7 +305,7 @@ if (set_value('class_id') == $class['id']) {
                     $this.button('loading');
                 },
                 success: function (data) {
-console.log(data);
+                console.log(data);
                 if (data.status) {
                 var ck= $('#myModal .add_question_body').html(data.page);
                 var elem = $('#myModal .add_question_body').find('.ckeditor');

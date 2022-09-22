@@ -1,21 +1,31 @@
  <input type="hidden" name="recordid" value="<?php echo $recordid; ?>">
  <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
                         <label for="subject_id"><?php echo $this->lang->line('subject') ?></label><small class="req"> *</small>
-
                         <select class="form-control" name="subject_id">
                             <option value=""><?php echo $this->lang->line('select'); ?></option>
-                            <?php
-foreach ($subjectlist as $subject_key => $subject_value) {
-    ?>
+                            <?php   foreach ($subjectlist as $subject_key => $subject_value) { ?>
                                 <option value="<?php echo $subject_value['id']; ?>" <?php echo set_select('subject_id', $subject_value['id'], (set_value('subject_id', $subject_value['id']) == $question_result->subject_id) ? true : false); ?>><?php echo $subject_value['name']; ?></option>
-                                <?php
-}
-?>
+                            <?php  } ?>
                         </select>
                         <span class="text text-danger subject_id_error"></span>
                     </div>
-
+                    <div class="form-group col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                <select  id="branch_id" name="branch_id" class="form-control">
+                                <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                <?php  } else { ?>
+                                <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                <?php foreach ($all_branch as  $value) { ?>                                                        
+                                <option value="<?php echo $value["id"] ?>" <?php if ($question_result->branch_id == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
+                                <?php } } ?>
+                            </select>
+                            <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                        </div>
+                    </div>
                       <div class="form-group col-md-3">
                         <label for="question_type"><?php echo $this->lang->line('question_type');?></label><small class="req"> *</small>
 
