@@ -442,6 +442,8 @@ class Lessonplan extends Admin_Controller
 
     public function edittopic($id)
     {
+
+       
         if (!($this->rbac->hasPrivilege('topic', 'can_edit'))) {
             access_denied();
         }
@@ -449,6 +451,7 @@ class Lessonplan extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/lessonplan/topic');
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
+        $data['all_branch']      = $this->branch_model->getBranch();
         foreach ($class as $class_key => $class_value) {
             $data['class_array'][] = $class_value['id'];
         }
@@ -468,13 +471,16 @@ class Lessonplan extends Admin_Controller
             $data['topicresult'] = $topicresult;
         }
 
-        $editresult                              = $this->lessonplan_model->gettopic($id, $this->sch_current_session);
-
+        $editresult                              = $this->lessonplan_model->gettopic($this->sch_current_session,$id);
+        
+       
         $edittopic                               = $this->lessonplan_model->gettopicBylessonid($editresult["lesson_id"], $this->sch_current_session);
+     
         $data['lesson_id']                       = $editresult["lesson_id"];
         $data['topic_lesson_id']                 = $id;
         $data['edittopicname']                   = $edittopic;
         $data['class_id']                        = $editresult['classid'];
+        $data['branch_id']                       = $editresult['branch_id'];
         $data['section_id']                      = $editresult['sectionid'];
         $data['subject_group_id']                = $editresult['subjectgroupsid'];
         $data['subject_id']                      = $editresult['subjectid'];

@@ -126,10 +126,16 @@ class Lessonplan_model extends MY_model {
     }
 
     public function gettopic($session, $id = null) {
-     
+         
+        $branch_id = $this->session->admin['branch_id'];
+        
         $this->db->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id,lesson.branch_id')->from('topic');
         if ($id != null) {
             $this->db->where('topic.lesson_id', $id);
+        }
+
+        if($branch_id>0){
+            $this->db->where('lesson.branch_id', $branch_id);
         }
         $this->db->where('topic.session_id', $session);     
 
@@ -146,6 +152,7 @@ class Lessonplan_model extends MY_model {
         $this->db->group_by("lesson.subject_group_subject_id");
         $this->db->group_by("topic.lesson_id");
         $query = $this->db->get();
+       
         if ($id != null) {
             return $query->row_array();
         } else {
