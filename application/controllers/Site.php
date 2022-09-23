@@ -43,7 +43,7 @@ class Site extends Public_Controller
     }
 
     public function login()
-    {
+     {   
 
         $app_name = $this->setting_model->get();
         $app_name = $app_name[0]['name'];

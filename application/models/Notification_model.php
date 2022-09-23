@@ -29,7 +29,7 @@ class Notification_model extends MY_Model {
         $sql = "SELECT * from send_notification left JOIN (SELECT send_notification_id, GROUP_CONCAT(role_id) as roles  FROM notification_roles  group by send_notification_id) as notification_roles on notification_roles.send_notification_id = send_notification.id WHERE is_active IS NOT NULL ".$branchWhere."";
         if ($id != null) {
 
-            $sql .= "AND send_notification.id =" . $id."";
+            $sql .= " AND send_notification.id =" . $id."";
         }
         $query = $this->db->query($sql);
         if ($id != null) {
@@ -72,21 +72,21 @@ class Notification_model extends MY_Model {
     public function getNotificationForStudent($studentid = null) {
         $date = date('Y-m-d');
         $query = $this->db->query("SELECT
-send_notification.id,send_notification.title,send_notification.publish_date,send_notification.date,send_notification.message,
-IF (read_notification.id IS NULL,'unread','read') as notification_id
-FROM send_notification
-LEFT JOIN read_notification ON send_notification.id = read_notification.notification_id and read_notification.student_id=" . $this->db->escape($studentid) . " where send_notification.visible_student='Yes' order by send_notification.publish_date desc");
-        return $query->result_array();
+        send_notification.id,send_notification.title,send_notification.publish_date,send_notification.date,send_notification.message,
+        IF (read_notification.id IS NULL,'unread','read') as notification_id
+        FROM send_notification
+        LEFT JOIN read_notification ON send_notification.id = read_notification.notification_id and read_notification.student_id=" . $this->db->escape($studentid) . " where send_notification.visible_student='Yes' order by send_notification.publish_date desc");
+            return $query->result_array();
     }
 
     public function getNotificationForParent($parentid = null) {
         $date = date('Y-m-d');
         $query = $this->db->query("SELECT
-send_notification.id,send_notification.title,send_notification.publish_date,send_notification.date,send_notification.message,
-IF (read_notification.id IS NULL,'unread','read') as notification_id
-FROM send_notification
-LEFT JOIN read_notification ON send_notification.id = read_notification.notification_id and read_notification.parent_id=" . $this->db->escape($parentid) . " where send_notification.visible_parent='Yes' order by send_notification.publish_date desc");
-        return $query->result_array();
+        send_notification.id,send_notification.title,send_notification.publish_date,send_notification.date,send_notification.message,
+        IF (read_notification.id IS NULL,'unread','read') as notification_id
+        FROM send_notification
+        LEFT JOIN read_notification ON send_notification.id = read_notification.notification_id and read_notification.parent_id=" . $this->db->escape($parentid) . " where send_notification.visible_parent='Yes' order by send_notification.publish_date desc");
+            return $query->result_array();
     }
 
     public function countUnreadNotificationStudent($studentid = null) {
