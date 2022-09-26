@@ -82,6 +82,7 @@ class Site extends Public_Controller
             $data['captcha_image'] = $this->captchalib->generate_captcha()['image'];
             $setting_result        = $this->setting_model->get();
             $result                = $this->staff_model->checkLogin($login_post);
+           
 
             if (!empty($result->language_id)) {
                 $lang_array = array('lang_id' => $result->language_id, 'language' => $result->language);
@@ -90,6 +91,7 @@ class Site extends Public_Controller
             }
 
             if ($result) {
+                
                 $idrole = $this->staff_model->roleid($result->id);
                 if ($result->is_active) {
                     if ($result->surname != "") {
@@ -125,6 +127,7 @@ class Site extends Public_Controller
                         $session_data['is_rtl'] = 'disabled';
                     }
 
+                  
                     $this->session->set_userdata('admin', $session_data);
 
                     $role      = $this->customlib->getStaffRole();

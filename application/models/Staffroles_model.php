@@ -11,6 +11,7 @@ class Staffroles_model extends CI_Model {
     }
 
     public function getStaffRoles($staffid) {
+       
         $this->db->select('staff_roles.*,roles.name');
         $this->db->from('staff_roles');
         $this->db->join('roles', 'roles.id=staff_roles.role_id', 'inner');

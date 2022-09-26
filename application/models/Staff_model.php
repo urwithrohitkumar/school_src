@@ -798,6 +798,7 @@ class Staff_model extends MY_Model
         $this->db->where("staff.is_active", "1");
         $this->db->from('staff');
         $query = $this->db->get();
+       
         return $query->result_array();
     }
 
@@ -988,6 +989,30 @@ class Staff_model extends MY_Model
         } else {
             return false;
         }
+    }
+
+    /**
+     * Issue item by staff list
+     *
+     */
+    public function issueItemby()
+    {
+        if($this->session->userdata['admin']['role_id'] != 7)
+        {
+            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id")
+            ->from('staff')
+            ->where('staff.is_active', 1)
+            ->where('staff.id', $this->session->userdata['admin']['id'])
+            ->get()->result_array();
+        }
+        else{
+            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id")
+            ->from('staff')
+            ->where('staff.is_active', 1)
+            ->get()->result_array();
+        }
+        return $staffList;
+
     }
 
 }

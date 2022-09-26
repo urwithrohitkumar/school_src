@@ -212,6 +212,7 @@ class Expense_model extends MY_Model
 
     public function getTotalExpenseBwdate($date_from, $date_to)
     {
+       
         $branch_id = $this->session->admin['branch_id'];
         $where ='';
         if($branch_id>0){

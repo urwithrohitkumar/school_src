@@ -36,9 +36,7 @@ class Itemissue_model extends MY_Model {
           ->orderable('item.name,item_category,issue_date,staff.name,issue_by,quantity,null')
           ->searchable('item.name,item_category,issue_date,staff.name,issue_by,item_issue.quantity,null')
          ->query_where_enable(TRUE);
-         $this->datatables->generate('json');   
-         echo $this->datatables->last_query();
-         exit;
+         return $this->datatables->generate('json');   
     
     }
 
