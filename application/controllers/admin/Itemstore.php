@@ -3,16 +3,19 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Itemstore extends Admin_Controller {
+class Itemstore extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->helper('file');
 
         $this->load->helper('url');
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('store', 'can_view')) {
             access_denied();
         }
@@ -21,12 +24,16 @@ class Itemstore extends Admin_Controller {
         $data['title'] = 'Item Store List';
         $itemstore_result = $this->itemstore_model->get();
         $data['itemstorelist'] = $itemstore_result;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header', $data);
         $this->load->view('admin/itemstore/itemstoreList', $data);
         $this->load->view('layout/footer', $data);
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('store', 'can_delete')) {
             access_denied();
         }
@@ -35,7 +42,8 @@ class Itemstore extends Admin_Controller {
         redirect('admin/itemstore/index');
     }
 
-    function create() {
+    function create()
+    {
         if (!$this->rbac->hasPrivilege('store', 'can_add')) {
             access_denied();
         }
@@ -53,6 +61,7 @@ class Itemstore extends Admin_Controller {
             $data = array(
                 'item_store' => $this->input->post('name'),
                 'code' => $this->input->post('code'),
+                'branch_id' => $this->input->post('branch_id'),
                 'description' => $this->input->post('description'),
             );
             $this->itemstore_model->add($data);
@@ -61,7 +70,8 @@ class Itemstore extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
 
         if (!$this->rbac->hasPrivilege('store', 'can_edit')) {
             access_denied();
@@ -92,7 +102,4 @@ class Itemstore extends Admin_Controller {
             redirect('admin/itemstore/index');
         }
     }
-
 }
-
-?>

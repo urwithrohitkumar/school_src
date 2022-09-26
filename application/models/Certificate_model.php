@@ -3,14 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Certificate_model extends MY_Model {
+class Certificate_model extends MY_Model
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function addcertificate($data) {
+    public function addcertificate($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -56,16 +59,22 @@ class Certificate_model extends MY_Model {
         }
     }
 
-    public function certificateList() {
+    public function certificateList()
+    {
         $this->db->select('*');
         $this->db->from('certificates');
         $this->db->where('status = 1');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $this->db->where('created_for = 2');
+
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function get($id) {
+    public function get($id)
+    {
         $this->db->select('*');
         $this->db->from('certificates');
         $this->db->where('status = 1');
@@ -74,7 +83,8 @@ class Certificate_model extends MY_Model {
         return $query->result();
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -96,22 +106,24 @@ class Certificate_model extends MY_Model {
         }
     }
 
-    public function getstudentcertificate() {
+    public function getstudentcertificate()
+    {
         $this->db->select('*');
         $this->db->from('certificates');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $this->db->where('created_for = 2');
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function certifiatebyid($id) {
+    public function certifiatebyid($id)
+    {
         $this->db->select('*');
         $this->db->from('certificates');
         $this->db->where('id', $id);
         $query = $this->db->get();
         return $query->row();
     }
-
 }
-
-?>

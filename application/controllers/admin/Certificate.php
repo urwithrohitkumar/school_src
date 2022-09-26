@@ -26,6 +26,8 @@ class Certificate extends Admin_Controller
         $custom_fields                 = $this->customfield_model->get_custom_fields('students');
         $this->data['custom_fields']   = $custom_fields;
         $this->data['certificateList'] = $this->certificate_model->certificateList();
+        $this->data['branch'] = $this->staff_model->getBranch();
+
         $this->load->view('layout/header');
         $this->load->view('admin/certificate/createcertificate', $this->data);
         $this->load->view('layout/footer');
@@ -91,6 +93,7 @@ class Certificate extends Admin_Controller
                 'content_height'       => $this->input->post('content_height'),
                 'footer_height'        => $this->input->post('footer_height'),
                 'content_width'        => $this->input->post('content_width'),
+                'branch_id'        => $this->input->post('branch_id'),
                 'enable_student_image' => $enableimg,
                 'enable_image_height'  => $imgHeight,
             );
@@ -159,6 +162,7 @@ class Certificate extends Admin_Controller
                         'content_height'       => $this->input->post('content_height'),
                         'footer_height'        => $this->input->post('footer_height'),
                         'content_width'        => $this->input->post('content_width'),
+                        'branch_id'        => $this->input->post('branch_id'),
                         'enable_student_image' => $enableimg,
                         'enable_image_height'  => $imgHeight,
                     );

@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Hostel_model extends MY_Model {
+class Hostel_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
@@ -16,7 +18,8 @@ class Hostel_model extends MY_Model {
      * @param int $id
      * @return mixed
      */
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select()->from('hostel');
         if ($id != null) {
             $this->db->where('hostel.id', $id);
@@ -35,7 +38,8 @@ class Hostel_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -63,7 +67,8 @@ class Hostel_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function addhostel($data) {
+    public function addhostel($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -109,17 +114,21 @@ class Hostel_model extends MY_Model {
         }
     }
 
-    public function listhostel() {
+    public function listhostel()
+    {
 
         $this->db->select()->from('hostel');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $listhostel = $this->db->get();
         return $listhostel->result_array();
     }
 
-    public function get_hostel($id) {
+    public function get_hostel($id)
+    {
 
         $query = $this->db->where("id", $id)->get("hostel_rooms");
         return $query->row_array();
     }
-
 }

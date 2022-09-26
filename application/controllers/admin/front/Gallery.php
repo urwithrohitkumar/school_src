@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Gallery extends Admin_Controller {
+class Gallery extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $config = array(
             'field' => 'slug',
@@ -18,7 +20,8 @@ class Gallery extends Admin_Controller {
         $this->load->library('imageResize');
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('gallery', 'can_view')) {
             access_denied();
         }
@@ -33,12 +36,16 @@ class Gallery extends Admin_Controller {
         $this->load->view('layout/footer');
     }
 
-    function create() {
+    function create()
+    {
         if (!$this->rbac->hasPrivilege('gallery', 'can_add')) {
             access_denied();
         }
         $data['title'] = 'Add Gallery';
         $data['title_list'] = 'Gallery Details';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->session->set_userdata('top_menu', 'Front CMS');
         $this->session->set_userdata('sub_menu', 'admin/front/gallery');
         $this->form_validation->set_rules('title', $this->lang->line('title'), 'trim|required|xss_clean');
@@ -73,7 +80,8 @@ class Gallery extends Admin_Controller {
                 'feature_image' => $this->input->post('image'),
                 'sidebar' => $this->input->post('sidebar'),
                 'type' => $this->config->item('ci_front_gallery_content'),
-                'meta_description' => $this->input->post('meta_description')
+                'meta_description' => $this->input->post('meta_description'),
+                'branch_id' => $this->input->post('branch_id')
             );
 
             $data['slug'] = $this->slug->create_uri($data);
@@ -84,7 +92,8 @@ class Gallery extends Admin_Controller {
         }
     }
 
-    function edit($slug) {
+    function edit($slug)
+    {
         if (!$this->rbac->hasPrivilege('gallery', 'can_edit')) {
             access_denied();
         }
@@ -164,7 +173,8 @@ class Gallery extends Admin_Controller {
         }
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('gallery', 'can_delete')) {
             access_denied();
         }
@@ -173,7 +183,4 @@ class Gallery extends Admin_Controller {
         $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('delete_message') . '</div>');
         redirect('admin/front/gallery/');
     }
-
 }
-
-?>

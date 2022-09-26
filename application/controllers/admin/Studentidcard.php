@@ -16,6 +16,8 @@ class studentidcard extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Certificate');
         $this->session->set_userdata('sub_menu', 'admin/studentidcard');
         $this->data['idcardlist'] = $this->Student_id_card_model->idcardlist();
+        $this->data['branch'] = $this->staff_model->getBranch();
+
         $this->load->view('layout/header');
         $this->load->view('admin/certificate/createidcard', $this->data);
         $this->load->view('layout/footer');
@@ -87,6 +89,7 @@ class studentidcard extends Admin_Controller {
                 'school_name' => $this->input->post('school_name'),
                 'school_address' => $this->input->post('address'),
                 'header_color' => $this->input->post('header_color'),
+                'branch_id' => $this->input->post('branch_id'),
                 'enable_admission_no' => $admission_no,
                 'enable_student_name' => $studentname,
                 'enable_class' => $class,
@@ -349,6 +352,7 @@ class studentidcard extends Admin_Controller {
                 'logo' => $logo_img,
                 'sign_image' => $sign_image,
                 'header_color' => $this->input->post('header_color'),
+                'branch_id' => $this->input->post('branch_id'),
                 'enable_admission_no' => $admission_no,
                 'enable_student_name' => $studentname,
                 'enable_class' => $class,

@@ -1,9 +1,9 @@
-
 <div class="content-wrapper" style="min-height: 946px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-object-group"></i> <?php echo $this->lang->line('inventory'); ?></h1>
+            <i class="fa fa-object-group"></i> <?php echo $this->lang->line('inventory'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -16,25 +16,35 @@
                             <h3 class="box-title"><?php echo $this->lang->line('add_item_supplier'); ?></h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form  action="<?php echo site_url('admin/itemsupplier/create') ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
-                            <div class="box-body">                            
+                        <form action="<?php echo site_url('admin/itemsupplier/create') ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                            <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
                                 <?php } ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('name'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
+                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('phone'); ?></label>
-                                    <input id="phone" name="phone" placeholder="" type="text" class="form-control"  value="<?php echo set_value('phone'); ?>" />
+                                    <input id="phone" name="phone" placeholder="" type="text" class="form-control" value="<?php echo set_value('phone'); ?>" />
                                     <span class="text-danger"><?php echo form_error('phone'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('email'); ?></label>
-                                    <input id="text" name="email" placeholder="" type="text" class="form-control"  value="<?php echo set_value('email'); ?>" />
+                                    <input id="text" name="email" placeholder="" type="text" class="form-control" value="<?php echo set_value('email'); ?>" />
                                     <span class="text-danger"><?php echo form_error('email'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -44,17 +54,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('contact_person_name'); ?></label>
-                                    <input id="contact_person_name" name="contact_person_name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('contact_person_name'); ?>" />
+                                    <input id="contact_person_name" name="contact_person_name" placeholder="" type="text" class="form-control" value="<?php echo set_value('contact_person_name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('contact_person_name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('contact_person_phone'); ?></label>
-                                    <input id="contact_person_phone" name="contact_person_phone" placeholder="" type="text" class="form-control"  value="<?php echo set_value('contact_person_phone'); ?>" />
+                                    <input id="contact_person_phone" name="contact_person_phone" placeholder="" type="text" class="form-control" value="<?php echo set_value('contact_person_phone'); ?>" />
                                     <span class="text-danger"><?php echo form_error('contact_person_phone'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('contact_person_email'); ?></label>
-                                    <input id="contact_person_email" name="contact_person_email" placeholder="" type="email" class="form-control"  value="<?php echo set_value('contact_person_email'); ?>" />
+                                    <input id="contact_person_email" name="contact_person_email" placeholder="" type="email" class="form-control" value="<?php echo set_value('contact_person_email'); ?>" />
                                     <span class="text-danger"><?php echo form_error('contact_person_email'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -67,17 +77,18 @@
                                 <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                             </div>
                         </form>
-                    </div>            
-                </div><!--/.col (right) -->
+                    </div>
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('supplier', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('supplier', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary" id="exphead">
                     <div class="box-header ptbnull">
@@ -97,49 +108,49 @@
                                 </thead>
                                 <tbody>
                                     <?php if (empty($itemsupplierlist)) {
-                                        ?>
+                                    ?>
 
                                         <?php
                                     } else {
                                         $count = 1;
                                         foreach ($itemsupplierlist as $supplier) {
-                                            ?>
-                                            <tr>   
+                                        ?>
+                                            <tr>
 
 
                                                 <td class="mailbox-name">
 
-                                                    <a href="#" data-toggle="popover" class="detail_popover" >
+                                                    <a href="#" data-toggle="popover" class="detail_popover">
                                                         <?php echo $supplier['item_supplier'] ?>
                                                         <br>
                                                     </a>
                                                     <?php
                                                     if ($supplier['phone'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-phone-square"></i> <?php echo $supplier['phone'] ?>
                                                         <br>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                     <?php
                                                     if ($supplier['email'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-envelope"></i> <?php echo $supplier['email'] ?>
 
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
 
                                                     <div class="fee_detail_popover" style="display: none">
                                                         <?php
                                                         if ($supplier['description'] == "") {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                            <?php
+                                                        <?php
                                                         } else {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-info"><?php echo $supplier['description']; ?></p>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
                                                     </div>
@@ -147,51 +158,52 @@
                                                 <td class="mailbox-name">
                                                     <?php
                                                     if ($supplier['contact_person_name'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-user"></i> <?php echo $supplier['contact_person_name'] ?>
                                                         <br>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                     <?php
                                                     if ($supplier['contact_person_phone'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-phone-square"></i> <?php echo $supplier['contact_person_phone'] ?>
                                                         <br>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                     <?php
                                                     if ($supplier['contact_person_email'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-envelope"></i> <?php echo $supplier['contact_person_email'] ?>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </td>
                                                 <td class="mailbox-name">
                                                     <?php
                                                     if ($supplier['address'] != "") {
-                                                        ?>
+                                                    ?>
                                                         <i class="fa fa-building"></i> <?php echo $supplier['address'] ?>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
 
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
                                                     <?php if ($this->rbac->hasPrivilege('supplier', 'can_edit')) { ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/itemsupplier/edit/<?php echo $supplier['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/itemsupplier/edit/<?php echo $supplier['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                    <?php } if ($this->rbac->hasPrivilege('supplier', 'can_delete')) { ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/itemsupplier/delete/<?php echo $supplier['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    <?php }
+                                                    if ($this->rbac->hasPrivilege('supplier', 'can_delete')) { ?>
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/itemsupplier/delete/<?php echo $supplier['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                             <i class="fa fa-remove"></i>
                                                         </a>
                                                     <?php } ?>
                                                 </td>
                                             </tr>
-                                            <?php
+                                    <?php
                                         }
                                         $count++;
                                     }
@@ -206,26 +218,25 @@
 
             <!-- right column -->
 
-        </div>   <!-- /.row -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnreset").click(function () {
+    $(document).ready(function() {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
     });
-
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
@@ -234,6 +245,4 @@
 
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
-
-
 </script>

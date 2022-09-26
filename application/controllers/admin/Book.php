@@ -26,6 +26,9 @@ class Book extends Admin_Controller
         $data['title_list'] = 'Book Details';
         $listbook           = $this->book_model->listbook();
         $data['listbook']   = $listbook;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header');
         $this->load->view('admin/book/createbook', $data);
         $this->load->view('layout/footer');
@@ -67,6 +70,7 @@ class Book extends Admin_Controller
                 'rack_no'     => $this->input->post('rack_no'),
                 'publish'     => $this->input->post('publish'),
                 'author'      => $this->input->post('author'),
+                'branch_id'      => $this->input->post('branch_id'),
                 'qty'         => $this->input->post('qty'),
                 'perunitcost' => $this->input->post('perunitcost'),
                 'description' => $this->input->post('description'),
@@ -246,7 +250,8 @@ class Book extends Admin_Controller
         $error = "";
         if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
             $allowedExts = array('csv');
-            $mimes       = array('text/csv',
+            $mimes       = array(
+                'text/csv',
                 'text/plain',
                 'application/csv',
                 'text/comma-separated-values',
@@ -255,7 +260,8 @@ class Book extends Admin_Controller
                 'application/vnd.msexcel',
                 'text/anytext',
                 'application/octet-stream',
-                'application/txt');
+                'application/txt'
+            );
             $temp      = explode(".", $_FILES["file"]["name"]);
             $extension = end($temp);
             if ($_FILES["file"]["error"] > 0) {
@@ -402,7 +408,6 @@ class Book extends Admin_Controller
                 if ($value->admission != 0) {
 
                     $row[] = $value->admission;
-
                 } else {
                     $row[] = "";
                 }
@@ -411,7 +416,6 @@ class Book extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -421,5 +425,4 @@ class Book extends Admin_Controller
         );
         echo json_encode($json_data);
     }
-
 }

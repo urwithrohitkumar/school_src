@@ -45,6 +45,9 @@ class Notice extends Admin_Controller
         }
         $data['title']      = 'Add Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->session->set_userdata('top_menu', 'Front CMS');
         $this->session->set_userdata('sub_menu', 'admin/front/notice');
         $this->form_validation->set_rules('title', $this->lang->line('title'), 'trim|required|xss_clean');
@@ -73,6 +76,7 @@ class Notice extends Admin_Controller
                 'sidebar'          => $this->input->post('sidebar'),
                 'type'             => $this->config->item('ci_front_notice_content'),
                 'meta_description' => $this->input->post('meta_description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
 
             $data['slug'] = $this->slug->create_uri($data);
@@ -136,5 +140,4 @@ class Notice extends Admin_Controller
         $this->cms_program_model->removeBySlug(urldecode($id), 'notice');
         redirect('admin/front/notice');
     }
-
 }

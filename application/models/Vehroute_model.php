@@ -3,16 +3,22 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Vehroute_model extends MY_Model {
+class Vehroute_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select('vehicle_routes.*,transport_route.id as transport_id,transport_route.route_title,transport_route.fare')->from('vehicle_routes');
         $this->db->join('transport_route', 'transport_route.id = vehicle_routes.route_id');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         if ($id != null) {
             $this->db->where('vehicle_routes.route_id', $id);
         } else {
@@ -58,7 +64,8 @@ class Vehroute_model extends MY_Model {
         }
     }
 
-    public function getVechileByRoute($route_id) {
+    public function getVechileByRoute($route_id)
+    {
         $this->db->select('vehicle_routes.id as vec_route_id,vehicles.*')->from('vehicle_routes');
         $this->db->join('vehicles', 'vehicles.id = vehicle_routes.vehicle_id');
         $this->db->where('vehicle_routes.route_id', $route_id);
@@ -67,7 +74,8 @@ class Vehroute_model extends MY_Model {
         return $vehicle_routes = $query->result();
     }
 
-    public function getVechileDetailByVecRouteID($id) {
+    public function getVechileDetailByVecRouteID($id)
+    {
         $this->db->select('vehicle_routes.id as vec_route_id,vehicles.*,transport_route.route_title')->from('vehicle_routes');
         $this->db->join('vehicles', 'vehicles.id = vehicle_routes.vehicle_id');
         $this->db->join('transport_route', 'transport_route.id = vehicle_routes.route_id');
@@ -76,7 +84,8 @@ class Vehroute_model extends MY_Model {
         return $vehicle_routes = $query->row();
     }
 
-    public function listroute() {
+    public function listroute()
+    {
 
         $listroute = $this->route_model->listroute();
         if (!empty($listroute)) {
@@ -88,7 +97,8 @@ class Vehroute_model extends MY_Model {
         return $listroute;
     }
 
-    public function remove($route_id, $array) {
+    public function remove($route_id, $array)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -111,7 +121,8 @@ class Vehroute_model extends MY_Model {
         }
     }
 
-    public function removeByroute($route_id) {
+    public function removeByroute($route_id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -133,7 +144,8 @@ class Vehroute_model extends MY_Model {
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -151,7 +163,7 @@ class Vehroute_model extends MY_Model {
             $action = "Insert";
             $record_id = $insert_id;
             $this->log($message, $record_id, $action);
-        }        
+        }
         //======================Code End==============================
 
         $this->db->trans_complete(); # Completing transaction
@@ -167,7 +179,8 @@ class Vehroute_model extends MY_Model {
         // return $insert_id;
     }
 
-    public function route_exists($str) {
+    public function route_exists($str)
+    {
         $route_id = $this->security->xss_clean($str);
         $pre_route_id = $this->input->post('pre_route_id');
         if (isset($pre_route_id)) {
@@ -184,7 +197,8 @@ class Vehroute_model extends MY_Model {
         }
     }
 
-    function check_data_exists($route_id) {
+    function check_data_exists($route_id)
+    {
         $this->db->where('route_id', $route_id);
 
         $query = $this->db->get('vehicle_routes');
@@ -194,5 +208,4 @@ class Vehroute_model extends MY_Model {
             return FALSE;
         }
     }
-
 }

@@ -3,15 +3,21 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Vehicle_model extends MY_Model {
+class Vehicle_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select()->from('vehicles');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('vehicles.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         if ($id != null) {
             $this->db->where('vehicles.id', $id);
         } else {
@@ -25,7 +31,8 @@ class Vehicle_model extends MY_Model {
         }
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -47,7 +54,8 @@ class Vehicle_model extends MY_Model {
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -93,7 +101,8 @@ class Vehicle_model extends MY_Model {
         }
     }
 
-    public function vehicleListByarray($array) {
+    public function vehicleListByarray($array)
+    {
 
         $this->db->select('*');
         $this->db->from('vehicles');
@@ -101,5 +110,4 @@ class Vehicle_model extends MY_Model {
         $query = $this->db->get();
         return $query->result();
     }
-
 }

@@ -3,13 +3,16 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Vehicle extends Admin_Controller {
+class Vehicle extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
     }
 
-    public function index() {
+    public function index()
+    {
 
         if (!$this->rbac->hasPrivilege('vehicle', 'can_view')) {
             access_denied();
@@ -19,6 +22,10 @@ class Vehicle extends Admin_Controller {
         $data['title'] = 'Add Vehicle';
         $listVehicle = $this->vehicle_model->get();
         $data['listVehicle'] = $listVehicle;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
+
         $this->form_validation->set_rules('vehicle_no', $this->lang->line('vehicle_no'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == FALSE) {
@@ -36,6 +43,7 @@ class Vehicle extends Admin_Controller {
                 'driver_name' => $this->input->post('driver_name'),
                 'driver_licence' => $this->input->post('driver_licence'),
                 'driver_contact' => $this->input->post('driver_contact'),
+                'branch_id' => $this->input->post('branch_id'),
                 'note' => $this->input->post('note'),
             );
 
@@ -46,7 +54,8 @@ class Vehicle extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
 
         if (!$this->rbac->hasPrivilege('vehicle', 'can_edit')) {
             access_denied();
@@ -83,7 +92,8 @@ class Vehicle extends Admin_Controller {
         }
     }
 
-    function delete($id) {
+    function delete($id)
+    {
 
         if (!$this->rbac->hasPrivilege('vehicle', 'can_delete')) {
             access_denied();
@@ -92,7 +102,4 @@ class Vehicle extends Admin_Controller {
         $this->vehicle_model->remove($id);
         redirect('admin/vehicle/index');
     }
-
 }
-
-?>

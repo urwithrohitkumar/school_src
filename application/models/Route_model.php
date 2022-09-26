@@ -3,15 +3,23 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Route_model extends MY_Model {
+class Route_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select()->from('transport_route');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
+
         if ($id != null) {
             $this->db->where('transport_route.id', $id);
         } else {
@@ -25,7 +33,8 @@ class Route_model extends MY_Model {
         }
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -47,7 +56,8 @@ class Route_model extends MY_Model {
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -93,19 +103,25 @@ class Route_model extends MY_Model {
         }
     }
 
-    public function listroute() {
+    public function listroute()
+    {
         $this->db->select()->from('transport_route');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $listtransport = $this->db->get();
         return $listtransport->result_array();
     }
 
-    public function listvehicles() {
+    public function listvehicles()
+    {
         $this->db->select()->from('vehicles');
         $listvehicles = $this->db->get();
         return $listvehicles->result_array();
     }
 
-    function studentTransportDetails($carray) {
+    function studentTransportDetails($carray)
+    {
 
         $userdata = $this->customlib->getUserData();
 
@@ -125,7 +141,8 @@ class Route_model extends MY_Model {
         return $query->result_array();
     }
 
-    function searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no) {
+    function searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no)
+    {
 
         if ((!empty($class_id)) && (!empty($section_id))) {
 
@@ -150,14 +167,15 @@ class Route_model extends MY_Model {
         return $query->result_array();
     }
 
-    public function getClass($student_id) {
+    public function getClass($student_id)
+    {
         $query = $this->db->query("SELECT  classes.class, classes.id  FROM  `classes`  where id in ( SELECT max(class_id) from student_session WHERE student_id = $student_id) ");
         return $query->row_array();
     }
 
-    public function getSection($student_id, $class_id) {
+    public function getSection($student_id, $class_id)
+    {
         $query = $this->db->query("SELECT  sections.section  FROM  `sections` join student_session on student_session.section_id = sections.id where student_session.class_id = " . $class_id . " and student_session.student_id = " . $student_id);
         return $query->row_array();
     }
-
 }

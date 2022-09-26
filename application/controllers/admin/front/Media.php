@@ -21,6 +21,9 @@ class Media extends Admin_Controller
         }
         $data['title']      = 'Add Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->session->set_userdata('top_menu', 'Front CMS');
         $this->session->set_userdata('sub_menu', 'admin/front/media');
         $data['mediaTypes'] = $this->customlib->mediaType();
@@ -109,7 +112,6 @@ class Media extends Admin_Controller
             $del_record       = $this->cms_media_model->remove($record_id);
             if ($del_record) {
                 if (is_readable($destination_path) && unlink($destination_path) && is_readable($thumb_path) && unlink($thumb_path)) {
-
                 }
                 echo json_encode(array('status' => 1, 'msg' => $this->lang->line('delete_message')));
             } else {
@@ -165,6 +167,8 @@ class Media extends Admin_Controller
                             'thumb_name' => $value['store_name'],
                             'thumb_path' => $value['thumb_path'],
                             'dir_path'   => $value['dir_path'],
+                            'branch_id'   =>$this->input->post('branch_id'),
+                            
                         );
                         $insert_id         = $this->cms_media_model->add($data);
                         $data['record_id'] = $insert_id;
@@ -172,13 +176,10 @@ class Media extends Admin_Controller
                     }
                     $response_array['status'] = 0;
                     $response_array['msg']    = $this->lang->line('success_message');
-
                 } else {
                     $response_array['status'] = 0;
                     $response_array['msg']    = $this->lang->line('extension_not_allowed');
-
                 }
-
             } else {
                 $response_array['status'] = 0;
                 $response_array['msg']    = $this->lang->line('something_wrong');
@@ -221,7 +222,7 @@ class Media extends Admin_Controller
             $file     = base_url('backend/images/docicon.png');
             $file_src = base_url() . $result->dir_path . $result->img_name;
         }
-//==============
+        //==============
         $output = '';
         $output .= "<div class='col-sm-3 col-md-2 col-xs-6 img_div_modal image_div div_record_" . $result->id . "'>";
         $output .= "<div class='fadeoverlay'>";
@@ -249,7 +250,7 @@ class Media extends Admin_Controller
         $output .= "</div>";
         $output .= "</div>";
         return $output;
-//================
+        //================
     }
 
     public function addVideo()
@@ -302,5 +303,4 @@ class Media extends Admin_Controller
             }
         }
     }
-
 }

@@ -786,6 +786,7 @@ $lang['homework'] = 'Homework';
 $lang['homework_already_evaluated'] = 'Homework already evaluated, now you can update evaluation.';
 $lang['homework_completed'] = 'Homework Completed';
 $lang['homework_date'] = 'Homework Date';
+$lang['branch_id'] = 'Branch Data';
 $lang['homework_evaluation'] = 'Homework Evaluation';
 $lang['homework_list'] = 'Homework List';
 $lang['house'] = 'Student House';

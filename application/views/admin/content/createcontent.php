@@ -3,7 +3,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-download"></i> <?php echo $this->lang->line('download_center'); ?></h1>
+            <i class="fa fa-download"></i> <?php echo $this->lang->line('download_center'); ?>
+        </h1>
 
     </section>
 
@@ -12,7 +13,7 @@
         <div class="row">
             <?php
             if ($this->rbac->hasPrivilege('upload_content', 'can_add')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
@@ -21,50 +22,62 @@
                         </div><!-- /.box-header -->
                         <!-- form start -->
 
-                        <form id="form1" action="<?php echo site_url('admin/content') ?>"  id="employeeform" name="employeeform" method="post"  enctype='multipart/form-data' accept-charset="utf-8">
+                        <form id="form1" action="<?php echo site_url('admin/content') ?>" id="employeeform" name="employeeform" method="post" enctype='multipart/form-data' accept-charset="utf-8">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
                                 <?php } ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('content_title'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="content_title" name="content_title" placeholder="" type="text" class="form-control"  value="<?php echo set_value('content_title'); ?>" />
+                                    <input autofocus="" id="content_title" name="content_title" placeholder="" type="text" class="form-control" value="<?php echo set_value('content_title'); ?>" />
                                     <span class="text-danger"><?php echo form_error('content_title'); ?></span>
                                 </div>
+
+
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('content_type'); ?></label><small class="req"> *</small>
 
-                                    <select  id="content_type" name="content_type" class="form-control" >
+                                    <select id="content_type" name="content_type" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($ght as $key => $type) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key; ?>" <?php if (set_value('content_type') == $key) echo "selected=selected"; ?>><?php echo $type; ?></option>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('content_type'); ?></span>
                                 </div>
-                                <div class="form-group"> <!-- Radio group !-->
+                                <div class="form-group">
+                                    <!-- Radio group !-->
                                     <label class="control-label"><?php echo $this->lang->line('available_for'); ?></label><small class="req"> *</small>
                                     <?php
                                     foreach ($content_available as $cont_avail_key => $cont_avail_value) {
-                                        ?>
+                                    ?>
                                         <div class="checkbox">
                                             <label>
                                                 <input type="checkbox" class="content_available" name="content_available[]" value="<?php echo $cont_avail_key; ?>" <?php echo set_checkbox('content_available[]', $cont_avail_key); ?>>
                                                 <?php echo $cont_avail_value; ?>
                                             </label>
                                         </div>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                     <span class="text-danger"><?php echo form_error('content_available[]'); ?></span>
 
-                                </div>      
+                                </div>
                                 <?php
                                 $content_disable = "content_disable";
                                 if (set_checkbox('content_available[]', 'student')) {
@@ -73,7 +86,7 @@
                                 ?>
                                 <div class="upload_content <?php echo $content_disable; ?>">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="Yes" name="visibility" id="chk" <?php if (set_value('visibility') == "Yes") echo "checked=checked"; ?>/><b><?php echo $this->lang->line('available_for_all_classes'); ?> </b></label>
+                                        <label><input type="checkbox" value="Yes" name="visibility" id="chk" <?php if (set_value('visibility') == "Yes") echo "checked=checked"; ?> /><b><?php echo $this->lang->line('available_for_all_classes'); ?> </b></label>
                                     </div>
 
 
@@ -81,14 +94,14 @@
 
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?> </label><small class="req"> *</small>
 
-                                        <select  id="class_id" name="class_id" class="form-control" >
+                                        <select id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($classlist as $class) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) echo "selected=selected" ?>>
                                                     <?php echo $class['class'] ?></option>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
                                         </select>
@@ -96,8 +109,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                        <select  id="section_id" name="section_id" class="form-control" >
-                                            <option value=""   ><?php echo $this->lang->line('select'); ?></option>
+                                        <select id="section_id" name="section_id" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
@@ -107,7 +120,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('upload_date'); ?></label><small class="req"> *</small>
-                                            <input id="upload_date" name="upload_date" placeholder="" type="text" class="form-control date"  value="<?php echo set_value('upload_date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat(date('Y-m-d')))); ?>" />
+                                            <input id="upload_date" name="upload_date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('upload_date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat(date('Y-m-d')))); ?>" />
                                             <span class="text-danger"><?php echo form_error('upload_date'); ?></span>
                                         </div>
                                     </div>
@@ -139,16 +152,17 @@
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('upload_content', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('upload_content', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -182,70 +196,70 @@
                                     <?php
                                     $count = 1;
                                     foreach ($list as $data) {
-                                        ?> 
+                                    ?>
                                         <tr>
                                             <td class="mailbox-name">
                                                 <a href="#" data-toggle="popover" class="detail_popover"><?php echo $data['title'] ?></a>
                                                 <div class="fee_detail_popover" style="display: none">
                                                     <?php
                                                     if ($data['note'] == "") {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                        <?php
+                                                    <?php
                                                     } else {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-info"><?php echo $data['note']; ?></p>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </div>
                                             </td>
                                             <td class="mailbox-name"><?php
-                                                $type = $data['type'];
-                                                echo $this->lang->line($type);
-                                                ?></td>
+                                                                        $type = $data['type'];
+                                                                        echo $this->lang->line($type);
+                                                                        ?></td>
                                             <td class="mailbox-name"><?php
-                                                if ($data['date'] != '0000-00-00') {
-                                                    echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($data['date']));
-                                                }
-                                                ?></td>
+                                                                        if ($data['date'] != '0000-00-00') {
+                                                                            echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($data['date']));
+                                                                        }
+                                                                        ?></td>
                                             <td class="mailbox-name">
                                                 <ul class="list-unstyled">
 
                                                     <?php
                                                     $roles = explode(",", $data['role']);
                                                     foreach ($roles as $role_k => $role_v) {
-                                                        ?>
+                                                    ?>
                                                         <li><?php echo $role_v; ?></li>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </ul>
-                                            </td>  
+                                            </td>
                                             <td class="mailbox-name"><?php
-                                                if ($data['is_public'] == "Yes") {
-                                                    echo "ALL Classes";
-                                                } elseif (in_array('student', explode(",", $data['role']))) {
+                                                                        if ($data['is_public'] == "Yes") {
+                                                                            echo "ALL Classes";
+                                                                        } elseif (in_array('student', explode(",", $data['role']))) {
 
-                                                    echo $data['class'] . "(" . $data['section'] . ")";
-                                                }
-                                                ?></td>
+                                                                            echo $data['class'] . "(" . $data['section'] . ")";
+                                                                        }
+                                                                        ?></td>
                                             <td class="mailbox-date pull-right">
 
-                                                <a data-placement="left" href="<?php echo base_url(); ?>admin/content/download/<?php echo $data['file'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('download'); ?>">
+                                                <a data-placement="left" href="<?php echo base_url(); ?>admin/content/download/<?php echo $data['file'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('download'); ?>">
                                                     <i class="fa fa-download"></i>
                                                 </a>
                                                 <?php
                                                 if ($this->rbac->hasPrivilege('upload_content', 'can_delete')) {
-                                                    ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/content/delete/<?php echo $data['id'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                ?>
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/content/delete/<?php echo $data['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
                                                 <?php } ?>
 
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                     }
                                     $count++;
                                     ?>
@@ -257,27 +271,29 @@
                     </div><!-- /.box-body -->
 
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
             <!-- right column -->
-        </div>     
+        </div>
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
 
-        $("#btnreset").click(function () {
+        $("#btnreset").click(function() {
 
             $("#form1")[0].reset();
         });
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
         getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             getSectionByClass(class_id, 0);
         });
+
         function getSectionByClass(class_id, section_id) {
             if (class_id != "") {
                 $('#section_id').html("");
@@ -286,11 +302,12 @@
                 $.ajax({
                     type: "GET",
                     url: base_url + "sections/getByClass",
-                    data: {'class_id': class_id},
+                    data: {
+                        'class_id': class_id
+                    },
                     dataType: "json",
-                    success: function (data) {
-                        $.each(data, function (i, obj)
-                        {
+                    success: function(data) {
+                        $.each(data, function(i, obj) {
                             var sel = "";
                             if (section_id == obj.section_id) {
                                 sel = "selected";
@@ -303,8 +320,8 @@
             }
         }
     });
-    $(document).ready(function () {
-        $(document).on("click", '.content_available', function (e) {
+    $(document).ready(function() {
+        $(document).on("click", '.content_available', function(e) {
             var avai_value = $(this).val();
             if (avai_value === "student") {
                 console.log(avai_value);
@@ -317,7 +334,7 @@
                 }
             }
         });
-        $("#chk").click(function () {
+        $("#chk").click(function() {
             if ($(this).is(":checked")) {
                 $("#class_id").prop("disabled", true);
             } else {
@@ -332,13 +349,13 @@
 
     });
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });

@@ -73,21 +73,7 @@
                                     <span class="text-danger"><?php echo form_error('Items'); ?></span>
 
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label>
 
-                                        <select id="branch_id" name="branch" placeholder="" type="text" class="form-control">
-
-                                            <?php foreach ($branch as $key => $value) {
-                                            ?>
-                                                <option value="<?php echo $value["id"] ?>" <?php echo set_select('branch', $value['id'], set_value('branch')); ?>><?php echo $value["branch_name"] ?></option>
-                                            <?php }
-                                            ?>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
-                                    </div>
-                                </div>
 
                                 <div class="form-group col-md-4 col-sm-4">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('issue_to'); ?></label><small class="req"> *</small>

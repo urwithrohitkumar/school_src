@@ -2,20 +2,28 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Generatestaffidcard_model extends CI_model {
+class Generatestaffidcard_model extends CI_model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function getstaffidcard() {
+    public function getstaffidcard()
+    {
         $this->db->select('*');
         $this->db->from('staff_id_card');
-        $query = $this->db->get();        
+
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+        $query = $this->db->get();
         return $query->result();
     }
 
-    public function getidcardbyid($idcard) {
+    public function getidcardbyid($idcard)
+    {
         $this->db->select('*');
         $this->db->from('staff_id_card');
         $this->db->where('id', $idcard);
@@ -23,7 +31,7 @@ class Generatestaffidcard_model extends CI_model {
         return $query->result();
     }
 
-     public function getEmployee($array,$active)
+    public function getEmployee($array, $active)
     {
         $this->db->select("staff.*,staff_designation.designation,department.department_name as department,roles.name as user_type")->from('staff');
         $this->db->join('staff_designation', "staff_designation.id = staff.designation", "left");
@@ -36,5 +44,3 @@ class Generatestaffidcard_model extends CI_model {
         return $query->result();
     }
 }
-
-?>

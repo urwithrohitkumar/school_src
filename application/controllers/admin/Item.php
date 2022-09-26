@@ -3,14 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Item extends Admin_Controller {
+class Item extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->helper('form');
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('item', 'can_view')) {
             access_denied();
         }
@@ -23,20 +26,22 @@ class Item extends Admin_Controller {
         $this->form_validation->set_rules('unit', $this->lang->line('unit'), 'trim|required|xss_clean');
 
         $this->form_validation->set_rules(
-                'item_category_id', $this->lang->line('item_category'), array(
-            'required',
-            array('check_exists', array($this->item_model, 'valid_check_exists'))
-                )
+            'item_category_id',
+            $this->lang->line('item_category'),
+            array(
+                'required',
+                array('check_exists', array($this->item_model, 'valid_check_exists'))
+            )
         );
 
         if ($this->form_validation->run() == FALSE) {
-            
         } else {
             $data = array(
                 'item_category_id' => $this->input->post('item_category_id'),
                 'name' => $this->input->post('name'),
                 'unit' => $this->input->post('unit'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $insert_id = $this->item_model->add($data);
 
@@ -48,6 +53,11 @@ class Item extends Admin_Controller {
         $data['itemlist'] = $item_result;
 
 
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
+
+
         $itemcategory = $this->itemcategory_model->get();
         $data['itemcatlist'] = $itemcategory;
 
@@ -56,7 +66,8 @@ class Item extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function download($file) {
+    public function download($file)
+    {
         $this->load->helper('download');
         $filepath = "./uploads/inventory_items/" . $this->uri->segment(6);
         $data = file_get_contents($filepath);
@@ -64,7 +75,8 @@ class Item extends Admin_Controller {
         force_download($name, $data);
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('item', 'can_delete')) {
             access_denied();
         }
@@ -73,7 +85,8 @@ class Item extends Admin_Controller {
         redirect('admin/item/index');
     }
 
-    function getAvailQuantity() {
+    function getAvailQuantity()
+    {
         $item_id = $this->input->get('item_id');
         $data = $this->item_model->getItemAvailable($item_id);
 
@@ -85,7 +98,9 @@ class Item extends Admin_Controller {
         }
     }
 
-    function handle_upload() {
+    function handle_upload()
+    {
+        $error ='';
         if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
             $allowedExts = array('jpg', 'jpeg', 'png');
             $temp = explode(".", $_FILES["file"]["name"]);
@@ -93,9 +108,11 @@ class Item extends Admin_Controller {
             if ($_FILES["file"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }
-            if ($_FILES["file"]["type"] != 'image/gif' &&
-                    $_FILES["file"]["type"] != 'image/jpeg' &&
-                    $_FILES["file"]["type"] != 'image/png') {
+            if (
+                $_FILES["file"]["type"] != 'image/gif' &&
+                $_FILES["file"]["type"] != 'image/jpeg' &&
+                $_FILES["file"]["type"] != 'image/png'
+            ) {
 
                 $this->form_validation->set_message('handle_upload', $this->lang->line('file_type_not_allowed'));
                 return false;
@@ -118,7 +135,8 @@ class Item extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('item', 'can_edit')) {
             access_denied();
         }
@@ -136,10 +154,12 @@ class Item extends Admin_Controller {
         $this->form_validation->set_rules('unit', $this->lang->line('unit'), 'trim|required|xss_clean');
 
         $this->form_validation->set_rules(
-                'item_category_id', $this->lang->line('item_category'), array(
-            'required',
-            array('check_exists', array($this->item_model, 'valid_check_exists'))
-                )
+            'item_category_id',
+            $this->lang->line('item_category'),
+            array(
+                'required',
+                array('check_exists', array($this->item_model, 'valid_check_exists'))
+            )
         );
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('layout/header', $data);
@@ -167,7 +187,4 @@ class Item extends Admin_Controller {
             redirect('admin/item/index');
         }
     }
-
 }
-
-?>

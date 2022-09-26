@@ -211,8 +211,11 @@ class Classsection_model extends MY_Model
 
     public function getClassSectionStudentCount()
     {
-        $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
-
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id AND student_session.branch_id = " . $this->session->userdata['admin']['branch_id'] . " and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
+        } else {
+            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
+        }
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -227,6 +230,9 @@ class Classsection_model extends MY_Model
         $query = "SELECT students.id,students.gender,students.dob,classes.class,categories.category,
             DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),students.dob)), '%Y')+0 AS Age
          FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id;";
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $query = $query . " where item.branch_id =" . $this->session->userdata['admin']['branch_id'];
+        }
 
         $query = $this->db->query($query);
         $student =  $this->prepareAgeReport($query->result());
@@ -2146,5 +2152,14 @@ class Classsection_model extends MY_Model
 
 
         return ['category' => $categories, 'minorities' => $minorities, 'documents' => $isDocuments];
+    }
+
+    public function sectionList()
+    {
+        $sectionData = "SELECT class_sections.class_id,classes.class,COUNT(class_sections.id) as sectionid FROM `class_sections`
+        LEFT JOIN classes on classes.id = class_sections.class_id
+        GROUP BY class_id";
+        $sectionData = $this->db->query($sectionData)->result();
+        return $sectionData;
     }
 }

@@ -30,7 +30,6 @@ class Itemstock extends Admin_Controller
         $this->form_validation->set_rules('item_photo', $this->lang->line('file'), 'callback_handle_upload[item_photo]');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             $store_id = ($this->input->post('store_id')) ? $this->input->post('store_id') : null;
             $data     = array(
@@ -42,6 +41,7 @@ class Itemstock extends Admin_Controller
                 'purchase_price' => $this->input->post('purchase_price'),
                 'date'           => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'description'    => $this->input->post('description'),
+                'branch_id'    => $this->input->post('branch_id'),
             );
             $insert_id = $this->itemstock_model->add($data);
             if (isset($_FILES["item_photo"]) && !empty($_FILES['item_photo']['name'])) {
@@ -64,6 +64,9 @@ class Itemstock extends Admin_Controller
         $data['itemsupplier'] = $itemsupplier;
         $itemstore            = $this->itemstore_model->get();
         $data['itemstore']    = $itemstore;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header', $data);
         $this->load->view('admin/itemstock/itemList', $data);
         $this->load->view('layout/footer', $data);
@@ -132,7 +135,6 @@ class Itemstock extends Admin_Controller
                     $this->form_validation->set_message('handle_upload', $this->lang->line('file_size_shoud_be_less_than') . number_format($image_validate['upload_size'] / 1048576, 2) . " MB");
                     return false;
                 }
-
             } else {
                 $this->form_validation->set_message('handle_upload', "File Type / Extension Error Uploading ");
                 return false;
@@ -141,7 +143,6 @@ class Itemstock extends Admin_Controller
             return true;
         }
         return true;
-
     }
 
     public function edit($id)
@@ -201,5 +202,4 @@ class Itemstock extends Admin_Controller
             redirect('admin/itemstock/index');
         }
     }
-
 }

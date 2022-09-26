@@ -3,15 +3,18 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Hostel extends Admin_Controller {
+class Hostel extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         $this->load->library('Customlib');
     }
 
-    public function index() {
+    public function index()
+    {
 
         if (!$this->rbac->hasPrivilege('hostel', 'can_view')) {
             access_denied();
@@ -22,12 +25,16 @@ class Hostel extends Admin_Controller {
         $data['listhostel'] = $listhostel;
         $ght = $this->customlib->getHostaltype();
         $data['ght'] = $ght;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header');
         $this->load->view('admin/hostel/createhostel', $data);
         $this->load->view('layout/footer');
     }
 
-    function create() {
+    function create()
+    {
         if (!$this->rbac->hasPrivilege('hostel', 'can_add')) {
             access_denied();
         }
@@ -48,7 +55,8 @@ class Hostel extends Admin_Controller {
                 'type' => $this->input->post('type'),
                 'address' => $this->input->post('address'),
                 'intake' => $this->input->post('intake'),
-                'description' => $this->input->post('description')
+                'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id')
             );
             $this->hostel_model->addhostel($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
@@ -56,7 +64,8 @@ class Hostel extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('hostel', 'can_edit')) {
             access_denied();
         }
@@ -89,7 +98,8 @@ class Hostel extends Admin_Controller {
         }
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('hostel', 'can_delete')) {
             access_denied();
         }
@@ -97,7 +107,4 @@ class Hostel extends Admin_Controller {
         $this->hostel_model->remove($id);
         redirect('admin/hostel/index');
     }
-
 }
-
-?>

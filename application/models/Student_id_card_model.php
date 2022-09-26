@@ -1,15 +1,22 @@
 <?php
 
-class Student_id_card_model extends MY_model {
+class Student_id_card_model extends MY_model
+{
 
-    public function idcardlist() {
+    public function idcardlist()
+    {
         $this->db->select('*');
         $this->db->from('id_card');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function addidcard($data) {
+    public function addidcard($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -55,7 +62,8 @@ class Student_id_card_model extends MY_model {
         }
     }
 
-    public function idcardbyid($id) {
+    public function idcardbyid($id)
+    {
         $this->db->select('*');
         $this->db->from('id_card');
         $this->db->where('id', $id);
@@ -63,7 +71,8 @@ class Student_id_card_model extends MY_model {
         return $query->row();
     }
 
-    public function get($id) {
+    public function get($id)
+    {
         $this->db->select('*');
         $this->db->from('id_card');
         $this->db->where('status = 1');
@@ -72,7 +81,8 @@ class Student_id_card_model extends MY_model {
         return $query->result();
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -93,7 +103,4 @@ class Student_id_card_model extends MY_model {
             //return $return_value;
         }
     }
-
 }
-
-?>

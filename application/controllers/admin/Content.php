@@ -24,6 +24,10 @@ class Content extends Admin_Controller
         $ght                       = $this->customlib->getcontenttype();
         $role                      = json_decode($user_role);
 
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
+
         $list = $this->content_model->getContentByRole($this->customlib->getStaffID(), $role->name);
 
         $class = $this->class_model->get();
@@ -63,7 +67,6 @@ class Content extends Admin_Controller
                 $section_id = $this->input->post('section_id');
                 $classes    = $this->input->post('class_id');
             } else {
-
             }
 
             $content_for = array();
@@ -75,15 +78,16 @@ class Content extends Admin_Controller
                 'title'      => $this->input->post('content_title'),
                 'type'       => $this->input->post('content_type'),
                 'note'       => $this->input->post('note'),
+                'branch_id'       => $this->input->post('branch_id'),
                 'class_id'   => $classes,
                 'cls_sec_id' => $section_id,
                 'created_by' => $this->customlib->getStaffID(),
                 'file'       => $this->input->post('file'),
                 'is_public'  => $visibility,
             );
-            
-           
-            
+
+
+
             if (isset($_POST['upload_date']) && $_POST['upload_date'] != '') {
 
                 $data['date'] = date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('upload_date')));
@@ -144,7 +148,6 @@ class Content extends Admin_Controller
                 $section_id = $this->input->post('section_id');
                 $classes    = $this->input->post('class_id');
             } else {
-
             }
 
             $content_for = array();
@@ -284,8 +287,8 @@ class Content extends Admin_Controller
         if (!$this->rbac->hasPrivilege('upload_content', 'can_delete')) {
             access_denied();
         }
-        $this->content_model->remove($id);        
-        redirect('admin/content/' . $page);       
+        $this->content_model->remove($id);
+        redirect('admin/content/' . $page);
     }
 
     public function assignment()
@@ -335,5 +338,4 @@ class Content extends Admin_Controller
         $this->load->view('admin/content/other', $data);
         $this->load->view('layout/footer');
     }
-
 }

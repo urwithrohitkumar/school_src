@@ -4,14 +4,17 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Member extends Admin_Controller {
+class Member extends Admin_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->sch_setting_detail = $this->setting_model->getSetting();
-    } 
+    }
 
-    public function index() {
+    public function index()
+    {
         if (!$this->rbac->hasPrivilege('issue_return', 'can_view')) {
             access_denied();
         }
@@ -28,7 +31,8 @@ class Member extends Admin_Controller {
         $this->load->view('layout/footer');
     }
 
-    public function issue($id) {
+    public function issue($id)
+    {
         if (!$this->rbac->hasPrivilege('issue_return', 'can_view')) {
             access_denied();
         }
@@ -45,13 +49,14 @@ class Member extends Admin_Controller {
         $data['bookList'] = $bookList;
         $this->form_validation->set_rules('return_date', $this->lang->line('return_date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules(
-                'book_id', $this->lang->line('book'), array(
-            'required',
-            array('check_exists', array($this->bookissue_model, 'valid_check_exists')),
-                )
+            'book_id',
+            $this->lang->line('book'),
+            array(
+                'required',
+                array('check_exists', array($this->bookissue_model, 'valid_check_exists')),
+            )
         );
         if ($this->form_validation->run() == false) {
-             
         } else {
             $member_id = $this->input->post('member_id');
             $data = array(
@@ -70,7 +75,8 @@ class Member extends Admin_Controller {
         $this->load->view('layout/footer');
     }
 
-    public function bookreturn() {
+    public function bookreturn()
+    {
 
         $this->form_validation->set_rules('id', $this->lang->line('id'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('member_id', $this->lang->line('member_id'), 'required|trim|xss_clean');
@@ -99,7 +105,8 @@ class Member extends Admin_Controller {
         }
     }
 
-    public function student() {
+    public function student()
+    {
 
         if (!$this->rbac->hasPrivilege('add_student', 'can_view')) {
             access_denied();
@@ -109,6 +116,10 @@ class Member extends Admin_Controller {
         $data['title'] = 'Student Search';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
+
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $button = $this->input->post('search');
         if ($this->input->server('REQUEST_METHOD') == "GET") {
             $this->load->view('layout/header', $data);
@@ -123,7 +134,6 @@ class Member extends Admin_Controller {
                 if ($search == 'search_filter') {
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
                     if ($this->form_validation->run() == false) {
-                        
                     } else {
                         $data['searchby'] = "filter";
                         $data['class_id'] = $this->input->post('class_id');
@@ -141,7 +151,7 @@ class Member extends Admin_Controller {
                     $resultlist = $this->student_model->searchFullText($search_text);
                     $data['resultlist'] = $resultlist;
                 }
-            } 
+            }
             $data['sch_setting'] = $this->sch_setting_detail;
             $this->load->view('layout/header', $data);
             $this->load->view('admin/member/studentSearch', $data);
@@ -149,7 +159,8 @@ class Member extends Admin_Controller {
         }
     }
 
-    public function add() {
+    public function add()
+    {
         if ($this->input->post('library_card_no') != "") {
 
             $this->form_validation->set_rules('library_card_no', $this->lang->line('library_card_no'), 'required|trim|xss_clean|callback_check_cardno_exists');
@@ -187,7 +198,8 @@ class Member extends Admin_Controller {
         }
     }
 
-    public function check_cardno_exists() {
+    public function check_cardno_exists()
+    {
         $data['library_card_no'] = $this->security->xss_clean($this->input->post('library_card_no'));
 
         if ($this->librarymanagement_model->check_data_exists($data)) {
@@ -198,7 +210,8 @@ class Member extends Admin_Controller {
         }
     }
 
-    public function teacher() {
+    public function teacher()
+    {
         $this->session->set_userdata('top_menu', 'Library');
         $this->session->set_userdata('sub_menu', 'Library/member/teacher');
         $data['title'] = 'Add Teacher';
@@ -212,7 +225,8 @@ class Member extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function addteacher() {
+    public function addteacher()
+    {
         if ($this->input->post('library_card_no') != "") {
 
             $this->form_validation->set_rules('library_card_no', $this->lang->line('library_card_no'), 'required|trim|xss_clean|callback_check_cardno_exists');
@@ -250,12 +264,12 @@ class Member extends Admin_Controller {
         }
     }
 
-    public function surrender() {
+    public function surrender()
+    {
 
         $this->form_validation->set_rules('member_id', $this->lang->line('book'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
             $member_id = $this->input->post('member_id');
             $this->librarymember_model->surrender($member_id);
@@ -263,5 +277,4 @@ class Member extends Admin_Controller {
             echo json_encode($array);
         }
     }
-
 }

@@ -25,6 +25,9 @@ class Hostelroom extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'hostelroom/index');
         $hostelroomlist = $this->hostelroom_model->lists();
         $data['hostelroomlist'] = $hostelroomlist;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header');
         $this->load->view('admin/hostelroom/create', $data);
         $this->load->view('layout/footer');
@@ -62,6 +65,7 @@ class Hostelroom extends Admin_Controller {
                 'no_of_bed' => $this->input->post('no_of_bed'),
                 'cost_per_bed' => $this->input->post('cost_per_bed'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->hostelroom_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
@@ -220,6 +224,4 @@ class Hostelroom extends Admin_Controller {
 
     }
 
-} 
-
-?>
+}

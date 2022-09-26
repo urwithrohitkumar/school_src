@@ -1,15 +1,16 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
 </style>
 <?php
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
-?>     <!-- Content Wrapper. Contains page content -->
+?>
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -28,7 +29,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <h3 class="box-title"><?php echo $this->lang->line('add_hostel_room'); ?></h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form id="form1" action="<?php echo site_url('admin/hostelroom/create') ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                        <form id="form1" action="<?php echo site_url('admin/hostelroom/create') ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
@@ -40,24 +41,34 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('room_no_name'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="amount" name="room_no" placeholder="" type="text" class="form-control"  value="<?php echo set_value('room_no'); ?>" />
+                                    <input autofocus="" id="amount" name="room_no" placeholder="" type="text" class="form-control" value="<?php echo set_value('room_no'); ?>" />
                                     <span class="text-danger"><?php echo form_error('room_no'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('hostel'); ?></label><small class="req"> *</small>
-                                    <select  id="hostel_id" name="hostel_id" class="form-control" >
+                                    <select id="hostel_id" name="hostel_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($hostellist as $hostel) {
-                                            ?>
-                                            <option value="<?php echo $hostel['id'] ?>"<?php
-                                            if (set_value('hostel_id') == $hostel['id']) {
-                                                echo "selected =selected";
-                                            }
-                                            ?>><?php echo $hostel['hostel_name'] ?></option>
+                                        ?>
+                                            <option value="<?php echo $hostel['id'] ?>" <?php
+                                                                                        if (set_value('hostel_id') == $hostel['id']) {
+                                                                                            echo "selected =selected";
+                                                                                        }
+                                                                                        ?>><?php echo $hostel['hostel_name'] ?></option>
 
-                                            <?php
+                                        <?php
                                             $count++;
                                         }
                                         ?>
@@ -66,18 +77,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('room_type'); ?></label><small class="req"> *</small>
-                                    <select  id="room_type_id" name="room_type_id" class="form-control" >
+                                    <select id="room_type_id" name="room_type_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($roomtypelist as $roomtype) {
-                                            ?>
-                                            <option value="<?php echo $roomtype['id'] ?>"<?php
-                                            if (set_value('room_type_id') == $roomtype['id']) {
-                                                echo "selected =selected";
-                                            }
-                                            ?>><?php echo $roomtype['room_type'] ?></option>
+                                        ?>
+                                            <option value="<?php echo $roomtype['id'] ?>" <?php
+                                                                                            if (set_value('room_type_id') == $roomtype['id']) {
+                                                                                                echo "selected =selected";
+                                                                                            }
+                                                                                            ?>><?php echo $roomtype['room_type'] ?></option>
 
-                                            <?php
+                                        <?php
                                             $count++;
                                         }
                                         ?>
@@ -86,12 +97,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('no_of_bed'); ?></label><small class="req"> *</small>
-                                    <input id="amount" name="no_of_bed" placeholder="" type="text" class="form-control"  value="<?php echo set_value('no_of_bed'); ?>" />
+                                    <input id="amount" name="no_of_bed" placeholder="" type="text" class="form-control" value="<?php echo set_value('no_of_bed'); ?>" />
                                     <span class="text-danger"><?php echo form_error('no_of_bed'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('cost_per_bed'); ?></label><small class="req"> *</small>
-                                    <input id="amount" name="cost_per_bed" placeholder="" type="text" class="form-control"  value="<?php echo set_value('cost_per_bed'); ?>" />
+                                    <input id="amount" name="cost_per_bed" placeholder="" type="text" class="form-control" value="<?php echo set_value('cost_per_bed'); ?>" />
                                     <span class="text-danger"><?php echo form_error('cost_per_bed'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -106,16 +117,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('hostel_rooms', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('hostel_rooms', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary" id="hroom">
                     <div class="box-header ptbnull">
@@ -141,26 +153,26 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </thead>
                                 <tbody>
                                     <?php if (empty($hostelroomlist)) {
-                                        ?>
+                                    ?>
 
                                         <?php
                                     } else {
                                         $count = 1;
                                         foreach ($hostelroomlist as $hostelroom) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td class="mailbox-name">
-                                                    <a href="#" data-toggle="popover" class="detail_popover" ><?php echo $hostelroom['room_no'] ?></a>
+                                                    <a href="#" data-toggle="popover" class="detail_popover"><?php echo $hostelroom['room_no'] ?></a>
                                                     <div class="fee_detail_popover" style="display: none">
                                                         <?php
                                                         if ($hostelroom['description'] == "") {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                            <?php
+                                                        <?php
                                                         } else {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-info"><?php echo $hostelroom['description']; ?></p>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
                                                     </div>
@@ -171,17 +183,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <td class="mailbox-name"> <?php echo $currency_symbol . $hostelroom['cost_per_bed'] ?></td>
                                                 <td class="mailbox-date pull-right no-print">
                                                     <?php if ($this->rbac->hasPrivilege('hostel_rooms', 'can_edit')) { ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/hostelroom/edit/<?php echo $hostelroom['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/hostelroom/edit/<?php echo $hostelroom['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                    <?php } if ($this->rbac->hasPrivilege('hostel_rooms', 'can_delete')) { ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/hostelroom/delete/<?php echo $hostelroom['id'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    <?php }
+                                                    if ($this->rbac->hasPrivilege('hostel_rooms', 'can_delete')) { ?>
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/hostelroom/delete/<?php echo $hostelroom['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                             <i class="fa fa-remove"></i>
                                                         </a>
                                                     <?php } ?>
                                                 </td>
                                             </tr>
-                                            <?php
+                                    <?php
                                         }
                                         $count++;
                                     }
@@ -191,29 +204,34 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
             <!-- right column -->
 
         </div>
         <div class="row">
             <div class="col-md-12">
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
+
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
 
-    function Popup(data)
-    {
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -239,7 +257,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
@@ -250,13 +268,13 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     }
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });

@@ -3,15 +3,18 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Itemsupplier extends Admin_Controller {
+class Itemsupplier extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         $this->load->helper('url');
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('supplier', 'can_view')) {
             access_denied();
         }
@@ -20,12 +23,15 @@ class Itemsupplier extends Admin_Controller {
         $data['title'] = 'Item Supplier List';
         $itemsupplier_result = $this->itemsupplier_model->get();
         $data['itemsupplierlist'] = $itemsupplier_result;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('admin/itemsupplier/itemsupplierList', $data);
         $this->load->view('layout/footer', $data);
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('supplier', 'can_delete')) {
             access_denied();
         }
@@ -34,7 +40,8 @@ class Itemsupplier extends Admin_Controller {
         redirect('admin/itemsupplier/index');
     }
 
-    function create() {
+    function create()
+    {
         if (!$this->rbac->hasPrivilege('supplier', 'can_add')) {
             access_denied();
         }
@@ -65,6 +72,7 @@ class Itemsupplier extends Admin_Controller {
                 'contact_person_name' => $this->input->post('contact_person_name'),
                 'contact_person_email' => $this->input->post('contact_person_email'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->itemsupplier_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
@@ -72,7 +80,8 @@ class Itemsupplier extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('supplier', 'can_edit')) {
             access_denied();
         }
@@ -112,7 +121,4 @@ class Itemsupplier extends Admin_Controller {
             redirect('admin/itemsupplier/index');
         }
     }
-
 }
-
-?>

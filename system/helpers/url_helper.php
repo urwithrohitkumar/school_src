@@ -571,16 +571,14 @@ if ( ! function_exists('redirect'))
 	// ------------------------------------------------------------------------
 
 
-	if (!function_exists('branch_id')) {
+	if (!function_exists('check_branch_id_data')) {
 		
-		function check_branch_id_data($branch_id = NULL)
+		function check_branch_id_data($branch_id = NULL, $tablename = NULL)
 		{
 			$branchWhere = '';
 			$session = $_SESSION;
-			
-			
 			if (empty(($session['admin']['roles']['Super Admin']))) {
-				$branchWhere .= 'AND staff.branch_id = '. $branch_id.'';
+				$branchWhere .= 'AND '.$tablename.'.branch_id = '. $branch_id.'';
 			}
 			return $branchWhere;
 		}

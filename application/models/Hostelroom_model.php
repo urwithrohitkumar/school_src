@@ -131,6 +131,9 @@ class Hostelroom_model extends MY_Model
         $this->db->from('hostel_rooms');
         $this->db->join('hostel b', 'b.id=hostel_rooms.hostel_id');
         $this->db->join('room_types c', 'c.id=hostel_rooms.room_type_id');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('hostel_rooms.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $listroomtype = $this->db->get();
         return $listroomtype->result_array();
     }

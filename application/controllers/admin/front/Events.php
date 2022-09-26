@@ -47,6 +47,9 @@ class Events extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/front/events');
         $data['title']      = 'Add Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->form_validation->set_rules('title', $this->lang->line('title'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('start_date', $this->lang->line('start_date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('end_date', $this->lang->line('event_date'), 'trim|required|xss_clean');
@@ -76,6 +79,7 @@ class Events extends Admin_Controller
                 'sidebar'          => $this->input->post('sidebar'),
                 'type'             => $this->config->item('ci_front_event_content'),
                 'meta_description' => $this->input->post('meta_description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $data['slug'] = $this->slug->create_uri($data);
             $data['url']  = $this->config->item('ci_front_page_read_url') . $data['slug'];
@@ -89,7 +93,6 @@ class Events extends Admin_Controller
     {
         $delte_image = $this->input->post('id');
         if ($delte_image == "" && !isset($delte_image)) {
-
         } else {
             $this->cms_program_model->removeImage($delte_image);
             echo json_encode(array('status' => 0, 'msg' => $this->lang->line('image_deleted_successfully')));
@@ -103,7 +106,6 @@ class Events extends Admin_Controller
         $id        = $this->input->post('id');
         $record_id = $this->input->post('record_id');
         if ($id == "" && !isset($id)) {
-
         } else {
             $this->cms_program_model->updateFeaturedImage($id, $record_id);
             echo json_encode(array('status' => 0, 'msg' => $this->lang->line('update_message')));
@@ -211,5 +213,4 @@ class Events extends Admin_Controller
         $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('delete_message') . '</div>');
         redirect('admin/front/events');
     }
-
 }

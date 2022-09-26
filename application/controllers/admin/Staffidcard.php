@@ -18,6 +18,9 @@ class Staffidcard extends Admin_Controller
         }
         $this->session->set_userdata('top_menu', 'Certificate');
         $this->session->set_userdata('sub_menu', 'admin/staffidcard');
+
+        $this->data['branch'] = $this->staff_model->getBranch();
+
         $this->data['staffidcardlist'] = $this->Staffidcard_model->staffidcardlist();
         $this->load->view('layout/header');
         $this->load->view('admin/staffidcard/staffidcardView', $this->data);
@@ -87,6 +90,7 @@ class Staffidcard extends Admin_Controller
                 'school_name'              => $this->input->post('school_name'),
                 'school_address'           => $this->input->post('address'),
                 'header_color'             => $this->input->post('header_color'),
+                'branch_id'             => $this->input->post('branch_id'),
                 'enable_staff_id'          => $staff_id,
                 'enable_staff_department'  => $department,
                 'enable_designation'       => $designation,
@@ -291,6 +295,7 @@ class Staffidcard extends Admin_Controller
                 'logo'                     => $logo_img,
                 'sign_image'               => $sign_image,
                 'header_color'             => $this->input->post('header_color'),
+                'branch_id'             => $this->input->post('branch_id'),
                 'enable_staff_id'          => $staff_id,
                 'enable_staff_department'  => $department,
                 'enable_designation'       => $designation,
@@ -334,9 +339,11 @@ class Staffidcard extends Admin_Controller
             if ($_FILES["background_image"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }
-            if ($_FILES["background_image"]["type"] != 'image/gif' &&
+            if (
+                $_FILES["background_image"]["type"] != 'image/gif' &&
                 $_FILES["background_image"]["type"] != 'image/jpeg' &&
-                $_FILES["background_image"]["type"] != 'image/png') {
+                $_FILES["background_image"]["type"] != 'image/png'
+            ) {
                 $this->form_validation->set_message('background_image_handle_upload', $this->lang->line('invalid_file_type'));
                 return false;
             }
@@ -359,9 +366,11 @@ class Staffidcard extends Admin_Controller
             if ($_FILES["logo_img"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }
-            if ($_FILES["logo_img"]["type"] != 'image/gif' &&
+            if (
+                $_FILES["logo_img"]["type"] != 'image/gif' &&
                 $_FILES["logo_img"]["type"] != 'image/jpeg' &&
-                $_FILES["logo_img"]["type"] != 'image/png') {
+                $_FILES["logo_img"]["type"] != 'image/png'
+            ) {
                 $this->form_validation->set_message('logo_img_handle_upload', $this->lang->line('invalid_file_type'));
                 return false;
             }
@@ -384,9 +393,11 @@ class Staffidcard extends Admin_Controller
             if ($_FILES["background_image"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }
-            if ($_FILES["sign_image"]["type"] != 'image/gif' &&
+            if (
+                $_FILES["sign_image"]["type"] != 'image/gif' &&
                 $_FILES["sign_image"]["type"] != 'image/jpeg' &&
-                $_FILES["sign_image"]["type"] != 'image/png') {
+                $_FILES["sign_image"]["type"] != 'image/png'
+            ) {
                 $this->form_validation->set_message('sign_image_handle_upload', $this->lang->line('invalid_file_type'));
                 return false;
             }
@@ -399,5 +410,4 @@ class Staffidcard extends Admin_Controller
             return true;
         }
     }
-
 }

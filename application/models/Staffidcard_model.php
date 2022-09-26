@@ -7,6 +7,10 @@ class Staffidcard_model extends MY_model {
     public function staffidcardlist() {
         $this->db->select('*');
         $this->db->from('staff_id_card');
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+        $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $query = $this->db->get();
         return $query->result();
     }
@@ -87,5 +91,3 @@ class Staffidcard_model extends MY_model {
         }
     }
 }
-
-?>

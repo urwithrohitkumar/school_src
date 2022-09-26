@@ -35,6 +35,10 @@ class Homework extends Admin_Controller
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
 
+
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $userdata                 = $this->customlib->getUserData();
         $carray                   = array();
         $data['class_id']         = "";
@@ -47,25 +51,27 @@ class Homework extends Admin_Controller
         $this->load->view("layout/footer", $data);
     }
 
-      public function searchvalidation()
+    public function searchvalidation()
     {
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
         $subject_group_id    = $this->input->post('subject_group_id');
         $subject_id  = $this->input->post('subject_id');
+        $branch_id  = $this->input->post('branch');
+     
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
-        if ($this->form_validation->run() == false) { 
+        if ($this->form_validation->run() == false) {
             $error = array();
-            
+
             $error['class_id'] = form_error('class_id');
             $array = array('status' => 0, 'error' => $error);
             echo json_encode($array);
         } else {
             $class_id = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
-            
-            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'subject_group_id' => $subject_group_id, 'subject_id' => $subject_id);
+
+            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'subject_group_id' => $subject_group_id, 'subject_id' => $subject_id, 'branch_id' => $branch_id);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -73,70 +79,70 @@ class Homework extends Admin_Controller
 
     public function dthomeworklist()
     {
-        
+
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
         $subject_group_id    = $this->input->post('subject_group_id');
         $subject_id  = $this->input->post('subject_id');
+        $branch_id  = $this->input->post('branch');
 
         $userdata                = $this->customlib->getUserData();
         $carray                  = array();
-        $homeworklist            = $this->homework_model->search_dthomework($class_id, $section_id, $subject_group_id, $subject_id);
-        
+        $homeworklist            = $this->homework_model->search_dthomework($class_id, $section_id, $subject_group_id, $subject_id,$branch_id);
+
         $homework      = json_decode($homeworklist);
-        
-        $dt_data=array();
+
+        $dt_data = array();
         if (!empty($homework->data)) {
             foreach ($homework->data as $homework_key => $homeworklist) {
 
-                $editbtn='';
+                $editbtn = '';
                 $deletebtn = '';
-                $viewbtn='';
+                $viewbtn = '';
 
-                 if ($this->rbac->hasPrivilege('homework_evaluation', 'can_view')) {
-                    $viewbtn = "<a onclick='evaluation(" . '"' .$homeworklist->id . '"' . "  )' title=''  data-toggle='tooltip'  data-original-title=".$this->lang->line('evaluation')." class='btn btn-default btn-xs' data-placement='left' title='" . $this->lang->line('data-original-title') . "' data-toggle='tooltip'><i class='fa fa-reorder'></i></a>";
+                if ($this->rbac->hasPrivilege('homework_evaluation', 'can_view')) {
+                    $viewbtn = "<a onclick='evaluation(" . '"' . $homeworklist->id . '"' . "  )' title=''  data-toggle='tooltip'  data-original-title=" . $this->lang->line('evaluation') . " class='btn btn-default btn-xs' data-placement='left' title='" . $this->lang->line('data-original-title') . "' data-toggle='tooltip'><i class='fa fa-reorder'></i></a>";
 
                     if ($homeworklist->assignments > 0) {
 
-                        $viewbtn.= "<a data-placement='left' class='btn btn-default btn-xs' onclick='homework_docs(" . '"' .$homeworklist->id . '"' . "  )' data-toggle='tooltip'  data-original-title=".$this->lang->line('assignments')."> <i class='fa fa-download'></i></a>" ; 
-                       }
+                        $viewbtn .= "<a data-placement='left' class='btn btn-default btn-xs' onclick='homework_docs(" . '"' . $homeworklist->id . '"' . "  )' data-toggle='tooltip'  data-original-title=" . $this->lang->line('assignments') . "> <i class='fa fa-download'></i></a>";
+                    }
                 }
                 if ($this->rbac->hasPrivilege('homework', 'can_edit')) {
-                    
-                    $editbtn = "<a  class='btn btn-default btn-xs modal_form'  data-toggle='tooltip' data-placement='left'  data-method_call='edit' data-original-title='" . $this->lang->line('edit') . "' data-record_id=".$homeworklist->id." ><i class='fa fa-pencil'></i></a>";
+
+                    $editbtn = "<a  class='btn btn-default btn-xs modal_form'  data-toggle='tooltip' data-placement='left'  data-method_call='edit' data-original-title='" . $this->lang->line('edit') . "' data-record_id=" . $homeworklist->id . " ><i class='fa fa-pencil'></i></a>";
                 }
                 if ($this->rbac->hasPrivilege('homework', 'can_delete')) {
-                    
-                    $collectbtn = "<a onclick='return confirm(" . '"' . $this->lang->line('delete_confirm') . '"' . "  )' href='".base_url()."homework/delete/".$homeworklist->id."'   class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='left' title='" . $this->lang->line('delete') . "' data-original-title='" . $this->lang->line('delete') . "'><i class='fa fa-remove'></i></a>";
+
+                    $collectbtn = "<a onclick='return confirm(" . '"' . $this->lang->line('delete_confirm') . '"' . "  )' href='" . base_url() . "homework/delete/" . $homeworklist->id . "'   class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='left' title='" . $this->lang->line('delete') . "' data-original-title='" . $this->lang->line('delete') . "'><i class='fa fa-remove'></i></a>";
                 }
-             
+
                 $row   = array();
                 $row[] = $homeworklist->class;
-                $row[] = $homeworklist->section ;
+                $row[] = $homeworklist->section;
                 $row[] = $homeworklist->name;
-                $row[] = $homeworklist->subject_name ;
+                $row[] = $homeworklist->subject_name;
 
-                
-                if ($homeworklist->homework_date != null && $homeworklist->homework_date!='0000-00-00') {
-                   $row[]= date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homeworklist->homework_date));
-                }else{
-                    $row[]="";
+
+                if ($homeworklist->homework_date != null && $homeworklist->homework_date != '0000-00-00') {
+                    $row[] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homeworklist->homework_date));
+                } else {
+                    $row[] = "";
                 }
-                $row[]= date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homeworklist->submit_date));
+                $row[] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homeworklist->submit_date));
 
-                 $evl_date = "";
-                 if ($homeworklist->evaluation_date != "0000-00-00") { 
+                $evl_date = "";
+                if ($homeworklist->evaluation_date != "0000-00-00") {
 
-                 $row[]= date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homeworklist->evaluation_date));
-                }else{
-                    $row[]="";
+                    $row[] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homeworklist->evaluation_date));
+                } else {
+                    $row[] = "";
                 }
-                $row[] = $homeworklist->staff_name.' '.$homeworklist->staff_surname;
-                $row[] = $viewbtn.''.$editbtn.''.$collectbtn;
-                $dt_data[] = $row;  
+                $row[] = $homeworklist->staff_name . ' ' . $homeworklist->staff_surname;
+                $row[] = $viewbtn . '' . $editbtn . '' . $collectbtn;
+                $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($homework->draw),
@@ -144,35 +150,35 @@ class Homework extends Admin_Controller
             "recordsFiltered" => intval($homework->recordsFiltered),
             "data"            => $dt_data,
         );
-        echo json_encode($json_data); 
+        echo json_encode($json_data);
     }
 
     public function homework_docs($id)
-    { 
+    {
         $docs = $this->homework_model->get_homeworkDocByid($id);;
         $docs = json_decode($docs);
 
         $dt_data = array();
         if (!empty($docs->data)) {
-            $doc="";
+            $doc = "";
             foreach ($docs->data as $key => $value) {
-                if($value->docs!==''){
+                if ($value->docs !== '') {
 
-                         $document = '';
-                $documentGet = explode(",",$value->docs);
-                foreach($documentGet as $documentRow) {
-                $documentRow = trim($documentRow);
-              
-                    $doc='<a class="btn btn-default btn-xs" href="'.base_url().'homework/assigmnetDownload/'.$documentRow.'"  data-original-title='.$this->lang->line("evaluation").'>
+                    $document = '';
+                    $documentGet = explode(",", $value->docs);
+                    foreach ($documentGet as $documentRow) {
+                        $documentRow = trim($documentRow);
+
+                        $doc = '<a class="btn btn-default btn-xs" href="' . base_url() . 'homework/assigmnetDownload/' . $documentRow . '"  data-original-title=' . $this->lang->line("evaluation") . '>
                 <i class="fa fa-download"></i></a>';
-                }
+                    }
                 }
 
                 $row = array();
-                $row[] = $this->customlib->getFullName($value->firstname,$value->middlename,$value->lastname,$this->sch_setting_detail->middlename,$this->sch_setting_detail->lastname) . " (" . $value->admission_no . ")";;
+                $row[] = $this->customlib->getFullName($value->firstname, $value->middlename, $value->lastname, $this->sch_setting_detail->middlename, $this->sch_setting_detail->lastname) . " (" . $value->admission_no . ")";;
                 $row[] = $value->message;
                 $row[] = $doc;
-               
+
 
 
                 $dt_data[] = $row;
@@ -186,11 +192,10 @@ class Homework extends Admin_Controller
             "data" => $dt_data,
         );
         echo json_encode($json_data);
-        
     }
-    
-    
-    
+
+
+
 
 
     public function create()
@@ -213,6 +218,7 @@ class Homework extends Admin_Controller
         $this->form_validation->set_rules('homework_date', $this->lang->line('homework_date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('submit_date', $this->lang->line('submission_date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('description', $this->lang->line('description'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('branch_id', $this->lang->line('branch_id'), 'trim|required|xss_clean');
         // $this->form_validation->set_rules('userfile', $this->lang->line('image'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
 
@@ -226,10 +232,10 @@ class Homework extends Admin_Controller
                 'submit_date'            => form_error('submit_date'),
                 'description'            => form_error('description'),
                 'userfile'               => form_error('userfile'),
+                'branch_id'               => form_error('branch_id'),
             );
 
             $array = array('status' => 'fail', 'error' => $msg, 'message' => '');
-
         } else {
 
             $session_id = $this->setting_model->getCurrentSession();
@@ -238,6 +244,7 @@ class Homework extends Admin_Controller
                 'id'                       => $record_id,
                 'session_id'               => $session_id,
                 'class_id'                 => $this->input->post("modal_class_id"),
+                'branch_id'                 => $this->input->post("branch_id"),
                 'section_id'               => $this->input->post("modal_section_id"),
                 'homework_date'            => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('homework_date'))),
                 'submit_date'              => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('submit_date'))),
@@ -253,92 +260,89 @@ class Homework extends Admin_Controller
 
             if ($record_id > 0) {
                 $id = $record_id;
-            } else {
+            } 
+            // else {
+            //     $cpt = count($_FILES['userfile']['name']);
 
-            }
-                
-                
-                 $cpt = count($_FILES['userfile']['name']);
 
-                
-                
-                // if (!is_dir($uploaddir) && !mkdir($uploaddir)) {
-                //     die("Error creating folder $uploaddir");
-                // }
-                // $fileInfo = pathinfo($_FILES["userfile"]["name"]);
-                // $document = basename($_FILES['userfile']['name']);
 
-                // $img_name = $id . '.' . $fileInfo['extension'];
-                // move_uploaded_file($_FILES["userfile"]["tmp_name"], $uploaddir . $img_name);
-                
-                    $this->load->library('upload');
-                    $dataInfo = array();
-                    $files = $_FILES;
-                    $cpt = count($_FILES['userfile']['name']);
-                    $img= array();
-                    for($i=0; $i<$cpt; $i++)
-                    {           
-                    $_FILES['userfile']['name']= $files['userfile']['name'][$i];
-                    $_FILES['userfile']['type']= $files['userfile']['type'][$i];
-                    $_FILES['userfile']['tmp_name']= $files['userfile']['tmp_name'][$i];
-                    $_FILES['userfile']['error']= $files['userfile']['error'][$i];
-                    $_FILES['userfile']['size']= $files['userfile']['size'][$i];
-                    $files['userfile']['name'][$i];
-                    
-                    $this->upload->initialize($this->set_upload_options());
-                    $data = $this->upload->do_upload('userfile');
-                  //  $name_array[] = $data['file_name'];
-                    $dataInfo[] = $this->upload->data();
-                    
-                    $img[] = $dataInfo[$i]['file_name'];
-                 
-                    
-                    
-                    }
-                    
-                   $img_name = implode(',', $img);
-                $upload_data = array('id' => $id, 'document' => $img_name);
-                $this->homework_model->add($upload_data);
-            
+            //     // if (!is_dir($uploaddir) && !mkdir($uploaddir)) {
+            //     //     die("Error creating folder $uploaddir");
+            //     // }
+            //     // $fileInfo = pathinfo($_FILES["userfile"]["name"]);
+            //     // $document = basename($_FILES['userfile']['name']);
 
-            if ($record_id == 0) {
-                $homework_detail = $this->homework_model->get($id);
+            //     // $img_name = $id . '.' . $fileInfo['extension'];
+            //     // move_uploaded_file($_FILES["userfile"]["tmp_name"], $uploaddir . $img_name);
 
-                $sender_details = array(
-                    'class_id'      => $this->input->post("modal_class_id"),
-                    'section_id'    => $this->input->post("modal_section_id"),
-                    'homework_date' => date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homework_detail['homework_date'])),
-                    'submit_date'   => date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homework_detail['submit_date'])),
-                    'subject'       => $homework_detail['subject_name'],
-                );
+            //     $this->load->library('upload');
+            //     $dataInfo = array();
+            //     $files = $_FILES;
+            //     $cpt = count($_FILES['userfile']['name']);
+            //     $img = array();
+            //     for ($i = 0; $i < $cpt; $i++) {
+            //         $_FILES['userfile']['name'] = $files['userfile']['name'][$i];
+            //         $_FILES['userfile']['type'] = $files['userfile']['type'][$i];
+            //         $_FILES['userfile']['tmp_name'] = $files['userfile']['tmp_name'][$i];
+            //         $_FILES['userfile']['error'] = $files['userfile']['error'][$i];
+            //         $_FILES['userfile']['size'] = $files['userfile']['size'][$i];
+            //         $files['userfile']['name'][$i];
 
-               // $this->sms_send->mailsms('homework', $sender_details);
-            }
- 
+            //         $this->upload->initialize($this->set_upload_options());
+            //         $data = $this->upload->do_upload('userfile');
+            //         //  $name_array[] = $data['file_name'];
+            //         $dataInfo[] = $this->upload->data();
+
+            //         $img[] = $dataInfo[$i]['file_name'];
+            //     }
+
+            //     $img_name = implode(',', $img);
+            //     $upload_data = array('id' => $id, 'document' => $img_name);
+            //     $this->homework_model->add($upload_data);
+
+
+            //     if ($record_id == 0) {
+            //         $homework_detail = $this->homework_model->get($id);
+
+            //         $sender_details = array(
+            //             'class_id'      => $this->input->post("modal_class_id"),
+            //             'section_id'    => $this->input->post("modal_section_id"),
+            //             'homework_date' => date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homework_detail['homework_date'])),
+            //             'submit_date'   => date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($homework_detail['submit_date'])),
+            //             'subject'       => $homework_detail['subject_name'],
+            //         );
+
+            //         // $this->sms_send->mailsms('homework', $sender_details);
+            //     }
+            // }
+
+
+
+
+
             $msg   = $this->lang->line('success_message');
             $array = array('status' => 'success', 'error' => '', 'message' => $msg);
         }
-
         echo json_encode($array);
     }
 
 
     public function set_upload_options()
-{   
-//upload an image options
- $result         = $this->filetype_model->get();
-            $allowed_extension = array_map('trim', array_map('strtolower', explode(',', $result->file_extension)));
+    {
+        //upload an image options
+        $result         = $this->filetype_model->get();
+        $allowed_extension = array_map('trim', array_map('strtolower', explode(',', $result->file_extension)));
 
-$config = array();
-$config['upload_path']          ='./uploads/homework/';
-$config['allowed_types']        =  $allowed_extension;
-$config['max_size']      = 50000;
-$config['overwrite']     = FALSE;
-$config['encrypt_name'] = FALSE;
+        $config = array();
+        $config['upload_path']          = './uploads/homework/';
+        $config['allowed_types']        =  $allowed_extension;
+        $config['max_size']      = 50000;
+        $config['overwrite']     = FALSE;
+        $config['encrypt_name'] = FALSE;
 
 
-return $config;
-}
+        return $config;
+    }
     // public function handle_upload()
     // {
     //     $image_validate = $this->config->item('file_validate');
@@ -480,14 +484,14 @@ return $config;
         // $filepath = "./uploads/homework/" . $id . "." . $ext[1];
         // $data     = file_get_contents($filepath);
         // force_download($name, $data);
-        
-         $this->load->helper('download');
-    force_download(FCPATH.'/uploads/homework/'.$doc, null);
+
+        $this->load->helper('download');
+        force_download(FCPATH . '/uploads/homework/' . $doc, null);
     }
 
     public function evaluation($id)
     {
-                error_reporting(0);
+        error_reporting(0);
 
         if (!$this->rbac->hasPrivilege('homework_evaluation', 'can_view')) {
             access_denied();
@@ -623,7 +627,7 @@ return $config;
             $data["studentlist"]  = $studentlist;
             $this->load->view("homework/evaluation_report", $data);
         } else {
-            echo "<div class='row'><div class='col-md-12'><br/><div class='alert alert-info'>".$this->lang->line('no_record_found')."</div></div></div>";
+            echo "<div class='row'><div class='col-md-12'><br/><div class='alert alert-info'>" . $this->lang->line('no_record_found') . "</div></div></div>";
         }
     }
 
@@ -659,5 +663,4 @@ return $config;
         $data     = file_get_contents($filepath);
         force_download($name, $data);
     }
-
 }

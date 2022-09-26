@@ -44,6 +44,9 @@ class Page extends Admin_Controller
         }
         $data['title']      = 'Add Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->session->set_userdata('top_menu', 'Front CMS');
         $this->session->set_userdata('sub_menu', 'admin/front/page');
         $data['category'] = $this->customlib->getPageContentCategory();
@@ -71,6 +74,7 @@ class Page extends Admin_Controller
                 'type'             => 'page',
                 'sidebar'          => $this->input->post('sidebar'),
                 'meta_description' => $this->input->post('meta_description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $data['slug']     = $this->slug->create_uri($data);
             $data['url']      = $this->config->item('ci_front_page_url') . $data['slug'];
@@ -154,5 +158,4 @@ class Page extends Admin_Controller
         $this->cms_page_model->removeBySlug(urldecode($slug));
         redirect('admin/front/page');
     }
-
 }

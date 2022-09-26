@@ -8,7 +8,7 @@ $language_name = $language["short_code"];
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1> 
+        <h1>
             <i class="fa fa-flask"></i> <?php echo $this->lang->line('homework'); ?>
         </h1>
     </section>
@@ -18,7 +18,7 @@ $language_name = $language["short_code"];
                 <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
 
             </div>
-            <form  class="assign_teacher_form" action="<?php echo base_url(); ?>homework/searchvalidation" method="post" enctype="multipart/form-data">
+            <form class="assign_teacher_form" action="<?php echo base_url(); ?>homework/searchvalidation" method="post" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -27,48 +27,64 @@ $language_name = $language["short_code"];
                             <?php } ?>
                             <?php echo $this->customlib->getCSRF(); ?>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label>
+
+                                <select id="branch" name="branch" placeholder="" type="text" class="form-control">
+
+                                    <?php foreach ($branch as $key => $value) {
+                                    ?>
+                                        <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                    <?php }
+                                    ?>
+                                </select>
+                                <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')"  class="form-control" >
+                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                     <?php
                                     foreach ($classlist as $class) {
-                                        ?>
+                                    ?>
                                         <option <?php
-                                        if ($class_id == $class["id"]) {
-                                            echo "selected";
-                                        }
-                                        ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                            <?php
-                                        }
-                                        ?>
+                                                if ($class_id == $class["id"]) {
+                                                    echo "selected";
+                                                }
+                                                ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                                 <span class="text-danger" id="error_class_id"></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label>
-                                <select  id="secid" name="section_id" class="form-control" >
+                                <select id="secid" name="section_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+
+                        <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label>
-                                <select  id="subject_group_id" name="subject_group_id" class="form-control" >
+                                <select id="subject_group_id" name="subject_group_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject'); ?></label>
-                                <select  id="subid" name="subject_id" class="form-control" >
+                                <select id="subid" name="subject_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
@@ -87,14 +103,14 @@ $language_name = $language["short_code"];
                             <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('homework_list'); ?></h3>
                             <?php if ($this->rbac->hasPrivilege('homework', 'can_add')) { ?>
                                 <div class="box-tools pull-right">
-                                    <button type="button"class="btn btn-sm btn-primary modal_form" data-method_call="add"><i class="fa fa-plus"></i> <?php echo $this->lang->line('add'); ?></button>
+                                    <button type="button" class="btn btn-sm btn-primary modal_form" data-method_call="add"><i class="fa fa-plus"></i> <?php echo $this->lang->line('add'); ?></button>
                                 </div>
                             <?php } ?>
                         </div>
 
                         <div class="box-body table-responsive">
                             <div class="download_label"> <?php echo $this->lang->line('homework_list'); ?></div>
-                            <div >
+                            <div>
                                 <table class="table table-striped table-bordered table-hover homework-list" data-export-title="<?php echo $this->lang->line('homework_list'); ?>">
                                     <thead>
                                         <tr>
@@ -134,36 +150,50 @@ $language_name = $language["short_code"];
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="row">
                                 <input type="hidden" id="modal_record_id" value="0" name="record_id">
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select') ?></option>
+                                            <?php foreach ($branch as $key => $value) {
+                                            ?>
+                                                <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                            <?php }
+                                            ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class') ?></label><small class="req"> *</small>
                                         <select class="form-control modal_class_id" name="modal_class_id" id="modal_class_id">
                                             <option value=""><?php echo $this->lang->line('select') ?></option>
-<?php foreach ($classlist as $key => $value) {
-    ?>
+                                            <?php foreach ($classlist as $key => $value) {
+                                            ?>
                                                 <option value="<?php echo $value["id"] ?>"><?php echo $value["class"] ?></option>
 
-<?php } ?>
+                                            <?php } ?>
 
                                         </select>
                                         <span id="name_add_error" class="text-danger"></span>
                                     </div>
 
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('section') ?></label><small class="req"> *</small>
-                                        <select class="form-control modal_section_id" name="modal_section_id" id="modal_section_id" >
+                                        <select class="form-control modal_section_id" name="modal_section_id" id="modal_section_id">
                                             <option value=""><?php echo $this->lang->line('select') ?></option>
 
                                         </select>
                                         <span id="name_add_error" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label><small class="req"> *</small>
-                                        <select  id="modal_subject_group_id" name="modal_subject_group_id" class="form-control" >
+                                        <select id="modal_subject_group_id" name="modal_subject_group_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"></span>
@@ -187,7 +217,7 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('homework_date'); ?></label><small class="req"> *</small>
-                                        <input type="text"  name="homework_date" class="form-control" id="homework_date" value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="">
+                                        <input type="text" name="homework_date" class="form-control" id="homework_date" value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="">
                                         <span id="date_add_error" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -197,14 +227,14 @@ $language_name = $language["short_code"];
                                         <input type="text" id="submit_date" name="submit_date" class="form-control" value="<?php echo set_value('follow_up_date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="">
                                     </div>
                                 </div>
-                                    <div class="col-sm-12">
-                                    
-                                    
-                                    
+                                <div class="col-sm-12">
+
+
+
                                     <div class=" form-group wrapper">
                                     </div>
-                                    
-                                    <p><button class="add_fields">Add More Fields</button></p>
+
+                                    <!-- <p><button class="add_fields">Add More Fields</button></p> -->
 
 
                                     <!--<div class="form-group">-->
@@ -216,7 +246,7 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label for="email"><?php echo $this->lang->line('description'); ?></label><small class="req"> *</small>
-                                        <textarea name="description" id="compose-textarea" class="form-control" ><?php echo set_value('address'); ?>
+                                        <textarea name="description" id="compose-textarea" class="form-control"><?php echo set_value('address'); ?>
 
                                         </textarea>
                                     </div>
@@ -227,11 +257,14 @@ $language_name = $language["short_code"];
 
 
 
-                            </div><!--./row-->
+                            </div>
+                            <!--./row-->
 
-                        </div><!--./col-md-12-->
+                        </div>
+                        <!--./col-md-12-->
 
-                    </div><!--./row-->
+                    </div>
+                    <!--./row-->
 
                 </div>
                 <div class="box-footer">
@@ -272,8 +305,8 @@ $language_name = $language["short_code"];
                     <div class="col-md-12">
                         <div class="">
                             <div class="box-body table-responsive">
-                                <div >
-                                    <table class="table table-hover table-striped table-bordered all-list" >
+                                <div>
+                                    <table class="table table-hover table-striped table-bordered all-list">
                                         <thead>
                                             <tr>
                                                 <th><?php echo $this->lang->line('name') ?></th>
@@ -299,32 +332,32 @@ $language_name = $language["short_code"];
 </div>
 <!-- -->
 <script type="text/javascript">
-        var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm','mmm' => 'M', 'Y' => 'yyyy']) ?>';
+    var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'mmm' => 'M', 'Y' => 'yyyy']) ?>';
 
-        $(document).ready(function(){ 
-   $("#homework_date").datepicker({
-        format: date_format,
+    $(document).ready(function() {
+        $("#homework_date").datepicker({
+            format: date_format,
             autoclose: true,
-              weekStart : start_week,
+            weekStart: start_week,
             language: '<?php echo $language_name ?>',
-   }).on('changeDate', function (selected) {
-       var minDate = new Date(selected.date.valueOf());
-       $('#submit_date').datepicker('setStartDate', minDate);
-   });
+        }).on('changeDate', function(selected) {
+            var minDate = new Date(selected.date.valueOf());
+            $('#submit_date').datepicker('setStartDate', minDate);
+        });
 
-   $("#submit_date").datepicker({
-        format: date_format,
+        $("#submit_date").datepicker({
+            format: date_format,
             autoclose: true,
-              weekStart : start_week,
+            weekStart: start_week,
             language: '<?php echo $language_name ?>',
-   }).on('changeDate', function (selected) {
-           var minDate = new Date(selected.date.valueOf());
-           $('#homework_date').datepicker('setEndDate', minDate);
-   });
-});
+        }).on('changeDate', function(selected) {
+            var minDate = new Date(selected.date.valueOf());
+            $('#homework_date').datepicker('setEndDate', minDate);
+        });
+    });
 
- 
-    $(document).ready(function () {
+
+    $(document).ready(function() {
 
         $('#homeworkdate,#submitdate').datepicker({
             format: date_format,
@@ -333,43 +366,40 @@ $language_name = $language["short_code"];
         });
 
 
-        $("#btnreset").click(function () {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
 
     });
- 
+
     function homework_docs(id) {
 
         $('#homework_docs').modal('show');
-            (function ($) {
-        'use strict';
-        $(document).ready(function () {
-            initDatatable('all-list', 'homework/homework_docs/'+id, [], 100);
-        });
-    }(jQuery))
-      
-    }
+        (function($) {
+            'use strict';
+            $(document).ready(function() {
+                initDatatable('all-list', 'homework/homework_docs/' + id, [], 100);
+            });
+        }(jQuery))
 
+    }
 </script>
 <script>
-
-
-    $(function () {
+    $(function() {
 
         $("#compose-textarea,#desc-textarea").wysihtml5();
     });
 </script>
 <script type="text/javascript">
-    $(document).ready(function (e) {
+    $(document).ready(function(e) {
         getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
         getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
         getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
 
     });
 
-    $(document).ready(function (e) {
-        $("#formedit").on('submit', (function (e) {
+    $(document).ready(function(e) {
+        $("#formedit").on('submit', (function(e) {
             e.preventDefault();
             $.ajax({
                 url: "<?php echo site_url("homework/edit") ?>",
@@ -379,13 +409,12 @@ $language_name = $language["short_code"];
                 contentType: false,
                 cache: false,
                 processData: false,
-                success: function (res)
-                {
+                success: function(res) {
 
                     if (res.status == "fail") {
 
                         var message = "";
-                        $.each(res.error, function (index, value) {
+                        $.each(res.error, function(index, value) {
 
                             message += value;
                         });
@@ -409,11 +438,11 @@ $language_name = $language["short_code"];
         $('#evaluation_details').html("");
         $.ajax({
             url: '<?php echo base_url(); ?>homework/evaluation/' + id,
-            success: function (data) {
+            success: function(data) {
                 $('#evaluation_details').html(data);
-         
+
             },
-            error: function () {
+            error: function() {
                 alert("Fail")
             }
         });
@@ -422,12 +451,8 @@ $language_name = $language["short_code"];
     function addhomework() {
         $('iframe').contents().find('.wysihtml5-editor').html("");
     }
-
-
-
 </script>
 <script type="text/javascript">
-
     var save_method; //for save method string
     var update_id; //for save method string
 
@@ -439,14 +464,15 @@ $language_name = $language["short_code"];
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#' + select_control).addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -455,7 +481,7 @@ $language_name = $language["short_code"];
                     });
                     $('#' + select_control).append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + select_control).removeClass('dropdownloading');
                 }
             });
@@ -463,7 +489,7 @@ $language_name = $language["short_code"];
     }
 
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#myModal').modal({
             backdrop: 'static',
             keyboard: false,
@@ -471,7 +497,7 @@ $language_name = $language["short_code"];
         });
     });
 
-    $(document).on('click', '.modal_form', function () {
+    $(document).on('click', '.modal_form', function() {
         save_method = $(this).data('method_call');
         $(':input').val('');
         if (save_method == "edit") {
@@ -488,20 +514,20 @@ $language_name = $language["short_code"];
         }
 
     });
-    $(document).on('change', '#modal_section_id', function () {
+    $(document).on('change', '#modal_section_id', function() {
         var class_id = $('.modal_class_id').val();
         var section_id = $(this).val();
         getSubjectGroup(class_id, section_id, 0, 'modal_subject_group_id');
     });
 
-    $(document).on('change', '#secid', function () {
+    $(document).on('change', '#secid', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $(this).val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
     });
 
 
-    $(document).on('change', '#modal_subject_group_id', function () {
+    $(document).on('change', '#modal_subject_group_id', function() {
         var class_id = $('.modal_class_id').val();
         var section_id = $('.modal_section_id').val();
         var subject_group_id = $(this).val();
@@ -509,7 +535,7 @@ $language_name = $language["short_code"];
         getsubjectBySubjectGroup(class_id, section_id, subject_group_id, 0, 'modal_subject_id');
 
     });
-    $(document).on('change', '#subject_group_id', function () {
+    $(document).on('change', '#subject_group_id', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $('#secid').val();
         var subject_group_id = $(this).val();
@@ -518,7 +544,7 @@ $language_name = $language["short_code"];
 
     });
 
-    $("#formadd").on('submit', (function (e) {
+    $("#formadd").on('submit', (function(e) {
         e.preventDefault();
 
         var $this = $(this).find("button[type=submit]:focus");
@@ -531,17 +557,16 @@ $language_name = $language["short_code"];
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (res)
-            {
- 
+            success: function(res) {
+
                 if (res.status == "fail") {
 
                     var message = "";
-                    $.each(res.error, function (index, value) {
+                    $.each(res.error, function(index, value) {
 
                         message += value;
                     });
@@ -554,11 +579,11 @@ $language_name = $language["short_code"];
                     window.location.reload(true);
                 }
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
                 alert("Error occured.please try again");
                 $this.button('reset');
             },
-            complete: function () {
+            complete: function() {
                 $this.button('reset');
             }
 
@@ -566,7 +591,7 @@ $language_name = $language["short_code"];
     }));
 
 
-    $(document).on('change', '.modal_class_id', function () {
+    $(document).on('change', '.modal_class_id', function() {
 
         var modal_class_id = $('.modal_class_id').val();
         var modal_section_id = $('.modal_section_id').val();
@@ -582,16 +607,18 @@ $language_name = $language["short_code"];
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupByClassandSection',
-                data: {'class_id': class_id, 'section_id': section_id},
+                data: {
+                    'class_id': class_id,
+                    'section_id': section_id
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_group_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
 
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subjectgroup_id == obj.subject_group_id) {
                             sel = "selected";
@@ -600,11 +627,11 @@ $language_name = $language["short_code"];
                     });
                     $('#' + subject_group_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_group_target).removeClass('dropdownloading');
                 }
             });
@@ -620,16 +647,17 @@ $language_name = $language["short_code"];
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupsubjects',
-                data: {'subject_group_id': subject_group_id},
+                data: {
+                    'subject_group_id': subject_group_id
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
                     console.log(data);
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subject_group_subject_id == obj.id) {
                             sel = "selected";
@@ -638,11 +666,11 @@ $language_name = $language["short_code"];
                     });
                     $('#' + subject_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_target).removeClass('dropdownloading');
                 }
             });
@@ -650,22 +678,23 @@ $language_name = $language["short_code"];
     }
 
 
-    $('#myModal').on('shown.bs.modal', function () {
+    $('#myModal').on('shown.bs.modal', function() {
 
 
         if (save_method == "edit") {
             $.ajax({
                 url: base_url + "homework/getRecord",
                 type: "POST",
-                data: {id: update_id},
+                data: {
+                    id: update_id
+                },
                 dataType: 'json',
 
-                beforeSend: function () {
+                beforeSend: function() {
 
                     $('#myModal').addClass('modal_loading');
                 },
-                success: function (res)
-                {
+                success: function(res) {
                     console.log(res);
                     $('#modal_record_id').val(res.id);
                     $("#submit_date").datepicker("update", new Date(res.submit_date));
@@ -680,11 +709,11 @@ $language_name = $language["short_code"];
 
 
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
                     $('#myModal').removeClass('modal_loading');
                 },
-                complete: function () {
+                complete: function() {
                     $('#myModal').removeClass('modal_loading');
                 }
 
@@ -693,85 +722,86 @@ $language_name = $language["short_code"];
     })
 </script>
 <script>
-$(document).ready(function() {
-     emptyDatatable('homework-list','fees_data');
-});
+    $(document).ready(function() {
+        emptyDatatable('homework-list', 'fees_data');
+    });
 </script>
 <script type="text/javascript">
-$(document).ready(function(){ 
-$(document).on('submit','.assign_teacher_form',function(e){
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-    var $this = $(this).find("button[type=submit]:focus");  
-    var form = $(this);
-    var url = form.attr('action');
-    var form_data = form.serializeArray();
-    $.ajax({
-           url: url,
-           type: "POST",
-           dataType:'JSON',
-           data: form_data, // serializes the form's elements.
-              beforeSend: function () {
-                $('[id^=error]').html("");
-                $this.button('loading');
-                resetFields($this.attr('name'));
-               },
-              success: function(response) { // your success handler
-                
-                if(!response.status){
-                    $.each(response.error, function(key, value) {
-                    $('#error_' + key).html(value);
-                    });
-                }else{
-                 
-                   initDatatable('homework-list','homework/dthomeworklist',response.params,[],100);
-                }
-              },
-             error: function() { // your error handler
-                 $this.button('reset');
-             },
-             complete: function() {
-             $this.button('reset');
-             }
-         });
+    $(document).ready(function() {
+        $(document).on('submit', '.assign_teacher_form', function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var $this = $(this).find("button[type=submit]:focus");
+            var form = $(this);
+            var url = form.attr('action');
+            var form_data = form.serializeArray();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'JSON',
+                data: form_data, // serializes the form's elements.
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+                    resetFields($this.attr('name'));
+                },
+                success: function(response) { // your success handler
 
-});
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
+                            $('#error_' + key).html(value);
+                        });
+                    } else {
+
+                        initDatatable('homework-list', 'homework/dthomeworklist', response.params, [], 100);
+                    }
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
+                }
+            });
+
+        });
 
     });
-    function resetFields(search_type){
-        if(search_type == "keyword_search"){
-            $('#class_id').prop('selectedIndex',0);
+
+    function resetFields(search_type) {
+        if (search_type == "keyword_search") {
+            $('#class_id').prop('selectedIndex', 0);
             $('#section_id').find('option').not(':first').remove();
-        }else if (search_type == "class_search") {
-            
-             $('#search_text').val("");
+        } else if (search_type == "class_search") {
+
+            $('#search_text').val("");
         }
     }
 </script>
 
 <script>
-//Add Input Fields
-$(document).ready(function() {
-var max_fields = 10; //Maximum allowed input fields 
-var wrapper    = $(".wrapper"); //Input fields wrapper
-var add_button = $(".add_fields"); //Add button class or ID
-var x = 1; //Initial input field is set to 1
+    //Add Input Fields
+    $(document).ready(function() {
+        var max_fields = 10; //Maximum allowed input fields 
+        var wrapper = $(".wrapper"); //Input fields wrapper
+        var add_button = $(".add_fields"); //Add button class or ID
+        var x = 1; //Initial input field is set to 1
 
-//When user click on add input button
-$(add_button).click(function(e){
-e.preventDefault();
-//Check maximum allowed input fields
-if(x < max_fields){ 
-x++; //input field increment
-//add input field
-$(wrapper).append('<div><input class="form-control filestyle" style="opacity: 1 !important" type="file"  name="userfile[]" placeholder="Upload Document" /> <a href="javascript:void(0);" class="remove_field">Remove</a></div>');
-}
-});
+        //When user click on add input button
+        $(add_button).click(function(e) {
+            e.preventDefault();
+            //Check maximum allowed input fields
+            if (x < max_fields) {
+                x++; //input field increment
+                //add input field
+                $(wrapper).append('<div><input class="form-control filestyle" style="opacity: 1 !important" type="file"  name="userfile[]" placeholder="Upload Document" /> <a href="javascript:void(0);" class="remove_field">Remove</a></div>');
+            }
+        });
 
-//when user click on remove button
-$(wrapper).on("click",".remove_field", function(e){ 
-e.preventDefault();
-$(this).parent('div').remove(); //remove inout field
-x--; //inout field decrement
-})
-});
+        //when user click on remove button
+        $(wrapper).on("click", ".remove_field", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove(); //remove inout field
+            x--; //inout field decrement
+        })
+    });
 </script>

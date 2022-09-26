@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Cms_page_model extends MY_Model {
+class Cms_page_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
         $this->load->config('ci-blog');
@@ -17,9 +19,14 @@ class Cms_page_model extends MY_Model {
      * @param int $id
      * @return mixed
      */
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select('front_cms_pages.*,front_cms_page_contents.content_type')->from('front_cms_pages');
         $this->db->join('front_cms_page_contents', 'front_cms_pages.id = front_cms_page_contents.page_id', 'left');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         if ($id != null) {
             $this->db->where('front_cms_pages.id', $id);
         } else {
@@ -33,7 +40,8 @@ class Cms_page_model extends MY_Model {
         }
     }
 
-    public function getBySlug($slug = null) {
+    public function getBySlug($slug = null)
+    {
         $this->db->select()->from('front_cms_pages');
         if ($slug != null) {
             $this->db->where('slug', $slug);
@@ -48,7 +56,8 @@ class Cms_page_model extends MY_Model {
         return $result;
     }
 
-    public function getPageCategoryContent($page_id) {
+    public function getPageCategoryContent($page_id)
+    {
         $content_result = array();
         $content = $this->cms_page_content_model->getContentByPage($page_id);
         if (!empty($content)) {
@@ -63,7 +72,8 @@ class Cms_page_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -85,7 +95,8 @@ class Cms_page_model extends MY_Model {
         }
     }
 
-    public function removeBySlug($slug) {
+    public function removeBySlug($slug)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -113,7 +124,8 @@ class Cms_page_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -142,7 +154,7 @@ class Cms_page_model extends MY_Model {
             $message = INSERT_RECORD_CONSTANT . " On Page List id " . $insert_id;
             $action = "Insert";
             $record_id = $insert_id;
-            $this->log($message, $record_id, $action);            
+            $this->log($message, $record_id, $action);
             //======================Code End==============================
 
             $this->db->trans_complete(); # Completing transaction
@@ -159,7 +171,8 @@ class Cms_page_model extends MY_Model {
         }
     }
 
-    public function valid_check_exists($str) {
+    public function valid_check_exists($str)
+    {
         $url = $this->input->post('url');
         $id = $this->input->post('id');
 
@@ -174,7 +187,8 @@ class Cms_page_model extends MY_Model {
         }
     }
 
-    function check_data_exists($url, $id) {
+    function check_data_exists($url, $id)
+    {
         $this->db->where('url', $url);
         $this->db->where('id !=', $id);
         $query = $this->db->get('front_cms_pages');
@@ -184,5 +198,4 @@ class Cms_page_model extends MY_Model {
             return FALSE;
         }
     }
-
 }

@@ -3,15 +3,18 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Route extends Admin_Controller {
+class Route extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->model("classteacher_model");
-         $this->sch_setting_detail = $this->setting_model->getSetting();
+        $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    public function index() {
+    public function index()
+    {
         if (!$this->rbac->hasPrivilege('routes', 'can_view')) {
             access_denied();
         }
@@ -19,12 +22,15 @@ class Route extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'route/index');
         $listroute = $this->route_model->listroute();
         $data['listroute'] = $listroute;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
         $this->load->view('layout/header');
         $this->load->view('admin/route/createroute', $data);
         $this->load->view('layout/footer');
     }
 
-    function create() {
+    function create()
+    {
         if (!$this->rbac->hasPrivilege('routes', 'can_add')) {
             access_denied();
         }
@@ -40,6 +46,7 @@ class Route extends Admin_Controller {
             $data = array(
                 'route_title' => $this->input->post('route_title'),
                 'no_of_vehicle' => $this->input->post('no_of_vehicle'),
+                'branch_id' => $this->input->post('branch_id'),
                 'fare' => $this->input->post('fare')
             );
             $this->route_model->add($data);
@@ -48,7 +55,8 @@ class Route extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('routes', 'can_edit')) {
             access_denied();
         }
@@ -76,7 +84,8 @@ class Route extends Admin_Controller {
         }
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('routes', 'can_delete')) {
             access_denied();
         }
@@ -85,7 +94,8 @@ class Route extends Admin_Controller {
         redirect('admin/route/index');
     }
 
-    function studenttransportdetails() {
+    function studenttransportdetails()
+    {
 
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'reports/studenttransportdetails');
@@ -135,7 +145,4 @@ class Route extends Admin_Controller {
         $this->load->view("admin/route/studentroutedetails", $data);
         $this->load->view("layout/footer", $data);
     }
-
 }
-
-?>

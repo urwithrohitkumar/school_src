@@ -545,7 +545,8 @@ class Student_model extends MY_Model
         $section_id = null,
         $category = null,
         $gender = null,
-        $rte = null
+        $rte = null,
+        $branch_id = null
     ) {
 
         if ($class_id != null) {
@@ -562,6 +563,9 @@ class Student_model extends MY_Model
         }
         if ($rte != null) {
             $this->datatables->where('students.rte', $rte);
+        }
+        if ($branch_id != null) {
+            $this->datatables->where('student_session.branch_id', $branch_id);
         }
 
         $this->datatables->select('classes.id AS `class_id`,student_session.id as student_session_id,students.id,classes.class,sections.id AS `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,students.category_id, categories.category,   students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.father_name,students.rte,students.gender')

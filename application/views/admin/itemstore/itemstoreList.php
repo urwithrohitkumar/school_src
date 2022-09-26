@@ -1,8 +1,8 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
@@ -11,7 +11,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-object-group"></i> <?php echo $this->lang->line('inventory'); ?></h1>
+            <i class="fa fa-object-group"></i> <?php echo $this->lang->line('inventory'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -24,20 +25,30 @@
                             <h3 class="box-title"><?php echo $this->lang->line('add_item_store'); ?></h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form  action="<?php echo site_url('admin/itemstore/create') ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
-                            <div class="box-body">                            
+                        <form action="<?php echo site_url('admin/itemstore/create') ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                            <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
                                 <?php } ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('item_store_name'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
+                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('item_store_code'); ?></label>
-                                    <input id="code" name="code" placeholder="" type="text" class="form-control"  value="<?php echo set_value('code'); ?>" />
+                                    <input id="code" name="code" placeholder="" type="text" class="form-control" value="<?php echo set_value('code'); ?>" />
                                     <span class="text-danger"><?php echo form_error('code'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -50,17 +61,18 @@
                                 <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                             </div>
                         </form>
-                    </div>            
-                </div><!--/.col (right) -->
+                    </div>
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('store', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('store', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary" id="exphead">
                     <div class="box-header ptbnull">
@@ -69,7 +81,7 @@
                     <div class="box-body  ">
                         <div class="mailbox-messages ">
                             <div class="download_label"><?php echo $this->lang->line('item_store_list'); ?></div>
-                            <div class="table-responsive"> 
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover example">
                                     <thead>
                                         <tr>
@@ -80,30 +92,30 @@
                                     </thead>
                                     <tbody>
                                         <?php if (empty($itemstorelist)) {
-                                            ?>
+                                        ?>
 
                                             <?php
                                         } else {
                                             $count = 1;
                                             foreach ($itemstorelist as $store) {
-                                                ?>
-                                                <tr>   
+                                            ?>
+                                                <tr>
                                                     <td class="mailbox-name">
 
-                                                        <a href="#" data-toggle="popover" class="detail_popover" >
+                                                        <a href="#" data-toggle="popover" class="detail_popover">
                                                             <?php echo $store['item_store'] ?>
                                                         </a>
 
                                                         <div class="fee_detail_popover" style="display: none">
                                                             <?php
                                                             if ($store['description'] == "") {
-                                                                ?>
+                                                            ?>
                                                                 <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                                <?php
+                                                            <?php
                                                             } else {
-                                                                ?>
+                                                            ?>
                                                                 <p class="text text-info"><?php echo $store['description']; ?></p>
-                                                                <?php
+                                                            <?php
                                                             }
                                                             ?>
                                                         </div>
@@ -112,21 +124,22 @@
 
                                                         <?php echo $store['code'] ?>
 
-                                                    </td>                                       
+                                                    </td>
 
                                                     <td class="mailbox-date pull-right no-print">
                                                         <?php if ($this->rbac->hasPrivilege('store', 'can_edit')) { ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/itemstore/edit/<?php echo $store['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/itemstore/edit/<?php echo $store['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
-                                                        <?php } if ($this->rbac->hasPrivilege('store', 'can_delete')) { ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/itemstore/delete/<?php echo $store['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                        <?php }
+                                                        if ($this->rbac->hasPrivilege('store', 'can_delete')) { ?>
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/itemstore/delete/<?php echo $store['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                                 <i class="fa fa-remove"></i>
                                                             </a>
                                                         <?php } ?>
                                                     </td>
                                                 </tr>
-                                                <?php
+                                        <?php
                                             }
                                             $count++;
                                         }
@@ -134,33 +147,32 @@
 
                                     </tbody>
                                 </table><!-- /.table -->
-                            </div>  
+                            </div>
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
             </div>
 
 
-        </div>   <!-- /.row -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnreset").click(function () {
+    $(document).ready(function() {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
     });
-
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
@@ -171,12 +183,14 @@
     var base_url = '<?php echo base_url() ?>';
 
 
-    function Popup(data)
-    {
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -202,7 +216,7 @@
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
@@ -213,8 +227,7 @@
     }
 
 
-    $("#print_div").click(function () {
+    $("#print_div").click(function() {
         Popup($('#exphead').html());
     });
-
 </script>

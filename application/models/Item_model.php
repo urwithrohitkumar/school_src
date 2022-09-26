@@ -73,8 +73,13 @@ class Item_model extends MY_Model
         if ($id != null) {
             $query = $query . " where item.id =" . $id;
         }
-
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+            $query = $query . " where item.branch_id =" . $this->session->userdata['admin']['branch_id'];
+        }
+      
         $query = $this->db->query($query);
+
         if ($id != null) {
             return $query->row_array();
         }

@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Content_model extends MY_Model {
+class Content_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
@@ -16,7 +18,8 @@ class Content_model extends MY_Model {
      * @param int $id
      * @return mixed
      */
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select('contents.*,classes.class,sections.section,(select GROUP_CONCAT(role) FROM content_for WHERE content_id=contents.id) as role,class_sections.id as `aa`')->from('contents');
         $this->db->join('class_sections', 'contents.cls_sec_id = class_sections.id', 'left outer');
         $this->db->join('classes', 'class_sections.class_id = classes.id', 'left outer');
@@ -34,21 +37,29 @@ class Content_model extends MY_Model {
         }
     }
 
-    public function getContentByRole($id = null, $role = null) {
+    public function getContentByRole($id = null, $role = null)
+    {
         $inner_sql = "";
-     
-        if ($role == "student") {
-            $inner_sql = " WHERE (role='student' and created_by='" . $id . "' ) or (created_by=0 and role='" . $role . "')";
-        }elseif($role == "Teacher"){
-            $inner_sql = " WHERE (role='Teacher' and created_by='" . $id . "' ) or (created_by=0 and role='" . $role . "')";
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $inner_sql = " Where contents.branch_id = ". $this->session->userdata['admin']['branch_id']."";
         }
-        $query = "SELECT contents.*,(select GROUP_CONCAT(role) FROM content_for WHERE content_id=contents.id) as role,class_sections.id as `class_section_id`,classes.class,sections.section  FROM `content_for`  INNER JOIN contents on contents.id=content_for.content_id left JOIN class_sections on class_sections.id=contents.cls_sec_id left join classes on classes.id=class_sections.class_id LEFT JOIN sections on sections.id=class_sections.section_id" . $inner_sql . " GROUP by contents.id";
+        else{
+            $inner_sql = " Where 1";
+        }
 
+        if ($role == "student") {
+            $inner_sql = " AND (role='student' and created_by='" . $id . "' ) or (created_by=0 and role='" . $role . "')";
+        } elseif ($role == "Teacher") {
+            $inner_sql = " AND (role='Teacher' and created_by='" . $id . "' ) or (created_by=0 and role='" . $role . "')";
+        }
+        $query = "SELECT contents.*,(select GROUP_CONCAT(role) FROM content_for WHERE content_id=contents.id) as role,class_sections.id as `class_section_id`,classes.class,sections.section  FROM `content_for`  INNER JOIN contents on contents.id=content_for.content_id left JOIN class_sections on class_sections.id=contents.cls_sec_id left join classes on classes.id=class_sections.class_id LEFT JOIN sections on sections.id=class_sections.section_id" . $inner_sql . " GROUP by contents.id ";
+       
         $query = $this->db->query($query);
         return $query->result_array();
     }
 
-    public function getListByCategory($category) {
+    public function getListByCategory($category)
+    {
         $this->db->select('contents.*,classes.class')->from('contents');
         $this->db->join('classes', 'contents.class_id = classes.id', 'left outer');
         $this->db->where('contents.type', $category);
@@ -57,7 +68,8 @@ class Content_model extends MY_Model {
         return $query->result_array();
     }
 
-    public function getListByCategoryforUser($class_id, $section_id, $category = '') {
+    public function getListByCategoryforUser($class_id, $section_id, $category = '')
+    {
 
         if (empty($class_id)) {
 
@@ -73,7 +85,8 @@ class Content_model extends MY_Model {
         return $query->result_array();
     }
 
-    public function getListByforUser($class_id, $section_id) {
+    public function getListByforUser($class_id, $section_id)
+    {
 
         if (empty($class_id)) {
 
@@ -93,7 +106,8 @@ class Content_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -115,7 +129,8 @@ class Content_model extends MY_Model {
         }
     }
 
-    public function search_by_content_type($text) {
+    public function search_by_content_type($text)
+    {
         $this->db->select()->from('contents');
         $this->db->or_like('contents.content_type', $text);
         $query = $this->db->get();
@@ -128,7 +143,8 @@ class Content_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data, $content_role = array()) {
+    public function add($data, $content_role = array())
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -168,5 +184,4 @@ class Content_model extends MY_Model {
         }
         // return $insert_id;
     }
-
 }

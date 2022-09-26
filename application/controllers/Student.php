@@ -42,7 +42,7 @@ class Student extends Admin_Controller
         }
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'student/multiclass');
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['title']       = 'student fees';
         $data['title']       = 'student fees';
         $class               = $this->class_model->get();
@@ -102,7 +102,7 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
         $data['title'] = 'Students Age Report';
-        
+
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
@@ -143,6 +143,9 @@ class Student extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/student_report');
         $data['title']           = 'student fee';
         $data['title']           = 'student fee';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $genderList              = $this->customlib->getGender();
         $data['genderList']      = $genderList;
         $RTEstatusList           = $this->customlib->getRteStatus();
@@ -261,7 +264,7 @@ class Student extends Admin_Controller
 
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'student/create');
-        $data['all_branch']  = $this->branch_model->getBranch();       
+        $data['all_branch']  = $this->branch_model->getBranch();
         $genderList                 = $this->customlib->getGender();
         $data['genderList']         = $genderList;
         $data['sch_setting']        = $this->sch_setting_detail;
@@ -274,7 +277,7 @@ class Student extends Admin_Controller
         $data['studentlist']        = $student_result;
         $class                      = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']          = $class;
-        $userdata                   = $this->customlib->getUserData();        
+        $userdata                   = $this->customlib->getUserData();
         $category                   = $this->category_model->get();
         $data['categorylist']       = $category;
         $houses                     = $this->student_model->gethouselist();
@@ -285,7 +288,7 @@ class Student extends Admin_Controller
         $vehroute_result            = $this->vehroute_model->get();
         $data['vehroutelist']       = $vehroute_result;
         $custom_fields              = $this->customfield_model->getByBelong('students');
-       
+
         foreach ($custom_fields as $custom_fields_key => $custom_fields_value) {
             if ($custom_fields_value['validation']) {
                 $custom_fields_id   = $custom_fields_value['id'];
@@ -362,9 +365,9 @@ class Student extends Admin_Controller
                 $hostel_room_id = 0;
             }
             // 'bpl'               => $this->input->post('bpl'),
-            $data_insert = array(   
+            $data_insert = array(
                 'firstname'         => $this->input->post('firstname'),
-                'rte'               => $this->input->post('rte'),                
+                'rte'               => $this->input->post('rte'),
                 'state'             => $this->input->post('state'),
                 'city'              => $this->input->post('city'),
                 'pincode'           => $this->input->post('pincode'),
@@ -555,7 +558,7 @@ class Student extends Admin_Controller
                     'session_id'    => $session,
                     'fees_discount' => $fees_discount,
                 );
-                
+
                 $this->student_model->add_student_session($data_new);
                 // $user_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                 $user_password = '123456';
@@ -1612,7 +1615,7 @@ class Student extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'bulkdelete');
         $class                   = $this->class_model->get();
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['classlist']       = $class;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting']     = $this->sch_setting_detail;
@@ -1657,7 +1660,7 @@ class Student extends Admin_Controller
         $data['fields']          = $this->customfield_model->get_custom_fields('students', 1);
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
-        $data['all_branch']      = $this->branch_model->getBranch();       
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentSearch', $data);
         $this->load->view('layout/footer', $data);
@@ -1839,7 +1842,7 @@ class Student extends Admin_Controller
         $data["resultlist"]      = array();
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting']     = $this->sch_setting_detail;
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $userdata                = $this->customlib->getUserData();
         $carray                  = array();
         $reason_list             = array();
@@ -1867,10 +1870,10 @@ class Student extends Admin_Controller
                     } else {
                         $data['searchby']   = "filter";
                         $data['class_id']   = $this->input->post('class_id');
-                        $data['section_id'] = (!empty($this->input->post('section_id'))? $this->input->post('section_id'): '0');
+                        $data['section_id'] = (!empty($this->input->post('section_id')) ? $this->input->post('section_id') : '0');
                         $data['branch_id']  = $this->input->post('branch_id');
                         $data['search_text'] = $this->input->post('search_text');
-                        $resultlist          = $this->student_model->disablestudentByClassSection($branch_id, $class, $section);                        
+                        $resultlist          = $this->student_model->disablestudentByClassSection($branch_id, $class, $section);
                         $data['resultlist']  = $resultlist;
                         $title               = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
                         $data['title']       = 'Student Details for ' . $title['class'] . "(" . $title['section'] . ")";
@@ -1879,7 +1882,7 @@ class Student extends Admin_Controller
                     $data['searchby'] = "text";
                     $branch_id       = $this->session->admin['branch_id'];
                     $data['search_text'] = trim($this->input->post('search_text'));
-                    $resultlist          = $this->student_model->disablestudentFullText($branch_id,$search_text);
+                    $resultlist          = $this->student_model->disablestudentFullText($branch_id, $search_text);
 
                     $data['resultlist'] = $resultlist;
                     $data['title']      = 'Search Details: ' . $data['search_text'];
@@ -2195,8 +2198,8 @@ class Student extends Admin_Controller
     }
 
     public function dtstudentlist()
-    {   
-        
+    {
+
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $branch_id       = $this->input->post('branch_id');
         $class           = $this->input->post('class_id');
@@ -2214,10 +2217,10 @@ class Student extends Admin_Controller
 
         $sch_setting = $this->sch_setting_detail;
         if ($search_type == "search_filter") {
-            $resultlist = $this->student_model->searchdtByClassSection($branch_id,$class, $section);
+            $resultlist = $this->student_model->searchdtByClassSection($branch_id, $class, $section);
         } elseif ($search_type == "search_full") {
             $branch_id       = $this->session->admin['branch_id'];
-            $resultlist = $this->student_model->searchFullText($branch_id,$search_text, $carray);
+            $resultlist = $this->student_model->searchFullText($branch_id, $search_text, $carray);
         }
         $students = array();
         $students = json_decode($resultlist);
@@ -2289,7 +2292,7 @@ class Student extends Admin_Controller
 
     //datatable function to check search parameter validation
     public function searchvalidation()
-    {   
+    {
         $branch_id   = $this->input->post('branch_id');
         $class_id   = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
@@ -2301,7 +2304,7 @@ class Student extends Admin_Controller
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == true) {
 
-                $params = array('srch_type' => $srch_type,'branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id);
+                $params = array('srch_type' => $srch_type, 'branch_id' => $branch_id, 'class_id' => $class_id, 'section_id' => $section_id);
                 $array  = array('status' => 1, 'error' => '', 'params' => $params);
                 echo json_encode($array);
             } else {
@@ -2313,7 +2316,7 @@ class Student extends Admin_Controller
             }
         } else {
             $branch_id       = $this->session->admin['branch_id'];
-            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id,'search_text' => $search_text);
+            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id, 'search_text' => $search_text);
             $array  = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -2327,6 +2330,7 @@ class Student extends Admin_Controller
         $category_id = $this->input->post('category_id');
         $gender      = $this->input->post('gender');
         $rte         = $this->input->post('rte');
+        $branch_id         = $this->input->post('branch_id');
 
         $srch_type = $this->input->post('search_type');
 
@@ -2335,7 +2339,7 @@ class Student extends Admin_Controller
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == true) {
 
-                $params = array('srch_type' => $srch_type, 'class_id' => $class_id, 'section_id' => $section_id, 'category_id' => $category_id, 'gender' => $gender, 'rte' => $rte);
+                $params = array('srch_type' => $srch_type, 'class_id' => $class_id, 'section_id' => $section_id, 'category_id' => $category_id, 'gender' => $gender, 'rte' => $rte, 'branch_id' => $branch_id);
                 $array  = array('status' => 1, 'error' => '', 'params' => $params);
                 echo json_encode($array);
             } else {
@@ -2346,7 +2350,7 @@ class Student extends Admin_Controller
                 echo json_encode($array);
             }
         } else {
-            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id);
+            $params = array('srch_type' => 'search_full', 'class_id' => $class_id, 'section_id' => $section_id, 'branch_id' => $branch_id);
             $array  = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -2361,9 +2365,10 @@ class Student extends Admin_Controller
         $category_id     = $this->input->post('category_id');
         $gender          = $this->input->post('gender');
         $rte             = $this->input->post('rte');
+        $branch_id             = $this->input->post('branch_id');
         $sch_setting     = $this->sch_setting_detail;
 
-        $result     = $this->student_model->searchdatatableByClassSectionCategoryGenderRte($class, $section, $category_id, $gender, $rte);
+        $result     = $this->student_model->searchdatatableByClassSectionCategoryGenderRte($class, $section, $category_id, $gender, $rte ,$branch_id);
         $resultlist = json_decode($result);
         $dt_data    = array();
         if (!empty($resultlist->data)) {
@@ -2456,20 +2461,22 @@ class Student extends Admin_Controller
     /**
      * Downlod student age report pdf
      */
-    public function getStudentAgereportpdf(){
+    public function getStudentAgereportpdf()
+    {
         $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->library('pdf');
-        $html = $this->load->view('reports/studentAgeReportPdf',$data, true);
-        $this->pdf->createPDF($html, 'mypdf', false,'A4','landscape');
+        $html = $this->load->view('reports/studentAgeReportPdf', $data, true);
+        $this->pdf->createPDF($html, 'mypdf', false, 'A4', 'landscape');
         // $this->pdf->createPDF($html, 'mypdf', false);
     }
     /**
      * Downlod student age report pdf
      */
-    public function getStudentCatreportpdf(){
+    public function getStudentCatreportpdf()
+    {
         $data['students_list'] = $this->classsection_model->StudentCategoryReport();
         $this->load->library('pdf');
-        $html = $this->load->view('reports/studentcategoriesreportspdf',$data, true);
+        $html = $this->load->view('reports/studentcategoriesreportspdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false);
     }
 }
