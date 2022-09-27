@@ -293,7 +293,6 @@ class Report extends Admin_Controller
     {
 
         $this->load->view('reports/betweenDate');
-
     }
 
     public function class_subject()
@@ -304,11 +303,15 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/class_subject_report');
         $data['title']       = 'Add Fees Type';
         $data['searchlist']  = $this->search_type;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $class               = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']   = $class;
         $data['search_type'] = '';
         $data['class_id']    = $class_id    = $this->input->post('class_id');
         $data['section_id']  = $section_id  = $this->input->post('section_id');
+        $data['section_id']  = $branch_id  = $this->input->post('branch_id');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
@@ -316,7 +319,7 @@ class Report extends Admin_Controller
         } else {
             $data['section_list'] = $this->section_model->getClassBySection($this->input->post('class_id'));
 
-            $data['resultlist'] = $this->subjecttimetable_model->getSubjectByClassandSection($class_id, $section_id);
+            $data['resultlist'] = $this->subjecttimetable_model->getSubjectByClassandSection($class_id, $section_id, $branch_id);
 
             $subject = array();
             foreach ($data['resultlist'] as $value) {
@@ -329,7 +332,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('reports/class_subject', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function admission_report()
@@ -342,13 +344,15 @@ class Report extends Admin_Controller
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $searchterm              = '';
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/admission_report', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function sibling_report()
@@ -357,6 +361,9 @@ class Report extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/sibling_report');
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $data['title']           = 'Add Fees Type';
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
@@ -368,6 +375,7 @@ class Report extends Admin_Controller
 
         $data['class_id']     = $class_id     = $this->input->post('class_id');
         $data['section_id']   = $section_id   = $this->input->post('section_id');
+        $branch_id   = $this->input->post('branch_id');
         $data['section_list'] = $this->section_model->getClassBySection($this->input->post('class_id'));
 
         if (isset($_POST['class_id']) && $_POST['class_id'] != '') {
@@ -384,7 +392,7 @@ class Report extends Admin_Controller
         if ($this->form_validation->run() == false) {
             $data['resultlist'] = array();
         } else {
-            $data['sibling_list'] = $this->student_model->sibling_reportsearch($searchterm, $carray = null, $condition);
+            $data['sibling_list'] = $this->student_model->sibling_reportsearch($searchterm, $carray = null, $condition, $branch_id);
 
             $sibling_parent = array();
 
@@ -393,7 +401,7 @@ class Report extends Admin_Controller
                 $sibling_parent[] = $value['parent_id'];
             }
 
-            $data['resultlist'] = $this->student_model->sibling_report($searchterm, $carray = null);
+            $data['resultlist'] = $this->student_model->sibling_report($searchterm, $carray = null, $branch_id);
             $sibling            = array();
 
             foreach ($data['resultlist'] as $value) {
@@ -401,9 +409,7 @@ class Report extends Admin_Controller
                 if (in_array($value['parent_id'], $sibling_parent)) {
 
                     $sibling[$value['parent_id']][] = $value;
-
                 }
-
             }
             $data['resultlist'] = $sibling;
         }
@@ -411,7 +417,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('reports/sibling_report', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function onlinefees_report()
@@ -423,6 +428,10 @@ class Report extends Admin_Controller
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['group_by']   = $this->customlib->get_groupby();
 
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
+
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
@@ -432,7 +441,7 @@ class Report extends Admin_Controller
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
         }
-
+        $branch_id   = $this->input->post('branch_id');
         $collection = array();
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
@@ -441,11 +450,9 @@ class Report extends Admin_Controller
         if ($this->form_validation->run() == false) {
 
             $data['collectlist'] = array();
-
         } else {
 
-            $data['collectlist'] = $this->studentfeemaster_model->getOnlineFeeCollectionReport($start_date, $end_date);
-
+            $data['collectlist'] = $this->studentfeemaster_model->getOnlineFeeCollectionReport($start_date, $end_date, $branch_id);
         }
 
         $data['sch_setting'] = $this->sch_setting_detail;
@@ -475,7 +482,7 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/library/bookduereport');
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['sch_setting'] = $this->sch_setting_detail;
-		$data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
+        $data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
         $this->load->view('layout/header', $data);
         $this->load->view('reports/bookduereport', $data);
         $this->load->view('layout/footer', $data);
@@ -512,12 +519,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $start_date       = date('Y-m-d', strtotime($dates['from_date']));
@@ -571,7 +576,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header');
         $this->load->view('reports/library');
         $this->load->view('layout/footer');
-
     }
 
     public function inventory()
@@ -583,7 +587,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header');
         $this->load->view('reports/inventory');
         $this->load->view('layout/footer');
-
     }
 
     public function onlineexams()
@@ -598,7 +601,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexams', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function onlineexamsresult()
@@ -615,12 +617,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
@@ -635,17 +635,13 @@ class Report extends Admin_Controller
             if ($_POST['date_type'] == 'exam_from_date') {
 
                 $condition = " date_format(exam_from,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
             } elseif ($_POST['date_type'] == 'exam_to_date') {
 
                 $condition = " date_format(exam_to,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
             }
-
         } else {
 
             $condition = " date_format(created_at,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
         }
 
         $data['resultlist'] = $this->onlineexam_model->onlineexamReport($condition);
@@ -685,7 +681,6 @@ class Report extends Admin_Controller
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'required');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             if (isset($_POST['class_id']) && $_POST['class_id'] != '') {
                 $class_id = $_POST['class_id'];
@@ -714,7 +709,6 @@ class Report extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexamrank', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function inventorystock()
@@ -799,12 +793,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
@@ -890,6 +882,9 @@ class Report extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/finance');
         $this->session->set_userdata('subsub_menu', 'Reports/finance/income');
         $data['searchlist'] = $this->customlib->get_searchtype();
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header', $data);
         $this->load->view('reports/income', $data);
         $this->load->view('layout/footer', $data);
@@ -903,6 +898,9 @@ class Report extends Admin_Controller
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['date_type']   = $this->customlib->date_type();
         $data['date_typeid'] = '';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         $this->form_validation->set_rules('search_type', $this->lang->line('search') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
 
@@ -931,18 +929,21 @@ class Report extends Admin_Controller
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['date_type']   = $this->customlib->date_type();
         $data['date_typeid'] = '';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
+
+        $branch_id      = $this->input->post('branch_id');
 
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
@@ -950,7 +951,7 @@ class Report extends Admin_Controller
         $data['label']        = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
         $data['payment_mode'] = $this->payment_mode;
 
-        $result              = $this->payroll_model->getbetweenpayrollReport($start_date, $end_date);
+        $result              = $this->payroll_model->getbetweenpayrollReport($start_date, $end_date, $branch_id);
         $data['payrollList'] = $result;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/payroll', $data);
@@ -966,6 +967,9 @@ class Report extends Admin_Controller
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['date_type']   = $this->customlib->date_type();
         $data['date_typeid'] = '';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $data['headlist']    = $this->incomehead_model->get();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/incomegroup', $data);
@@ -982,6 +986,9 @@ class Report extends Admin_Controller
         $data['date_type']   = $this->customlib->date_type();
         $data['date_typeid'] = '';
         $data['headlist']    = $this->expensehead_model->get();
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->load->view('layout/header', $data);
         $this->load->view('reports/expensegroup', $data);
         $this->load->view('layout/footer', $data);
@@ -993,6 +1000,9 @@ class Report extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/student_profile');
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $data['title']           = 'Add Fees Type';
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
@@ -1002,6 +1012,7 @@ class Report extends Admin_Controller
         $data['classlist']       = $class;
         $data['class_id']        = $class_id        = $this->input->post('class_id');
         $data['section_id']      = $section_id      = $this->input->post('section_id');
+        $branch_id      = $this->input->post('branch_id');
         $condition               = "";
         $data['section_list']    = $this->section_model->getClassBySection($this->input->post('class_id'));
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
@@ -1029,7 +1040,7 @@ class Report extends Admin_Controller
         } else {
             $condition .= " and classes.id='" . $this->input->post('class_id') . "' and sections.id='" . $this->input->post('section_id') . "'";
 
-            $data['resultlist'] = $this->student_model->student_profile($condition);
+            $data['resultlist'] = $this->student_model->student_profile($condition, $branch_id);
         }
         $this->load->view('layout/header', $data);
         $this->load->view('reports/student_profile', $data);
@@ -1052,12 +1063,10 @@ class Report extends Admin_Controller
 
             $between_date        = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $search_type = $_POST['search_type'];
-
         } else {
 
             $between_date        = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = $search_type = '';
-
         }
 
         $from_date = date('Y-m-d', strtotime($between_date['from_date']));
@@ -1072,15 +1081,12 @@ class Report extends Admin_Controller
             if ($_POST['staff_status'] == 'both') {
 
                 $search_status = "1,2";
-
             } elseif ($_POST['staff_status'] == '2') {
 
                 $search_status = "0";
-
             } else {
 
                 $search_status = "1";
-
             }
             $condition .= " and `staff`.`is_active` in (" . $search_status . ")";
             $data['status_val'] = $_POST['staff_status'];
@@ -1139,12 +1145,10 @@ class Report extends Admin_Controller
 
             $between_date        = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $search_type = $_POST['search_type'];
-
         } else {
 
             $between_date        = $this->customlib->get_betweendate('this_week');
             $data['search_type'] = $search_type = 'this_week';
-
         }
 
         $from_date = date('Y-m-d', strtotime($between_date['from_date']));
@@ -1167,7 +1171,6 @@ class Report extends Admin_Controller
             }
 
             $current = strtotime('+1 day', $current);
-
         }
 
         $data['filter']          = date($this->customlib->getSchoolDateFormat(), strtotime($from_date)) . " To " . date($this->customlib->getSchoolDateFormat(), strtotime($to_date));
@@ -1179,13 +1182,11 @@ class Report extends Admin_Controller
             $this->load->view('layout/header', $data);
             $this->load->view('reports/stuattendance', $data);
             $this->load->view('layout/footer', $data);
-
         } else {
 
             $data['attendance_type_id'] = $attendance_type_id = $this->input->post('attendance_type');
             $condition .= " and `student_attendences`.`attendence_type_id`=" . $this->input->post('attendance_type');
             foreach ($dates as $key => $value) {
-
             }
 
             if ($data['class_id'] != '') {
@@ -1210,7 +1211,6 @@ class Report extends Admin_Controller
                 foreach ($att_value as $value) {
 
                     if (in_array($value['date'], $off_date)) {
-
                     } else {
                         if (in_array($value['date'], $dates)) {
                             //echo "Match found";
@@ -1218,12 +1218,10 @@ class Report extends Admin_Controller
                             $all_week = 0;
                         }
                     }
-
                 }
                 if ($all_week == 1) {
                     $fdata[] = $att_value[0];
                 }
-
             }
 
             $dates = " '" . $from_date . "' and '" . $to_date . "'";
@@ -1232,7 +1230,6 @@ class Report extends Admin_Controller
             $this->load->view('reports/stuattendance', $data);
             $this->load->view('layout/footer', $data);
         }
-
     }
 
     public function biometric_attlog($offset = 0)
@@ -1303,7 +1300,6 @@ class Report extends Admin_Controller
         $this->form_validation->set_rules('subject_group_id', $this->lang->line('subject'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
 
             $data['class_id']               = $_POST['class_id'];
@@ -1335,7 +1331,6 @@ class Report extends Admin_Controller
                         'total'      => $subject_details[0]->total,
                         'name'       => $value->name,
                     );
-
                 } else {
 
                     $data['subjects_data'][$value->id] = array(
@@ -1374,11 +1369,9 @@ class Report extends Admin_Controller
 
                     $show_status     = 1;
                     $lesson_result[] = array('name' => $syllabus_reportvalue['name'], 'topics' => $topic_data, 'incomplete_percent' => $incomplete_percent, 'complete_percent' => $complete_percent);
-
                 }
 
                 $data['subjects_data'][$value->id]['lesson_summary'] = $lesson_result;
-
             }
         }
 
@@ -1409,7 +1402,6 @@ class Report extends Admin_Controller
         $this->form_validation->set_rules('subject_id', $this->lang->line('subject'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             $lebel = "";
 
@@ -1445,7 +1437,6 @@ class Report extends Admin_Controller
                     'id'         => $subjectdata['id'] . '_' . $subjectdata['code'],
                 );
                 $data['subject_complete'] = round($complete);
-
             } else {
 
                 $data['subjects_data'][$subjectdata['id']] = array(
@@ -1462,10 +1453,8 @@ class Report extends Admin_Controller
             foreach ($teachers_report as $teachers_reportkey => $teachers_reportvalue) {
                 if ($teachers_reportvalue['code'] == '') {
                     $data['subject_name'] = $teachers_reportvalue['subject_name'];
-
                 } else {
                     $data['subject_name'] = $teachers_reportvalue['subject_name'] . " (" . $teachers_reportvalue['code'] . ")";
-
                 }
                 $syllabus_id       = explode(',', $teachers_reportvalue['subject_syllabus_id']);
                 $staff_periodsdata = array();
@@ -1473,7 +1462,6 @@ class Report extends Admin_Controller
 
                     $staff_periods       = $this->syllabus_model->get_subjectsyllabusbyid($syllabus_idvalue);
                     $staff_periodsdata[] = $staff_periods;
-
                 }
 
                 $teacher_summary[] = array(
@@ -1481,11 +1469,9 @@ class Report extends Admin_Controller
                     'total_periods'  => $teachers_reportvalue['total_priodes'],
                     'summary_report' => $staff_periodsdata,
                 );
-
             }
 
             $data['subjects_data'][$subjectdata['id']]['teachers_summary'] = $teacher_summary;
-
         }
 
         $this->load->view('layout/header', $data);
@@ -1542,7 +1528,6 @@ class Report extends Admin_Controller
                     $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'trim|required|xss_clean');
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
                     if ($this->form_validation->run() == false) {
-
                     } else {
                         $data['searchby']    = "filter";
                         $data['class_id']    = $this->input->post('class_id');
@@ -1550,7 +1535,6 @@ class Report extends Admin_Controller
                         $data['search_text'] = $this->input->post('search_text');
                         $resultlist          = $this->student_model->search_alumniStudentReport($class, $section, $session_id);
                         $data['resultlist']  = $resultlist;
-
                     }
                 } else if ($search == 'search_full') {
                     $data['searchby'] = "text";
@@ -1558,7 +1542,6 @@ class Report extends Admin_Controller
                     $data['search_text'] = trim($this->input->post('search_text'));
                     $resultlist          = $this->student_model->search_alumniStudentbyAdmissionNoReport($search_text, $carray);
                     $data['resultlist']  = $resultlist;
-
                 }
             }
 
@@ -1566,7 +1549,6 @@ class Report extends Admin_Controller
             $this->load->view('reports/alumnireport', $data);
             $this->load->view('layout/footer');
         }
-
     }
 
     public function boys_girls_ratio()
@@ -1648,7 +1630,6 @@ class Report extends Admin_Controller
     {
         if ($num2 > 0 && $num1 > 0) {
             $num = round($num2 / $num1, 2);
-
         } else {
             $num = 0;
         }
@@ -1660,7 +1641,6 @@ class Report extends Admin_Controller
             $by = 1;
             return "$by:$num";
         }
-
     }
 
     public function daily_attendance_report()
@@ -1690,10 +1670,8 @@ class Report extends Admin_Controller
                 $total_student = $total_present + $value->absent;
                 if ($total_present > 0) {
                     $presnt_percent = round(($total_present / $total_student) * 100);
-
                 } else {
                     $presnt_percent = 0;
-
                 }
                 if ($value->absent > 0) {
 
@@ -1719,13 +1697,11 @@ class Report extends Admin_Controller
                 $data['all_present_percent'] = "0%";
                 $data['all_absent_percent']  = "0%";
             }
-
         }
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/daily_attendance_report', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function getAvailQuantity($item_id)
@@ -1738,7 +1714,6 @@ class Report extends Admin_Controller
         } else {
             return 0;
         }
-
     }
 
     public function getinventorylist()
@@ -1787,6 +1762,7 @@ class Report extends Admin_Controller
             echo json_encode($array);
         } else {
             $search_type = $this->input->post('search_type');
+            $branch_id = $this->input->post('branch_id');
             $date_from   = "";
             $date_to     = "";
             if ($search_type == 'period') {
@@ -1795,7 +1771,7 @@ class Report extends Admin_Controller
                 $date_to   = $this->input->post('date_to');
             }
 
-            $params = array('search_type' => $search_type, 'date_from' => $date_from, 'date_to' => $date_to);
+            $params = array('search_type' => $search_type, 'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
             $array  = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -1803,6 +1779,7 @@ class Report extends Admin_Controller
 
     public function dtadmissionreport()
     {
+        $branch_id = $this->input->post('branch_id');
         $sch_setting = $this->sch_setting_detail;
         $searchterm  = '';
         $class       = $this->class_model->get();
@@ -1827,7 +1804,7 @@ class Report extends Admin_Controller
         $condition    = " date_format(admission_date,'%Y-%m-%d') between  '" . $from_date . "' and '" . $to_date . "'";
         $filter_label = date($this->customlib->getSchoolDateFormat(), strtotime($from_date)) . " To " . date($this->customlib->getSchoolDateFormat(), strtotime($to_date));
 
-        $result     = $this->student_model->admission_report($searchterm, $carray, $condition);
+        $result     = $this->student_model->admission_report($searchterm, $carray, $condition, $branch_id);
         $resultlist = json_decode($result);
         $dt_data    = array();
         if (!empty($resultlist->data)) {
@@ -1884,7 +1861,6 @@ class Report extends Admin_Controller
             $footer_row[] = "";
             $footer_row[] = "";
             $dt_data[]    = $footer_row;
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -1913,7 +1889,6 @@ class Report extends Admin_Controller
         $params = array('search_type' => $search_type, 'date_type' => $date_type, 'date_from' => $date_from, 'date_to' => $date_to);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
-
     }
 
     public function dtexamreportlist()
@@ -1929,12 +1904,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($search_type);
             $data['search_type'] = $search_type;
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
@@ -1951,7 +1924,6 @@ class Report extends Admin_Controller
             } elseif ($date_type == 'exam_to_date') {
                 $condition = " date_format(exam_to,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
             }
-
         } else {
             $condition = " date_format(created_at,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         }
@@ -1990,7 +1962,6 @@ class Report extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -2034,15 +2005,12 @@ class Report extends Admin_Controller
             if ($search_type == 'exam_from_date') {
 
                 $condition .= " and date_format(onlineexam.exam_from,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
             } elseif ($date_type == 'exam_to_date') {
                 $condition .= " and date_format(onlineexam.exam_to,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
             }
-
         } else {
 
             $condition .= " and  date_format(onlineexam.created_at,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-
         }
 
         $result      = $this->onlineexam_model->onlineexamatteptreport($condition);
@@ -2104,7 +2072,6 @@ class Report extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -2133,7 +2100,6 @@ class Report extends Admin_Controller
         $params = array('search_type' => $search_type, 'members_type' => $members_type, 'date_from' => $date_from, 'date_to' => $date_to);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
-
     }
 
     /* function to get book issue report by using datatable */
@@ -2150,12 +2116,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $data['members'] = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
@@ -2194,7 +2158,6 @@ class Report extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -2217,22 +2180,18 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         if (isset($_POST['members_type']) && $_POST['members_type'] != '') {
 
             $data['member_id'] = $_POST['members_type'];
-
         } else {
 
             $data['member_id'] = '';
-
         }
 
         $data['members'] = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
@@ -2270,7 +2229,6 @@ class Report extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -2293,12 +2251,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
@@ -2349,7 +2305,6 @@ class Report extends Admin_Controller
                 $row[]     = $editbtn . " " . $deletebtn;
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -2433,7 +2388,6 @@ class Report extends Admin_Controller
             "data"            => $dt_data,
         );
         echo json_encode($json_data);
-
     }
 
     public function getexpenselistbydt()
@@ -2441,6 +2395,7 @@ class Report extends Admin_Controller
         $search_type = $this->input->post('search_type');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
+        $branch_id     = $this->input->post('branch_id');
 
         if ($search_type == "") {
             $dates               = $this->customlib->get_betweendate('this_year');
@@ -2454,7 +2409,7 @@ class Report extends Admin_Controller
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
 
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $expenseList   = $this->expense_model->search($start_date, $end_date,"");
+        $expenseList   = $this->expense_model->search($start_date, $end_date, "", $branch_id);
 
         $m               = json_decode($expenseList);
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
@@ -2495,6 +2450,7 @@ class Report extends Admin_Controller
 
         $search_type = $this->input->post('search_type');
         $head        = $this->input->post('head');
+        $branch_id        = $this->input->post('branch_id');
 
         $date_from = "";
         $date_to   = "";
@@ -2504,7 +2460,7 @@ class Report extends Admin_Controller
             $date_to   = $this->input->post('date_to');
         }
 
-        $params = array('search_type' => $search_type, 'head' => $head, 'date_from' => $date_from, 'date_to' => $date_to);
+        $params = array('search_type' => $search_type, 'head' => $head, 'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
     }
@@ -2514,6 +2470,7 @@ class Report extends Admin_Controller
     public function dtincomegroupreport()
     {
         $search_type = $this->input->post('search_type');
+        $branch_id = $this->input->post('branch_id');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
         $head        = $this->input->post('head');
@@ -2522,12 +2479,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($search_type);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
         $data['head_id'] = $head_id = "";
         if (isset($_POST['head']) && $_POST['head'] != '') {
@@ -2538,7 +2493,7 @@ class Report extends Admin_Controller
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
 
         $data['label']   = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $incomeList      = $this->income_model->searchincomegroup($start_date, $end_date, $head_id);
+        $incomeList      = $this->income_model->searchincomegroup($start_date, $end_date, $head_id, $branch_id);
         $m               = json_decode($incomeList);
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $dt_data         = array();
@@ -2612,6 +2567,8 @@ class Report extends Admin_Controller
 
     public function dtexpensegroupreport()
     {
+
+        $branch_id = $this->input->post('branch_id');
         $search_type = $this->input->post('search_type');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
@@ -2624,12 +2581,10 @@ class Report extends Admin_Controller
 
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
-
         } else {
 
             $dates               = $this->customlib->get_betweendate('this_year');
             $data['search_type'] = '';
-
         }
 
         $data['head_id'] = $head_id = "";
@@ -2641,7 +2596,7 @@ class Report extends Admin_Controller
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
 
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $result        = $this->expensehead_model->searchexpensegroup($start_date, $end_date, $head_id);
+        $result        = $this->expensehead_model->searchexpensegroup($start_date, $end_date, $head_id, $branch_id);
 
         $m               = json_decode($result);
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
@@ -2721,6 +2676,9 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/finance/onlineadmission');
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['group_by']   = $this->customlib->get_groupby();
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
 
@@ -2732,6 +2690,7 @@ class Report extends Admin_Controller
             $data['search_type'] = '';
         }
 
+        $branch_id = $this->input->post('branch_id');
         $collection = array();
         $start_date = date('Y-m-d', strtotime($dates['from_date']));
         $end_date   = date('Y-m-d', strtotime($dates['to_date']));
@@ -2740,12 +2699,10 @@ class Report extends Admin_Controller
         if ($this->form_validation->run() == false) {
 
             $data['collectlist'] = array();
-
         } else {
 
-            $data['collectlist'] = $this->onlinestudent_model->getOnlineAdmissionFeeCollectionReport($start_date, $end_date);
-
-        } 
+            $data['collectlist'] = $this->onlinestudent_model->getOnlineAdmissionFeeCollectionReport($start_date, $end_date,$branch_id);
+        }
         $data['sch_setting'] = $this->sch_setting_detail;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineadmission', $data);

@@ -1,11 +1,12 @@
 <?php
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
- 
+
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?> <small> <?php echo $this->lang->line('filter_by_name1'); ?></small></h1>
+            <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?> <small> <?php echo $this->lang->line('filter_by_name1'); ?></small>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -17,20 +18,32 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                    <form action="<?php echo site_url('admin/transaction/studentacademicreport') ?>"  method="post" accept-charset="utf-8">
+                    <form action="<?php echo site_url('admin/transaction/studentacademicreport') ?>" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?><small class="req"> *</small></label>
-                                        <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($classlist as $class) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) echo "selected=selected" ?>><?php echo $class['class'] ?></option>
-                                                <?php
+                                            <?php
                                                 $count++;
                                             }
                                             ?>
@@ -38,22 +51,22 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?><small class="req"> *</small></label>
-                                        <select  id="section_id" name="section_id" class="form-control" >
+                                        <select id="section_id" name="section_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($section_list as $value) {
-                                                ?>
-                                                <option  <?php
-                                                if ($value['section_id'] == $section_id) {
-                                                    echo "selected";
-                                                }
-                                                ?> value="<?php echo $value['section_id']; ?>"><?php echo $value['section']; ?></option>
-                                                    <?php
-                                                }
-                                                ?>
+                                            ?>
+                                                <option <?php
+                                                        if ($value['section_id'] == $section_id) {
+                                                            echo "selected";
+                                                        }
+                                                        ?> value="<?php echo $value['section_id']; ?>"><?php echo $value['section']; ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
@@ -62,7 +75,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-footer">
 
-                            <button type="submit" class="btn btn-primary btn-sm pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>   </div>
+                            <button type="submit" class="btn btn-primary btn-sm pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
+                        </div>
                     </form>
 
 
@@ -70,18 +84,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                         <?php
                         if (isset($student_due_fee) && !empty($student_due_fee)) {
-                            ?>
+                        ?>
 
                             <div class="" id="transfee">
                                 <div class="box-header ptbnull">
                                     <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('balance_fees_report'); ?></h3>
-                                </div>                              
+                                </div>
                                 <div class="box-body table-responsive">
                                     <div class="download_label"><?php
-                            echo $this->lang->line('balance_fees_report') . "<br>";
-                            $this->customlib->get_postmessage();
-                            ?></div> 
-                                    <a class="btn btn-default btn-xs pull-right" id="print" onclick="printDiv()" ><i class="fa fa-print"></i></a> <button class="btn btn-default btn-xs pull-right" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </button>  
+                                                                echo $this->lang->line('balance_fees_report') . "<br>";
+                                                                $this->customlib->get_postmessage();
+                                                                ?></div>
+                                    <a class="btn btn-default btn-xs pull-right" id="print" onclick="printDiv()"><i class="fa fa-print"></i></a> <button class="btn btn-default btn-xs pull-right" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </button>
                                     <table class="table table-striped table-hover" id="headerTable">
                                         <thead>
                                             <tr>
@@ -92,7 +106,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <th class="text text-left"><?php echo $this->lang->line('admission_no'); ?></th>
                                                 <?php if ($sch_setting->roll_no) { ?>
                                                     <th class="text text-left"><?php echo $this->lang->line('roll_no'); ?></th>
-                                                <?php } if ($sch_setting->father_name) { ?>
+                                                <?php }
+                                                if ($sch_setting->father_name) { ?>
                                                     <th class="text text-left"><?php echo $this->lang->line('father_name'); ?></th>
                                                 <?php } ?>
                                                 <th class="text-right"><?php echo $this->lang->line('total_fees'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
@@ -103,8 +118,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                                 <th class="text-right"><?php echo $this->lang->line('balance'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
                                             </tr>
-                                        </thead>  
-                                        <tbody> 
+                                        </thead>
+                                        <tbody>
                                             <?php
                                             if (!empty($resultarray)) {
                                                 $grand_total = array();
@@ -147,49 +162,95 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         }
 
                                                         if (!empty($balancelabel)) {
-                                                            ?>
+                                            ?>
                                                             <tr>
                                                                 <td><?php echo $class; ?></td>
                                                                 <td><?php echo $section['section_name']; ?></td>
-                                                                <td><table><?php foreach ($name as $detail) { ?>
-                                                                            <tr><td class="text-left-md"><?php echo $detail; ?></td><tr>
+                                                                <td>
+                                                                    <table><?php foreach ($name as $detail) { ?>
+                                                                            <tr>
+                                                                                <td class="text-left-md"><?php echo $detail; ?></td>
+                                                                            <tr>
                                                                             <?php }
-                                                                            ?></table></td>
-                                                                <td><table><?php foreach ($admission_no as $admission_detail) { ?>
-                                                                            <tr><td class="text-left-md"><?php echo $admission_detail; ?></td><tr>
-                    <?php }
-                    ?></table></td>
-                                                                            <?php if ($sch_setting->roll_no) { ?>
-                                                                    <td><table><?php foreach ($roll_no as $roll_no_detail) { ?>
-                                                                                <tr><td><?php echo $roll_no_detail; ?></td><tr>
-                        <?php }
-                        ?></table></td>
-                                                                            <?php } if ($sch_setting->father_name) { ?>
-                                                                    <td><table><?php foreach ($father_name as $father_name_detail) { ?>
-                                                                                <tr><td class="text-left-md"><?php echo $father_name_detail; ?></td><tr>
-                        <?php }
-                        ?></table></td>
-                                                                            <?php } ?>
-                                                                <td class="text-right"><table width="100%"><?php foreach ($totalfeelabel as $totalfeelabel_detail) { ?>
-                                                                            <tr ><td ><?php echo $totalfeelabel_detail; ?></td><tr>
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <td>
+                                                                    <table><?php foreach ($admission_no as $admission_detail) { ?>
+                                                                            <tr>
+                                                                                <td class="text-left-md"><?php echo $admission_detail; ?></td>
+                                                                            <tr>
                                                                             <?php }
-                                                                            ?></table></td>
-                                                                <td class="text-right"><table width="100%"><?php foreach ($depositfeelabel as $depositfeelabel_detail) { ?>
-                                                                            <tr><td ><?php echo $depositfeelabel_detail; ?></td><tr>
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <?php if ($sch_setting->roll_no) { ?>
+                                                                    <td>
+                                                                        <table><?php foreach ($roll_no as $roll_no_detail) { ?>
+                                                                                <tr>
+                                                                                    <td><?php echo $roll_no_detail; ?></td>
+                                                                                <tr>
+                                                                                <?php }
+                                                                                ?>
+                                                                        </table>
+                                                                    </td>
+                                                                <?php }
+                                                                if ($sch_setting->father_name) { ?>
+                                                                    <td>
+                                                                        <table><?php foreach ($father_name as $father_name_detail) { ?>
+                                                                                <tr>
+                                                                                    <td class="text-left-md"><?php echo $father_name_detail; ?></td>
+                                                                                <tr>
+                                                                                <?php }
+                                                                                ?>
+                                                                        </table>
+                                                                    </td>
+                                                                <?php } ?>
+                                                                <td class="text-right">
+                                                                    <table width="100%"><?php foreach ($totalfeelabel as $totalfeelabel_detail) { ?>
+                                                                            <tr>
+                                                                                <td><?php echo $totalfeelabel_detail; ?></td>
+                                                                            <tr>
                                                                             <?php }
-                                                                            ?></table></td>
-                                                                <td class="text-right"><table width="100%"><?php foreach ($discountlabel as $discountlabel_detail) { ?>
-                                                                            <tr><td ><?php echo $discountlabel_detail; ?></td><tr>
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <table width="100%"><?php foreach ($depositfeelabel as $depositfeelabel_detail) { ?>
+                                                                            <tr>
+                                                                                <td><?php echo $depositfeelabel_detail; ?></td>
+                                                                            <tr>
                                                                             <?php }
-                                                                            ?></table></td>
-                                                                <td class="text-right"><table width="100%"><?php foreach ($finelabel as $finelabel_detail) { ?>
-                                                                            <tr><td><?php echo $finelabel_detail; ?></td><tr>
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <table width="100%"><?php foreach ($discountlabel as $discountlabel_detail) { ?>
+                                                                            <tr>
+                                                                                <td><?php echo $discountlabel_detail; ?></td>
+                                                                            <tr>
                                                                             <?php }
-                                                                            ?></table></td>
-                                                                <td class="text-right"><table width="100%"><?php foreach ($balancelabel as $balancelabel_detail) { ?>
-                                                                            <tr><td ><?php echo $balancelabel_detail; ?></td><tr>
-                    <?php }
-                    ?></table></td>
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <table width="100%"><?php foreach ($finelabel as $finelabel_detail) { ?>
+                                                                            <tr>
+                                                                                <td><?php echo $finelabel_detail; ?></td>
+                                                                            <tr>
+                                                                            <?php }
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <table width="100%"><?php foreach ($balancelabel as $balancelabel_detail) { ?>
+                                                                            <tr>
+                                                                                <td><?php echo $balancelabel_detail; ?></td>
+                                                                            <tr>
+                                                                            <?php }
+                                                                            ?>
+                                                                    </table>
+                                                                </td>
                                                             </tr>
                                                             <tr class="box box-solid total-bg">
                                                                 <td></td>
@@ -198,9 +259,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                                                 <?php if ($sch_setting->roll_no) { ?>
                                                                     <td></td>
-                    <?php } if ($sch_setting->father_name) { ?>
+                                                                <?php }
+                                                                if ($sch_setting->father_name) { ?>
                                                                     <td></td>
-                    <?php } ?>
+                                                                <?php } ?>
                                                                 <td><?php echo $this->lang->line('total'); ?></td>
                                                                 <td class="text-right"><?php echo array_sum($totalfeelabel); ?></td>
                                                                 <td class="text-right"><?php echo array_sum($depositfeelabel); ?></td>
@@ -208,7 +270,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                                 <td class="text-right"><?php echo array_sum($finelabel); ?></td>
                                                                 <td class="text-right"><?php echo array_sum($balancelabel); ?></td>
                                                             </tr>
-                                                            <?php
+                                                    <?php
                                                             $class = '';
                                                             $grand_total[] = array_sum($totalfeelabel);
                                                             $grand_depositfee[] = array_sum($depositfeelabel);
@@ -219,16 +281,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     }
                                                     ?>
 
-            <?php ?>
+                                                    <?php ?>
                                                     <tr class="box box-solid total-bg">
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <?php if ($sch_setting->roll_no) { ?>
                                                             <td></td>
-                                                        <?php } if ($sch_setting->father_name) { ?>
+                                                        <?php }
+                                                        if ($sch_setting->father_name) { ?>
                                                             <td></td>
-            <?php } ?>
+                                                        <?php } ?>
                                                         <td><?php echo $this->lang->line('grand_total'); ?></td>
                                                         <td class="text-right"><?php echo array_sum($grand_total); ?></td>
                                                         <td class="text-right"><?php echo array_sum($grand_depositfee); ?></td>
@@ -236,17 +299,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         <td class="text-right"><?php echo array_sum($grand_fine); ?></td>
                                                         <td class="text-right"><?php echo array_sum($grand_balance); ?></td>
                                                     </tr>
-        <?php } ?>
-                                            </tbody> 
-                                        </table>
-                                    </div>                            
-                                </div>                 
+                                                <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                    </div>
 
-                            <?php
-                        }
-                    } 
-?>
+            <?php
+                                            }
+                                        }
+            ?>
 
 
 
@@ -259,6 +322,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     function removeElement() {
         document.getElementById("imgbox1").style.display = "block";
     }
+
     function getSectionByClass(class_id, section_id) {
         if (class_id != "" && section_id != "") {
             $('#section_id').html("");
@@ -267,11 +331,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -283,8 +348,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             });
         }
     }
-    $(document).ready(function () {
-        $(document).on('change', '#class_id', function (e) {
+    $(document).ready(function() {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             var base_url = '<?php echo base_url() ?>';
@@ -292,11 +357,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                     });
 
@@ -304,13 +370,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 }
             });
         });
-        $(document).on('change', '#section_id', function (e) {
+        $(document).on('change', '#section_id', function(e) {
             getStudentsByClassAndSection();
         });
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
         getSectionByClass(class_id, section_id);
     });
+
     function getStudentsByClassAndSection() {
         $('#student_id').html("");
         var class_id = $('#class_id').val();
@@ -320,11 +387,13 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $.ajax({
             type: "GET",
             url: base_url + "student/getByClassAndSection",
-            data: {'class_id': class_id, 'section_id': section_id},
+            data: {
+                'class_id': class_id,
+                'section_id': section_id
+            },
             dataType: "json",
-            success: function (data) {
-                $.each(data, function (i, obj)
-                {
+            success: function(data) {
+                $.each(data, function(i, obj) {
                     div_data += "<option value=" + obj.id + ">" + obj.firstname + " " + obj.lastname + "</option>";
                 });
                 $('#student_id').append(div_data);
@@ -332,11 +401,11 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         });
     }
 
-    $(document).ready(function () {
-        $("ul.type_dropdown input[type=checkbox]").each(function () {
-            $(this).change(function () {
+    $(document).ready(function() {
+        $("ul.type_dropdown input[type=checkbox]").each(function() {
+            $(this).change(function() {
                 var line = "";
-                $("ul.type_dropdown input[type=checkbox]").each(function () {
+                $("ul.type_dropdown input[type=checkbox]").each(function() {
                     if ($(this).is(":checked")) {
                         line += $("+ span", this).text() + ";";
                     }
@@ -345,7 +414,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             });
         });
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $.extend($.fn.dataTable.defaults, {
             ordering: false,
             paging: false,
@@ -355,7 +424,6 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 </script>
 <script>
-
     document.getElementById("print").style.display = "block";
     document.getElementById("btnExport").style.display = "block";
 
@@ -365,47 +433,43 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         var divElements = document.getElementById('transfee').innerHTML;
         var oldPage = document.body.innerHTML;
         document.body.innerHTML =
-                "<html><head><title></title></head><body>" +
-                divElements + "</body>";
+            "<html><head><title></title></head><body>" +
+            divElements + "</body>";
         window.print();
         document.body.innerHTML = oldPage;
 
         location.reload(true);
     }
 
-    function fnExcelReport()
-    {
+    function fnExcelReport() {
         var tab_text = "<table border='2px'><tr >";
         var textRange;
         var j = 0;
         tab = document.getElementById('headerTable'); // id of table
 
-        for (j = 0; j < tab.rows.length; j++)
-        {
+        for (j = 0; j < tab.rows.length; j++) {
             tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
             //tab_text=tab_text+"</tr>";
         }
 
         tab_text = tab_text + "</table>";
-        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
         tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
         tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
 
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
         {
             txtArea1.document.open("txt/html", "replace");
             txtArea1.document.write(tab_text);
             txtArea1.document.close();
             txtArea1.focus();
             sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-        } else                 //other browser not tested on IE 11
+        } else //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
         return (sa);
     }
 </script>
-
-

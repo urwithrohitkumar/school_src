@@ -121,13 +121,14 @@ class Expensehead_model extends MY_Model {
         }
     }
 
-    public function searchexpensegroup($start_date, $end_date, $head_id = null) {
+    public function searchexpensegroup($start_date, $end_date, $head_id = null,$branch_id) {
         
         $this->datatables
             ->select('GROUP_CONCAT(expenses.id,"@",expenses.date,"@",expenses.name,"@",expenses.invoice_no,"@",expenses.amount) as expense, expense_head.exp_category,expenses.exp_head_id,sum(expenses.amount) as total_amount')
             ->searchable('expense_head.exp_category,expenses.id,expenses.name,expenses.date,expenses.invoice_no,expenses.amount')
             ->orderable('expense_head.exp_category,expenses.id,expenses.name,expenses.date,expenses.invoice_no')
             ->join('expense_head', 'expenses.exp_head_id = expense_head.id')
+            ->where('expenses.branch_id =', $branch_id)
             ->where('expenses.date >=', $start_date)
             ->where('expenses.date <=', $end_date)
             ->from('expenses');

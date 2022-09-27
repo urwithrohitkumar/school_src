@@ -95,7 +95,19 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                 <?php echo $this->customlib->getCSRF(); ?>
 
-                                <div class="col-sm-6 col-md-6">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('class'); ?><small class="req" > *</small></label>
                                         <select autofocus="" id="class_id" name="class_id" class="form-control" >
@@ -112,7 +124,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                       <span class="text-danger" id="error_class_id"></span>
                                     </div>
                                 </div> 
-                                <div class="col-sm-6 col-md-6">
+                                <div class="col-sm-4 col-md-4">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('section'); ?><small class="req" > *</small></label>
                                         <select autofocus="" id="section_id" name="section_id" class="form-control" >

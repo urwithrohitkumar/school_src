@@ -231,7 +231,7 @@ class Classsection_model extends MY_Model
             DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),students.dob)), '%Y')+0 AS Age
          FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id;";
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $query = $query . " where item.branch_id =" . $this->session->userdata['admin']['branch_id'];
+            $query = $query . " where student_session.branch_id =" . $this->session->userdata['admin']['branch_id'];
         }
 
         $query = $this->db->query($query);
@@ -1883,6 +1883,9 @@ class Classsection_model extends MY_Model
         LEFT JOIN categories on categories.id=students.category_id
         LEFT JOIN religion on religion.id=students.religion
         LEFT JOIN aadhar_card on aadhar_card.student_id=student_session.student_id";
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $query = $query . " where student_session.branch_id =" . $this->session->userdata['admin']['branch_id'];
+        }
         $query = $this->db->query($query);
         $res = $this->prepareCategoryReport($query->result());
 

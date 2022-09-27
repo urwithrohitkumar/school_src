@@ -6,65 +6,77 @@
     <!-- Main content -->
     <section class="content">
         <?php
-$this->load->view('reports/_studentinformation');
-?>
+        $this->load->view('reports/_studentinformation');
+        ?>
         <div class="box removeboxmius">
             <div class="box-header ptbnull"></div>
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
 
             </div>
-            <form  class="assign_teacher_form" action="<?php echo base_url(); ?>homework/evaluation_report" method="post" enctype="multipart/form-data">
+            <form class="assign_teacher_form" action="<?php echo base_url(); ?>homework/evaluation_report" method="post" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <?php if ($this->session->flashdata('msg')) {?>
+                            <?php if ($this->session->flashdata('msg')) { ?>
                                 <?php echo $this->session->flashdata('msg') ?>
-                            <?php }?>
+                            <?php } ?>
                             <?php echo $this->customlib->getCSRF(); ?>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-3">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                    <?php foreach ($branch as $key => $value) {  ?>
+                                        <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-lg-2 col-sm-3">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?><small class="req"> *</small></label>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')"  class="form-control" >
+                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                     <?php
-foreach ($classlist as $class) {
-    ?>
+                                    foreach ($classlist as $class) {
+                                    ?>
                                         <option <?php
-if ($class_id == $class["id"]) {
-        echo "selected";
-    }
-    ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                            <?php
-}
-?>
+                                                if ($class_id == $class["id"]) {
+                                                    echo "selected";
+                                                }
+                                                ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-3">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?><small class="req"> *</small></label>
-                                <select  id="secid" name="section_id" class="form-control" >
+                                <select id="secid" name="section_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"><?php echo form_error('section_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-3">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?><small class="req"> *</small></label>
-                                <select  id="subject_group_id" name="subject_group_id" class="form-control" >
+                                <select id="subject_group_id" name="subject_group_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"><?php echo form_error('subject_group_id'); ?></span>
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-6">
+                        <div class="col-md-2 col-lg-2 col-sm-3">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject'); ?><small class="req"> *</small></label>
-                                <select  id="subid" name="subject_id" class="form-control" >
+                                <select id="subid" name="subject_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="section_id_error text-danger"><?php echo form_error('subject_id'); ?></span>
@@ -84,8 +96,8 @@ if ($class_id == $class["id"]) {
                 </div>
                 <div class="box-body table-responsive">
                     <div class="download_label"> <?php echo $this->lang->line('evaluation_report') . "<br>";
-$this->customlib->get_postmessage();
-?></div>
+                                                    $this->customlib->get_postmessage();
+                                                    ?></div>
                     <table class="table table-striped table-bordered table-hover example" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -98,37 +110,38 @@ $this->customlib->get_postmessage();
                         </thead>
                         <tbody>
                             <?php
-if (!empty($resultlist)) {
+                            if (!empty($resultlist)) {
 
-    foreach ($resultlist as $key => $homework) {
-        ?>
+                                foreach ($resultlist as $key => $homework) {
+                            ?>
                                     <tr>
                                         <td><?php echo $homework["subject_name"]; ?></td>
                                         <td><?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homework['homework_date'])); ?></td>
                                         <td><?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($homework['submit_date'])); ?></td>
 
                                         <td><?php
-if (!empty($report[$homework['id']])) {
-            echo $report[$homework['id']]['completed'] . "/" . ($report[$homework['id']]["total"] - $report[$homework['id']]["completed"]);
-        }
-        ?></td>
+                                            if (!empty($report[$homework['id']])) {
+                                                echo $report[$homework['id']]['completed'] . "/" . ($report[$homework['id']]["total"] - $report[$homework['id']]["completed"]);
+                                            }
+                                            ?></td>
                                         <td><?php
-if (!empty($report[$homework['id']])) {
-            echo $report[$homework['id']]["percentage"];
-        }
-        ?></td>
+                                            if (!empty($report[$homework['id']])) {
+                                                echo $report[$homework['id']]["percentage"];
+                                            }
+                                            ?></td>
 
 
                                     </tr>
-        <?php
-}
-}
-?>
+                            <?php
+                                }
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div><!--./box box-primary-->
+        </div>
+        <!--./box box-primary-->
     </section>
 </div>
 
@@ -145,7 +158,7 @@ if (!empty($report[$homework['id']])) {
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy']) ?>';
         $('#homework_date,#submit_date,#homeworkdate,#submitdate').datepicker({
@@ -157,17 +170,14 @@ if (!empty($report[$homework['id']])) {
 
 
     });
-
-
 </script>
 <script>
 
 </script>
 <script type="text/javascript">
-
     var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'MM', 'Y' => 'yyyy']) ?>';
 
-    $(document).ready(function (e) {
+    $(document).ready(function(e) {
 
         getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
 
@@ -175,20 +185,8 @@ if (!empty($report[$homework['id']])) {
         getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
 
     });
-
-
-
-
-
-
-
-
-
-
-
 </script>
 <script type="text/javascript">
-
     var save_method; //for save method string
     var update_id; //for save method string
 
@@ -200,14 +198,15 @@ if (!empty($report[$homework['id']])) {
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#' + select_control).addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -216,7 +215,7 @@ if (!empty($report[$homework['id']])) {
                     });
                     $('#' + select_control).append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + select_control).removeClass('dropdownloading');
                 }
             });
@@ -227,7 +226,7 @@ if (!empty($report[$homework['id']])) {
 
 
 
-    $(document).on('change', '#secid', function () {
+    $(document).on('change', '#secid', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $(this).val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
@@ -235,7 +234,7 @@ if (!empty($report[$homework['id']])) {
 
 
 
-    $(document).on('change', '#subject_group_id', function () {
+    $(document).on('change', '#subject_group_id', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $('#secid').val();
         var subject_group_id = $(this).val();
@@ -256,16 +255,18 @@ if (!empty($report[$homework['id']])) {
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupByClassandSection',
-                data: {'class_id': class_id, 'section_id': section_id},
+                data: {
+                    'class_id': class_id,
+                    'section_id': section_id
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_group_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
 
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subjectgroup_id == obj.subject_group_id) {
                             sel = "selected";
@@ -274,11 +275,11 @@ if (!empty($report[$homework['id']])) {
                     });
                     $('#' + subject_group_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_group_target).removeClass('dropdownloading');
                 }
             });
@@ -294,16 +295,17 @@ if (!empty($report[$homework['id']])) {
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupsubjects',
-                data: {'subject_group_id': subject_group_id},
+                data: {
+                    'subject_group_id': subject_group_id
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
                     console.log(data);
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subject_group_subject_id == obj.id) {
                             sel = "selected";
@@ -312,17 +314,14 @@ if (!empty($report[$homework['id']])) {
                     });
                     $('#' + subject_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_target).removeClass('dropdownloading');
                 }
             });
         }
     }
-
-
-
 </script>

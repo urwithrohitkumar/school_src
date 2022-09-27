@@ -77,6 +77,9 @@ class Users extends Admin_Controller
         $userdata                = $this->customlib->getUserData();
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $carray                  = array();
 
         if (!empty($data["classlist"])) {
@@ -98,13 +101,17 @@ class Users extends Admin_Controller
         if (!$this->rbac->hasPrivilege('student_login_credential_report', 'can_view')) {
             access_denied();
         }
+
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/student_login_credential');
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
-        
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
+
         $this->load->view("layout/header");
         $this->load->view("admin/users/logindetailreport", $data);
         $this->load->view("layout/footer");
@@ -115,77 +122,78 @@ class Users extends Admin_Controller
     {
         $class_id       = $this->input->post('class_id');
         $year     = $this->input->post('year');
+        $branch_id     = $this->input->post('branch_id');
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
-        if ($this->form_validation->run() == false) { 
+        if ($this->form_validation->run() == false) {
             $error = array();
-            
+
             $error['class_id'] = form_error('class_id');
             $array = array('status' => 0, 'error' => $error);
             echo json_encode($array);
         } else {
 
-            $params      = array('class_id' => $class_id, 'year' => $year,  );
+            $params      = array('class_id' => $class_id, 'year' => $year, 'branch_id' => $branch_id,);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
     }
 
-     public function dtadmissionreportlist()
+    public function dtadmissionreportlist()
     {
-        
+
         $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $class_id       = $this->input->post('class_id');
         $year       = $this->input->post('year');
-        
+        $branch_id     = $this->input->post('branch_id');
+
         $sch_setting     = $this->sch_setting_detail;
-        $result =    $this->student_model->searchdatatablebyAdmissionDetails($class_id, $year);
+        $result =    $this->student_model->searchdatatablebyAdmissionDetails($class_id, $year, $branch_id);
         $resultlist      = json_decode($result);
-        
-        $dt_data=array();
+
+        $dt_data = array();
         if (!empty($resultlist->data)) {
-            foreach ($resultlist->data as $resultlist_key => $student) { 
+            foreach ($resultlist->data as $resultlist_key => $student) {
 
 
-            $id            = $student->sid;
-            $sessionlist = $this->student_model->studentSessionDetails($id);
-            $startsession = $sessionlist['start'];
-            $findstartyear = explode("-", $startsession);
-            $startyear = $findstartyear[0];
-            $endsession = $sessionlist['end'];
-            $findendyear = explode("-", $endsession);
-            $endyear = $findendyear[0];
+                $id            = $student->sid;
+                $sessionlist = $this->student_model->studentSessionDetails($id);
+                $startsession = $sessionlist['start'];
+                $findstartyear = explode("-", $startsession);
+                $startyear = $findstartyear[0];
+                $endsession = $sessionlist['end'];
+                $findendyear = explode("-", $endsession);
+                $endyear = $findendyear[0];
 
-                $viewbtn = "<a  href='".base_url()."student/view/".$student->id."'>".$this->customlib->getFullName($student->firstname,$student->middlename,$student->lastname,$sch_setting->middlename,$sch_setting->lastname)."</a>";
-             
+                $viewbtn = "<a  href='" . base_url() . "student/view/" . $student->id . "'>" . $this->customlib->getFullName($student->firstname, $student->middlename, $student->lastname, $sch_setting->middlename, $sch_setting->lastname) . "</a>";
+
                 $row   = array();
-                $row[] = $student->admission_no ;
-                $row[] = $viewbtn ;
+                $row[] = $student->admission_no;
+                $row[] = $viewbtn;
 
-                if ($student->admission_date != null && $student->admission_date!='0000-00-00') {
-                   $row[]= date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student->admission_date));
-                }else{
-                    $row[]="";
+                if ($student->admission_date != null && $student->admission_date != '0000-00-00') {
+                    $row[] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student->admission_date));
+                } else {
+                    $row[] = "";
                 }
-                 $row[] = $sessionlist['startclass'] . "  -  " . $sessionlist['endclass']; 
-                 $row[] = $sessionlist['start'] . "  -  " . $sessionlist['end'];;
-                 $row[] = ($endyear - $startyear) + 1;
+                $row[] = $sessionlist['startclass'] . "  -  " . $sessionlist['endclass'];
+                $row[] = $sessionlist['start'] . "  -  " . $sessionlist['end'];;
+                $row[] = ($endyear - $startyear) + 1;
 
                 if ($sch_setting->mobile_no) {
-                     $row[] = $student->mobileno;
+                    $row[] = $student->mobileno;
                 }
-                
-                if ($sch_setting->guardian_name) {
-                     $row[] = $student->guardian_name;
-                }
-                
-                if ($sch_setting->guardian_phone) {
-                     $row[] = $student->guardian_phone;
-                }
-                
-                $dt_data[] = $row;  
-            }
 
+                if ($sch_setting->guardian_name) {
+                    $row[] = $student->guardian_name;
+                }
+
+                if ($sch_setting->guardian_phone) {
+                    $row[] = $student->guardian_phone;
+                }
+
+                $dt_data[] = $row;
+            }
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -193,7 +201,7 @@ class Users extends Admin_Controller
             "recordsFiltered" => intval($resultlist->recordsFiltered),
             "data"            => $dt_data,
         );
-        echo json_encode($json_data); 
+        echo json_encode($json_data);
     }
 
     /*function to check search filter validation forstudent login credential report*/
@@ -202,21 +210,22 @@ class Users extends Admin_Controller
     {
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
+        $branch_id     = $this->input->post('branch_id');
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
 
-        if ($this->form_validation->run() == false) { 
+        if ($this->form_validation->run() == false) {
             $error = array();
-            
+
             $error['class_id'] = form_error('class_id');
             $error['section_id'] = form_error('section_id');
-            
+
             $array = array('status' => 0, 'error' => $error);
             echo json_encode($array);
         } else {
 
-            $params      = array('class_id' => $class_id, 'section' => $section_id,  );
+            $params      = array('class_id' => $class_id, 'section' => $section_id,'branch_id' => $branch_id);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -224,60 +233,60 @@ class Users extends Admin_Controller
 
     public function dtcredentialreportlist()
     {
-        
+
         $sch_setting     = $this->sch_setting_detail;
         $class_id   = $this->input->post("class_id");
         $section_id = $this->input->post("section_id");
-        $result = $this->student_model->getdtforlogincredential($class_id, $section_id);
+        $branch_id = $this->input->post("branch_id");
+        $result = $this->student_model->getdtforlogincredential($class_id, $section_id,$branch_id);
         $resultlist      = json_decode($result);
-        $dt_data=array();
+        $dt_data = array();
 
         if (!empty($resultlist->data)) {
-            foreach ($resultlist->data as $resultlist_key => $student) { 
+            foreach ($resultlist->data as $resultlist_key => $student) {
 
 
-            $studentlist = $this->user_model->getUserLoginDetails($student->id);
-            $parentlist = $this->user_model->getParentLoginDetails($student->id);
-                if ( $studentlist["role"] == "student") {
+                $studentlist = $this->user_model->getUserLoginDetails($student->id);
+                $parentlist = $this->user_model->getParentLoginDetails($student->id);
+                if ($studentlist["role"] == "student") {
                     $student_username = $studentlist["username"];
                     $student_password = $studentlist["password"];
                     $parent_username  = $parentlist["username"];
                     $parent_password  = $parentlist["password"];
                 }
 
-                $viewbtn = "<a  href='".base_url()."student/view/".$student->id."'>".$this->customlib->getFullName($student->firstname,$student->middlename,$student->lastname,$sch_setting->middlename,$sch_setting->lastname)."</a>";
-             
+                $viewbtn = "<a  href='" . base_url() . "student/view/" . $student->id . "'>" . $this->customlib->getFullName($student->firstname, $student->middlename, $student->lastname, $sch_setting->middlename, $sch_setting->lastname) . "</a>";
+
                 $row   = array();
-                $row[] = $student->admission_no ;
-                $row[] = $viewbtn ;
+                $row[] = $student->admission_no;
+                $row[] = $viewbtn;
 
                 if (isset($student_username)) {
-                   $row[] = $student_username ;  
-                }else{
-                     $row[]="" ;
+                    $row[] = $student_username;
+                } else {
+                    $row[] = "";
                 }
 
                 if (isset($student_password)) {
-                   $row[] = $student_password ;  
-                }else{
-                     $row[]="" ;
+                    $row[] = $student_password;
+                } else {
+                    $row[] = "";
                 }
 
                 if (isset($parent_username)) {
-                   $row[] = $parent_username ;  
-                }else{
-                     $row[]="" ;
+                    $row[] = $parent_username;
+                } else {
+                    $row[] = "";
                 }
 
                 if (isset($parent_password)) {
-                   $row[] = $parent_password ;  
-                }else{
-                     $row[]="" ;
-                } 
-                 
-                $dt_data[] = $row;  
-            }
+                    $row[] = $parent_password;
+                } else {
+                    $row[] = "";
+                }
 
+                $dt_data[] = $row;
+            }
         }
         $json_data = array(
             "draw"            => intval($resultlist->draw),
@@ -285,8 +294,6 @@ class Users extends Admin_Controller
             "recordsFiltered" => intval($resultlist->recordsFiltered),
             "data"            => $dt_data,
         );
-        echo json_encode($json_data); 
+        echo json_encode($json_data);
     }
-
-
 }

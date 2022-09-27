@@ -6,6 +6,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     .carousel-row {
         margin-bottom: 10px;
     }
+
     .slide-row {
         padding: 0;
         background-color: #ffffff;
@@ -15,24 +16,29 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: auto;
         position: relative;
     }
+
     .slide-carousel {
         width: 20%;
         float: left;
         display: inline-block;
     }
+
     .slide-carousel .carousel-indicators {
         margin-bottom: 0;
         bottom: 0;
         background: rgba(0, 0, 0, .5);
     }
+
     .slide-carousel .carousel-indicators li {
         border-radius: 0;
         width: 20px;
         height: 6px;
     }
+
     .slide-carousel .carousel-indicators .active {
         margin: 1px;
     }
+
     .slide-content {
         position: absolute;
         top: 0;
@@ -44,10 +50,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         padding: 1.5% 2% 2% 2%;
         overflow-y: auto;
     }
+
     .slide-content h4 {
         margin-bottom: 3px;
         margin-top: 0;
     }
+
     .slide-footer {
         position: absolute;
         bottom: 0;
@@ -56,15 +64,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: 20%;
         margin: 1%;
     }
+
     /* Scrollbars */
     .slide-content::-webkit-scrollbar {
         width: 5px;
     }
+
     .slide-content::-webkit-scrollbar-thumb:vertical {
         margin: 5px;
         background-color: #999;
         -webkit-border-radius: 5px;
     }
+
     .slide-content::-webkit-scrollbar-button:start:decrement,
     .slide-content::-webkit-scrollbar-button:end:increment {
         height: 5px;
@@ -76,7 +87,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?></h1>
+            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -89,22 +101,33 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
 
-                    <form  action="<?php echo site_url('report/searchreportvalidation') ?>" method="post" class="" id="reportform"  >
-                        <div class="box-body row">                           
-                            <div class="col-sm-6 col-md-3" >
+                    <form action="<?php echo site_url('report/searchreportvalidation') ?>" method="post" class="" id="reportform">
+                        <div class="box-body row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?></label>
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger" id="error_search_type"></span>
                                 </div>
@@ -128,7 +151,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('admission') . " " . $this->lang->line('report') ?></h3>
                         </div>
                         <div class="box-body table-responsive">
-                            
+
                             <table class="table table-striped table-bordered table-hover record-list" data-export-title="<?php echo $this->lang->line('admission') . " " . $this->lang->line('report'); ?>">
                                 <thead>
                                     <tr>
@@ -141,86 +164,85 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <th><?php echo $this->lang->line('father_name'); ?></th>
                                         <?php } ?>
                                         <th><?php echo $this->lang->line('date_of_birth'); ?></th>
-<?php if ($sch_setting->admission_date) { ?>
+                                        <?php if ($sch_setting->admission_date) { ?>
                                             <th><?php echo $this->lang->line('admission') . " " . $this->lang->line('date'); ?></th><?php } ?>
 
                                         <th><?php echo $this->lang->line('gender'); ?></th>
                                         <?php if ($sch_setting->category) { ?>
                                             <th><?php echo $this->lang->line('category'); ?></th>
-                                        <?php } if ($sch_setting->mobile_no) { ?>
+                                        <?php }
+                                        if ($sch_setting->mobile_no) { ?>
                                             <th><?php echo $this->lang->line('mobile_no'); ?></th>
-<?php } ?>
+                                        <?php } ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>
- <script>
-$(document).ready(function() {
-     emptyDatatable('record-list','data');
-});
-</script>  
+<script>
+    $(document).ready(function() {
+        emptyDatatable('record-list', 'data');
+    });
+</script>
 <script type="text/javascript">
-$(document).ready(function(){ 
-$(document).on('submit','#reportform',function(e){
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-    var $this = $(this).find("button[type=submit]:focus");  
-    var form = $(this);
-    var url = form.attr('action');
-    var form_data = form.serializeArray();
-    $.ajax({
-           url: url,
-           type: "POST",
-           dataType:'JSON',
-           data: form_data, // serializes the form's elements.
-              beforeSend: function () {
-                $('[id^=error]').html("");
-                $this.button('loading');
-               },
-              success: function(response) { // your success handler
-                
-                if(!response.status){
-                    $.each(response.error, function(key, value) {
-                    $('#error_' + key).html(value);
-                    });
-                }else{
-                 
-                   initDatatable('record-list','report/dtadmissionreport',response.params,[],100);
+    $(document).ready(function() {
+        $(document).on('submit', '#reportform', function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var $this = $(this).find("button[type=submit]:focus");
+            var form = $(this);
+            var url = form.attr('action');
+            var form_data = form.serializeArray();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'JSON',
+                data: form_data, // serializes the form's elements.
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+                },
+                success: function(response) { // your success handler
+
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
+                            $('#error_' + key).html(value);
+                        });
+                    } else {
+
+                        initDatatable('record-list', 'report/dtadmissionreport', response.params, [], 100);
+                    }
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
                 }
-              },
-             error: function() { // your error handler
-                 $this.button('reset');
-             },
-             complete: function() {
-               $this.button('reset');
-             }
-         });
+            });
 
         });
 
     });
-   
 </script>

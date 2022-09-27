@@ -112,7 +112,7 @@ class Homework_model extends MY_model
         $query = $this->db->select('students.*,submit_assignment.docs,submit_assignment.message')->from('submit_assignment')->join('students', 'students.id=submit_assignment.student_id', 'inner')->where(array('submit_assignment.homework_id' => $homework_id, 'submit_assignment.student_id' => $student_id))->get();
         return $query->result_array();
     }
-    public function search_homework($class_id, $section_id, $subject_group_id, $subject_id)
+    public function search_homework($class_id, $section_id, $subject_group_id, $subject_id,$branch_id)
     {
         if ((!empty($class_id)) && (!empty($section_id)) && (!empty($subject_id)) && (!empty($subject_group_id))) {
 
@@ -135,6 +135,7 @@ class Homework_model extends MY_model
         $this->db->join("subjects", "subjects.id = subject_group_subjects.subject_id");
         $this->db->join("subject_groups", "subject_group_subjects.subject_group_id=subject_groups.id");
         $this->db->where('subject_groups.session_id', $this->current_session);
+        $this->db->where('homework.branch_id', $branch_id);
         $this->db->order_by('homework.homework_date', 'DESC');
         $query = $this->db->get("homework");
         return $query->result_array();

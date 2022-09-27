@@ -6,6 +6,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     .carousel-row {
         margin-bottom: 10px;
     }
+
     .slide-row {
         padding: 0;
         background-color: #ffffff;
@@ -15,24 +16,29 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: auto;
         position: relative;
     }
+
     .slide-carousel {
         width: 20%;
         float: left;
         display: inline-block;
     }
+
     .slide-carousel .carousel-indicators {
         margin-bottom: 0;
         bottom: 0;
         background: rgba(0, 0, 0, .5);
     }
+
     .slide-carousel .carousel-indicators li {
         border-radius: 0;
         width: 20px;
         height: 6px;
     }
+
     .slide-carousel .carousel-indicators .active {
         margin: 1px;
     }
+
     .slide-content {
         position: absolute;
         top: 0;
@@ -44,10 +50,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         padding: 1.5% 2% 2% 2%;
         overflow-y: auto;
     }
+
     .slide-content h4 {
         margin-bottom: 3px;
         margin-top: 0;
     }
+
     .slide-footer {
         position: absolute;
         bottom: 0;
@@ -56,15 +64,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: 20%;
         margin: 1%;
     }
+
     /* Scrollbars */
     .slide-content::-webkit-scrollbar {
         width: 5px;
     }
+
     .slide-content::-webkit-scrollbar-thumb:vertical {
         margin: 5px;
         background-color: #999;
         -webkit-border-radius: 5px;
     }
+
     .slide-content::-webkit-scrollbar-button:start:decrement,
     .slide-content::-webkit-scrollbar-button:end:increment {
         height: 5px;
@@ -76,7 +87,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?></h1>
+            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -93,47 +105,59 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-body row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
 
-                            <div class="col-sm-6 col-md-3" >
+
+                            <div class="col-sm-4 col-md-3">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('class'); ?><small class="req"> *</small></label>
-                                    <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                    <select autofocus="" id="class_id" name="class_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($classlist as $class) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $class['id'] ?>" <?php
-                                            if ($class_id == $class['id']) {
-                                                echo "selected =selected";
-                                            }
-                                            ?>><?php echo $class['class'] ?></option>
-                                                    <?php
-                                                    $count++;
-                                                }
-                                                ?>
+                                                                                        if ($class_id == $class['id']) {
+                                                                                            echo "selected =selected";
+                                                                                        }
+                                                                                        ?>><?php echo $class['class'] ?></option>
+                                        <?php
+                                            $count++;
+                                        }
+                                        ?>
                                     </select>
                                     <span class="text-danger" id="error_class_id"></span>
                                 </div>
                             </div>
 
-                            <div class="col-sm-6 col-md-3" >
+                            <div class="col-sm-4 col-md-3">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('section'); ?><small class="req"> *</small></label>
-                                    <select  id="section_id" onchange="getSubjects()" name="section_id" class="form-control" >
+                                    <select id="section_id" onchange="getSubjects()" name="section_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($section_list as $value) {
-                                            ?>
-                                            <option  <?php
-                                            if ($value['section_id'] == $section_id) {
-                                                echo "selected";
-                                            }
-                                            ?> value="<?php echo $value['section_id']; ?>"><?php echo $value['section']; ?></option>
-                                                <?php
-                                            }
-                                            ?>
+                                        ?>
+                                            <option <?php
+                                                    if ($value['section_id'] == $section_id) {
+                                                        echo "selected";
+                                                    }
+                                                    ?> value="<?php echo $value['section_id']; ?>"><?php echo $value['section']; ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
-                                     <span class="text-danger" id="error_section_id"></span>
+                                    <span class="text-danger" id="error_section_id"></span>
                                 </div>
                             </div>
 
@@ -142,7 +166,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <button type="submit" name="search" value="search_filter" class="btn btn-primary btn-sm checkbox-toggle pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                 </div>
                             </div>
-                        </div>    
+                        </div>
                     </form>
 
 
@@ -153,10 +177,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-body table-responsive">
                             <div class="download_label"><?php
-                                echo $this->lang->line('class') . "-" . $this->lang->line('subject') . " " . $this->lang->line('report');
+                                                        echo $this->lang->line('class') . "-" . $this->lang->line('subject') . " " . $this->lang->line('report');
 
-                                $this->customlib->get_postmessage();
-                                ?></div>
+                                                        $this->customlib->get_postmessage();
+                                                        ?></div>
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead class="header">
                                     <tr>
@@ -171,7 +195,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <tbody>
                                     <?php
                                     foreach ($subjects as $value) {
-                                        ?>
+                                    ?>
                                         <tr>
                                             <td><?php echo $value[0]->class_name; ?></td>
                                             <td><?php echo $value[0]->section_name; ?></td>
@@ -199,24 +223,22 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 }
                                                 ?></td>
                                         </tr>
-                                            <?php
-                                        }
-                                        ?>
+                                    <?php
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 
 <script>
-
-
-    $(document).on('change', '#class_id', function (e) {
+    $(document).on('change', '#class_id', function(e) {
 
         $('#section_id').html("");
         var class_id = $(this).val();
@@ -226,11 +248,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $.ajax({
             type: "GET",
             url: baseurl + "sections/getByClass",
-            data: {'class_id': class_id},
+            data: {
+                'class_id': class_id
+            },
             dataType: "json",
-            success: function (data) {
-                $.each(data, function (i, obj)
-                {
+            success: function(data) {
+                $.each(data, function(i, obj) {
                     div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                 });
                 $('#section_id').append(div_data);
@@ -239,54 +262,55 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 </script>
 <script type="text/javascript">
-$(document).ready(function(){ 
-$(document).on('submit','#reportform',function(e){
-   // e.preventDefault(); // avoid to execute the actual submit of the form.
-    var $this = $(this).find("button[type=submit]:focus");  
-    var form = $(this);
-    var url = form.attr('action');
-    var form_data = form.serializeArray();
-   // form_data.push({name: 'search_type', value: $this.attr('value')});
-  
-    $.ajax({
-           url: url,
-           type: "POST",
-           dataType:'JSON',
-           data: form_data, // serializes the form's elements.
-              beforeSend: function () {
-                $('[id^=error]').html("");
-                $this.button('loading');
-                resetFields($this.attr('name'));
-               },
-              success: function(response) { // your success handler
-                
-                if(!response.status){
-                    $.each(response.error, function(key, value) {
-                    $('#error_' + key).html(value);
-                    });
-                }else{
-                 
-                   initDatatable('record-list','report/dtclasssubjectreport',response.params);
+    $(document).ready(function() {
+        $(document).on('submit', '#reportform', function(e) {
+            // e.preventDefault(); // avoid to execute the actual submit of the form.
+            var $this = $(this).find("button[type=submit]:focus");
+            var form = $(this);
+            var url = form.attr('action');
+            var form_data = form.serializeArray();
+            // form_data.push({name: 'search_type', value: $this.attr('value')});
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'JSON',
+                data: form_data, // serializes the form's elements.
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+                    resetFields($this.attr('name'));
+                },
+                success: function(response) { // your success handler
+
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
+                            $('#error_' + key).html(value);
+                        });
+                    } else {
+
+                        initDatatable('record-list', 'report/dtclasssubjectreport', response.params);
+                    }
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
                 }
-              },
-             error: function() { // your error handler
-                 $this.button('reset');
-             },
-             complete: function() {
-             $this.button('reset');
-             }
-         });
+            });
 
         });
 
     });
-    function resetFields(search_type){
-        if(search_type == "keyword_search"){
-            $('#class_id').prop('selectedIndex',0);
+
+    function resetFields(search_type) {
+        if (search_type == "keyword_search") {
+            $('#class_id').prop('selectedIndex', 0);
             $('#section_id').find('option').not(':first').remove();
-        }else if (search_type == "class_search") {
-            
-             $('#search_text').val("");
+        } else if (search_type == "class_search") {
+
+            $('#search_text').val("");
         }
     }
 </script>

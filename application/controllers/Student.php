@@ -1798,6 +1798,9 @@ class Student extends Admin_Controller
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $userdata                = $this->customlib->getUserData();
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $carray                  = array();
 
         if (!empty($data["classlist"])) {
@@ -1809,6 +1812,7 @@ class Student extends Admin_Controller
 
         $class_id   = $this->input->post("class_id");
         $section_id = $this->input->post("section_id");
+        $branch_id = $this->input->post("branch_id");
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
@@ -1819,7 +1823,7 @@ class Student extends Admin_Controller
             $data["resultlist"] = "";
         } else {
 
-            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id);
+            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id ,$branch_id);
             $data["resultlist"] = $resultlist;
         }
 
@@ -2368,7 +2372,7 @@ class Student extends Admin_Controller
         $branch_id             = $this->input->post('branch_id');
         $sch_setting     = $this->sch_setting_detail;
 
-        $result     = $this->student_model->searchdatatableByClassSectionCategoryGenderRte($class, $section, $category_id, $gender, $rte ,$branch_id);
+        $result     = $this->student_model->searchdatatableByClassSectionCategoryGenderRte($class, $section, $category_id, $gender, $rte, $branch_id);
         $resultlist = json_decode($result);
         $dt_data    = array();
         if (!empty($resultlist->data)) {

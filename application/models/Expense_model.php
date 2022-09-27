@@ -19,14 +19,16 @@ class Expense_model extends MY_Model
      * @param int $id
      * @return mixed
      */
-    public function search($text = null, $start_date = null, $end_date = null)
+    public function search($text = null, $start_date = null, $end_date = null ,$branch_id)
     
     {
-        $branch_id = $this->session->admin['branch_id'];
-        $arr =[];
-        if($branch_id>0){
-            $arr['expenses.branch_id']= $branch_id;
-        }
+        
+       
+        // $branch_id = $this->session->admin['branch_id'];
+        // $arr =[];
+        // if($branch_id>0){
+        //     $arr['expenses.branch_id']= $branch_id;
+        // }
 
         if (!empty($text)) {
            
@@ -35,7 +37,8 @@ class Expense_model extends MY_Model
             ->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->join('expense_head', 'expenses.exp_head_id = expense_head.id','left')
-            ->where($arr)
+            ->where('expenses.branch_id = ', $branch_id)
+            // ->where($arr)
             ->like('expenses.name', $text)
             ->from('expenses');
             
@@ -46,7 +49,8 @@ class Expense_model extends MY_Model
             ->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount')
             ->join('expense_head', 'expenses.exp_head_id = expense_head.id','left')
-            ->where($arr)
+            // ->where($arr)
+            ->where('expenses.branch_id = ', $branch_id)
             ->where('expenses.date <=', $end_date)
             ->where('expenses.date >=', $start_date)
             ->from('expenses');

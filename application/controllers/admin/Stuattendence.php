@@ -3,26 +3,29 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Stuattendence extends Admin_Controller {
+class Stuattendence extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         $this->config->load("mailsms");
         $this->load->library('mailsmsconf');
         $this->config_attendance = $this->config->item('attendence');
         $this->load->model("classteacher_model");
-         $this->sch_setting_detail = $this->setting_model->getSetting();
+        $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('student_attendance', 'can_view')) {
             access_denied();
         }
 
         $this->session->set_userdata('top_menu', 'Attendance');
         $this->session->set_userdata('sub_menu', 'stuattendence/index');
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['title'] = 'Add Fees Type';
         $data['title_list'] = 'Fees Type List';
         $sch_setting = $this->setting_model->getSchoolDetail();
@@ -135,14 +138,15 @@ class Stuattendence extends Admin_Controller {
             $data['attendencetypeslist'] = $attendencetypes;
             $resultlist = $this->stuattendence_model->searchAttendenceClassSection($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)));
             $data['resultlist'] = $resultlist;
-       
+
             $this->load->view('layout/header', $data);
             $this->load->view('admin/stuattendence/attendenceList', $data);
             $this->load->view('layout/footer', $data);
         }
     }
 
-    function attendencereport() {
+    function attendencereport()
+    {
 
         if (!$this->rbac->hasPrivilege('attendance_by_date', 'can_view')) {
             access_denied();
@@ -150,7 +154,7 @@ class Stuattendence extends Admin_Controller {
 
         $this->session->set_userdata('top_menu', 'Attendance');
         $this->session->set_userdata('sub_menu', 'stuattendence/attendenceReport');
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['title'] = 'Add Fees Type';
         $data['title_list'] = 'Fees Type List';
         $class = $this->class_model->get();
@@ -217,14 +221,15 @@ class Stuattendence extends Admin_Controller {
             $resultlist = $this->stuattendence_model->searchAttendenceClassSectionPrepare($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)));
 
             $data['resultlist'] = $resultlist;
-            $data['sch_setting'] =$this->sch_setting_detail;
+            $data['sch_setting'] = $this->sch_setting_detail;
             $this->load->view('layout/header', $data);
             $this->load->view('admin/stuattendence/attendencereport', $data);
             $this->load->view('layout/footer', $data);
         }
     }
 
-    function classattendencereport() {
+    function classattendencereport()
+    {
 
         if (!$this->rbac->hasPrivilege('attendance_report', 'can_view')) {
             access_denied();
@@ -237,6 +242,9 @@ class Stuattendence extends Admin_Controller {
         $data['attendencetypeslist'] = $attendencetypes;
         $data['title'] = 'Add Fees Type';
         $data['title_list'] = 'Fees Type List';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $class = $this->class_model->get();
         $userdata = $this->customlib->getUserData();
 
@@ -337,7 +345,8 @@ class Stuattendence extends Admin_Controller {
         }
     }
 
-    function monthAttendance($st_month, $no_of_months, $student_id) {
+    function monthAttendance($st_month, $no_of_months, $student_id)
+    {
 
         $record = array();
 
@@ -360,7 +369,4 @@ class Stuattendence extends Admin_Controller {
 
         return $record;
     }
-
 }
-
-?>

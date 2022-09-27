@@ -28,7 +28,7 @@ class Studentfee extends Admin_Controller
         $data['title']       = 'student fees';
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('studentfee/studentfeeSearch', $data);
         $this->load->view('layout/footer', $data);
@@ -39,7 +39,9 @@ class Studentfee extends Admin_Controller
         if (!$this->rbac->hasPrivilege('collect_fees', 'can_view')) {
             access_denied();
         }
- 
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $data['collect_by'] = $this->studentfeemaster_model->get_feesreceived_by();
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['group_by']   = $this->customlib->get_groupby();
@@ -48,7 +50,7 @@ class Studentfee extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');
         $this->session->set_userdata('subsub_menu', 'Reports/finance/collection_report');
-            $subtotal=false;
+        $subtotal = false;
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
             $dates               = $this->customlib->get_betweendate($_POST['search_type']);
             $data['search_type'] = $_POST['search_type'];
@@ -59,21 +61,19 @@ class Studentfee extends Admin_Controller
 
         if (isset($_POST['collect_by']) && $_POST['collect_by'] != '') {
             $data['received_by'] = $received_by = $_POST['collect_by'];
-           
         } else {
             $data['received_by'] = $received_by = '';
         }
 
-         if (isset($_POST['feetype_id']) && $_POST['feetype_id'] != '') {
+        if (isset($_POST['feetype_id']) && $_POST['feetype_id'] != '') {
             $feetype_id = $_POST['feetype_id'];
-           
         } else {
-           $feetype_id="";
+            $feetype_id = "";
         }
 
         if (isset($_POST['group']) && $_POST['group'] != '') {
             $data['group_byid'] = $group = $_POST['group'];
-            $subtotal=true;
+            $subtotal = true;
         } else {
             $data['group_byid'] = $group = '';
         }
@@ -82,7 +82,8 @@ class Studentfee extends Admin_Controller
         $collection          = array();
         $start_date          = date('Y-m-d', strtotime($dates['from_date']));
         $end_date            = date('Y-m-d', strtotime($dates['to_date']));
-        
+        $branch_id = $this->input->post('branch_id');
+
 
         $this->form_validation->set_rules('search_type', $this->lang->line('search') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
 
@@ -90,8 +91,8 @@ class Studentfee extends Admin_Controller
         if ($this->form_validation->run() == false) {
             $data['results'] = array();
         } else {
-            $data['results'] = $this->studentfeemaster_model->getFeeCollectionReport($start_date, $end_date,$feetype_id, $received_by, $group);
- 
+            $data['results'] = $this->studentfeemaster_model->getFeeCollectionReport($start_date, $end_date, $feetype_id, $received_by, $group ,$branch_id);
+
             if ($group != '') {
 
                 if ($group == 'class') {
@@ -120,13 +121,13 @@ class Studentfee extends Admin_Controller
 
             $data['results'] = $collection;
         }
-        $data['subtotal']=$subtotal;
+        $data['subtotal'] = $subtotal;
         $data['sch_setting'] = $this->sch_setting_detail;
         $this->load->view('layout/header', $data);
         $this->load->view('studentfee/collection_report', $data);
         $this->load->view('layout/footer', $data);
     }
- 
+
     public function pdf()
     {
         $this->load->helper('pdf_helper');
@@ -142,7 +143,7 @@ class Studentfee extends Admin_Controller
             $this->form_validation->set_rules('search_text', 'keyword --r', 'required|trim|xss_clean');
             $data = array('search_text' => 'dummy');
 
-			$this->form_validation->set_data($data);
+            $this->form_validation->set_data($data);
         }
         if ($this->form_validation->run() == false) {
             $error = array();
@@ -166,17 +167,17 @@ class Studentfee extends Admin_Controller
         }
     }
     public function ajaxSearch()
-    {   
+    {
         $branch_id   = $this->input->post('branch_id');
         $class       = $this->input->post('class_id');
         $section     = $this->input->post('section_id');
         $search_text = $this->input->post('search_text');
         $search_type = $this->input->post('search_type');
         if ($search_type == "class_search") {
-            $students = $this->student_model->getDatatableByClassSection($branch_id,$class, $section);
+            $students = $this->student_model->getDatatableByClassSection($branch_id, $class, $section);
         } elseif ($search_type == "keyword_search") {
             $branch_id       = $this->session->admin['branch_id'];
-            $students = $this->student_model->getDatatableByFullTextSearch($branch_id,$search_text);
+            $students = $this->student_model->getDatatableByFullTextSearch($branch_id, $search_text);
         }
 
         $students = json_decode($students);
@@ -195,7 +196,6 @@ class Studentfee extends Admin_Controller
 
                 $dt_data[] = $row;
             }
-
         }
         $json_data = array(
             "draw"            => intval($students->draw),
@@ -204,9 +204,8 @@ class Studentfee extends Admin_Controller
             "data"            => $dt_data,
         );
         echo json_encode($json_data);
-
     }
-    
+
     public function feesearch()
     {
         if (!$this->rbac->hasPrivilege('search_due_fees', 'can_view')) {
@@ -219,7 +218,7 @@ class Studentfee extends Admin_Controller
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $data['all_branch']      = $this->branch_model->getBranch();
         $feesessiongroup     = $this->feesessiongroup_model->getFeesByGroup();
         $branch_id = $this->session->admin['branch_id'];
         $data['feesessiongrouplist'] = $feesessiongroup;
@@ -240,10 +239,10 @@ class Studentfee extends Admin_Controller
             $feegroup                = explode("-", $feegroup_id);
             $feegroup_id             = $feegroup[0];
             $fee_groups_feetype_id   = $feegroup[1];
-            $data['all_branch']      = $this->branch_model->getBranch(); 
+            $data['all_branch']      = $this->branch_model->getBranch();
             $class_id                = $this->input->post('class_id');
             $section_id              = $this->input->post('section_id');
-            $student_due_fee         = $this->studentfee_model->getDueStudentFees($branch_id,$feegroup_id, $fee_groups_feetype_id, $class_id, $section_id);
+            $student_due_fee         = $this->studentfee_model->getDueStudentFees($branch_id, $feegroup_id, $fee_groups_feetype_id, $class_id, $section_id);
             if (!empty($student_due_fee)) {
                 foreach ($student_due_fee as $student_due_fee_key => $student_due_fee_value) {
                     $amt_due                                                  = $student_due_fee_value['amount'];
@@ -292,20 +291,22 @@ class Studentfee extends Admin_Controller
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         if ($this->input->server('REQUEST_METHOD') == "GET") {
-
             $this->load->view('layout/header', $data);
             $this->load->view('studentfee/reportByName', $data);
             $this->load->view('layout/footer', $data);
-        } else {           
-            {
-
+        } else { {
                 $data['student_due_fee'] = array();
                 $class_id                = $this->input->post('class_id');
                 $section_id              = $this->input->post('section_id');
-                $student_id              = $this->input->post('student_id');               
-                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id,$section_id,$student_id);      
+                $student_id              = $this->input->post('student_id');
+                $branch_id              = $this->input->post('branch_id');
+
+                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id, $section_id, $student_id, $branch_id);
                 $data['student_due_fee']      = $student_due_fee;
                 $data['class_id']             = $class_id;
                 $data['section_id']           = $section_id;
@@ -636,7 +637,6 @@ class Studentfee extends Admin_Controller
 
         $this->form_validation->set_rules('paymentid', $this->lang->line('payment_id'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
-
         } else {
             $paymentid = $this->input->post('paymentid');
             $invoice   = explode("/", $paymentid);
@@ -644,7 +644,7 @@ class Studentfee extends Admin_Controller
                 $invoice_id             = $invoice[0];
                 $sub_invoice_id         = $invoice[1];
                 $branch_id              = $this->session->admin['branch_id'];
-                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($branch_id,$invoice_id, $sub_invoice_id);
+                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($branch_id, $invoice_id, $sub_invoice_id);
                 $data['feeList']        = $feeList;
                 $data['sub_invoice_id'] = $sub_invoice_id;
             } else {
@@ -842,7 +842,6 @@ class Studentfee extends Admin_Controller
                     'fee_groups_feetype_id'  => $this->input->post('fee_groups_feetype_id_' . $total_row_value),
                     'amount_detail'          => $json_array,
                 );
-
             }
 
             $deposited_fees = $this->studentfeemaster_model->fee_deposit_collections($collected_array);
@@ -871,6 +870,9 @@ class Studentfee extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/finance/reportdailycollection');
         $data          = array();
         $data['title'] = 'Daily Collection Report';
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $this->form_validation->set_rules('date_from', $this->lang->line('date_from'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('date_to', $this->lang->line('date_to'), 'trim|required|xss_clean');
 
@@ -878,44 +880,43 @@ class Studentfee extends Admin_Controller
 
             $date_from          = $this->input->post('date_from');
             $date_to            = $this->input->post('date_to');
+            $branch_id            = $this->input->post('branch_id');
             $formated_date_from = strtotime($this->customlib->dateFormatToYYYYMMDD($date_from));
             $formated_date_to   = strtotime($this->customlib->dateFormatToYYYYMMDD($date_to));
-            $st_fees            = $this->studentfeemaster_model->getCurrentSessionStudentFees();
-            $fees_data=array();
+            $st_fees            = $this->studentfeemaster_model->getCurrentSessionStudentFees($branch_id);
+            $fees_data = array();
 
-for ($i=$formated_date_from; $i <= $formated_date_to ; $i+=86400) {
-   $fees_data[$i]['amt']=0;
-   $fees_data[$i]['count']=0;
-   $fees_data[$i]['student_fees_deposite_ids']=array();
+            for ($i = $formated_date_from; $i <= $formated_date_to; $i += 86400) {
+                $fees_data[$i]['amt'] = 0;
+                $fees_data[$i]['count'] = 0;
+                $fees_data[$i]['student_fees_deposite_ids'] = array();
+            }
 
-}
-
-             if (!empty($st_fees)) {
+            if (!empty($st_fees)) {
                 foreach ($st_fees as $fee_key => $fee_value) {
                     if (isJSON($fee_value->amount_detail)) {
 
                         $fees_details = (json_decode($fee_value->amount_detail));
                         if (!empty($fees_details)) {
-            foreach ($fees_details as $fees_detail_key => $fees_detail_value) {
-        $date = strtotime($fees_detail_value->date);
-    if ($date >= $formated_date_from && $date <= $formated_date_to) {
-if (array_key_exists($date,$fees_data)){
- $fees_data[$date]['amt']+=$fees_detail_value->amount+$fees_detail_value->amount_fine; 
-  $fees_data[$date]['count']+=1; 
- $fees_data[$date]['student_fees_deposite_ids'][]=$fee_value->student_fees_deposite_id; 
-}else{
- $fees_data[$date]['amt']=$fees_detail_value->amount+$fees_detail_value->amount_fine; 
-   $fees_data[$date]['count']=1; 
-  $fees_data[$date]['student_fees_deposite_ids'][]=$fee_value->student_fees_deposite_id; 
-}                                 
-                               }                            
+                            foreach ($fees_details as $fees_detail_key => $fees_detail_value) {
+                                $date = strtotime($fees_detail_value->date);
+                                if ($date >= $formated_date_from && $date <= $formated_date_to) {
+                                    if (array_key_exists($date, $fees_data)) {
+                                        $fees_data[$date]['amt'] += $fees_detail_value->amount + $fees_detail_value->amount_fine;
+                                        $fees_data[$date]['count'] += 1;
+                                        $fees_data[$date]['student_fees_deposite_ids'][] = $fee_value->student_fees_deposite_id;
+                                    } else {
+                                        $fees_data[$date]['amt'] = $fees_detail_value->amount + $fees_detail_value->amount_fine;
+                                        $fees_data[$date]['count'] = 1;
+                                        $fees_data[$date]['student_fees_deposite_ids'][] = $fee_value->student_fees_deposite_id;
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-            $data['fees_data']=$fees_data;           
-
+            $data['fees_data'] = $fees_data;
         }
 
         $this->load->view('layout/header', $data);
@@ -936,13 +937,17 @@ if (array_key_exists($date,$fees_data)){
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         if ($this->input->server('REQUEST_METHOD') == "POST") {
             $date               = date('Y-m-d');
             $class_id           = $this->input->post('class_id');
             $section_id         = $this->input->post('section_id');
+            $branch_id         = $this->input->post('branch_id');
             $data['class_id']   = $class_id;
             $data['section_id'] = $section_id;
-            $fees_dues          = $this->studentfeemaster_model->getStudentDueFeeTypesByDate($date, $class_id, $section_id);
+            $fees_dues          = $this->studentfeemaster_model->getStudentDueFeeTypesByDate($date, $class_id, $section_id, $branch_id);
             $students_list      = array();
 
             if (!empty($fees_dues)) {
@@ -973,14 +978,12 @@ if (array_key_exists($date,$fees_data)){
                         $students_list[$fee_due_value->student_session_id]['section']                  = $fee_due_value->section;
                         $students_list[$fee_due_value->student_session_id]['fee_groups_feetype_ids'][] = $fee_due_value->fee_groups_feetype_id;
                     }
-
                 }
             }
 
             if (!empty($students_list)) {
                 foreach ($students_list as $student_key => $student_value) {
                     $students_list[$student_key]['fees_list'] = $this->studentfeemaster_model->studentDepositByFeeGroupFeeTypeArray($student_key, $student_value['fee_groups_feetype_ids']);
-
                 }
             }
 
@@ -1042,7 +1045,6 @@ if (array_key_exists($date,$fees_data)){
         if (!empty($students_list)) {
             foreach ($students_list as $student_key => $student_value) {
                 $students_list[$student_key]['fees_list'] = $this->studentfeemaster_model->studentDepositByFeeGroupFeeTypeArray($student_key, $student_value['fee_groups_feetype_ids']);
-
             }
         }
         $data['student_due_fee'] = $students_list;
@@ -1050,19 +1052,18 @@ if (array_key_exists($date,$fees_data)){
         echo json_encode(array('status' => 1, 'page' => $page));
     }
 
-	public function feeCollectionStudentDeposit()
+    public function feeCollectionStudentDeposit()
     {
 
-      $data=array();
-      $date=$this->input->post('date');
-      $fees_id=$this->input->post('fees_id');
-      $fees_id_array=explode(',', $fees_id);    
-      $fees_list=$this->studentfeemaster_model->getFeesDepositeByIdArray($fees_id_array);
-      $data['student_list']=$fees_list;
-      $data['date']=$date;
+        $data = array();
+        $date = $this->input->post('date');
+        $fees_id = $this->input->post('fees_id');
+        $fees_id_array = explode(',', $fees_id);
+        $fees_list = $this->studentfeemaster_model->getFeesDepositeByIdArray($fees_id_array);
+        $data['student_list'] = $fees_list;
+        $data['date'] = $date;
         $data['sch_setting']  = $this->sch_setting_detail;
-      $page = $this->load->view('reports/_feeCollectionStudentDeposit', $data, true);
-      echo json_encode(array('status' => 1, 'page' => $page));
+        $page = $this->load->view('reports/_feeCollectionStudentDeposit', $data, true);
+        echo json_encode(array('status' => 1, 'page' => $page));
     }
-
 }

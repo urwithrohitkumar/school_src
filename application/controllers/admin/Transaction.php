@@ -3,14 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Transaction extends Admin_Controller {
+class Transaction extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function searchtransaction() {
+    function searchtransaction()
+    {
 
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');
@@ -62,7 +65,8 @@ class Transaction extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    function studentacademicreport() {
+    function studentacademicreport()
+    {
 
         if (!$this->rbac->hasPrivilege('balance_fees_report', 'can_view')) {
             access_denied();
@@ -77,7 +81,11 @@ class Transaction extends Admin_Controller {
         $data['sch_setting'] = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $class_id = $this->input->post('class_id');
+        $branch_id = $this->input->post('branch_id');
         $section_id = $this->input->post('section_id');
         $feetype = $this->input->post('feetype');
         $feetype_arr = $this->input->post('feetype_arr');
@@ -95,23 +103,23 @@ class Transaction extends Admin_Controller {
             $data['feetype'] = "";
             $data['feetype_arr'] = array();
         } else {
-            $student_Array = array(); 
+            $student_Array = array();
 
             $section = array();
 
-            $classlist = $this->student_model->getAllClassSection($class_id, $section_id);
+            $classlist = $this->student_model->getAllClassSection($class_id, $section_id,$branch_id);
 
             foreach ($classlist as $key => $value) {
                 $classid = $value['class_id'];
                 $sectionid = $value['section_id'];
 
-                $studentlist = $this->student_model->reportClassSection($classid, $sectionid);
+                $studentlist = $this->student_model->reportClassSection($classid, $sectionid,$branch_id);
 
                 $student_Array = array();
                 if (!empty($studentlist)) {
                     foreach ($studentlist as $key => $eachstudent) {
                         $obj = new stdClass();
-                        $obj->name = $this->customlib->getFullName($eachstudent['firstname'],$eachstudent['middlename'],$eachstudent['lastname'],$this->sch_setting_detail->middlename,$this->sch_setting_detail->lastname);
+                        $obj->name = $this->customlib->getFullName($eachstudent['firstname'], $eachstudent['middlename'], $eachstudent['lastname'], $this->sch_setting_detail->middlename, $this->sch_setting_detail->lastname);
                         $obj->class = $eachstudent['class'];
                         $obj->section = $eachstudent['section'];
                         $obj->admission_no = $eachstudent['admission_no'];
@@ -185,7 +193,4 @@ class Transaction extends Admin_Controller {
         $this->load->view('admin/transaction/studentAcademicReport', $data);
         $this->load->view('layout/footer', $data);
     }
-
 }
-
-?>

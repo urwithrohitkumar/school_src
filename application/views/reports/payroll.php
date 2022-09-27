@@ -6,6 +6,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     .carousel-row {
         margin-bottom: 10px;
     }
+
     .slide-row {
         padding: 0;
         background-color: #ffffff;
@@ -15,24 +16,29 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: auto;
         position: relative;
     }
+
     .slide-carousel {
         width: 20%;
         float: left;
         display: inline-block;
     }
+
     .slide-carousel .carousel-indicators {
         margin-bottom: 0;
         bottom: 0;
         background: rgba(0, 0, 0, .5);
     }
+
     .slide-carousel .carousel-indicators li {
         border-radius: 0;
         width: 20px;
         height: 6px;
     }
+
     .slide-carousel .carousel-indicators .active {
         margin: 1px;
     }
+
     .slide-content {
         position: absolute;
         top: 0;
@@ -44,10 +50,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         padding: 1.5% 2% 2% 2%;
         overflow-y: auto;
     }
+
     .slide-content h4 {
         margin-bottom: 3px;
         margin-top: 0;
     }
+
     .slide-footer {
         position: absolute;
         bottom: 0;
@@ -56,15 +64,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         height: 20%;
         margin: 1%;
     }
+
     /* Scrollbars */
     .slide-content::-webkit-scrollbar {
         width: 5px;
     }
+
     .slide-content::-webkit-scrollbar-thumb:vertical {
         margin: 5px;
         background-color: #999;
         -webkit-border-radius: 5px;
     }
+
     .slide-content::-webkit-scrollbar-button:start:decrement,
     .slide-content::-webkit-scrollbar-button:end:increment {
         height: 5px;
@@ -76,7 +87,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?></h1>
+            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -94,20 +106,33 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                             <?php echo $this->customlib->getCSRF(); ?>
 
-                            <div class="col-sm-6 col-md-3" >
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?></label>
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -132,10 +157,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-body table-responsive">
                             <div class="download_label"><?php
-                                echo $this->lang->line('payroll') . " " . $this->lang->line('report');
-                                $this->customlib->get_postmessage();
-                                ;
-                                ?></div>
+                                                        echo $this->lang->line('payroll') . " " . $this->lang->line('report');
+                                                        $this->customlib->get_postmessage();;
+                                                        ?></div>
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>
                                     <tr>
@@ -167,7 +191,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     $tax = 0;
 
                                     if (empty($payrollList)) {
-                                        ?>
+                                    ?>
 
                                         <?php
                                     } else {
@@ -189,39 +213,38 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             $tax += $taxdata;
                                             $total = 0;
                                             $grd_total = 0;
-                                            ?>
+                                        ?>
                                             <tr>
 
 
                                                 <td style="text-transform: capitalize;">
-                                                    <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="<?php echo base_url() ?>admin/staff/profile/<?php echo $value['staff_id']; ?>"><?php echo $value['name'] . " " . $value['surname']." (".$value['employee_id'].")"; ?></a></span>
-                                                   
-                                                </td>
-                                                <td>
-        <?php echo $value['user_type']; ?>
-                                                </td>
-                                                <td>
-                                                    <span  data-original-title="" title=""><?php
-                                                        echo $value['designation'];
-                                                        ;
-                                                        ?></span>
+                                                    <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="<?php echo base_url() ?>admin/staff/profile/<?php echo $value['staff_id']; ?>"><?php echo $value['name'] . " " . $value['surname'] . " (" . $value['employee_id'] . ")"; ?></a></span>
 
                                                 </td>
                                                 <td>
-        <?php echo $value['month'] . " - " . $value['year']; ?>
+                                                    <?php echo $value['user_type']; ?>
+                                                </td>
+                                                <td>
+                                                    <span data-original-title="" title=""><?php
+                                                                                            echo $value['designation'];;
+                                                                                            ?></span>
+
+                                                </td>
+                                                <td>
+                                                    <?php echo $value['month'] . " - " . $value['year']; ?>
                                                 </td>
                                                 <td>
 
                                                     <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#"><?php echo $value['id']; ?></a></span>
                                                     <div class="fee_detail_popover" style="display: none"><?php echo $this->lang->line('mode'); ?>: <?php
-                                                        if (array_key_exists($value["payment_mode"], $payment_mode)) {
-                                                            echo $payment_mode[$value["payment_mode"]];
-                                                        }
-                                                        ?></div>
+                                                                                                                                                    if (array_key_exists($value["payment_mode"], $payment_mode)) {
+                                                                                                                                                        echo $payment_mode[$value["payment_mode"]];
+                                                                                                                                                    }
+                                                                                                                                                    ?></div>
 
                                                 </td>
                                                 <td class="text text-right">
-        <?php echo number_format($value['basic'], 2, '.', ''); ?>
+                                                    <?php echo number_format($value['basic'], 2, '.', ''); ?>
                                                 </td>
 
                                                 <td class="text text-right">
@@ -254,50 +277,49 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <?php
+                                        <?php
                                             $count++;
                                         }
                                         ?>
-                                        
+
                                 </tbody>
                                 <tr class="box box-solid total-bg">
 
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="text-right"><?php echo $this->lang->line('grand_total'); ?> </td>
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($basic, 2, '.', '')); ?></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><?php echo $this->lang->line('grand_total'); ?> </td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($basic, 2, '.', '')); ?></td>
 
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($earnings, 2, '.', '')); ?></td>
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($deduction, 2, '.', '')); ?></td>
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($gross, 2, '.', '')); ?></td>
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($tax, 2, '.', '')); ?></td>
-                                            <td class="text text-right"><?php echo ($currency_symbol . number_format($net - $tax, 2, '.', '')); ?></td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($earnings, 2, '.', '')); ?></td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($deduction, 2, '.', '')); ?></td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($gross, 2, '.', '')); ?></td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($tax, 2, '.', '')); ?></td>
+                                    <td class="text text-right"><?php echo ($currency_symbol . number_format($net - $tax, 2, '.', '')); ?></td>
 
-                                        </tr>
-                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>

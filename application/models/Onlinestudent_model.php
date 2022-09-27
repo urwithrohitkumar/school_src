@@ -495,7 +495,7 @@ class Onlinestudent_model extends MY_Model
 
     }
 
-    public function getOnlineAdmissionFeeCollectionReport($start_date, $end_date)
+    public function getOnlineAdmissionFeeCollectionReport($start_date, $end_date,$branch_id)
     {
         $query = "SELECT online_admissions.*,online_admission_payment.*,classes.class,sections.section FROM online_admissions
         join online_admission_payment on online_admissions.id = online_admission_payment.admission_id
@@ -510,7 +510,8 @@ class Onlinestudent_model extends MY_Model
         left join transport_route on vehicle_routes.route_id = transport_route.id
         left join vehicles on vehicles.id = vehicle_routes.vehicle_id
         left join school_houses on school_houses.id = online_admissions.school_house_id
-        where DATE_FORMAT(online_admission_payment.date, '%Y-%m-%d') >= '$start_date'
+        where class_sections.branch_id = '$branch_id'
+        and DATE_FORMAT(online_admission_payment.date, '%Y-%m-%d') >= '$start_date'
         and DATE_FORMAT(online_admission_payment.date, '%Y-%m-%d') <= '$end_date'
         ";
         $query = $this->db->query($query);

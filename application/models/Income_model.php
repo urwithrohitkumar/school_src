@@ -55,7 +55,7 @@ class Income_model extends My_Model
         return $this->datatables->generate('json');
     }
 
-    public function searchincomegroup($start_date = null, $end_date = null, $head_id = null)
+    public function searchincomegroup($start_date = null, $end_date = null, $head_id = null, $branch_id = null)
     {
        
          $this->datatables
@@ -65,7 +65,9 @@ class Income_model extends My_Model
             ->join('income_head', 'income.inc_head_id = income_head.id')
             ->where('income.date >=', $start_date)
             ->where('income.date <=', $end_date)
+            ->where('income.branch_id =', $branch_id)
             ->from('income');
+            
         if ($head_id != null) {
             $this->datatables->where('income.inc_head_id', $head_id);
         }

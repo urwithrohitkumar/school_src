@@ -58,7 +58,7 @@ class Homework extends Admin_Controller
         $subject_group_id    = $this->input->post('subject_group_id');
         $subject_id  = $this->input->post('subject_id');
         $branch_id  = $this->input->post('branch');
-     
+
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
@@ -89,7 +89,7 @@ class Homework extends Admin_Controller
 
         $userdata                = $this->customlib->getUserData();
         $carray                  = array();
-        $homeworklist            = $this->homework_model->search_dthomework($class_id, $section_id, $subject_group_id, $subject_id,$branch_id);
+        $homeworklist            = $this->homework_model->search_dthomework($class_id, $section_id, $subject_group_id, $subject_id, $branch_id);
 
         $homework      = json_decode($homeworklist);
 
@@ -260,7 +260,7 @@ class Homework extends Admin_Controller
 
             if ($record_id > 0) {
                 $id = $record_id;
-            } 
+            }
             // else {
             //     $cpt = count($_FILES['userfile']['name']);
 
@@ -575,11 +575,15 @@ class Homework extends Admin_Controller
         $data['section_id']       = $section_id       = "";
         $data['subject_id']       = $subject_id       = "";
         $data['subject_group_id'] = $subject_group_id = "";
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         $class_id                 = $this->input->post("class_id");
         $section_id               = $this->input->post("section_id");
         $subject_group_id         = $this->input->post("subject_group_id");
         $subject_id               = $this->input->post("subject_id");
+        $branch_id               = $this->input->post("branch_id");
         $data['class_id']         = $class_id;
         $data['section_id']       = $section_id;
         $data['subject_group_id'] = $subject_group_id;
@@ -595,7 +599,7 @@ class Homework extends Admin_Controller
             $data["report"]     = array();
         } else {
 
-            $data['resultlist'] = $this->homework_model->search_homework($class_id, $section_id, $subject_group_id, $subject_id);
+            $data['resultlist'] = $this->homework_model->search_homework($class_id, $section_id, $subject_group_id, $subject_id , $branch_id);
 
             foreach ($data['resultlist'] as $key => $value) {
 

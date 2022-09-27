@@ -21,19 +21,31 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-body row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
-                            <div class="col-sm-6 col-md-3" >
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?><small class="req"> *</small></label>
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -51,47 +63,47 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                     </form>
 
-<?php
-                                    $grd_total = 0;
-                                    $allamount = 0;
-                                    $alldiscount = 0;
-                                    $finetotal = 0;
-                                    $alltotal = 0;
-                                    if (empty($collectlist)) { ?>
-									<br/>
-									<div class="box-header ptbnull">
-										<div class="alert alert-info"><?php echo $this->lang->line('no_record_found'); ?></div>
-                                    </div> 
-                                 <?php    } else { ?>
-                    <div class="">
-                        <div class="box-header ptbnull"></div>
+                    <?php
+                    $grd_total = 0;
+                    $allamount = 0;
+                    $alldiscount = 0;
+                    $finetotal = 0;
+                    $alltotal = 0;
+                    if (empty($collectlist)) { ?>
+                        <br />
                         <div class="box-header ptbnull">
-                            <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php ?> <?php echo $this->lang->line('online') . " " . $this->lang->line('fees') . " " . $this->lang->line('report'); ?></h3> 
+                            <div class="alert alert-info"><?php echo $this->lang->line('no_record_found'); ?></div>
                         </div>
-                        <div class="box-body table-responsive">
-                            <div class="download_label"><?php echo $this->lang->line('online') . " " . $this->lang->line('fees') . " " . $this->lang->line('report');
-                                                $this->customlib->get_postmessage();
-                                                ?></div>
-                            <table class="table table-striped table-bordered table-hover example">
-                                <thead class="header">
-                                    <tr>
-                                        <th><?php echo $this->lang->line('payment_id'); ?></th>
-                                        <th><?php echo $this->lang->line('date'); ?></th>
-                                        <th><?php echo $this->lang->line('name'); ?></th>
-                                        <th><?php echo $this->lang->line('class'); ?></th>
-                                        <th><?php echo $this->lang->line('fee_type'); ?></th>
+                    <?php    } else { ?>
+                        <div class="">
+                            <div class="box-header ptbnull"></div>
+                            <div class="box-header ptbnull">
+                                <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php ?> <?php echo $this->lang->line('online') . " " . $this->lang->line('fees') . " " . $this->lang->line('report'); ?></h3>
+                            </div>
+                            <div class="box-body table-responsive">
+                                <div class="download_label"><?php echo $this->lang->line('online') . " " . $this->lang->line('fees') . " " . $this->lang->line('report');
+                                                            $this->customlib->get_postmessage();
+                                                            ?></div>
+                                <table class="table table-striped table-bordered table-hover example">
+                                    <thead class="header">
+                                        <tr>
+                                            <th><?php echo $this->lang->line('payment_id'); ?></th>
+                                            <th><?php echo $this->lang->line('date'); ?></th>
+                                            <th><?php echo $this->lang->line('name'); ?></th>
+                                            <th><?php echo $this->lang->line('class'); ?></th>
+                                            <th><?php echo $this->lang->line('fee_type'); ?></th>
 
-                                        <th><?php echo $this->lang->line('mode'); ?></th>
+                                            <th><?php echo $this->lang->line('mode'); ?></th>
 
-                                        <th class="text text-right"><?php echo $this->lang->line('amount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                        <th class="text text-right"><?php echo $this->lang->line('discount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                        <th class="text text-right"><?php echo $this->lang->line('fine'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                        <th class="text text-right"><?php echo $this->lang->line('total'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                            <th class="text text-right"><?php echo $this->lang->line('amount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                            <th class="text text-right"><?php echo $this->lang->line('discount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                            <th class="text text-right"><?php echo $this->lang->line('fine'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                            <th class="text text-right"><?php echo $this->lang->line('total'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                    <?php
+                                        <?php
                                         $count = 1;
 
                                         foreach ($collectlist as $key => $collect) {
@@ -126,35 +138,38 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             $alldiscount += $discount;
                                             $finetotal += $fine;
                                             $alltotal += $total;
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td>
-        <?php echo $collect['id'] . "/" . $collect['inv_no']; ?>
+                                                    <?php echo $collect['id'] . "/" . $collect['inv_no']; ?>
                                                 </td>
                                                 <td>
-        <?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($collect['date'])); ?>
+                                                    <?php echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($collect['date'])); ?>
                                                 </td>
                                                 <td>
-        <?php echo $this->customlib->getFullName($collect['firstname'],$collect['middlename'],$collect['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?>
+                                                    <?php echo $this->customlib->getFullName($collect['firstname'], $collect['middlename'], $collect['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?>
                                                 </td>
                                                 <td>
-        <?php echo $collect['class'] . " (" . $collect['section'] . ")"; ?>
+                                                    <?php echo $collect['class'] . " (" . $collect['section'] . ")"; ?>
                                                 </td>
                                                 <td>
-        <?php echo $collect['type']; ?>
+                                                    <?php echo $collect['type']; ?>
                                                 </td>
 
                                                 <td>
-        <?php echo $collect['payment_mode']; ?>
+                                                    <?php echo $collect['payment_mode']; ?>
                                                 </td>
                                                 <td class="text text-right">
-        <?php echo $amountLabel; //number_format($amount, 2, '.', '');  ?>
+                                                    <?php echo $amountLabel; //number_format($amount, 2, '.', '');  
+                                                    ?>
                                                 </td>
                                                 <td class="text text-right">
-        <?php echo $discountLabel; //number_format($discount, 2, '.', '');  ?>
+                                                    <?php echo $discountLabel; //number_format($discount, 2, '.', '');  
+                                                    ?>
                                                 </td>
                                                 <td class="text text-right">
-        <?php echo $fineLabel; //(number_format($fine, 2, '.', ''));  ?>
+                                                    <?php echo $fineLabel; //(number_format($fine, 2, '.', ''));  
+                                                    ?>
                                                 </td>
                                                 <td class="text text-right">
                                                     <?php
@@ -167,51 +182,50 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             $count++;
                                             ?>
 
-                                            <?php
+                                        <?php
                                         }
                                         ?>
-                                        
 
-                                </tbody>
-                                <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
 
-                                            <td style="font-weight:bold">Total</td>
-                                            <td class="text text-right" style="font-weight:bold" ><?php echo number_format($allamount, 2, '.', ''); ?></td>
-                                            <td class="text text-right" style="font-weight:bold"><?php echo number_format($alldiscount, 2, '.', ''); ?></td>
-                                            <td class="text text-right" style="font-weight:bold"><?php echo number_format($finetotal, 2, '.', ''); ?></td>
-                                            <td class="text text-right" style="font-weight:bold"><?php echo number_format($alltotal, 2, '.', ''); ?></td>                                                
-                                        </tr>
-                                      
-                            </table>
+                                    </tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <td style="font-weight:bold">Total</td>
+                                        <td class="text text-right" style="font-weight:bold"><?php echo number_format($allamount, 2, '.', ''); ?></td>
+                                        <td class="text text-right" style="font-weight:bold"><?php echo number_format($alldiscount, 2, '.', ''); ?></td>
+                                        <td class="text text-right" style="font-weight:bold"><?php echo number_format($finetotal, 2, '.', ''); ?></td>
+                                        <td class="text text-right" style="font-weight:bold"><?php echo number_format($alltotal, 2, '.', ''); ?></td>
+                                    </tr>
+
+                                </table>
+                            </div>
                         </div>
-                    </div>
                 </div>
-                 <?php
-                                    }
-                                    ?>
+            <?php
+                    }
+            ?>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 
 
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>
