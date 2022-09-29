@@ -60,9 +60,9 @@
                                                 <label for="exampleInputEmail1">Publish To</label>
                                                 <select name="branch_id" id="groupbranch_id" class="form-control">
                                                     <?php
-                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
-                                                        echo "<option value=''>All</option>";
-                                                    }
+                                                    // if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                    //     echo "<option value=''>All</option>";
+                                                    // }
                                                     foreach ($branch as  $branchValue) { ?>
                                                         <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
                                                     <?php } ?>
@@ -160,9 +160,9 @@
                                                 <label for="exampleInputEmail1">Publish To</label>
                                                 <select name="branch_id" id="indbranch_id" class="form-control">
                                                     <?php
-                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
-                                                        echo "<option value='0'>All</option>";
-                                                    }
+                                                    // if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                    //     echo "<option value='0'>All</option>";
+                                                    // }
                                                     foreach ($branch as  $branchValue) { ?>
                                                         <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
                                                     <?php } ?>
@@ -278,9 +278,9 @@
                                                 <label for="exampleInputEmail1">Publish To</label>
                                                 <select name="branch_id" id="classGroupBranchId" class="form-control">
                                                     <?php
-                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
-                                                        echo "<option value=''>All</option>";
-                                                    }
+                                                    // if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                    //     echo "<option value=''>All</option>";
+                                                    // }
                                                     foreach ($branch as  $branchValue) { ?>
                                                         <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
                                                     <?php } ?>
@@ -371,9 +371,9 @@
                                                 <label for="exampleInputEmail1">Publish To</label>
                                                 <select name="branch_id" id="birthdayBranchId" class="form-control">
                                                     <?php
-                                                    if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
-                                                        echo "<option value=''>All</option>";
-                                                    }
+                                                    // if (empty($this->session->userdata['admin']['branch_id']) || $this->session->userdata['admin']['branch_id'] == 0) {
+                                                    //     echo "<option value=''>All</option>";
+                                                    // }
                                                     foreach ($branch as  $branchValue) { ?>
                                                         <option value="<?= $branchValue['id'] ?>"><?= $branchValue['branch_name'] ?></option>
                                                     <?php } ?>

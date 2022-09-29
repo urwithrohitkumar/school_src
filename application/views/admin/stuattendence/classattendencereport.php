@@ -1,8 +1,8 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
@@ -11,38 +11,51 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-calendar-check-o"></i> <?php echo $this->lang->line('attendance'); ?> <small> <?php echo $this->lang->line('by_date1'); ?></small>        </h1>
+            <i class="fa fa-calendar-check-o"></i> <?php echo $this->lang->line('attendance'); ?> <small> <?php echo $this->lang->line('by_date1'); ?></small>
+        </h1>
     </section>
     <section class="content">
         <?php $this->load->view('reports/_attendance'); ?>
-        <div class="row">   
+        <div class="row">
             <div class="col-md-12">
                 <div class="box removeboxmius">
                     <div class="box-header ptbnull"></div>
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                    <form id='form1' action="<?php echo site_url('admin/stuattendence/classattendencereport') ?>"  method="post" accept-charset="utf-8">
+                    <form id='form1' action="<?php echo site_url('admin/stuattendence/classattendencereport') ?>" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                        <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($classlist as $class) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $class['id'] ?>" <?php
-                                                if ($class_id == $class['id']) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
+                                                                                            if ($class_id == $class['id']) {
+                                                                                                echo "selected =selected";
+                                                                                            }
+                                                                                            ?>><?php echo $class['class'] ?></option>
+                                            <?php
+                                                $count++;
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
@@ -50,7 +63,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                        <select  id="section_id" name="section_id" class="form-control" >
+                                        <select id="section_id" name="section_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
@@ -59,20 +72,20 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('month'); ?></label><small class="req"> *</small>
-                                        <select  id="month" name="month" class="form-control" >
+                                        <select id="month" name="month" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($monthlist as $m_key => $month) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $m_key ?>" <?php
-                                                if ($month_selected == $m_key) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $month; ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
+                                                                                        if ($month_selected == $m_key) {
+                                                                                            echo "selected =selected";
+                                                                                        }
+                                                                                        ?>><?php echo $month; ?></option>
+                                            <?php
+                                                $count++;
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('month'); ?></span>
                                     </div>
@@ -80,20 +93,20 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('year'); ?></label>
-                                        <select  id="year" name="year" class="form-control" >
+                                        <select id="year" name="year" class="form-control">
 
                                             <?php
                                             // $yearlist  = array('2018' => '2018' );
                                             foreach ($yearlist as $y_key => $year) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $year["year"] ?>" <?php
-                                                if ($year_selected == $year["year"]) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $year["year"]; ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                                                            if ($year_selected == $year["year"]) {
+                                                                                                echo "selected =selected";
+                                                                                            }
+                                                                                            ?>><?php echo $year["year"]; ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('year'); ?></span>
                                     </div>
@@ -103,10 +116,10 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <button type="submit" name="search" value="search" class="btn btn-primary btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
-                                    </div>  
+                                    </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </form>
 
 
@@ -114,10 +127,10 @@
                     if ($this->module_lib->hasActive('student_attendance')) {
 
                         if (isset($resultlist)) {
-                            ?>
+                    ?>
                             <div class="" id="attendencelist">
-                                <div class="box-header ptbnull"></div>  
-                                <div class="box-header with-border" >
+                                <div class="box-header ptbnull"></div>
+                                <div class="box-header with-border">
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4">
                                             <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('attendance'); ?> <?php echo $this->lang->line('report'); ?></h3>
@@ -126,7 +139,7 @@
                                             <div class="lateday">
                                                 <?php
                                                 foreach ($attendencetypeslist as $key_type => $value_type) {
-                                                    ?>
+                                                ?>
                                                     &nbsp;&nbsp;
                                                     <b>
                                                         <?php
@@ -137,66 +150,65 @@
                                                         }
                                                         ?>
                                                     </b>
-                                                    <?php
+                                                <?php
                                                 }
                                                 ?>
                                             </div>
 
                                         </div>
-                                    </div></div>
+                                    </div>
+                                </div>
                                 <div class="box-body table-responsive">
                                     <?php
                                     if (!empty($resultlist)) {
-                                        ?>
+                                    ?>
                                         <div class="mailbox-controls">
                                             <div class="pull-right">
                                             </div>
                                         </div>
                                         <div class="download_label"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('attendance'); ?> <?php echo $this->lang->line('report') . " ";
-                            $this->customlib->get_postmessage();
-                                        ?></div>
+                                                                                                                                                                $this->customlib->get_postmessage();
+                                                                                                                                                                ?></div>
                                         <table class="table table-striped table-bordered table-hover example">
                                             <thead>
                                                 <tr>
                                                     <th>
-            <?php echo $this->lang->line('student'); ?> / <?php echo $this->lang->line('date'); ?>
+                                                        <?php echo $this->lang->line('student'); ?> / <?php echo $this->lang->line('date'); ?>
                                                     </th>
-                                                    <th><br/><span data-toggle="tooltip" title="<?php echo "Gross Present Percentage(%)"; ?>">%</span></th>
+                                                    <th><br /><span data-toggle="tooltip" title="<?php echo "Gross Present Percentage(%)"; ?>">%</span></th>
 
                                                     <?php
-                                                    foreach ($attendencetypeslist as $key => $value) {                                                       
+                                                    foreach ($attendencetypeslist as $key => $value) {
                                                         if (strip_tags($value["key_value"]) != "E") {
-                                                            ?>
-                                                            <th colspan="" ><span data-toggle="tooltip" title="<?php echo "Total " . $value["type"]; ?>"><?php echo strip_tags($value["key_value"]); ?>
+                                                    ?>
+                                                            <th colspan=""><span data-toggle="tooltip" title="<?php echo "Total " . $value["type"]; ?>"><?php echo strip_tags($value["key_value"]); ?>
 
                                                                 </span></th>
 
-                                                            <?php
+                                                    <?php
                                                         }
                                                     }
                                                     ?>
                                                     <?php
                                                     foreach ($attendence_array as $at_key => $at_value) {
                                                         if (date('D', $this->customlib->dateyyyymmddTodateformat($at_value)) == "Sun") {
-                                                            ?>
+                                                    ?>
                                                             <th class="tdcls text text-center bg-danger">
                                                                 <?php
                                                                 echo date('d', $this->customlib->dateyyyymmddTodateformat($at_value)) . "<br/>" .
-                                                                date('D', $this->customlib->dateyyyymmddTodateformat($at_value))
-                                                                ;
+                                                                    date('D', $this->customlib->dateyyyymmddTodateformat($at_value));
                                                                 ?>
                                                             </th>
-                                                            <?php
+                                                        <?php
                                                         } else {
-                                                            ?>
+                                                        ?>
                                                             <th class="tdcls text text-center">
                                                                 <?php
                                                                 echo date('d', $this->customlib->dateyyyymmddTodateformat($at_value)) . "<br/>" .
-                                                                date('D', $this->customlib->dateyyyymmddTodateformat($at_value))
-                                                                ;
+                                                                    date('D', $this->customlib->dateyyyymmddTodateformat($at_value));
                                                                 ?>
                                                             </th>
-                                                            <?php
+                                                    <?php
                                                         }
                                                     }
                                                     ?>
@@ -205,7 +217,7 @@
                                             </thead>
                                             <tbody>
                                                 <?php if (empty($student_array)) {
-                                                    ?>
+                                                ?>
                                                     <tr>
                                                         <td colspan="32" class="text-danger text-center"><?php echo $this->lang->line('no_record_found'); ?></td>
                                                     </tr>
@@ -215,12 +227,12 @@
                                                     $i = 0;
 
 
-                                                    foreach ($student_array as $student_key => $student_value) {                                                      
-                                                        ?>
+                                                    foreach ($student_array as $student_key => $student_value) {
+                                                    ?>
                                                         <tr>
                                                             <th class="tdclsname">
-                                                                <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#" style="color:#333"><?php echo $this->customlib->getFullName($student_value['firstname'],$student_value['middlename'],$student_value['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?></a></span>
-                                                                <div class="fee_detail_popover" style="display: none"><?php echo "Admission No: " . $student_value['admission_no']; ?></div> 
+                                                                <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#" style="color:#333"><?php echo $this->customlib->getFullName($student_value['firstname'], $student_value['middlename'], $student_value['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?></a></span>
+                                                                <div class="fee_detail_popover" style="display: none"><?php echo "Admission No: " . $student_value['admission_no']; ?></div>
                                                             </th>
                                                             <th><?php
                                                                 $total_present = ($monthAttendance[$i][$student_value['student_session_id']]['present'] + $monthAttendance[$i][$student_value['student_session_id']]['late_with_excuse'] + $monthAttendance[$i][$student_value['student_session_id']]['half_day'] + $monthAttendance[$i][$student_value['student_session_id']]['late']);
@@ -257,22 +269,22 @@
 
                                                             <?php
                                                             foreach ($attendence_array as $at_key => $at_value) {
-                                                                ?>
+                                                            ?>
                                                                 <th class="tdcls text text-center">
 
                                                                     <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#" style="color:#333"><?php
-                                                                            if (strip_tags($resultlist[$at_value][$student_value['student_session_id']]['key']) == "E") {
+                                                                                                                                                                                        if (strip_tags($resultlist[$at_value][$student_value['student_session_id']]['key']) == "E") {
 
-                                                                                $attendence_key = "L";
-                                                                                $remark = "Late With Excuse";
-                                                                            } else {
+                                                                                                                                                                                            $attendence_key = "L";
+                                                                                                                                                                                            $remark = "Late With Excuse";
+                                                                                                                                                                                        } else {
 
-                                                                                $attendence_key = $resultlist[$at_value][$student_value['student_session_id']]['key'];
-                                                                                $remark = $resultlist[$at_value][$student_value['student_session_id']]['remark'];
-                                                                            }
+                                                                                                                                                                                            $attendence_key = $resultlist[$at_value][$student_value['student_session_id']]['key'];
+                                                                                                                                                                                            $remark = $resultlist[$at_value][$student_value['student_session_id']]['remark'];
+                                                                                                                                                                                        }
 
-                                                                            print_r($attendence_key);
-                                                                            ?></a></span>
+                                                                                                                                                                                        print_r($attendence_key);
+                                                                                                                                                                                        ?></a></span>
                                                                     <div class="fee_detail_popover" style="display: none"><?php echo $remark; ?></div>
 
                                                                 </th>
@@ -289,36 +301,36 @@
 
 
                                                         </tr>
-                                                        <?php
+                                                <?php
                                                     }
                                                 }
                                                 ?>
                                             </tbody>
                                         </table>
-                                        <?php
+                                    <?php
                                     } else {
-                                        ?>
+                                    ?>
                                         <div class="alert alert-info">
-                                        <?php echo $this->lang->line('no_attendance_prepare'); ?>
+                                            <?php echo $this->lang->line('no_attendance_prepare'); ?>
                                         </div>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </div>
                             </div>
-                        </div><!-- ./box box-primary -->  
-                        <?php
+                </div><!-- ./box box-primary -->
+        <?php
+                        }
                     }
-                }
-                ?>
+        ?>
             </div>
-        </div> 
+        </div>
     </section>
 </div>
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         $('.detail_popover').popover({
             placement: 'right',
@@ -326,7 +338,7 @@
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('th').find('.fee_detail_popover').html();
             }
         });
@@ -334,6 +346,7 @@
         var section_id_post = '<?php echo $section_id; ?>';
         var class_id_post = '<?php echo $class_id; ?>';
         populateSection(section_id_post, class_id_post);
+
         function populateSection(section_id_post, class_id_post) {
             $('#section_id').html("");
             var base_url = '<?php echo base_url() ?>';
@@ -341,11 +354,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id_post},
+                data: {
+                    'class_id': class_id_post
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var select = "";
                         if (section_id_post == obj.section_id) {
                             var select = "selected=selected";
@@ -356,7 +370,7 @@
                 }
             });
         }
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             var base_url = '<?php echo base_url() ?>';
@@ -364,11 +378,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                     });
                     $('#section_id').append(div_data);
@@ -384,15 +399,19 @@
 </script>
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
+
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
-    function Popup(data)
-    {
+
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -418,7 +437,7 @@
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();

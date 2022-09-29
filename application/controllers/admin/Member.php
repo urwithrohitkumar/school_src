@@ -116,7 +116,6 @@ class Member extends Admin_Controller
         $data['title'] = 'Student Search';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
-
         $branch = $this->staff_model->getBranch();
         $data["branch"]         = $branch;
 
@@ -130,6 +129,7 @@ class Member extends Admin_Controller
             $section = $this->input->post('section_id');
             $search = $this->input->post('search');
             $search_text = $this->input->post('search_text');
+            $branch_id = $this->input->post('branch_id');
             if (isset($search)) {
                 if ($search == 'search_filter') {
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -139,7 +139,7 @@ class Member extends Admin_Controller
                         $data['class_id'] = $this->input->post('class_id');
                         $data['section_id'] = $this->input->post('section_id');
                         $data['search_text'] = $this->input->post('search_text');
-                        $resultlist = $this->student_model->searchLibraryStudent($class, $section);
+                        $resultlist = $this->student_model->searchLibraryStudent($class, $section ,$branch_id);
 
                         $data['resultlist'] = $resultlist;
                     }
@@ -148,7 +148,7 @@ class Member extends Admin_Controller
                     $data['class_id'] = $this->input->post('class_id');
                     $data['section_id'] = $this->input->post('section_id');
                     $data['search_text'] = trim($this->input->post('search_text'));
-                    $resultlist = $this->student_model->searchFullText($search_text);
+                    $resultlist = $this->student_model->searchFullText($search_text ,$branch_id);
                     $data['resultlist'] = $resultlist;
                 }
             }

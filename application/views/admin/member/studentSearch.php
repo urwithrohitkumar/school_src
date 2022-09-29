@@ -1,34 +1,46 @@
 <?php
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
-<div class="content-wrapper">    
+<div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-book"></i> <?php echo $this->lang->line('library'); ?></h1>
-    </section>  
+            <i class="fa fa-book"></i> <?php echo $this->lang->line('library'); ?>
+        </h1>
+    </section>
     <section class="content">
-        <div class="row">  
-            <div class="col-md-12"> 
+        <div class="row">
+            <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
                     <div class="box-body">
-                        <?php if ($this->session->flashdata('msg')) { ?> <div class="alert alert-success">  <?php echo $this->session->flashdata('msg') ?> </div> <?php } ?>
+                        <?php if ($this->session->flashdata('msg')) { ?> <div class="alert alert-success"> <?php echo $this->session->flashdata('msg') ?> </div> <?php } ?>
                         <div class="row">
                             <div class="">
-                                <form role="form" action="<?php echo site_url('admin/member/student') ?>" method="post" class=""> 
+                                <form role="form" action="<?php echo site_url('admin/member/student') ?>" method="post" class="">
                                     <?php echo $this->customlib->getCSRF(); ?>
-                                    <div class="col-sm-6">
+                                    <div class='col-sm-4'>
+                                        <div class='form-group'>
+                                            <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                            <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                <?php foreach ($branch as $key => $value) {  ?>
+                                                    <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-4'>
                                         <div class="form-group">
                                             <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                            <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                            <select autofocus="" id="class_id" name="class_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                 <?php
                                                 foreach ($classlist as $class) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) echo "selected=selected" ?>><?php echo $class['class'] ?></option>
-                                                    <?php
+                                                <?php
                                                     $count++;
                                                 }
                                                 ?>
@@ -36,10 +48,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class='col-sm-4'>
                                         <div class="form-group">
                                             <label><?php echo $this->lang->line('section'); ?></label>
-                                            <select  id="section_id" name="section_id" class="form-control" >
+                                            <select id="section_id" name="section_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             </select>
                                             <span class="text-danger"><?php echo form_error('section_id'); ?></span>
@@ -60,9 +72,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                     <?php
                     if (isset($resultlist)) {
-                        ?>
+                    ?>
                         <div class="" id="tachelist">
-                            <div class="box-header ptbnull"></div>   
+                            <div class="box-header ptbnull"></div>
                             <div class="box-header ptbnull">
                                 <h3 class="box-title titlefix"><?php echo $this->lang->line('students'); ?></h3>
                                 <div class="box-tools pull-right">
@@ -92,7 +104,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <tbody>
                                             <?php
                                             if (empty($resultlist)) {
-                                                ?>
+                                            ?>
 
                                                 <?php
                                             } else {
@@ -107,13 +119,13 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         $member_id = $student['libarary_member_id'];
                                                         $library_card_no = $student['library_card_no'];
                                                     }
-                                                    ?>
+                                                ?>
                                                     <tr class="<?php echo $clsactive; ?>">
                                                         <td><?php echo $member_id; ?></td>
                                                         <td><?php echo $library_card_no; ?></td>
                                                         <td><?php echo $student['admission_no']; ?></td>
                                                         <td>
-                                                            <?php echo $this->customlib->getFullName($student['firstname'],$student['middlename'],$student['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?>
+                                                            <?php echo $this->customlib->getFullName($student['firstname'], $student['middlename'], $student['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?>
 
                                                         </td>
                                                         <td><?php echo $student['class'] . "(" . $student['section'] . ")" ?></td>
@@ -127,25 +139,25 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         <td class="text text-right">
                                                             <?php
                                                             if ($student['libarary_member_id'] == 0) {
-                                                                ?>
+                                                            ?>
 
-                                                                <button data-placement="left"  data-stdid="<?php echo $student['id'] ?>" class="btn btn-default btn-xs add-student"  data-toggle="tooltip" title="<?php echo $this->lang->line('add'); ?>" >
+                                                                <button data-placement="left" data-stdid="<?php echo $student['id'] ?>" class="btn btn-default btn-xs add-student" data-toggle="tooltip" title="<?php echo $this->lang->line('add'); ?>">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
 
-                                                                <?php
+                                                            <?php
                                                             } else {
-                                                                ?>
+                                                            ?>
                                                                 <button data-placement="left" type="button" class="btn btn-default btn-xs surrender-student" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please Wait.." data-toggle="tooltip" data-memberid="<?php echo $member_id; ?>" title="<?php echo $this->lang->line('surrender_membership'); ?>"><i class="fa fa-mail-reply"></i></button>
 
-                                                                <?php
+                                                            <?php
                                                             }
                                                             ?>
 
 
                                                         </td>
                                                     </tr>
-                                                    <?php
+                                            <?php
                                                     $count++;
                                                 }
                                             }
@@ -156,10 +168,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             </div>
 
                         </div>
-                        <?php
+                    <?php
                     }
                     ?>
-                </div>  
+                </div>
             </div>
         </div>
     </section>
@@ -182,7 +194,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <input type="hidden" name="member_id" value="0" id="member_id">
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo $this->lang->line('library_card_no'); ?></label>
-                        <input type="name" class="form-control" name="library_card_no" id="library_card_no" >
+                        <input type="name" class="form-control" name="library_card_no" id="library_card_no">
                         <span class="text-danger" id="library_card_no_error"></span>
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm add-member" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please Wait.."><?php echo $this->lang->line('add'); ?></button>
@@ -194,7 +206,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $("#squarespaceModal").modal({
             show: false,
             backdrop: 'static'
@@ -203,6 +215,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 
     var base_url = '<?php echo base_url() ?>';
+
     function getSectionByClass(class_id, section_id) {
         if (class_id != "" && section_id != "") {
             $('#section_id').html("");
@@ -210,11 +223,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -226,11 +240,11 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             });
         }
     }
-    $(document).ready(function () {
+    $(document).ready(function() {
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
         getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             var base_url = '<?php echo base_url() ?>';
@@ -238,11 +252,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                     });
                     $('#section_id').append(div_data);
@@ -252,7 +267,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 
 
-    $(".surrender-student").click(function () {
+    $(".surrender-student").click(function() {
         if (confirm('Are you sure you want to surrender membership?')) {
             var memberid = $(this).data('memberid');
             var $this = $('.surrender-student');
@@ -260,10 +275,11 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             $.ajax({
                 type: "POST",
                 url: '<?php echo site_url('admin/member/surrender') ?>',
-                data: {'member_id': memberid}, // serializes the form's elements.
+                data: {
+                    'member_id': memberid
+                }, // serializes the form's elements.
                 dataType: 'JSON',
-                success: function (response)
-                {
+                success: function(response) {
 
                     if (response.status == "success") {
                         successMsg(response.message);
@@ -278,14 +294,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
 
 
-    $(".add-student").click(function () {
+    $(".add-student").click(function() {
         var student = $(this).data('stdid');
         $('#click_member_id').val(student);
         $('#member_id').val(student);
         $('#squarespaceModal').modal('show');
     });
 
-    $("#add_member").submit(function (e) {
+    $("#add_member").submit(function(e) {
         var student = $('#click_member_id').val();
         var $this = $('.add-member');
         $this.button('loading');
@@ -294,8 +310,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             url: $(this).attr('action'),
             data: $("#add_member").serialize(), // serializes the form's elements.
             dataType: 'JSON',
-            success: function (response)
-            {
+            success: function(response) {
 
                 if (response.status == "success") {
                     $('#squarespaceModal').modal('hide');
@@ -307,7 +322,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     $('*[data-stdid="' + student + '"]').closest("tr").addClass("success");
                     $('*[data-stdid="' + student + '"]').closest("td").empty();
                 } else if (response.status == "fail") {
-                    $.each(response.error, function (index, value) {
+                    $.each(response.error, function(index, value) {
                         var errorDiv = '#' + index + '_error';
                         $(errorDiv).empty().append(value);
                     });
@@ -319,4 +334,3 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
 </script>
-

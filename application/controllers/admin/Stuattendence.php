@@ -244,6 +244,9 @@ class Stuattendence extends Admin_Controller
         $data['title_list'] = 'Fees Type List';
         $branch = $this->staff_model->getBranch();
         $data["branch"]         = $branch;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
 
         $class = $this->class_model->get();
         $userdata = $this->customlib->getUserData();
@@ -281,10 +284,11 @@ class Stuattendence extends Admin_Controller
             $class = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $month = $this->input->post('month');
+            $branch_id = $this->input->post('branch_id');
             $data['class_id'] = $class;
             $data['section_id'] = $section;
             $data['month_selected'] = $month;
-            $studentlist = $this->student_model->searchByClassSection($class, $section);
+            $studentlist = $this->student_model->searchByClassSection($class, $section , $branch_id);
             $session_current = $this->setting_model->getCurrentSessionName();
             $startMonth = $this->setting_model->getStartMonth();
             $centenary = substr($session_current, 0, 2); //2017-18 to 2017

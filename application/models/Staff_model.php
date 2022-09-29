@@ -29,11 +29,14 @@ class Staff_model extends MY_Model
 
     public function getrat()
     {
-
         $this->db->select('staff.id,staff.employee_id,CONCAT_WS(" ",staff.name,staff.surname,"(",staff.employee_id,")") as name,roles.name as user_type,roles.id as role_id,staff_rating.rate,staff_rating.status,staff_rating.comment,staff_rating.id as rate_id,CONCAT_WS(" ",students.firstname,students.middlename,students.lastname,"(",students.admission_no,")") as student_name')->from('staff')->join("staff_roles", "staff_roles.staff_id = staff.id", "left")->join("roles", "staff_roles.role_id = roles.id", "left")->join("staff_rating", "staff_rating.staff_id = staff.id", "inner")->join("users", "users.id=staff_rating.user_id", "left")->join("students", "students.id=users.user_id", "left");
         $this->db->where('staff.is_active', 1);
         $this->db->where_not_in('roles.id', 7);
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+            $this->db->where('staff.branch_id', $this->session->userdata['admin']['branch_id']);
 
+        }
         $this->db->order_by('staff.id');
         $query = $this->db->get();
         return $query->result_array();
@@ -933,7 +936,7 @@ class Staff_model extends MY_Model
         return $this->db->select("CONCAT_WS(' ',name,surname) as name,employee_id,id")->from('staff')->where('id', $id)->get()->row_array();
     }
 
-    public function staff_report($condition)
+    public function staff_report($condition ,$branch_id)
     {
         $i             = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
@@ -952,8 +955,12 @@ class Staff_model extends MY_Model
       
         $field_var = count($field_k_array) > 0 ? "," . implode(',', $field_k_array) : "";
 
-        $query = "SELECT `staff`.*, `staff_designation`.`designation` as `designation`, `department`.`department_name` as `department`,`roles`.`name` as user_type " . $field_var . ",GROUP_CONCAT(leave_type_id,'@',alloted_leave) as leaves  FROM `staff` " . $join_array . " LEFT JOIN `staff_designation` ON `staff_designation`.`id` = `staff`.`designation` LEFT JOIN `staff_roles` ON `staff_roles`.`staff_id` = `staff`.`id` LEFT JOIN `roles` ON `staff_roles`.`role_id` = `roles`.`id` LEFT JOIN `department` ON `department`.`id` = `staff`.`department` left join staff_leave_details ON staff_leave_details.staff_id=staff.id WHERE 1  " . $condition . " group by staff.id";
+        $query = "SELECT `staff`.*, `staff_designation`.`designation` as `designation`, `department`.`department_name` as `department`,`roles`.`name` as user_type " . $field_var . ",GROUP_CONCAT(leave_type_id,'@',alloted_leave) as leaves  FROM `staff` " . $join_array . " LEFT JOIN `staff_designation` ON `staff_designation`.`id` = `staff`.`designation` LEFT JOIN `staff_roles` ON `staff_roles`.`staff_id` = `staff`.`id` LEFT JOIN `roles` ON `staff_roles`.`role_id` = `roles`.`id` LEFT JOIN `department` ON `department`.`id` = `staff`.`department` left join staff_leave_details ON staff_leave_details.staff_id=staff.id WHERE 1  " . $condition . " ";
 
+        if (!empty($branch_id)) {
+            $query = $query . " AND staff.branch_id =" . $branch_id;
+        }
+        $query = $query . " group by staff.id";
         $query = $this->db->query($query);
 
         return $query->result_array();

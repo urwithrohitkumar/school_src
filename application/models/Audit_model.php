@@ -22,11 +22,16 @@ class Audit_model extends MY_Model {
 
     public function getAllRecord() {
         $this->datatables
-                ->select('logs.*, CONCAT_WS("",staff.name,staff.surname," (",staff.employee_id,")") as name')
+                ->select('logs.*,tb_branch.branch_name, CONCAT_WS("",staff.name,staff.surname," (",staff.employee_id,")") as name')
                 ->join('staff', 'staff.id = logs.user_id')
+                ->join('tb_branch', 'tb_branch.id = logs.branch_id', 'left')
                 ->searchable('message, name, ip_address, action, platform, agent')
                 ->orderable('message, name, ip_address, action, platform, agent')
                 ->from('logs');
+
+                if ($this->session->userdata['admin']['branch_id'] != 0) {
+                    $this->datatables->where('logs.branch_id', $this->session->userdata['admin']['branch_id']);
+                }
         return $this->datatables->generate('json');
     }
 

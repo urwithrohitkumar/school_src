@@ -3,21 +3,23 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Itemstock_model extends MY_Model {
+class Itemstock_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select('`item_stock`.*, `item`.`name`, `item`.`item_category_id`, `item`.`description` as des, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store`')->from('item_stock');
         $this->db->join('item ', 'item.id = item_stock.item_id');
         $this->db->join('item_category', 'item.item_category_id = item_category.id');
         $this->db->join('item_supplier', 'item_stock.supplier_id = item_supplier.id');
         $this->db->join('item_store', 'item_store.id = item_stock.store_id', 'left outer');
-        if($this->session->userdata['admin']['branch_id'] != 0)
-        {
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
             $this->db->where('item_stock.branch_id', $this->session->userdata['admin']['branch_id']);
         }
         if ($id != null) {
@@ -39,7 +41,8 @@ class Itemstock_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -67,7 +70,8 @@ class Itemstock_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -99,32 +103,48 @@ class Itemstock_model extends MY_Model {
         // return $insert_id;
     }
 
-    public function get_currentstock() {
-        
+    public function get_currentstock()
+    {
+
+
         $this->datatables
-            ->select('sum(`item_stock`.`quantity`) as available_stock, `item`.`name`, `item`.`id`,`item`.`item_category_id`, `item`.`description` as `des`, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store`,(SELECT sum(quantity) from item_issue where item.id=item_issue.item_id) as total_issued ,(SELECT sum(quantity) from item_issue where item.id=item_issue.item_id and is_returned=1) as total_not_returned')
+            ->select('sum(`item_stock`.`quantity`) as available_stock, `item`.`name`,`tb_branch`.`branch_name`, `item`.`id`,`item`.`item_category_id`, `item`.`description` as `des`, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store`,(SELECT sum(quantity) from item_issue where item.id=item_issue.item_id) as total_issued ,(SELECT sum(quantity) from item_issue where item.id=item_issue.item_id and is_returned=1) as total_not_returned')
             ->searchable('`item`.`name`,`item_category`.`item_category`,`item_supplier`.`item_supplier`,`item_store`.`item_store`')
             ->orderable('`item`.`name`,`item_category`.`item_category`,`item_supplier`.`item_supplier`,`item_store`.`item_store`," ",available_stock ')
-            ->join("item","`item`.`id` = `item_stock`.`item_id`")
-            ->join("`item_category`" , "`item`.`item_category_id` = `item_category`.`id`")
-            ->join("item_supplier`" ,"`item_stock`.`supplier_id` = `item_supplier`.`id`")
-            ->join("item_store` "," `item_store`.`id` = `item_stock`.`store_id`","left outer")
-            ->Group_By('`item`.`id`')
-            ->from('item_stock');
+            ->join("item", "`item`.`id` = `item_stock`.`item_id`")
+            ->join("`item_category`", "`item`.`item_category_id` = `item_category`.`id`")
+            ->join("item_supplier`", "`item_stock`.`supplier_id` = `item_supplier`.`id`")
+            ->join("tb_branch`", "`item`.`branch_id` = `tb_branch`.`id`", "left")
+            ->join("item_store` ", " `item_store`.`id` = `item_stock`.`store_id`", "left outer");
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->datatables->where('item.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
 
+        $this->datatables->Group_By('`item`.`id`');
+        $this->datatables->from('item_stock');
+        return $this->datatables->generate('json');
+       
+
+        // return 
+    }
+
+    public function get_ItemByBetweenDate($start_date, $end_date)
+    {
+        $condition = " and date_format(item_stock.date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $condition = " and item.branch_id = ".$this->session->userdata['admin']['branch_id']."";
+        }
+
+        $sql = "SELECT `item_stock`.*, `item`.`name`, `item`.`item_category_id`,tb_branch.branch_name, `item`.`description` as `des`, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store` FROM `item_stock` JOIN `item` ON `item`.`id` = `item_stock`.`item_id` JOIN `item_category` ON `item`.`item_category_id` = `item_category`.`id` 
+        JOIN `item_supplier` ON `item_stock`.`supplier_id` = `item_supplier`.`id`
+        LEFT JOIN `tb_branch` ON `item`.`branch_id` = `tb_branch`.`id`
+         LEFT OUTER JOIN `item_store` ON `item_store`.`id` = `item_stock`.`store_id` where 1 " . $condition;
+
+        $this->datatables->query($sql)
+            ->searchable('name,item_category,item_supplier,item_store,item_stock.quantity,purchase_price,item_stock.date')
+            ->orderable('name,item_category,item_supplier,item_store,quantity,purchase_price,date')
+            ->query_where_enable(TRUE)
+            ->sort('item_stock.id', 'desc');
         return $this->datatables->generate('json');
     }
-
-    public function get_ItemByBetweenDate($start_date, $end_date) {
-        $condition = " and date_format(item_stock.date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
-        $sql = "SELECT `item_stock`.*, `item`.`name`, `item`.`item_category_id`, `item`.`description` as `des`, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store` FROM `item_stock` JOIN `item` ON `item`.`id` = `item_stock`.`item_id` JOIN `item_category` ON `item`.`item_category_id` = `item_category`.`id` JOIN `item_supplier` ON `item_stock`.`supplier_id` = `item_supplier`.`id` LEFT OUTER JOIN `item_store` ON `item_store`.`id` = `item_stock`.`store_id` where 1 " . $condition ;
-        
-        $this->datatables->query($sql)
-        ->searchable('name,item_category,item_supplier,item_store,item_stock.quantity,purchase_price,item_stock.date')
-        ->orderable('name,item_category,item_supplier,item_store,quantity,purchase_price,date') 
-        ->query_where_enable(TRUE)
-        ->sort('item_stock.id','desc') ;
-        return $this->datatables->generate('json');   
-    }
-
 }

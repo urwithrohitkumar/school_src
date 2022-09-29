@@ -1,7 +1,8 @@
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content-header">
         <h1>
-            <i class="fa fa-map-o"></i> <?php echo $this->lang->line('examinations'); ?> <small><?php echo $this->lang->line('student_fee1'); ?></small>  </h1>
+            <i class="fa fa-map-o"></i> <?php echo $this->lang->line('examinations'); ?> <small><?php echo $this->lang->line('student_fee1'); ?></small>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -19,71 +20,85 @@
                             <?php echo $this->customlib->getCSRF(); ?>
 
                             <div class="row">
+                            <div class="col-sm-6 col-lg-3 col-md-3 col20">
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
-                                        <select  id="exam_group_id" name="exam_group_id" class="form-control select2" >
+                                        <select id="exam_group_id" name="exam_group_id" class="form-control select2" >
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($examgrouplist as $ex_group_key => $ex_group_value) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $ex_group_value->id ?>" <?php
-                                                if (set_value('exam_group_id') == $ex_group_value->id) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?php echo $ex_group_value->name; ?></option>
-                                                        <?php
-                                                    }
-                                                    ?> 
+                                                                                                    if (set_value('exam_group_id') == $ex_group_value->id) {
+                                                                                                        echo "selected=selected";
+                                                                                                    }
+                                                                                                    ?>><?php echo $ex_group_value->name; ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_group_id'); ?></span>
                                     </div>
-                                </div><!--./col-md-3-->
+                                </div>
+                                <!--./col-md-3-->
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') ?></label><small class="req"> *</small>
-                                        <select  id="exam_id" name="exam_id" class="form-control select2" >
+                                        <select id="exam_id" name="exam_id" class="form-control select2">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
                                     </div>
-                                </div><!--./col-md-3-->
+                                </div>
+                                <!--./col-md-3-->
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('session'); ?></label><small class="req"> *</small>
-                                        <select  id="session_id" name="session_id" class="form-control select2" >
+                                        <select id="session_id" name="session_id" class="form-control select2">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($sessionlist as $session) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $session['id'] ?>" <?php
-                                                if (set_value('session_id') == $session['id']) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?php echo $session['session'] ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                                                                if (set_value('session_id') == $session['id']) {
+                                                                                                    echo "selected=selected";
+                                                                                                }
+                                                                                                ?>><?php echo $session['session'] ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('session_id'); ?></span>
                                     </div>
-                                </div><!--./col-md-3-->
+                                </div>
+                                <!--./col-md-3-->
                                 <div class="col-sm-6 col-lg-3 col-md-12 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                        <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($classlist as $class) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $class['id'] ?>" <?php
-                                                if (set_value('class_id') == $class['id']) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                                                            if (set_value('class_id') == $class['id']) {
+                                                                                                echo "selected=selected";
+                                                                                            }
+                                                                                            ?>><?php echo $class['class'] ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
@@ -92,7 +107,7 @@
                                 <div class="col-sm-6 col-lg-3 col-md-12 col20">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                        <select  id="section_id" name="section_id" class="form-control" >
+                                        <select id="section_id" name="section_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
@@ -104,14 +119,14 @@
                                         <button type="submit" name="search" value="search_filter" class="btn btn-primary pull-right btn-sm checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                     </div>
                                 </div>
-                            </div>  
+                            </div>
                         </form>
                     </div>
 
                     <?php
                     if (isset($studentList)) {
-                        ?>
-                        <div class="box-header ptbnull"></div>  
+                    ?>
+                        <div class="box-header ptbnull"></div>
                         <div class="box-header ptbnull">
                             <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('list'); ?></h3>
 
@@ -119,14 +134,14 @@
                         <div class="box-body">
                             <div class="table-responsive no-padding">
                                 <div class="download_label"><?php ?> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('list') . "<br>";
-                    $this->customlib->get_postmessage();
-                        ?></div>
+                                                                                                                    $this->customlib->get_postmessage();
+                                                                                                                    ?></div>
 
                                 <?php
                                 if (empty($studentList)) {
-                                    ?>
+                                ?>
 
-                                    <?php
+                                <?php
                                 } else {
                                     $count = 1;
                                     $student_list_array = array();
@@ -137,9 +152,9 @@
                                         $student_array = array();
                                         $student_array['admission_no'] = $student_value->admission_no;
                                         $student_array['profile_roll_no'] = ($student_value->roll_no != 0) ? $student_value->roll_no : "-";
-                                         $student_array['exam_roll_no'] = ($student_value->exam_roll_no != 0) ? $student_value->exam_roll_no : "-";
+                                        $student_array['exam_roll_no'] = ($student_value->exam_roll_no != 0) ? $student_value->exam_roll_no : "-";
                                         $student_array['student_id'] = $student_value->student_id;
-                                        $student_array['name'] = $this->customlib->getFullName($student_value->firstname,$student_value->middlename,$student_value->lastname,$sch_setting->middlename,$sch_setting->lastname);
+                                        $student_array['name'] = $this->customlib->getFullName($student_value->firstname, $student_value->middlename, $student_value->lastname, $sch_setting->middlename, $sch_setting->lastname);
                                         $total_subject = count($subjectList);
                                         $result_total_subject = 0;
 
@@ -160,7 +175,7 @@
                                                 $subject_result['result_status'] = false;
 
                                                 if ($result) {
-                                                
+
                                                     $result_total_subject++;
                                                     $subject_status = false;
                                                     $subject_result['result_status'] = true;
@@ -235,41 +250,41 @@
                                             <?php
                                             if (!empty($subjectList)) {
                                                 foreach ($subjectList as $subject_key => $subject_value) {
-                                                    ?>
+                                            ?>
                                                     <th>
                                                         <?php
                                                         echo $subject_value->subject_name;
                                                         echo "<br/>";
                                                         echo "(" . $subject_value->min_marks . "/" . $subject_value->max_marks . " - " . $subject_value->subject_code . ")";
                                                         if ($exam_details->exam_group_type == "gpa") {
-                                                            ?>
-                                                            <br/>
+                                                        ?>
+                                                            <br />
                                                             (<?php echo $this->lang->line('grade') . " " . $this->lang->line('point'); ?>) * (<?php echo $this->lang->line('credit') . " " . $this->lang->line('hours') ?>)
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
                                                     </th>
-                                                    <?php
+                                                <?php
                                                 }
 
                                                 if ($exam_details->exam_group_type == "school_grade_system" || $exam_details->exam_group_type == "basic_system" || $exam_details->exam_group_type == "coll_grade_system") {
-                                                    ?>
+                                                ?>
 
                                                     <th><?php echo $this->lang->line('grand') . " " . $this->lang->line('total'); ?></th>
                                                     <th><?php echo $this->lang->line('percent') ?> (%)</th>
                                                     <?php
                                                     if ($exam_details->exam_group_type != "gpa") {
-                                                        ?>
+                                                    ?>
                                                         <th><?php echo $this->lang->line('result') ?></th>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
 
-                                                    <?php
+                                                <?php
                                                 } elseif ($exam_details->exam_group_type == "gpa") {
-                                                    ?>
+                                                ?>
                                                     <th><?php echo $this->lang->line('result') ?></th>
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -280,17 +295,17 @@
                                         if (!empty($student_list_array)) {
                                             $rank_count = 1;
                                             foreach ($student_list_array as $student_list_value) {
-                                                ?>
+                                        ?>
                                                 <tr>
                                                     <td><?php echo $rank_count; ?></td>
                                                     <td><?php echo $student_list_value['admission_no']; ?></td>
                                                     <td>
-                                                        <?php 
-                                                      echo ($exam_details->use_exam_roll_no)?$student_list_value['exam_roll_no']:$student_list_value['profile_roll_no']; ?> </td>
+                                                        <?php
+                                                        echo ($exam_details->use_exam_roll_no) ? $student_list_value['exam_roll_no'] : $student_list_value['profile_roll_no']; ?> </td>
                                                     <td>
                                                         <a href="<?php echo base_url(); ?>student/view/<?php echo $student_list_value['student_id']; ?>"><?php echo $student_list_value['name'];
- 
-                                                         ?>
+
+                                                                                                                                                            ?>
                                                         </a>
                                                     </td>
                                                     <?php
@@ -298,7 +313,7 @@
 
                                                         if (!empty($student_list_value['subjet_results'])) {
                                                             foreach ($student_list_value['subjet_results'] as $result_key => $result_value) {
-                                                                ?>
+                                                    ?>
                                                                 <td>
                                                                     <?php
                                                                     if ($result_value['result_status']) {
@@ -306,235 +321,247 @@
                                                                             echo $result_value['point'] . " X " . $result_value['subject_credit_hour'] . " = " . number_format($result_value['point'] * $result_value['subject_credit_hour'], 2, '.', '');
                                                                         } else {
 
-                 echo $result_value['get_marks'] .($result_value['get_exam_grade'] == "-" ? "": " (" . $result_value['get_exam_grade'] . ")" );
+                                                                            echo $result_value['get_marks'] . ($result_value['get_exam_grade'] == "-" ? "" : " (" . $result_value['get_exam_grade'] . ")");
                                                                         }
 
 
                                                                         if ($result_value['attendence'] == "absent") {
-                                                                            ?>  
+                                                                    ?>
                                                                             <p class="text">
-                                                                            <?php echo $this->lang->line($result_value['attendence']); ?>
-                                                                            </p>        
-                                                                            <?php
+                                                                                <?php echo $this->lang->line($result_value['attendence']); ?>
+                                                                            </p>
+                                                                        <?php
                                                                         }
                                                                         ?>
                                                                         <p class="text"><?php echo $result_value['note']; ?></p>
-                                                                        <?php
+                                                                    <?php
                                                                     }
                                                                     ?>
                                                                 </td>
-                                                                <?php
+                                                            <?php
                                                             }
                                                         }
 
                                                         if ($exam_details->exam_group_type != "gpa") {
                                                             ?>
                                                             <td>
-                    <?php echo $student_list_value['grand_total']; ?>
+                                                                <?php echo $student_list_value['grand_total']; ?>
                                                             </td>
                                                             <td>
-                                                            <?php echo $student_list_value['percentage']; ?>
+                                                                <?php echo $student_list_value['percentage']; ?>
                                                             </td>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
                                                         <td>
                                                             <?php
-//                                                        print_r($student_list_value);
+                                                            //                                                        print_r($student_list_value);
                                                             if ($student_list_value['total_subject'] > 0 && $student_list_value['result_total_subject'] >= 1)
                                                                 if ($exam_details->exam_group_type == "gpa") {
                                                                     echo $student_list_value['quality_points'];
                                                                 } else {
                                                                     if ($student_list_value['result_status']) {
+                                                            ?>
+                                                                    <label class="label label-success"><?php echo $this->lang->line('pass'); ?><label>
+                                                                        <?php
+                                                                    } else {
                                                                         ?>
-                                                                        <label class="label label-success"><?php echo $this->lang->line('pass'); ?><label>
-                                                                                <?php
-                                                                            } else {
-                                                                                ?>
-                                                                                <label class="label label-danger"><?php echo $this->lang->line('fail'); ?><label>
-                                                                                        <?php
-                                                                                    }
-                                                                                }
-                                                                            ?>
-                                                                            </td>
+                                                                            <label class="label label-danger"><?php echo $this->lang->line('fail'); ?><label>
                                                                             <?php
                                                                         }
-                                                                        ?>
-                                                                        </tr>
-                                                                        <?php
-                                                                        $rank_count++;
                                                                     }
-                                                                }
-                                                                ?>
-                                                                </tbody>
-                                                                </table>
-                                                                </div>
-                                                                </div>
-                                                                </div>
+                                                                            ?>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tr>
+                                        <?php
+                                                $rank_count++;
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                </div>
 
-                                                                <?php
-                                                            }
-                                                            ?>
-                                                            </div>
-                                                            </div>
-                                                            </section>
-                                                            </div>
+            <?php
+                    }
+            ?>
+            </div>
+        </div>
+    </section>
+</div>
 
-                                                            <?php
+<?php
 
-                                                            function getSubjectMarks($subject_results, $subject_id) {
-                                                                if (!empty($subject_results)) {
-                                                                    foreach ($subject_results as $subject_result_key => $subject_result_value) {
-                                                                        if ($subject_id == $subject_result_value->subject_id) {
-                                                                            return $subject_result_value;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                return false;
-                                                            }
+function getSubjectMarks($subject_results, $subject_id)
+{
+    if (!empty($subject_results)) {
+        foreach ($subject_results as $subject_result_key => $subject_result_value) {
+            if ($subject_id == $subject_result_value->subject_id) {
+                return $subject_result_value;
+            }
+        }
+    }
+    return false;
+}
 
-                                                            function get_ExamGrade($exam_grades, $percentage) {
-                                                                if (!empty($exam_grades)) {
-                                                                    foreach ($exam_grades as $exam_grade_key => $exam_grade_value) {
+function get_ExamGrade($exam_grades, $percentage)
+{
+    if (!empty($exam_grades)) {
+        foreach ($exam_grades as $exam_grade_key => $exam_grade_value) {
 
-                                                                        if ($exam_grade_value->mark_from >= $percentage && $exam_grade_value->mark_upto <= $percentage) {
-                                                                            return $exam_grade_value->name;
-                                                                        }
-                                                                    }
-                                                                }
+            if ($exam_grade_value->mark_from >= $percentage && $exam_grade_value->mark_upto <= $percentage) {
+                return $exam_grade_value->name;
+            }
+        }
+    }
 
-                                                                return "-";
-                                                            }
+    return "-";
+}
 
-                                                            function findGradePoints($exam_grades, $percentage) {
+function findGradePoints($exam_grades, $percentage)
+{
 
-                                                                if (!empty($exam_grades)) {
-                                                                    foreach ($exam_grades as $exam_grade_key => $exam_grade_value) {
+    if (!empty($exam_grades)) {
+        foreach ($exam_grades as $exam_grade_key => $exam_grade_value) {
 
-                                                                        if ($exam_grade_value->mark_from >= $percentage && $exam_grade_value->mark_upto <= $percentage) {
-                                                                            return $exam_grade_value->point;
-                                                                        }
-                                                                    }
-                                                                }
+            if ($exam_grade_value->mark_from >= $percentage && $exam_grade_value->mark_upto <= $percentage) {
+                return $exam_grade_value->point;
+            }
+        }
+    }
 
-                                                                return 0;
-                                                            }
+    return 0;
+}
 
-                                                            function aasort(&$arr) {
-                                                                array_multisort(
-                                                                        array_column($arr, 'result_status'), SORT_DESC, array_column($arr, 'percentage'), SORT_DESC, $arr);
-                                                         
-                                                            }
+function aasort(&$arr)
+{
+    array_multisort(
+        array_column($arr, 'result_status'),
+        SORT_DESC,
+        array_column($arr, 'percentage'),
+        SORT_DESC,
+        $arr
+    );
+}
 
-                                                            function aasort_gpa(&$arr) {
-                                                                array_multisort(
-                                                                        array_column($arr, 'exam_qulity_point'), SORT_DESC, $arr);
-                                                        
-                                                            }
-                                                            ?>
+function aasort_gpa(&$arr)
+{
+    array_multisort(
+        array_column($arr, 'exam_qulity_point'),
+        SORT_DESC,
+        $arr
+    );
+}
+?>
 
-                                                            <script type="text/javascript">
-                                                                $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function() {
         $('.select2').select2();
 
     });
-                                                                $(document).ready(function () {
-                                                                    $.extend($.fn.dataTable.defaults, {
-                                                                        searching: true,
-                                                                        ordering: true,
-                                                                        paging: false,
-                                                                        retrieve: true,
-                                                                        destroy: true,
-                                                                        info: false
-                                                                    });
-                                                                });
+    $(document).ready(function() {
+        $.extend($.fn.dataTable.defaults, {
+            searching: true,
+            ordering: true,
+            paging: false,
+            retrieve: true,
+            destroy: true,
+            info: false
+        });
+    });
 
-                                                                var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy']) ?>';
-                                                                var class_id = '<?php echo set_value('class_id') ?>';
-                                                                var section_id = '<?php echo set_value('section_id') ?>';
-                                                                var session_id = '<?php echo set_value('session_id') ?>';
-                                                                var exam_group_id = '<?php echo set_value('exam_group_id') ?>';
-                                                                var exam_id = '<?php echo set_value('exam_id') ?>';
-                                                                getSectionByClass(class_id, section_id);
-                                                            
-                                                                getExamByExamgroup(exam_group_id, exam_id);
-                                                                $(document).on('change', '#exam_group_id', function (e) {
-                                                                    $('#exam_id').html("");
-                                                                    var exam_group_id = $(this).val();
-                                                                    getExamByExamgroup(exam_group_id, 0);
-                                                                });
+    var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy']) ?>';
+    var class_id = '<?php echo set_value('class_id') ?>';
+    var section_id = '<?php echo set_value('section_id') ?>';
+    var session_id = '<?php echo set_value('session_id') ?>';
+    var exam_group_id = '<?php echo set_value('exam_group_id') ?>';
+    var exam_id = '<?php echo set_value('exam_id') ?>';
+    getSectionByClass(class_id, section_id);
 
-                                                                $(document).on('change', '#class_id', function (e) {
-                                                                    $('#section_id').html("");
-                                                                    var class_id = $(this).val();
-                                                                    getSectionByClass(class_id, 0);
-                                                                });
+    getExamByExamgroup(exam_group_id, exam_id);
+    $(document).on('change', '#exam_group_id', function(e) {
+        $('#exam_id').html("");
+        var exam_group_id = $(this).val();
+        getExamByExamgroup(exam_group_id, 0);
+    });
 
-                                                                function getSectionByClass(class_id, section_id) {
+    $(document).on('change', '#class_id', function(e) {
+        $('#section_id').html("");
+        var class_id = $(this).val();
+        getSectionByClass(class_id, 0);
+    });
 
-                                                                    if (class_id !== "") {
-                                                                        $('#section_id').html("");
-                                                                        var base_url = '<?php echo base_url() ?>';
-                                                                        var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+    function getSectionByClass(class_id, section_id) {
 
-                                                                        $.ajax({
-                                                                            type: "GET",
-                                                                            url: base_url + "sections/getByClass",
-                                                                            data: {'class_id': class_id},
-                                                                            dataType: "json",
-                                                                            beforeSend: function () {
-                                                                                $('#section_id').addClass('dropdownloading');
-                                                                            },
-                                                                            success: function (data) {
-                                                                                $.each(data, function (i, obj)
-                                                                                {
-                                                                                    var sel = "";
-                                                                                    if (section_id === obj.section_id) {
-                                                                                        sel = "selected";
-                                                                                    }
-                                                                                    div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                                                                                });
-                                                                                $('#section_id').append(div_data);
-                                                                            },
-                                                                            complete: function () {
-                                                                                $('#section_id').removeClass('dropdownloading');
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }
+        if (class_id !== "") {
+            $('#section_id').html("");
+            var base_url = '<?php echo base_url() ?>';
+            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+
+            $.ajax({
+                type: "GET",
+                url: base_url + "sections/getByClass",
+                data: {
+                    'class_id': class_id
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#section_id').addClass('dropdownloading');
+                },
+                success: function(data) {
+                    $.each(data, function(i, obj) {
+                        var sel = "";
+                        if (section_id === obj.section_id) {
+                            sel = "selected";
+                        }
+                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
+                    });
+                    $('#section_id').append(div_data);
+                },
+                complete: function() {
+                    $('#section_id').removeClass('dropdownloading');
+                }
+            });
+        }
+    }
 
 
-                                                                function getExamByExamgroup(exam_group_id, exam_id) {
+    function getExamByExamgroup(exam_group_id, exam_id) {
 
-                                                                    if (exam_group_id !== "") {
-                                                                        $('#exam_id').html("");
-                                                                        var base_url = '<?php echo base_url() ?>';
-                                                                        var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+        if (exam_group_id !== "") {
+            $('#exam_id').html("");
+            var base_url = '<?php echo base_url() ?>';
+            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
 
-                                                                        $.ajax({
-                                                                            type: "POST",
-                                                                            url: base_url + "admin/examgroup/getExamByExamgroup",
-                                                                            data: {'exam_group_id': exam_group_id},
-                                                                            dataType: "json",
-                                                                            beforeSend: function () {
-                                                                                $('#exam_id').addClass('dropdownloading');
-                                                                            },
-                                                                            success: function (data) {
-                                                                                $.each(data, function (i, obj)
-                                                                                {
-                                                                                    var sel = "";
-                                                                                    if (exam_id === obj.id) {
-                                                                                        sel = "selected";
-                                                                                    }
-                                                                                    div_data += "<option value=" + obj.id + " " + sel + ">" + obj.exam + "</option>";
-                                                                                });
-                                                                                $('#exam_id').append(div_data);
-                                                                            },
-                                                                            complete: function () {
-                                                                                $('#exam_id').removeClass('dropdownloading');
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }
-                                                                 
-                                                            </script>
+            $.ajax({
+                type: "POST",
+                url: base_url + "admin/examgroup/getExamByExamgroup",
+                data: {
+                    'exam_group_id': exam_group_id
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#exam_id').addClass('dropdownloading');
+                },
+                success: function(data) {
+                    $.each(data, function(i, obj) {
+                        var sel = "";
+                        if (exam_id === obj.id) {
+                            sel = "selected";
+                        }
+                        div_data += "<option value=" + obj.id + " " + sel + ">" + obj.exam + "</option>";
+                    });
+                    $('#exam_id').append(div_data);
+                },
+                complete: function() {
+                    $('#exam_id').removeClass('dropdownloading');
+                }
+            });
+        }
+    }
+</script>

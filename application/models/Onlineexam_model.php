@@ -18,7 +18,6 @@ class Onlineexam_model extends MY_model
             $action    = "Update";
             $record_id = $id = $data['id'];
             $this->log($message, $record_id, $action);
-
         } else {
             $this->db->insert('onlineexam', $data);
             $id        = $this->db->insert_id();
@@ -39,7 +38,6 @@ class Onlineexam_model extends MY_model
             # Something went wrong.
             $this->db->trans_rollback();
             return false;
-
         } else {
             return $id;
         }
@@ -49,9 +47,9 @@ class Onlineexam_model extends MY_model
     {
         $branch_id = $this->session->admin['branch_id'];
         $this->db->select('onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')->from('onlineexam');
-        if($branch_id>0){
+        if ($branch_id > 0) {
             $this->db->where('onlineexam.branch_id', $branch_id);
-        }   
+        }
         if ($id != null) {
             $this->db->where('onlineexam.id', $id);
             $this->db->where('onlineexam.session_id', $this->current_session);
@@ -72,22 +70,21 @@ class Onlineexam_model extends MY_model
     }
 
     public function getexamlist()
-    { 
+    {
         $branch_id = $this->session->admin['branch_id'];
         $arr = [];
-        if($branch_id>0){
-            $arr = ['onlineexam.branch_id'=>$branch_id];
+        if ($branch_id > 0) {
+            $arr = ['onlineexam.branch_id' => $branch_id];
         }
         $this->datatables
             ->select('onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')
-            ->searchable('onlineexam.exam,onlineexam.attempt,exam_from,exam_to,duration')            
+            ->searchable('onlineexam.exam,onlineexam.attempt,exam_from,exam_to,duration')
             ->orderable('onlineexam.exam," ",total_ques,attempt,exam_from,exam_to,duration," "," " ')
-            ->sort('onlineexam.exam_from','desc')  
-            ->where($arr)         
+            ->sort('onlineexam.exam_from', 'desc')
+            ->where($arr)
             ->from('onlineexam');
 
         return $this->datatables->generate('json');
-
     }
 
     public function insertExamQuestion($insert_data)
@@ -107,7 +104,6 @@ class Onlineexam_model extends MY_model
             $action    = "Delete";
             $record_id = $result->id;
             $this->log($message, $record_id, $action);
-
         } else {
             $this->db->insert('onlineexam_questions', $insert_data);
             $id        = $this->db->insert_id();
@@ -115,7 +111,6 @@ class Onlineexam_model extends MY_model
             $action    = "Insert";
             $record_id = $id;
             $this->log($message, $record_id, $action);
-
         }
         //======================Code End==============================
         $this->db->trans_complete(); # Completing transaction
@@ -163,7 +158,7 @@ class Onlineexam_model extends MY_model
         $this->db->join('onlineexam_students', 'onlineexam_students.student_session_id = student_session.id and onlineexam_students.onlineexam_id=' . $onlineexam_id, 'left');
         $this->db->where('student_session.session_id', $this->current_session);
         $this->db->where('student_session.class_id', $class_id);
-          $this->db->where('students.is_active', 'yes');
+        $this->db->where('students.is_active', 'yes');
         if ($section_id != "") {
             $this->db->where('student_session.section_id', $section_id);
         }
@@ -171,10 +166,9 @@ class Onlineexam_model extends MY_model
 
         $query = $this->db->get();
         return $query->result_array();
-
     }
 
-    public function searchAllOnlineExamStudents($onlineexam_id, $class_id = null, $section_id = null)
+    public function searchAllOnlineExamStudents($onlineexam_id, $class_id = null, $section_id = null, $branch_id = null)
     {
         $this->db->select('class_sections.id as class_section_id,classes.id AS `class_id`,student_session.id as student_session_id,students.id,classes.class,sections.id AS `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,IFNULL(students.category_id, 0) as `category_id`,IFNULL(categories.category, "") as `category`,students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.father_name,students.rte,students.gender,IFNULL(onlineexam_students.id, 0) as onlineexam_student_id,IFNULL(onlineexam_students.student_session_id, 0) as onlineexam_student_session_id,IFNULL(onlineexam_students.rank, 0) as rank,onlineexam_students.is_attempted')->from('students');
         $this->db->join('student_session', 'student_session.student_id = students.id');
@@ -184,9 +178,12 @@ class Onlineexam_model extends MY_model
         $this->db->join('categories', 'students.category_id = categories.id', 'left');
         $this->db->join('onlineexam_students', 'onlineexam_students.student_session_id = student_session.id and onlineexam_students.onlineexam_id=' . $onlineexam_id);
         $this->db->where('student_session.session_id', $this->current_session);
-         $this->db->where('students.is_active', 'yes');
+        $this->db->where('students.is_active', 'yes');
         if ($class_id != null) {
             $this->db->where('student_session.class_id', $class_id);
+        }
+        if ($branch_id != null) {
+            $this->db->where('student_session.branch_id', $branch_id);
         }
         if ($section_id != null) {
             $this->db->where('student_session.section_id', $section_id);
@@ -195,7 +192,6 @@ class Onlineexam_model extends MY_model
         $this->db->order_by('onlineexam_students.is_attempted', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
-
     }
 
     public function addStudents($data_insert, $data_delete, $onlineexam_id)
@@ -237,7 +233,6 @@ class Onlineexam_model extends MY_model
             $this->db->trans_commit();
             return true;
         }
-
     }
 
     public function getStudentAttemts($onlineexam_student_id)
@@ -274,7 +269,6 @@ class Onlineexam_model extends MY_model
 
         $query = $this->db->query($query);
         return $query->result();
-
     }
 
     public function getExamQuestions($id = null, $random_type = false)
@@ -290,15 +284,21 @@ class Onlineexam_model extends MY_model
         $query = $this->db->get();
         return $query->result();
     }
-    public function onlineexamReport($condition)
+    public function onlineexamReport($condition, $branch_id)
     {
         $query = "SELECT onlineexam.*,(select count(*) from onlineexam_students WHERE onlineexam_students.onlineexam_id = onlineexam.id) as assign,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id) as questions FROM `onlineexam`  where " . $condition . " ";
 
+        if (!empty($branch_id)) {
+            $query = $query . " AND onlineexam.branch_id =" . $branch_id;
+        }
+
+
+
         $this->datatables->query($query)
-        ->searchable('onlineexam.exam,onlineexam.attempt,onlineexam.exam_from,onlineexam.exam_to,onlineexam.duration')
-        ->orderable('onlineexam.exam,onlineexam.attempt,onlineexam.exam_from,onlineexam.exam_to,onlineexam.duration,null,null,null') 
-        ->query_where_enable(TRUE)
-        ->sort('onlineexam.id','asc') ;
+            ->searchable('onlineexam.exam,onlineexam.attempt,onlineexam.exam_from,onlineexam.exam_to,onlineexam.duration')
+            ->orderable('onlineexam.exam,onlineexam.attempt,onlineexam.exam_from,onlineexam.exam_to,onlineexam.duration,null,null,null')
+            ->query_where_enable(TRUE)
+            ->sort('onlineexam.id', 'asc');
         return $this->datatables->generate('json');
     }
 
@@ -307,25 +307,25 @@ class Onlineexam_model extends MY_model
         $query = "SELECT student_session.id,students.admission_no,students.id as sid, CONCAT_WS(' ',firstname,middlename,lastname) as name,firstname,middlename,lastname,GROUP_CONCAT(onlineexam.id,'@',onlineexam.exam,'@',onlineexam.attempt,'@',onlineexam.exam_from,'@',onlineexam.exam_to,'@',onlineexam.duration,'@',onlineexam.passing_percentage,'@',onlineexam.is_active,'@',onlineexam.publish_result) as exams,GROUP_CONCAT(onlineexam_students.onlineexam_id) as attempt,`classes`.`id` AS `class_id`, `student_session`.`id` as `student_session_id`, `students`.`id`, `classes`.`class`, `sections`.`id` AS `section_id`, `sections`.`section`, `students`.`id`, `students`.`admission_no` FROM `student_session` INNER JOIN onlineexam_students on onlineexam_students.student_session_id=student_session.id INNER JOIN students on students.id=student_session.student_id JOIN `classes` ON `student_session`.`class_id` = `classes`.`id` JOIN `sections` ON `sections`.`id` = `student_session`.`section_id` LEFT JOIN `categories` ON `students`.`category_id` = `categories`.`id` INNER JOIN onlineexam on onlineexam_students.onlineexam_id=onlineexam.id WHERE  student_session.session_id=" . $this->db->escape($this->current_session) . " and students.is_active='yes' " . $condition . " group by students.id";
 
         $this->datatables->query($query)
-        ->searchable('students.firstname,students.admission_no,classes.class,sections.section')
-        ->orderable('students.firstname,students.admission_no,classes.class,sections.section,null,null,null,null,null') 
-        ->query_where_enable(TRUE);
-        return $this->datatables->generate('json');  
+            ->searchable('students.firstname,students.admission_no,classes.class,sections.section')
+            ->orderable('students.firstname,students.admission_no,classes.class,sections.section,null,null,null,null,null')
+            ->query_where_enable(TRUE);
+        return $this->datatables->generate('json');
     }
 
 
-    public function getstudentByexam_id($id){
-        $this->db->select('students.*,classes.class,sections.section')->from('onlineexam_students')->join('student_session','student_session.id=onlineexam_students.student_session_id')->join('students','students.id=student_session.student_id');
-         $this->db->join('classes', 'student_session.class_id = classes.id');
+    public function getstudentByexam_id($id)
+    {
+        $this->db->select('students.*,classes.class,sections.section')->from('onlineexam_students')->join('student_session', 'student_session.id=onlineexam_students.student_session_id')->join('students', 'students.id=student_session.student_id');
+        $this->db->join('classes', 'student_session.class_id = classes.id');
         $this->db->join('sections', 'sections.id = student_session.section_id');
         $this->db->where('onlineexam_id', $id);
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function get_msnstatusByexam_id($id){
-         return $this->db->select('onlineexam.publish_exam_notification,onlineexam.publish_result_notification')->where('onlineexam.id',$id)->get('onlineexam')->row_array();
-
+    public function get_msnstatusByexam_id($id)
+    {
+        return $this->db->select('onlineexam.publish_exam_notification,onlineexam.publish_result_notification')->where('onlineexam.id', $id)->get('onlineexam')->row_array();
     }
-
 }

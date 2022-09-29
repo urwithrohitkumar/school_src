@@ -102,6 +102,8 @@ class Route extends Admin_Controller
         $data['title'] = 'Student Hostel Details';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $userdata = $this->customlib->getUserData();
         $carray = array();
 
@@ -124,6 +126,7 @@ class Route extends Admin_Controller
         $class_id = $this->input->post("class_id");
         $route_title = $this->input->post("route_title");
         $vehicle_no = $this->input->post("vehicle_no");
+        $branch_id = $this->input->post('branch_id');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
 
@@ -132,7 +135,7 @@ class Route extends Admin_Controller
         } else {
             if (isset($_POST["search"])) {
 
-                $details = $this->route_model->searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no);
+                $details = $this->route_model->searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no ,$branch_id);
             } else {
 
                 $details = $this->route_model->studentTransportDetails($carray);

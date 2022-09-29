@@ -2,12 +2,15 @@
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
 <style type="text/css">
-    .text-left{text-align: left !important;}
+    .text-left {
+        text-align: left !important;
+    }
 </style>
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?></h1>
+            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -24,6 +27,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-body row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
+                            <div class="col-sm-3 col-md-3">
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
 
                             <div class="col-sm-3 col-md-3">
                                 <div class="form-group">
@@ -31,14 +45,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -50,14 +64,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                         <?php
                                         foreach ($status as $status_key => $status_value) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $status_key ?>" <?php
-                                            if ((isset($status_val)) && ($status_val == $status_key)) {
+                                                                                        if ((isset($status_val)) && ($status_val == $status_key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $status_value ?></option>
-                                                <?php } ?>
+                                                                                            echo "selected";
+                                                                                        }
+                                                                                        ?>><?php echo $status_value ?></option>
+                                        <?php } ?>
                                     </select>
 
                                 </div>
@@ -65,17 +79,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <div class="col-sm-3 col-md-3">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('role'); ?></label>
-                                    <select class="form-control" name="role" >
+                                    <select class="form-control" name="role">
                                         <option value=""><?php echo $this->lang->line('select') ?></option>
                                         <?php foreach ($roles as $value) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $value['id'] ?>" <?php
-                                            if ((isset($role_val)) && ($role_val == $value['id'])) {
+                                                                                        if ((isset($role_val)) && ($role_val == $value['id'])) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $value['name'] ?></option>
-                                                <?php } ?>
+                                                                                            echo "selected";
+                                                                                        }
+                                                                                        ?>><?php echo $value['name'] ?></option>
+                                        <?php } ?>
                                     </select>
 
                                 </div>
@@ -86,14 +100,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <select class="form-control" name="designation">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php foreach ($designation as $value) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $value['id'] ?>" <?php
-                                            if ((isset($designation_val)) && ($designation_val == $value['id'])) {
+                                                                                        if ((isset($designation_val)) && ($designation_val == $value['id'])) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $value['designation'] ?></option>
-                                                <?php } ?>
+                                                                                            echo "selected";
+                                                                                        }
+                                                                                        ?>><?php echo $value['designation'] ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -116,8 +130,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('staff') . " " . $this->lang->line('report'); ?></h3>
                         </div>
                         <div class="box-body table-responsive">
-                            <div class="download_label"><?php echo $this->lang->line('staff') . " " . $this->lang->line('report') . "(".$this->customlib->get_postmessage();
-                                                ?></div>
+                            <div class="download_label"><?php echo $this->lang->line('staff') . " " . $this->lang->line('report') . "(" . $this->customlib->get_postmessage();
+                                                        ?></div>
                             <table class="table table-striped table-bordered table-hover example ">
                                 <thead>
                                     <tr>
@@ -136,7 +150,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <th><?php echo $this->lang->line('emergency_contact_number'); ?></th>
                                         <th><?php echo $this->lang->line('marital_status'); ?></th>
                                         <th><?php echo $this->lang->line('current'); ?> <?php echo $this->lang->line('address'); ?></th>
-                                        <th><?php echo $this->lang->line('permanent_address'); ?></th>                                      
+                                        <th><?php echo $this->lang->line('permanent_address'); ?></th>
                                         <th><?php echo $this->lang->line('qualification'); ?></th>
                                         <th><?php echo $this->lang->line('work_experience'); ?></th>
                                         <th><?php echo $this->lang->line('note'); ?></th>
@@ -152,13 +166,13 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <th><?php echo $this->lang->line('ifsc_code'); ?></th>
                                         <th><?php echo $this->lang->line('bank_branch_name'); ?></th>
                                         <th class="text-left"><?php echo $this->lang->line('social_media'); ?></th>
-                                            <?php
-                                            if (!empty($fields)) {
+                                        <?php
+                                        if (!empty($fields)) {
 
-                                                foreach ($fields as $fields_key => $fields_value) {
-                                                    ?>
+                                            foreach ($fields as $fields_key => $fields_value) {
+                                        ?>
                                                 <th><?php echo $fields_value->name; ?></th>
-                                                <?php
+                                        <?php
                                             }
                                         }
                                         ?>
@@ -167,12 +181,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <tbody>
                                     <?php
                                     if (empty($resultlist)) {
-                                        ?>
+                                    ?>
                                         <?php
                                     } else {
                                         $count = 1;
                                         foreach ($resultlist as $staff) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td><?php echo $staff['employee_id']; ?></td>
                                                 <td><?php echo $staff['user_type']; ?></td>
@@ -229,17 +243,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         if ($fields_value->type == "link") {
                                                             $display_field = "<a href=" . $staff[$fields_value->name] . " target='_blank'>" . $staff[$fields_value->name] . "</a>";
                                                         }
-                                                        ?>
+                                                ?>
                                                         <td>
 
-                                                        <?php echo $display_field; ?></td>
-                                                        <?php
+                                                            <?php echo $display_field; ?></td>
+                                                <?php
                                                     }
                                                 }
                                                 ?>
 
                                             </tr>
-                                            <?php
+                                    <?php
                                             $count++;
                                         }
                                     }
@@ -250,21 +264,20 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>

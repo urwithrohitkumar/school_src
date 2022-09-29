@@ -117,6 +117,9 @@ class Homework extends Admin_Controller
 
                     $collectbtn = "<a onclick='return confirm(" . '"' . $this->lang->line('delete_confirm') . '"' . "  )' href='" . base_url() . "homework/delete/" . $homeworklist->id . "'   class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='left' title='" . $this->lang->line('delete') . "' data-original-title='" . $this->lang->line('delete') . "'><i class='fa fa-remove'></i></a>";
                 }
+                else{
+                    $collectbtn = "";
+                }
 
                 $row   = array();
                 $row[] = $homeworklist->class;

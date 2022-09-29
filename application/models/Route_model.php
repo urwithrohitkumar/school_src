@@ -116,6 +116,9 @@ class Route_model extends MY_Model
     public function listvehicles()
     {
         $this->db->select()->from('vehicles');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
         $listvehicles = $this->db->get();
         return $listvehicles->result_array();
     }
@@ -141,7 +144,7 @@ class Route_model extends MY_Model
         return $query->result_array();
     }
 
-    function searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no)
+    function searchTransportDetails($section_id, $class_id, $route_title, $vehicle_no ,$branch_id)
     {
 
         if ((!empty($class_id)) && (!empty($section_id))) {
@@ -158,6 +161,10 @@ class Route_model extends MY_Model
         if (!empty($vehicle_no)) {
 
             $this->db->where('vehicles.vehicle_no', $vehicle_no)->where('student_session.session_id', $this->current_session);
+        }
+        if (!empty($branch_id)) {
+
+            $this->db->where('vehicles.branch_id', $branch_id);
         }
 
         $this->db->where('students.is_active', 'yes');

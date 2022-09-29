@@ -143,6 +143,8 @@ class Staffattendance extends Admin_Controller {
         $data['date'] = "";
         $data['month_selected'] = "";
         $data["role_selected"] = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $role = $this->input->post("role");
         $this->form_validation->set_rules('month', $this->lang->line('month'), 'trim|required|xss_clean');
 
@@ -156,6 +158,7 @@ class Staffattendance extends Admin_Controller {
             $resultlist = array();
             $month = $this->input->post('month');
             $searchyear = $this->input->post('year');
+            $branch_id = $this->input->post('branch_id');
             $data['month_selected'] = $month;
             $data["role_selected"] = $role;
             $stafflist = $this->staff_model->getEmployee($role);
@@ -184,7 +187,7 @@ class Staffattendance extends Admin_Controller {
                 $att_date = $searchyear . "-" . $month_number . "-" . sprintf("%02d", $i);
                 $attendence_array[] = $att_date;
 
-                $res = $this->staffattendancemodel->searchAttendanceReport($role, $att_date);
+                $res = $this->staffattendancemodel->searchAttendanceReport($role, $att_date,$branch_id);
 
 
                 $student_result = $res;

@@ -323,11 +323,13 @@ class Book extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/library');
         $this->session->set_userdata('subsub_menu', 'Reports/library/issue_returnreport');
         $data['title']  = 'Add Teacher';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $teacher_result = $this->teacher_model->getLibraryTeacher();
-
+        
         $issued_books         = $this->bookissue_model->getissuereturnMemberBooks();
+       
         $data['issued_books'] = $issued_books;
-
         $this->load->view('layout/header', $data);
         $this->load->view('admin/book/issue_returnreport', $data);
         $this->load->view('layout/footer', $data);

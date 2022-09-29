@@ -1131,7 +1131,7 @@ class Student_model extends MY_Model
         return $query->result_array();
     }
 
-    public function searchLibraryStudent($class_id = null, $section_id = null)
+    public function searchLibraryStudent($class_id = null, $section_id = null, $branch_id = null)
     {
         $this->db->select('classes.id AS `class_id`,student_session.id as student_session_id,students.id,classes.class,sections.id AS `section_id`,
            IFNULL(libarary_members.id,0) as `libarary_member_id`,
@@ -1144,7 +1144,10 @@ class Student_model extends MY_Model
         if($this->session->userdata['admin']['branch_id'] != 0)
         {
             $this->db->where('student_session.branch_id', $this->session->userdata['admin']['branch_id']);
-        }  
+        } 
+        else{
+            $this->db->where('student_session.branch_id', $branch_id);
+        } 
 
         $this->db->where('student_session.session_id', $this->current_session);
         $this->db->where('students.is_active', 'yes');

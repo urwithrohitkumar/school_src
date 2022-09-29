@@ -1,8 +1,8 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
@@ -11,23 +11,35 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-calendar-check-o"></i> <?php echo $this->lang->line('attendance'); ?> <small> <?php echo $this->lang->line('by_date1'); ?></small>        </h1>
+            <i class="fa fa-calendar-check-o"></i> <?php echo $this->lang->line('attendance'); ?> <small> <?php echo $this->lang->line('by_date1'); ?></small>
+        </h1>
     </section>
     <section class="content">
         <?php $this->load->view('reports/_attendance'); ?>
-        <div class="row">   
+        <div class="row">
             <div class="col-md-12">
                 <div class="box removeboxmius">
                     <div class="box-header ptbnull"></div>
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                    <form id='form1' action="<?php echo site_url('report/daily_attendance_report') ?>"  method="post" accept-charset="utf-8">
+                    <form id='form1' action="<?php echo site_url('report/daily_attendance_report') ?>" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
+                                <div class='col-md-6'>
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('date'); ?></label><span class="req"> *</span>
                                         <input type="text" name="date" value="<?php echo set_value('date', $date); ?>" class="form-control date">
@@ -41,10 +53,10 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <button type="submit" name="search" value="search" class="btn btn-primary btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
-                                    </div>  
+                                    </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </form>
                     <div class="">
                         <div class="box-header ptbnull"></div>
@@ -56,7 +68,7 @@
                             <div class="download_label"><?php echo $this->lang->line('daily_attendance_report'); ?></div>
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>
-                                    <tr> 
+                                    <tr>
 
                                         <th><?php echo $this->lang->line('class') . " (" . $this->lang->line('section') . ")"; ?></th>
 
@@ -72,7 +84,7 @@
                                     <?php
                                     if (!empty($result)) {
                                         foreach ($resultlist as $key => $value) {
-                                            ?>
+                                    ?>
                                             <tr>
                                                 <td><?php echo $value['class_section'] ?></td>
                                                 <td><?php echo $value['total_present'] ?></td>
@@ -80,27 +92,25 @@
                                                 <td><?php echo $value['present_percent'] ?></td>
                                                 <td><?php echo $value['absent_persent'] ?></td>
                                             </tr>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
-                                      
-                                </tbody>
-                                  <tr style="font-weight: bold;">
-                                            <td></td>
 
-                                            <td><?php echo $all_present ?></td>
-                                            <td><?php echo $all_absent ?></td>
-                                            <td><?php echo $all_present_percent ?></td>
-                                            <td><?php echo $all_absent_percent ?></td>
-                                        </tr>
-                                    <?php } ?>
+                                </tbody>
+                                <tr style="font-weight: bold;">
+                                    <td></td>
+
+                                    <td><?php echo $all_present ?></td>
+                                    <td><?php echo $all_absent ?></td>
+                                    <td><?php echo $all_present_percent ?></td>
+                                    <td><?php echo $all_absent_percent ?></td>
+                                </tr>
+                            <?php } ?>
                             </table>
                         </div>
                     </div>
 
                 </div>
-            </div> 
+            </div>
     </section>
 </div>
-
-

@@ -374,11 +374,14 @@ class Payroll extends Admin_Controller
         $data["month"]        = $month;
         $data["year"]         = $year;
         $data["role_select"]  = $role;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['monthlist']    = $this->customlib->getMonthDropdown();
         $data['yearlist']     = $this->payroll_model->payrollYearCount();
         $staffRole            = $this->staff_model->getStaffRole();
         $data["role"]         = $staffRole;
         $data["payment_mode"] = $this->payment_mode;
+       
 
         $this->form_validation->set_rules('year', $this->lang->line('year'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
@@ -387,8 +390,9 @@ class Payroll extends Admin_Controller
             $this->load->view("admin/payroll/payrollreport", $data);
             $this->load->view("layout/footer", $data);
         } else {
+            $branch_id = $this->input->post('branch_id');
 
-            $result         = $this->payroll_model->getpayrollReport($month, $year, $role);
+            $result         = $this->payroll_model->getpayrollReport($month, $year, $role,$branch_id);
             $data["result"] = $result;
             $this->load->view("layout/header", $data);
             $this->load->view("admin/payroll/payrollreport", $data);

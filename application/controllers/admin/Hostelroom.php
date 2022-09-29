@@ -132,6 +132,8 @@ class Hostelroom extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'reports/studenthosteldetails');
         $data['title'] = 'Student Hostel Details';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $class = $this->class_model->get();
         $data['classlist'] = $class;
         $userdata = $this->customlib->getUserData();
@@ -148,6 +150,7 @@ class Hostelroom extends Admin_Controller {
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
         $hostel_name         = $this->input->post('hostel_name');
+        $branch_id = $this->input->post('branch_id');
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
@@ -155,7 +158,7 @@ class Hostelroom extends Admin_Controller {
 
         if ($this->form_validation->run() == true) { 
            
-            $params      = array('class_id' => $class_id, 'section_id' => $section_id ,'hostel_name'=>$hostel_name);
+            $params      = array('class_id' => $class_id, 'section_id' => $section_id ,'hostel_name'=>$hostel_name , 'branch_id'=>$branch_id);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
        
@@ -189,10 +192,11 @@ class Hostelroom extends Admin_Controller {
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
         $hostel_name    = $this->input->post('hostel_name');
+        $branch_id = $this->input->post('branch_id');
         
         $sch_setting     = $this->sch_setting_detail;
 
-         $resultlist = $this->hostelroom_model->searchHostelDetails($section_id, $class_id, $hostel_name);
+         $resultlist = $this->hostelroom_model->searchHostelDetails($section_id, $class_id, $hostel_name,$branch_id);
         $resultlist = json_decode($resultlist);
         $dt_data=array();
         if (!empty($resultlist->data)) {

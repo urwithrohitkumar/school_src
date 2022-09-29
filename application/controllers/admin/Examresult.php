@@ -386,6 +386,8 @@ class Examresult extends Admin_Controller {
         $data['title_list'] = 'Recent Batch';
         $data['examType'] = $this->exam_type;
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $session = $this->session_model->get();
         $data['sessionlist'] = $session;
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -402,12 +404,13 @@ class Examresult extends Admin_Controller {
             $session_id = $this->input->post('session_id');
             $class_id = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
+            $branch_id = $this->input->post('branch_id');
 
             $marksheet_template = $this->input->post('marksheet');
             $data['marksheet_template'] = $marksheet_template;
             $exam_details = $this->examgroup_model->getExamByID($exam_id);
 
-            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id);
+            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id,$branch_id);
             $exam_subjects = $this->batchsubject_model->getExamSubjects($exam_id);
             $data['subjectList'] = $exam_subjects;
 

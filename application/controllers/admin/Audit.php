@@ -40,6 +40,7 @@ class Audit extends Admin_Controller {
 
                 $row = array();
                 $row[] = $value->message;
+                $row[] = $value->branch_name;
                 $row[] = $value->name;
                 $row[] = $value->ip_address;
                 $row[] = $value->action;

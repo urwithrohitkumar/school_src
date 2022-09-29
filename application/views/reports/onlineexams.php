@@ -13,25 +13,36 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
 
-                    <form role="form" action="<?php echo site_url('report/getformparameter') ?>" method="post" class="" id="report_form" >
+                    <form role="form" action="<?php echo site_url('report/getformparameter') ?>" method="post" class="" id="report_form">
                         <div class="box-body row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
 
-                            <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?></label>
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -41,19 +52,19 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                             </div>
 
-                            <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('date') . " " . $this->lang->line('type'); ?></label>
-                                    <select class="form-control" name="date_type" >
+                                    <select class="form-control" name="date_type">
 
                                         <?php foreach ($date_type as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($date_typeid)) && ($date_typeid == $key)) {
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                if ((isset($date_typeid)) && ($date_typeid == $key)) {
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -74,7 +85,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-body table-responsive">
                             <div class="download_label"><?php echo $this->lang->line('exams') . " " . $this->lang->line('report'); ?></div>
-                             <table class="table table-striped table-bordered table-hover record-list" data-export-title="<?php echo $this->lang->line('exams') . " " . $this->lang->line('report'); ?>">
+                            <table class="table table-striped table-bordered table-hover record-list" data-export-title="<?php echo $this->lang->line('exams') . " " . $this->lang->line('report'); ?>">
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('exam') ?></th>
@@ -87,7 +98,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <th class="text text-center"><?php echo $this->lang->line('questions') ?></th>
                                         <th class="text text-center"><?php echo $this->lang->line('exam') . " " . $this->lang->line('publish') ?></th>
                                         <th class="text text-center"><?php echo $this->lang->line('result') . " " . $this->lang->line('publish') ?></th>
-                                    </tr> 
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
@@ -96,72 +107,70 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>
 <script>
-$(document).ready(function() {
-     emptyDatatable('record-list','data');
-});
-</script>  
+    $(document).ready(function() {
+        emptyDatatable('record-list', 'data');
+    });
+</script>
 <script>
-$(document).ready(function() {
-     initDatatable('record-list','report/dtexamreportlist',[],[],100);
-});
+    $(document).ready(function() {
+        initDatatable('record-list', 'report/dtexamreportlist', [], [], 100);
+    });
 </script>
 <script type="text/javascript">
-$(document).ready(function(){ 
-$(document).on('submit','#report_form',function(e){
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-    var $this = $(this).find("button[type=submit]:focus");  
-    var form = $(this);
-    var url = form.attr('action');
-    var form_data = form.serializeArray();
-    $.ajax({
-           url: url,
-           type: "POST",
-           dataType:'JSON',
-           data: form_data, // serializes the form's elements.
-              beforeSend: function () {
-                $('[id^=error]').html("");
-                $this.button('loading');
-               },
-              success: function(response) { // your success handler
-                
-                if(!response.status){
-                    $.each(response.error, function(key, value) {
-                    $('#error_' + key).html(value);
-                    });
-                }else{
-                
-                   initDatatable('record-list','report/dtexamreportlist',response.params);
+    $(document).ready(function() {
+        $(document).on('submit', '#report_form', function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var $this = $(this).find("button[type=submit]:focus");
+            var form = $(this);
+            var url = form.attr('action');
+            var form_data = form.serializeArray();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'JSON',
+                data: form_data, // serializes the form's elements.
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+                },
+                success: function(response) { // your success handler
+
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
+                            $('#error_' + key).html(value);
+                        });
+                    } else {
+
+                        initDatatable('record-list', 'report/dtexamreportlist', response.params);
+                    }
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
                 }
-              },
-             error: function() { // your error handler
-                 $this.button('reset');
-             },
-             complete: function() {
-             $this.button('reset');
-             }
-         });
+            });
 
         });
 
     });
-    
 </script>

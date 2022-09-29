@@ -950,6 +950,8 @@ class Onlineexam extends Admin_Controller
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['sch_setting'] = $this->sch_setting_detail;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
    
         $this->load->view('layout/header', $data);
         $this->load->view('admin/onlineexam/report', $data);
@@ -1016,6 +1018,7 @@ class Onlineexam extends Admin_Controller
         $class_id       = $this->input->post('class_id');
         $section_id     = $this->input->post('section_id');
         $exam_id     = $this->input->post('exam_id');
+        $branch_id = $this->input->post('branch_id');
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
@@ -1031,7 +1034,7 @@ class Onlineexam extends Admin_Controller
             echo json_encode($array);
         } else {
 
-            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'exam_id'=>$exam_id);
+            $params      = array('class_id' => $class_id, 'section_id' => $section_id, 'exam_id'=>$exam_id, 'branch_id'=>$branch_id);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -1043,8 +1046,9 @@ class Onlineexam extends Admin_Controller
         $exam_id         = $this->input->post('exam_id');
         $class_id        = $this->input->post('class_id');
         $section_id      = $this->input->post('section_id');
+        $branch_id = $this->input->post('branch_id');
         $sch_setting = $this->sch_setting_detail;
-        $results         = $this->onlineexamresult_model->getStudentByExam($exam_id, $class_id, $section_id);
+        $results         = $this->onlineexamresult_model->getStudentByExam($exam_id, $class_id, $section_id,$branch_id);
         $resultlist      = json_decode($results);
         $dt_data=array();
         

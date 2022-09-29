@@ -108,14 +108,16 @@ class Bookissue_model extends MY_Model {
     }
 
     public function getissuereturnMemberBooks($member_id = null) {
-
+       
         $sql = "SELECT libarary_members.id as members_id,libarary_members.library_card_no,`book_issues`.`id`,staff.name as fname,staff.name as mname,staff.surname as lname, 'admission'=' ' as admission ,libarary_members.member_type,`book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author` FROM `book_issues` LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` left join libarary_members on libarary_members.id=book_issues.member_id left join staff on staff.id=libarary_members.member_id WHERE `book_issues`.`is_returned` = '1' and libarary_members.member_type='teacher' union all SELECT libarary_members.id as members_id, libarary_members.library_card_no, `book_issues`.`id`,students.firstname as fname,students.middlename as mname,students.lastname as lname, students.admission_no as adminssion,libarary_members.member_type, `book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author` FROM `book_issues` LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` left join libarary_members on libarary_members.id=book_issues.member_id left join students on students.id=libarary_members.member_id WHERE `book_issues`.`is_returned` = '1' and libarary_members.member_type='student'";
-
-         $this->datatables->query($sql)
-        ->searchable('book_title,book_no,issue_date,return_date,book_no,libarary_members.id,library_card_no,students.admission_no,students.firstname,member_type')
-        ->orderable('book_title,book_no,issue_date,return_date,members_id,library_card_no,admission,fname,member_type') 
-        ->query_where_enable(TRUE);
-        return $this->datatables->generate('json'); 
+        
+        // $this->datatables->query($sql)->searchable('book_title,book_no,issue_date,return_date,book_no,libarary_members.id,library_card_no,students.admission_no,students.firstname,member_type')->orderable('book_title,book_no,issue_date,return_date,members_id,library_card_no,admission,fname,member_type')->query_where_enable(TRUE);
+        // $this->datatables->generate('json'); 
+        // echo  $this->datatables->last_query();
+        // exit; 
+        // // return 
+        $query = $this->db->query($sql);
+        return $query->result_array();
     }
 
     public function update($data) {
@@ -172,7 +174,7 @@ class Bookissue_model extends MY_Model {
         return true;
     }
 
-    public function studentBookIssue_report($start_date, $end_date) {
+    public function studentBookIssue_report($start_date, $end_date ,$branch_id) {
         $condition = "";
         $condition .= " and date_format(book_issues.issue_date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
 
@@ -180,8 +182,29 @@ class Bookissue_model extends MY_Model {
 
             $condition .= " and libarary_members.member_type='" . $_POST['members_type'] . "'";
         }
+        if (isset($branch_id) && $branch_id != '') {
 
-        $sql = "SELECT libarary_members.id as members_id,libarary_members.library_card_no,`book_issues`.`id`,CONCAT_WS(' ',staff.name,staff.surname) as staff_name,CONCAT_WS(' ',students.firstname,students.lastname) as student_name,students.firstname,students.middlename,students.lastname, students.admission_no as admission ,students.id as sid ,libarary_members.member_type,`book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author`,book_issues.duereturn_date FROM `book_issues` LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` left join libarary_members on libarary_members.id=book_issues.member_id left join staff on staff.id=libarary_members.member_id left join students on (students.id=libarary_members.member_id and libarary_members.member_type='student') WHERE `book_issues`.`is_returned` = '0' " . $condition;
+            if($_POST['members_type'] = 'student')
+            {
+                $condition .= " AND (student_session.branch_id='" . $branch_id . "')";
+            }
+            else if($_POST['members_type'] = 'teacher')
+            {
+                $condition .= " AND (staff.branch_id='" . $branch_id . "')";
+            }
+            else{
+                
+                $condition .= " AND (student_session.branch_id='" . $branch_id . " ' OR  staff.branch_id='" . $branch_id . "')";
+            }
+        }
+
+        $sql = "SELECT libarary_members.id as members_id,libarary_members.library_card_no,`book_issues`.`id`,CONCAT_WS(' ',staff.name,staff.surname) as staff_name,CONCAT_WS(' ',students.firstname,students.lastname) as student_name,students.firstname,students.middlename,students.lastname, students.admission_no as admission ,students.id as sid ,libarary_members.member_type,`book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author`,book_issues.duereturn_date FROM `book_issues` 
+        LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` 
+        left join libarary_members on libarary_members.id=book_issues.member_id 
+        left join staff on staff.id=libarary_members.member_id 
+        left join students on (students.id=libarary_members.member_id and libarary_members.member_type='student') 
+        left join student_session on student_session.student_id  = students.id
+        WHERE `book_issues`.`is_returned` = '0' " . $condition;
 
         $this->datatables->query($sql)
         ->orderable('book_title,book_no,issue_date,duereturn_date,members_id,library_card_no, students.admission_no,firstname')
@@ -195,13 +218,35 @@ class Bookissue_model extends MY_Model {
  
  
 
-    public function bookduereport($start_date, $end_date) {
+    public function bookduereport($start_date, $end_date ,$branch_id) {
         $condition = " and date_format(book_issues.duereturn_date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         if (isset($_POST['members_type']) && $_POST['members_type'] != '') {
 
             $condition .= " and libarary_members.member_type='" . $_POST['members_type'] . "'";
         }
-        $sql = "SELECT libarary_members.id as members_id,libarary_members.library_card_no,`book_issues`.`id`,CONCAT_WS(' ',staff.name,students.firstname) as fname,CONCAT_WS(' ',staff.surname,students.lastname) as lname, students.firstname,students.middlename,students.lastname,students.admission_no as admission ,students.id as sid ,libarary_members.member_type,`book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author`,`book_issues`.duereturn_date FROM `book_issues` LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` left join libarary_members on libarary_members.id=book_issues.member_id left join staff on (staff.id=libarary_members.member_id and libarary_members.member_type='teacher') left join students on (students.id=libarary_members.member_id and libarary_members.member_type='student') WHERE `book_issues`.`is_returned` = '0' " . $condition;
+        if (isset($branch_id) && $branch_id != '') {
+
+            if($_POST['members_type'] = 'student')
+            {
+                $condition .= " AND (student_session.branch_id='" . $branch_id . "')";
+            }
+            else if($_POST['members_type'] = 'teacher')
+            {
+                $condition .= " AND (staff.branch_id='" . $branch_id . "')";
+            }
+            else{
+                
+                $condition .= " AND (student_session.branch_id='" . $branch_id . " ' OR  staff.branch_id='" . $branch_id . "')";
+            }
+        }
+        $sql = "SELECT libarary_members.id as members_id,libarary_members.library_card_no,`book_issues`.`id`,CONCAT_WS(' ',staff.name,students.firstname) as fname,CONCAT_WS(' ',staff.surname,students.lastname) as lname, students.firstname,students.middlename,students.lastname,students.admission_no as admission ,students.id as sid ,libarary_members.member_type,`book_issues`.`return_date`, `book_issues`.`issue_date`, `book_issues`.`is_returned`, `books`.`book_title`, `books`.`book_no`, `books`.`author`,`book_issues`.duereturn_date 
+        FROM `book_issues` 
+        LEFT JOIN `books` ON `books`.`id` = `book_issues`.`book_id` 
+        left join libarary_members on libarary_members.id=book_issues.member_id 
+        left join staff on (staff.id=libarary_members.member_id and libarary_members.member_type='teacher') 
+        left join students on (students.id=libarary_members.member_id and libarary_members.member_type='student')
+        left join student_session on student_session.student_id  = students.id 
+        WHERE `book_issues`.`is_returned` = '0' " . $condition;
 
            $this->datatables->query($sql)
         ->orderable('book_title,book_no,issue_date,duereturn_date,members_id,library_card_no, students.admission_no,firstname')

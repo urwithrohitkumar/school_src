@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th><?php echo $this->lang->line('message'); ?></th>
+                                    <th><?php echo $this->lang->line('branch'); ?></th>
                                     <th><?php echo $this->lang->line('users'); ?></th>
                                     <th><?php echo $this->lang->line('ip_address'); ?></th>
                                     <th><?php echo $this->lang->line('action'); ?></th>

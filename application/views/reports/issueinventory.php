@@ -61,6 +61,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <thead>
                                             <tr>
                                                 <th><?php echo $this->lang->line('item'); ?></th>
+                                                <th><?php echo $this->lang->line('branch'); ?></th>
                                                 <th><?php echo $this->lang->line('item_category'); ?></th>
                                                 <th><?php echo $this->lang->line('issue') . " - " . $this->lang->line('return'); ?></th>
                                                 <th><?php echo $this->lang->line('issue_to'); ?></th>

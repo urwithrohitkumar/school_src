@@ -63,6 +63,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <thead>
                                         <tr>
                                             <th><?php echo $this->lang->line('name'); ?></th>
+                                            <th><?php echo $this->lang->line('branch'); ?></th>
                                             <th><?php echo $this->lang->line('category'); ?></th>
                                             <th><?php echo $this->lang->line('supplier'); ?></th>
                                             <th><?php echo $this->lang->line('store'); ?></th>

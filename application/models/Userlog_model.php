@@ -4,16 +4,19 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Userlog_model extends CI_Model {
+class Userlog_model extends CI_Model
+{
 
     private $table = "userlog";
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->library('datatables');
     }
- 
-    public function get($id = null) {
+
+    public function get($id = null)
+    {
         $this->db->select()->from('userlog');
         if ($id != null) {
             $this->db->where('id', $id);
@@ -28,7 +31,8 @@ class Userlog_model extends CI_Model {
         }
     }
 
-    public function getByRole($role) {
+    public function getByRole($role)
+    {
         $this->db->select()->from('userlog');
         $this->db->where('role', $role);
         $this->db->order_by('login_datetime', 'desc');
@@ -36,7 +40,8 @@ class Userlog_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function getByRoleStaff() {
+    public function getByRoleStaff()
+    {
         $this->db->select()->from('userlog');
         $this->db->where('role!=', 'Parent');
         $this->db->where('role!=', 'Student');
@@ -45,7 +50,8 @@ class Userlog_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         if (isset($data['id'])) {
             $this->db->where('id', $data['id']);
             $this->db->update('userlog', $data);
@@ -54,49 +60,65 @@ class Userlog_model extends CI_Model {
         }
     }
 
-    public function getAllRecord() {
+    public function getAllRecord()
+    {
         $this->datatables
-                ->select($this->table . '.*,class_sections.id as `class_section_id`,IFNULL(classes.class, "") as `class_name`,IFNULL(sections.section, "") as `section_name`')
-                ->searchable('user,role,ipaddress,classes.class,sections.section')
-                ->join('class_sections', 'class_sections.id = ' . $this->table . '.class_section_id', 'left')
-                ->join('classes', 'classes.id = class_sections.class_id', 'left')
-                ->join('sections', 'sections.id = class_sections.section_id', 'left')
-                ->orderable('user, role, ipaddress,login_datetime,user_agent')
-                ->sort('login_datetime', 'desc')
-                ->from($this->table);
+            ->select($this->table . '.*,tb_branch.branch_name,class_sections.id as `class_section_id`,IFNULL(classes.class, "") as `class_name`,IFNULL(sections.section, "") as `section_name`')
+            ->searchable('user,role,ipaddress,classes.class,sections.section')
+            ->join('class_sections', 'class_sections.id = ' . $this->table . '.class_section_id', 'left')
+            ->join('classes', 'classes.id = class_sections.class_id', 'left')
+            ->join('tb_branch', 'tb_branch.id = '.$this->table.'.branch_id', 'left')
+            ->join('sections', 'sections.id = class_sections.section_id', 'left');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->datatables->where('' . $this->table . '.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+        $this->datatables->orderable('user, role, ipaddress,login_datetime,user_agent');
+        $this->datatables->sort('login_datetime', 'desc');
+        $this->datatables->from($this->table);
         return $this->datatables->generate('json');
     }
 
-    public function getAllRecordByRole($role) {
+    public function getAllRecordByRole($role)
+    {
 
         $this->datatables
-                ->select($this->table . '.*,class_sections.id as `class_section_id`,IFNULL(classes.class, "") as `class_name`,IFNULL(sections.section, "") as `section_name`')
-                ->searchable('user,role,ipaddress,classes.class,sections.section,login_datetime')
-                ->join('class_sections', 'class_sections.id = ' . $this->table . '.class_section_id', 'left')
-                ->join('classes', 'classes.id = class_sections.class_id', 'left')
-                ->join('sections', 'sections.id = class_sections.section_id', 'left')
-                ->orderable('user, role, ipaddress,login_datetime,user_agent')
-                ->where('role', $role)
-                ->sort('login_datetime', 'desc')
-                ->from($this->table);
+            ->select($this->table . '.*,tb_branch.branch_name,class_sections.id as `class_section_id`,IFNULL(classes.class, "") as `class_name`,IFNULL(sections.section, "") as `section_name`')
+            ->searchable('user,role,ipaddress,classes.class,sections.section,login_datetime')
+            ->join('class_sections', 'class_sections.id = ' . $this->table . '.class_section_id', 'left')
+            ->join('classes', 'classes.id = class_sections.class_id', 'left')
+            ->join('sections', 'sections.id = class_sections.section_id', 'left')
+            ->join('tb_branch', 'tb_branch.id = '.$this->table.'.branch_id', 'left')
+            ->orderable('user, role, ipaddress,login_datetime,user_agent')
+            ->where('role', $role)
+            ->sort('login_datetime', 'desc')
+            ->from($this->table);
+
+            if ($this->session->userdata['admin']['branch_id'] != 0) {
+                $this->datatables->where('' . $this->table . '.branch_id', $this->session->userdata['admin']['branch_id']);
+            }
         return $this->datatables->generate('json');
     }
 
-    public function getAllRecordByStaff() {
+    public function getAllRecordByStaff()
+    {
         $this->datatables
-                ->select('*')
-                ->searchable('id,user,role,ipaddress')
-                ->orderable('user, role, ipaddress,login_datetime,user_agent')
-                ->where('role!=', 'Parent')
-                ->where('role!=', 'Student')
-                ->sort('login_datetime', 'desc')
-                ->from($this->table);
+            ->select($this->table . '.*,tb_branch.branch_name')
+            ->join('tb_branch', 'tb_branch.id = '.$this->table.'.branch_id', 'left')
+            ->searchable('id,user,role,ipaddress')
+            ->orderable('user, role, ipaddress,login_datetime,user_agent')
+            ->where('role!=', 'Parent')
+            ->where('role!=', 'Student')
+            ->sort('login_datetime', 'desc')
+            ->from($this->table);
+
+            if ($this->session->userdata['admin']['branch_id'] != 0) {
+                $this->datatables->where('' . $this->table . '.branch_id', $this->session->userdata['admin']['branch_id']);
+            }
         return $this->datatables->generate('json');
     }
-	
-	public function userlog_delete()
-    {         
-        $this->db->truncate('userlog');        
-    }
 
+    public function userlog_delete()
+    {
+        $this->db->truncate('userlog');
+    }
 }

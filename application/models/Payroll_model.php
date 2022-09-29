@@ -278,7 +278,7 @@ class Payroll_model extends MY_Model
         return $query->row_array();
     }
 
-    public function getpayrollReport($month, $year, $role)
+    public function getpayrollReport($month, $year, $role ,$branch_id)
     {
 
         if ($role == "select" && $month != "") {
@@ -293,6 +293,7 @@ class Payroll_model extends MY_Model
 
             $data = array('staff_payslip.month' => $month, 'staff_payslip.year' => $year, 'roles.name' => $role, 'staff_payslip.status' => 'paid');
         }
+        $data['staff.branch_id'] = $branch_id;
         $data['staff.is_active'] = 1;
 
         $query = $this->db->select('staff.id,staff.employee_id,staff.name,roles.name as user_type,staff.surname,staff_designation.designation,department.department_name as department,staff_payslip.*')->join("staff_payslip", "staff_payslip.staff_id = staff.id", "inner")->join("staff_designation", "staff.designation = staff_designation.id", "left")->join("department", "staff.department = department.id", "left")->join("staff_roles", "staff_roles.staff_id = staff.id", "left")->join("roles", "staff_roles.role_id = roles.id", "left")->where($data)->get("staff");

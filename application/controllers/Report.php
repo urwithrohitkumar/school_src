@@ -469,6 +469,8 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/library/book_issue_report');
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentBookIssueReport', $data);
         $this->load->view('layout/footer', $data);
@@ -483,6 +485,8 @@ class Report extends Admin_Controller
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['sch_setting'] = $this->sch_setting_detail;
         $data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/bookduereport', $data);
         $this->load->view('layout/footer', $data);
@@ -494,6 +498,8 @@ class Report extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/library');
         $this->session->set_userdata('subsub_menu', 'Reports/library/bookinventory');
         $data['searchlist'] = $this->customlib->get_searchtype();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/bookinventory', $data);
         $this->load->view('layout/footer', $data);
@@ -597,6 +603,8 @@ class Report extends Admin_Controller
         $condition          = "";
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['date_type']  = $this->customlib->date_type();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexams', $data);
@@ -658,6 +666,8 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/online_examinations/onlineexamattend');
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['date_type']  = $this->customlib->date_type();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexamattend', $data);
         $this->load->view('layout/footer', $data);
@@ -676,6 +686,8 @@ class Report extends Admin_Controller
 
         $examList          = $this->onlineexam_model->get();
         $data['examList']  = $examList;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'required');
@@ -693,8 +705,9 @@ class Report extends Admin_Controller
             if (isset($_POST['exam_id']) && $_POST['exam_id'] != '') {
                 $exam_id = $_POST['exam_id'];
             }
+            $branch_id = $this->input->post('branch_id');
             $exam         = $this->onlineexam_model->get($exam_id);
-            $student_data = $this->onlineexam_model->searchAllOnlineExamStudents($exam_id, $class_id, $section_id);
+            $student_data = $this->onlineexam_model->searchAllOnlineExamStudents($exam_id, $class_id, $section_id,$branch_id);
 
             if (!empty($student_data)) {
                 foreach ($student_data as $student_key => $student_value) {
@@ -760,6 +773,7 @@ class Report extends Admin_Controller
 
                 $row       = array();
                 $row[]     = $value->name;
+                $row[]     = $value->branch_name;
                 $row[]     = $value->item_category;
                 $row[]     = $value->item_supplier;
                 $row[]     = $value->item_store;
@@ -842,6 +856,7 @@ class Report extends Admin_Controller
 
                 $row   = array();
                 $row[] = $title;
+                $row[] = $value->branch_name;
                 $row[] = $value->item_category;
                 if ($value->return_date == "0000-00-00") {
                     $return_date = "";
@@ -1049,7 +1064,6 @@ class Report extends Admin_Controller
 
     public function staff_report()
     {
-
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/human_resource');
         $this->session->set_userdata('subsub_menu', 'Reports/human_resource/staff_report');
@@ -1057,6 +1071,8 @@ class Report extends Admin_Controller
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $searchterm              = '';
         $condition               = "";
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
@@ -1103,8 +1119,8 @@ class Report extends Admin_Controller
             $condition .= " and `staff_designation`.`id`=" . $_POST['designation'];
             $data['designation_val'] = $_POST['designation'];
         }
-
-        $data['resultlist'] = $this->staff_model->staff_report($condition);
+        $branch_id = $this->input->post('branch_id');
+        $data['resultlist'] = $this->staff_model->staff_report($condition , $branch_id);
 
         $leave_type = $this->leavetypes_model->getLeaveType();
         foreach ($leave_type as $key => $leave_value) {
@@ -1131,6 +1147,9 @@ class Report extends Admin_Controller
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
+        $branch = $this->staff_model->getBranch();
+        $data["branch"]         = $branch;
+
         $class                   = $this->input->post('class_id');
         $section                 = $this->input->post('section_id');
         $data['class_id']        = $class;
@@ -1150,7 +1169,7 @@ class Report extends Admin_Controller
             $between_date        = $this->customlib->get_betweendate('this_week');
             $data['search_type'] = $search_type = 'this_week';
         }
-
+       
         $from_date = date('Y-m-d', strtotime($between_date['from_date']));
         $to_date   = date('Y-m-d', strtotime($between_date['to_date']));
         $dates     = array();
@@ -1183,7 +1202,7 @@ class Report extends Admin_Controller
             $this->load->view('reports/stuattendance', $data);
             $this->load->view('layout/footer', $data);
         } else {
-
+            $branch_id      = $this->input->post('branch_id');
             $data['attendance_type_id'] = $attendance_type_id = $this->input->post('attendance_type');
             $condition .= " and `student_attendences`.`attendence_type_id`=" . $this->input->post('attendance_type');
             foreach ($dates as $key => $value) {
@@ -1197,7 +1216,7 @@ class Report extends Admin_Controller
                 $condition .= ' and section_id=' . $data['section_id'];
             }
 
-            $data['student_attendences'] = $this->stuattendence_model->student_attendences($condition, $date_condition);
+            $data['student_attendences'] = $this->stuattendence_model->student_attendences($condition, $date_condition ,$branch_id);
 
             $attd = array();
 
@@ -1651,6 +1670,8 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/attendance/daily_attendance_report');
         $date         = "";
         $data['date'] = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('date', $this->lang->line('date'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
@@ -1660,9 +1681,10 @@ class Report extends Admin_Controller
             $date         = " and student_attendences.date='" . date('Y-m-d', $this->customlib->datetostrtotime($_POST['date'])) . "'";
             $data['date'] = date($this->customlib->getSchoolDateFormat(), $this->customlib->datetostrtotime($_POST['date']));
         }
+        $branch_id = $this->input->post('branch_id');
 
         $resultlist     = array();
-        $data['result'] = $this->stuattendence_model->get_attendancebydate($date);
+        $data['result'] = $this->stuattendence_model->get_attendancebydate($date,$branch_id);
         if (!empty($data['result'])) {
             $all_student = $all_present = $all_absent = 0;
             foreach ($data['result'] as $key => $value) {
@@ -1727,6 +1749,7 @@ class Report extends Admin_Controller
                 $available_stock = $this->getAvailQuantity($value->id);
                 $row             = array();
                 $row[]           = $value->name;
+                $row[]           = $value->branch_name;
                 $row[]           = $value->item_category;
                 $row[]           = $value->item_supplier;
                 $row[]           = $value->item_store;
@@ -1878,6 +1901,7 @@ class Report extends Admin_Controller
 
         $search_type = $this->input->post('search_type');
         $date_type   = $this->input->post("date_type");
+        $branch_id = $this->input->post('branch_id');
         $date_from   = "";
         $date_to     = "";
         if ($search_type == 'period') {
@@ -1886,7 +1910,7 @@ class Report extends Admin_Controller
             $date_to   = $this->input->post('date_to');
         }
 
-        $params = array('search_type' => $search_type, 'date_type' => $date_type, 'date_from' => $date_from, 'date_to' => $date_to);
+        $params = array('search_type' => $search_type, 'date_type' => $date_type, 'date_from' => $date_from, 'date_to' => $date_to,'branch_id' => $branch_id);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
     }
@@ -1898,6 +1922,7 @@ class Report extends Admin_Controller
         $date_type   = $this->input->post('date_type');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
+        $branch_id = $this->input->post('branch_id');
 
         $data['date_typeid'] = '';
         if (isset($search_type) && $search_type != '') {
@@ -1929,7 +1954,7 @@ class Report extends Admin_Controller
         }
 
         $sch_setting = $this->sch_setting_detail;
-        $results     = $this->onlineexam_model->onlineexamReport($condition);
+        $results     = $this->onlineexam_model->onlineexamReport($condition ,$branch_id);
 
         $resultlist = json_decode($results);
         $dt_data    = array();
@@ -2089,6 +2114,7 @@ class Report extends Admin_Controller
 
         $search_type  = $this->input->post('search_type');
         $members_type = $this->input->post("members_type");
+        $branch_id = $this->input->post('branch_id');
         $date_from    = "";
         $date_to      = "";
         if ($search_type == 'period') {
@@ -2097,7 +2123,7 @@ class Report extends Admin_Controller
             $date_to   = $this->input->post('date_to');
         }
 
-        $params = array('search_type' => $search_type, 'members_type' => $members_type, 'date_from' => $date_from, 'date_to' => $date_to);
+        $params = array('search_type' => $search_type, 'members_type' => $members_type, 'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
     }
@@ -2110,6 +2136,7 @@ class Report extends Admin_Controller
         $member_type = $this->input->post('date_type');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
+        $branch_id = $this->input->post('branch_id');
 
         $data['searchlist'] = $this->customlib->get_searchtype();
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
@@ -2127,7 +2154,7 @@ class Report extends Admin_Controller
         $end_date        = date('Y-m-d', strtotime($dates['to_date']));
         $data['label']   = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
 
-        $result = $this->bookissue_model->studentBookIssue_report($start_date, $end_date);
+        $result = $this->bookissue_model->studentBookIssue_report($start_date, $end_date ,$branch_id);
 
         $sch_setting = $this->sch_setting_detail;
 
@@ -2175,6 +2202,7 @@ class Report extends Admin_Controller
         $member_type = $this->input->post('date_type');
         $date_from   = $this->input->post('date_from');
         $date_to     = $this->input->post('date_to');
+        $branch_id = $this->input->post('branch_id');
 
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
 
@@ -2199,7 +2227,7 @@ class Report extends Admin_Controller
         $start_date    = date('Y-m-d', strtotime($dates['from_date']));
         $end_date      = date('Y-m-d', strtotime($dates['to_date']));
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $issued_books  = $this->bookissue_model->bookduereport($start_date, $end_date);
+        $issued_books  = $this->bookissue_model->bookduereport($start_date, $end_date ,$branch_id);
         $sch_setting   = $this->sch_setting_detail;
 
         $resultlist = json_decode($issued_books);
@@ -2246,6 +2274,7 @@ class Report extends Admin_Controller
 
         $date_from = $this->input->post('date_from');
         $date_to   = $this->input->post('date_to');
+        $branch_id = $this->input->post('branch_id');
 
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
 
@@ -2261,7 +2290,7 @@ class Report extends Admin_Controller
         $start_date    = date('Y-m-d', strtotime($dates['from_date']));
         $end_date      = date('Y-m-d', strtotime($dates['to_date']));
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $listbook      = $this->book_model->bookinventory($start_date, $end_date);
+        $listbook      = $this->book_model->bookinventory($start_date, $end_date ,$branch_id);
 
         $resultlist = json_decode($listbook);
         $dt_data    = array();
@@ -2701,7 +2730,7 @@ class Report extends Admin_Controller
             $data['collectlist'] = array();
         } else {
 
-            $data['collectlist'] = $this->onlinestudent_model->getOnlineAdmissionFeeCollectionReport($start_date, $end_date,$branch_id);
+            $data['collectlist'] = $this->onlinestudent_model->getOnlineAdmissionFeeCollectionReport($start_date, $end_date, $branch_id);
         }
         $data['sch_setting'] = $this->sch_setting_detail;
         $this->load->view('layout/header', $data);

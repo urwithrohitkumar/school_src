@@ -41,9 +41,10 @@ class Cms_program_model extends MY_Model
         $this->db->from('front_cms_programs');
         $this->db->order_by('created_at', 'desc');
         $this->db->where('type', $category);
-        if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
-        }
+       
+        // if ($this->session->userdata['admin']['branch_id'] != 0) {
+        //     $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        // }
         if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
             $this->db->limit($params['limit'], $params['start']);
         } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {

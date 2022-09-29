@@ -1,8 +1,8 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
@@ -14,86 +14,97 @@
     </section>
     <section class="content">
         <?php $this->load->view('reports/_attendance'); ?>
-        <div class="row">   
+        <div class="row">
             <div class="col-md-12">
                 <div class="box removeboxmius">
                     <div class="box-header ptbnull"></div>
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                    <form id='form1' action="<?php echo site_url('admin/staffattendance/attendancereport') ?>"  method="post" accept-charset="utf-8">
+                    <form id='form1' action="<?php echo site_url('admin/staffattendance/attendancereport') ?>" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
+                            <div class="col-md-3">
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('role'); ?></label>
-                                        <select  id="role" name="role" class="form-control" >
+                                        <select id="role" name="role" class="form-control">
                                             <option value="select"><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($role as $role_key => $value) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $value["type"] ?>" <?php
-                                                if ($role_selected == $value["type"]) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $value["type"]; ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
+                                                                                                if ($role_selected == $value["type"]) {
+                                                                                                    echo "selected =selected";
+                                                                                                }
+                                                                                                ?>><?php echo $value["type"]; ?></option>
+                                            <?php
+                                                $count++;
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('role'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('month'); ?></label><small class="req"> *</small>
-                                        <select  id="month" name="month" class="form-control" >
+                                        <select id="month" name="month" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($monthlist as $m_key => $month) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $m_key ?>" <?php
-                                                if ($month_selected == $m_key) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $month; ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
+                                                                                        if ($month_selected == $m_key) {
+                                                                                            echo "selected =selected";
+                                                                                        }
+                                                                                        ?>><?php echo $month; ?></option>
+                                            <?php
+                                                $count++;
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('month'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('year'); ?></label>
-                                        <select  id="year" name="year" class="form-control" >
+                                        <select id="year" name="year" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($yearlist as $y_key => $year) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $year["year"] ?>" <?php
-                                                if ($year["year"] == date("Y")) {
-                                                    echo "selected";
-                                                }
-                                                ?> ><?php echo $year["year"]; ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                                                            if ($year["year"] == date("Y")) {
+                                                                                                echo "selected";
+                                                                                            }
+                                                                                            ?>><?php echo $year["year"]; ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('year'); ?></span>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-12">
-                                    <div class="form-group"> 
+                                    <div class="form-group">
                                         <button type="submit" name="search" value="search" class="btn btn-primary btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
-                                    </div>  
-                                </div>   
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -101,10 +112,10 @@
 
                     <?php
                     if (isset($resultlist)) {
-                        ?>
+                    ?>
                         <div class="" id="attendencelist">
                             <div class="box-header ptbnull"></div>
-                            <div class="box-header with-border" >
+                            <div class="box-header with-border">
                                 <div class="row">
 
 
@@ -115,7 +126,7 @@
                                         <div class="pull-right">
                                             <?php
                                             foreach ($attendencetypeslist as $key_type => $value_type) {
-                                                ?>
+                                            ?>
                                                 &nbsp;&nbsp;
                                                 <b>
                                                     <?php
@@ -123,7 +134,7 @@
                                                     echo $this->lang->line($att_type) . ": " . $value_type['key_value'] . "";
                                                     ?>
                                                 </b>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
                                         </div>
@@ -135,57 +146,56 @@
 
                                 <?php
                                 if (!empty($resultlist)) {
-                                    ?>
+                                ?>
                                     <div class="mailbox-controls">
                                         <div class="pull-right">
                                         </div>
                                     </div>
-                                    <div class="download_label"><?php echo $this->lang->line('staff'); ?> <?php echo $this->lang->line('attendance'); ?> <?php echo $this->lang->line('report') ?></div>  <div> <?php echo 
-                            $this->customlib->get_postmessage();
-                                    ?></div>
+                                    <div class="download_label"><?php echo $this->lang->line('staff'); ?> <?php echo $this->lang->line('attendance'); ?> <?php echo $this->lang->line('report') ?></div>
+                                    <div> <?php echo
+                                            $this->customlib->get_postmessage();
+                                            ?></div>
                                     <table class="table table-striped table-bordered table-hover example xyz">
                                         <thead>
                                             <tr>
                                                 <th>
-        <?php echo $this->lang->line('staff'); ?> / <?php echo $this->lang->line('date'); ?>
+                                                    <?php echo $this->lang->line('staff'); ?> / <?php echo $this->lang->line('date'); ?>
                                                 </th>
-                                                <th><br/><span data-toggle="tooltip" title="<?php echo "Gross Present Percentage(%)"; ?>">%</span></th>
+                                                <th><br /><span data-toggle="tooltip" title="<?php echo "Gross Present Percentage(%)"; ?>">%</span></th>
                                                 <?php
                                                 if (!empty($attendence_array)) {
                                                     foreach ($attendencetypeslist as $key => $value) {
-                                                        ?>
-                                                        <th colspan="" ><br/><span data-toggle="tooltip" title="<?php echo $this->lang->line('total'). ' ' . $value["type"]; ?>"><?php echo strip_tags($value["key_value"]); ?>
+                                                ?>
+                                                        <th colspan=""><br /><span data-toggle="tooltip" title="<?php echo $this->lang->line('total') . ' ' . $value["type"]; ?>"><?php echo strip_tags($value["key_value"]); ?>
 
                                                             </span></th>
 
-                                                        <?php
+                                                <?php
                                                     }
                                                 }
-                                                ?>  
+                                                ?>
                                                 <?php
                                                 foreach ($attendence_array as $at_key => $at_value) {
 
                                                     if (date('D', $this->customlib->dateyyyymmddTodateformat($at_value)) == "Sun") {
-                                                        ?>
+                                                ?>
                                                         <th class="tdcls text text-center bg-danger">
                                                             <?php
                                                             echo date('d', $this->customlib->dateyyyymmddTodateformat($at_value)) . "<br/>" .
-                                                            $this->lang->line(strtolower(date('D', $this->customlib->dateyyyymmddTodateformat($at_value))))
-                                                            ;
-                                                            ?> 
+                                                                $this->lang->line(strtolower(date('D', $this->customlib->dateyyyymmddTodateformat($at_value))));
+                                                            ?>
                                                         </th>
 
-                                                        <?php
+                                                    <?php
                                                     } else {
-                                                        ?>
+                                                    ?>
                                                         <th class="tdcls text text-center">
                                                             <?php
                                                             echo date('d', $this->customlib->dateyyyymmddTodateformat($at_value)) . "<br/>" .
-                                                            $this->lang->line(strtolower(date('D', $this->customlib->dateyyyymmddTodateformat($at_value))))
-                                                            ;
+                                                                $this->lang->line(strtolower(date('D', $this->customlib->dateyyyymmddTodateformat($at_value))));
                                                             ?>
                                                         </th>
-                                                        <?php
+                                                <?php
                                                     }
                                                 }
                                                 ?>
@@ -193,7 +203,7 @@
                                         </thead>
                                         <tbody>
                                             <?php if (empty($student_array)) {
-                                                ?>
+                                            ?>
                                                 <tr>
                                                     <td colspan="32" class="text-danger text-center"><?php echo $this->lang->line('no_record_found'); ?></td>
                                                 </tr>
@@ -224,7 +234,7 @@
 
                                                         $label = "class='label label-default'";
                                                     }
-                                                    ?>
+                                                ?>
                                                     <tr>
 
                                                         <th class="tdclsname"><span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#" style="color:#333"><?php echo $student_value['name'] . " " . $student_value['surname']; ?></a></span>
@@ -238,44 +248,45 @@
                                                         <th><?php echo $monthAttendance[$i][$student_value['id']]['holiday']; ?></th>
                                                         <?php
                                                         foreach ($attendence_array as $at_key => $at_value) {
-                                                            ?>
+                                                        ?>
                                                             <th class="tdcls text text-center">
                                                                 <span data-toggle="popover" class="detail_popover" data-original-title="" title=""><a href="#" style="color:#333"><?php
-                                                                        print_r($resultlist[$at_value][$student_value['id']]['key']);
-                                                                        ?></a></span>
+                                                                                                                                                                                    print_r($resultlist[$at_value][$student_value['id']]['key']);
+                                                                                                                                                                                    ?></a></span>
                                                                 <div class="fee_detail_popover" style="display: none"><?php
-                                                                    if (!empty($resultlist[$at_value][$student_value['id']]['remark'])) {
-                                                                        echo $resultlist[$at_value][$student_value['id']]['remark'];
-                                                                    }
-                                                                    ?></div>
+                                                                                                                        if (!empty($resultlist[$at_value][$student_value['id']]['remark'])) {
+                                                                                                                            echo $resultlist[$at_value][$student_value['id']]['remark'];
+                                                                                                                        }
+                                                                                                                        ?></div>
                                                             </th>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
 
                                                     </tr>
-                                                    <?php
+                                            <?php
                                                     $i++;
                                                 }
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                    <?php
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <div class="alert alert-info">
-                                    <?php echo $this->lang->line('no_attendance_prepare'); ?>
+                                        <?php echo $this->lang->line('no_attendance_prepare'); ?>
                                     </div>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                             </div>
                         </div>
-                        <?php
+                    <?php
                     }
                     ?>
-                </div><!--./box box-primary-->
+                </div>
+                <!--./box box-primary-->
             </div>
         </div>
     </section>
@@ -284,14 +295,18 @@
 
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
+
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
-    function Popup(data)
-    {
+
+    function Popup(data) {
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -315,7 +330,7 @@
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();

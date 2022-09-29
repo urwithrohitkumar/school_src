@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Librarymember_model extends MY_Model {
+class Librarymember_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -15,15 +17,28 @@ class Librarymember_model extends MY_Model {
      * @param int $id
      * @return mixed
      */
-    public function get() {
+    public function get()
+    {
+       
+        $query = "SELECT libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,students.admission_no,students.firstname,students.lastname,students.guardian_phone,null as `teacher_name`,null as `teacher_email`,null as `teacher_sex`,null as `teacher_phone`,students.middlename 
+       FROM `libarary_members` 
+       INNER JOIN students on libarary_members.member_id= students.id 
+       WHERE libarary_members.member_type='student' and students.is_active = 'yes' UNION SELECT libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,null,null,null,null,CONCAT_WS(' ',staff.name,staff.surname) as name,staff.email,null,staff.contact_no,null 
+       FROM `libarary_members` 
+       INNER JOIN staff on libarary_members.member_id= staff.id 
+       WHERE libarary_members.member_type='teacher'";
 
-       $query = "SELECT libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,students.admission_no,students.firstname,students.lastname,students.guardian_phone,null as `teacher_name`,null as `teacher_email`,null as `teacher_sex`,null as `teacher_phone`,students.middlename FROM `libarary_members` INNER JOIN students on libarary_members.member_id= students.id WHERE libarary_members.member_type='student' and students.is_active = 'yes' UNION SELECT libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,null,null,null,null,CONCAT_WS(' ',staff.name,staff.surname) as name,staff.email,null,staff.contact_no,null FROM `libarary_members` INNER JOIN staff on libarary_members.member_id= staff.id WHERE libarary_members.member_type='teacher' ";
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $query = $query . " AND staff.branch_id =" . $this->session->userdata['admin']['branch_id'];
+        }
+
 
         $query = $this->db->query($query);
         return $query->result_array();
     }
 
-    public function checkIsMember($member_type, $id) {
+    public function checkIsMember($member_type, $id)
+    {
         $this->db->select()->from('libarary_members');
 
         $this->db->where('libarary_members.member_id', $id);
@@ -41,7 +56,8 @@ class Librarymember_model extends MY_Model {
         }
     }
 
-    public function getByMemberID($id = null) {
+    public function getByMemberID($id = null)
+    {
         $this->db->select()->from('libarary_members');
         if ($id != null) {
             $this->db->where('libarary_members.id', $id);
@@ -58,7 +74,8 @@ class Librarymember_model extends MY_Model {
         }
     }
 
-    function getTeacherData($id) {
+    function getTeacherData($id)
+    {
         $this->db->select('libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,staff.*');
         $this->db->from('libarary_members');
         $this->db->join('staff', 'libarary_members.member_id = staff.id');
@@ -69,7 +86,8 @@ class Librarymember_model extends MY_Model {
         return $result;
     }
 
-    function getStudentData($id) {
+    function getStudentData($id)
+    {
         $this->db->select('libarary_members.id as `lib_member_id`,libarary_members.library_card_no,libarary_members.member_type,students.*');
         $this->db->from('libarary_members');
         $this->db->join('students', 'libarary_members.member_id = students.id');
@@ -80,7 +98,8 @@ class Librarymember_model extends MY_Model {
         return $result;
     }
 
-    function surrender($id) {
+    function surrender($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -108,5 +127,4 @@ class Librarymember_model extends MY_Model {
             return true;
         }
     }
-
 }
