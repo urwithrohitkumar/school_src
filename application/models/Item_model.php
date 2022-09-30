@@ -13,12 +13,13 @@ class Item_model extends MY_Model
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function getItemByCategory($item_category_id)
+    public function getItemByCategory($item_category_id,$branch_id)
     {
         $this->db->select('item.id,item.name,item.item_category_id,item_category.item_category,item_category.id as `item_category_id`');
         $this->db->from('item');
         $this->db->join('item_category', 'item_category.id = item.item_category_id');
         $this->db->where('item.item_category_id', $item_category_id);
+        $this->db->where('item.branch_id', $branch_id);
         $this->db->order_by('item.id');
         $query = $this->db->get();
         return $query->result_array();

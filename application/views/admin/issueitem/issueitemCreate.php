@@ -93,7 +93,7 @@
                                         <?php
                                         foreach ($staff as $key => $value) {
                                         ?>
-                                            <option value="<?php echo $value['name'] . ' (' . $value['employee_id'] . ')'; ?>"><?php echo $value['name'] . ' (' . $value['employee_id'] . ')'; ?></option>
+                                            <option value="<?php echo $value['name'] . ' (' . $value['employee_id'] . ')'; ?>"><?php echo $value['name'] . ' (' . $value['employee_id'] . ')('. $value['branch_name'] .')'; ?></option>
                                         <?php
                                         }
                                         ?>
@@ -204,11 +204,13 @@
         if (item_category_id_post != "") {
             $('#item_id').html("");
             var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+            var branch_id = $('#branch_id').find(":selected").val();
             $.ajax({
                 type: "GET",
                 url: base_url + "admin/itemstock/getItemByCategory",
                 data: {
-                    'item_category_id': item_category_id_post
+                    'item_category_id': item_category_id_post,
+                    'branch_id': branch_id,
                 },
                 dataType: "json",
                 success: function(data) {
@@ -262,6 +264,8 @@
 
     $("input[name=account_type]:radio").change(function() {
         var user = $('input[name=account_type]:checked').val();
+        // var branch = $('input[name=branch]:checked').val();
+        // console.log(branch);
         getIssueUser(user);
 
 
@@ -276,7 +280,8 @@
             type: "POST",
             url: base_url + "admin/issueitem/getUser",
             data: {
-                'usertype': usertype
+                'usertype': usertype,
+                'branch_id': branch_id,
             },
             dataType: "json",
             success: function(data) {

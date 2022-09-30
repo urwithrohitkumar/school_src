@@ -349,6 +349,8 @@ class Lessonplan extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/lessonplan/topic');
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         foreach ($class as $class_key => $class_value) {
             $data['class_array'][] = $class_value['id'];
         }
@@ -422,6 +424,7 @@ class Lessonplan extends Admin_Controller
                     'lesson_id'  => $_POST['lesson_id'],
                     'name'       => $value,
                     'session_id' => $this->sch_current_session,
+                    'branch_id' =>$this->input->post('branch_id'),
                 );
                 $this->lessonplan_model->add_topic($data);
             }

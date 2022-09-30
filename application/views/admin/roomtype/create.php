@@ -1,14 +1,14 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
 </style>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">   
+<div class="content-wrapper">
     <section class="content-header">
         <h1>
             <i class="fa fa-building-o"></i> <?php echo $this->lang->line('hostel'); ?></small>
@@ -18,12 +18,12 @@
     <section class="content">
         <div class="row">
             <?php if ($this->rbac->hasPrivilege('room_type', 'can_add')) { ?>
-                <div class="col-md-4">               
+                <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add_room_type'); ?></h3>
                         </div>
-                        <form id="form1" action="<?php echo site_url('admin/roomtype/create') ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                        <form id="form1" action="<?php echo site_url('admin/roomtype/create') ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
@@ -34,9 +34,20 @@
                                 }
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
+
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('room_type'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="amount" name="room_type" placeholder="" type="text" class="form-control"  value="<?php echo set_value('room_type'); ?>" />
+                                    <input autofocus="" id="amount" name="room_type" placeholder="" type="text" class="form-control" value="<?php echo set_value('room_type'); ?>" />
                                     <span class="text-danger"><?php echo form_error('room_type'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -53,25 +64,25 @@
                 </div>
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('room_type', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">              
+                                if ($this->rbac->hasPrivilege('room_type', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <div class="box box-primary" id="rtype">
                     <div class="box-header ptbnull">
                         <h3 class="box-title titlefix"><?php echo $this->lang->line('room_type_list'); ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="mailbox-controls">                           
+                        <div class="mailbox-controls">
                             <div class="pull-right">
 
                             </div><!-- /.pull-right -->
                         </div>
                         <div class="mailbox-messages">
                             <div class="download_label"><?php echo $this->lang->line('room_type_list'); ?></div>
-                            <div class="table-responsive">   
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover example">
                                     <thead>
                                         <tr>
@@ -81,43 +92,44 @@
                                     </thead>
                                     <tbody>
                                         <?php if (empty($roomtypelist)) {
-                                            ?>
+                                        ?>
 
                                             <?php
                                         } else {
                                             $count = 1;
                                             foreach ($roomtypelist as $roomtype) {
-                                                ?>
+                                            ?>
                                                 <tr>
                                                     <td class="mailbox-name">
                                                         <a href="#" data-toggle="popover" class="detail_popover"><?php echo $roomtype['room_type'] ?></a>
                                                         <div class="fee_detail_popover" style="display: none">
                                                             <?php
                                                             if ($roomtype['description'] == "") {
-                                                                ?>
+                                                            ?>
                                                                 <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                                <?php
+                                                            <?php
                                                             } else {
-                                                                ?>
+                                                            ?>
                                                                 <p class="text text-info"><?php echo $roomtype['description']; ?></p>
-                                                                <?php
+                                                            <?php
                                                             }
                                                             ?>
                                                         </div>
                                                     </td>
                                                     <td class="mailbox-date pull-right no-print">
                                                         <?php if ($this->rbac->hasPrivilege('room_type', 'can_edit')) { ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/roomtype/edit/<?php echo $roomtype['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/roomtype/edit/<?php echo $roomtype['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
-                                                        <?php } if ($this->rbac->hasPrivilege('room_type', 'can_delete')) { ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/roomtype/delete/<?php echo $roomtype['id'] ?>"class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                        <?php }
+                                                        if ($this->rbac->hasPrivilege('room_type', 'can_delete')) { ?>
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/roomtype/delete/<?php echo $roomtype['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                                 <i class="fa fa-remove"></i>
                                                             </a>
                                                         <?php } ?>
                                                     </td>
                                                 </tr>
-                                                <?php
+                                        <?php
                                             }
                                             $count++;
                                         }
@@ -125,11 +137,11 @@
 
                                     </tbody>
                                 </table>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>     
+            </div>
 
         </div>
         <div class="row">
@@ -140,24 +152,27 @@
     </section>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnreset").click(function () {
+    $(document).ready(function() {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
     });
 </script>
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
+
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
 
-    function Popup(data)
-    {
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -183,7 +198,7 @@
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
@@ -194,13 +209,13 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });

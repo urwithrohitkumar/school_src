@@ -36,7 +36,6 @@ class Issueitem extends Admin_Controller {
         $itemcategory = $this->itemcategory_model->get();
         $data['itemcatlist'] = $itemcategory;
         $data['staff'] = $this->staff_model->issueItemby();
-
         $this->load->view('layout/header', $data);
         $this->load->view('admin/issueitem/issueitemCreate', $data);
         $this->load->view('layout/footer', $data);

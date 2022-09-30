@@ -41,9 +41,8 @@ class Content_model extends MY_Model
     {
         $inner_sql = "";
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $inner_sql = " Where contents.branch_id = ". $this->session->userdata['admin']['branch_id']."";
-        }
-        else{
+            $inner_sql = " Where contents.branch_id = " . $this->session->userdata['admin']['branch_id'] . "";
+        } else {
             $inner_sql = " Where 1";
         }
 
@@ -53,15 +52,21 @@ class Content_model extends MY_Model
             $inner_sql = " AND (role='Teacher' and created_by='" . $id . "' ) or (created_by=0 and role='" . $role . "')";
         }
         $query = "SELECT contents.*,(select GROUP_CONCAT(role) FROM content_for WHERE content_id=contents.id) as role,class_sections.id as `class_section_id`,classes.class,sections.section  FROM `content_for`  INNER JOIN contents on contents.id=content_for.content_id left JOIN class_sections on class_sections.id=contents.cls_sec_id left join classes on classes.id=class_sections.class_id LEFT JOIN sections on sections.id=class_sections.section_id" . $inner_sql . " GROUP by contents.id ";
-       
+
         $query = $this->db->query($query);
+
         return $query->result_array();
     }
+
 
     public function getListByCategory($category)
     {
         $this->db->select('contents.*,classes.class')->from('contents');
         $this->db->join('classes', 'contents.class_id = classes.id', 'left outer');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('contents.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         $this->db->where('contents.type', $category);
         $this->db->order_by('contents.id');
         $query = $this->db->get();

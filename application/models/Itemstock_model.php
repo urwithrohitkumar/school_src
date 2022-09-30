@@ -20,7 +20,7 @@ class Itemstock_model extends MY_Model
         $this->db->join('item_supplier', 'item_stock.supplier_id = item_supplier.id');
         $this->db->join('item_store', 'item_store.id = item_stock.store_id', 'left outer');
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $this->db->where('item_stock.branch_id', $this->session->userdata['admin']['branch_id']);
+            $this->db->where('item.branch_id', $this->session->userdata['admin']['branch_id']);
         }
         if ($id != null) {
             $this->db->where('item_stock.id', $id);

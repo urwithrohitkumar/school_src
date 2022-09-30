@@ -24,6 +24,8 @@ class Stdtransfer extends Admin_Controller
         $data['title']           = 'Exam Schedule';
         $class                   = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $userdata                = $this->customlib->getUserData();
         $data['sch_setting']     = $this->sch_setting_detail;
         $feecategory             = $this->feecategory_model->get();
@@ -41,13 +43,15 @@ class Stdtransfer extends Admin_Controller
             $session                       = $this->input->post('session_id');
             $class_promote                 = $this->input->post('class_promote_id');
             $section_promote               = $this->input->post('section_promote_id');
+            $branch_id                        = $this->input->post('branch_id');
             $data['class_post']            = $class;
             $data['section_post']          = $section;
             $data['class_promoted_post']   = $class_promote;
             $data['section_promoted_post'] = $section_promote;
             $data['session_promoted_post'] = $session;
+            $data['branch_id'] = $branch_id;
 
-            $resultlist = $this->student_model->searchNonPromotedStudents($class, $section, $session, $class_promote, $section_promote);
+            $resultlist = $this->student_model->searchNonPromotedStudents($class, $section, $session, $class_promote, $section_promote,$branch_id);
 
             $data['resultlist'] = $resultlist;
 

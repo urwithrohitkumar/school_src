@@ -6,14 +6,14 @@
         <div class="row">
             <?php
             if ($this->rbac->hasPrivilege('subject_group', 'can_add')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add') . " " . $this->lang->line('subject') . " " . $this->lang->line('group'); ?></h3>
                         </div><!-- /.box-header -->
-                        <form id="form1" action="<?php echo site_url('admin/subjectgroup') ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                        <form id="form1" action="<?php echo site_url('admin/subjectgroup') ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
 
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
@@ -25,34 +25,45 @@
                                 }
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
-
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
-                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
-                                    <span class="text-danger"><?php echo form_error('name'); ?></span>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                 </div>
+
                                 <div class="form-group">
 
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?> </label><small class="req"> *</small>
 
-                                    <select  id="class_id" name="class_id" class="form-control" >
+                                    <select id="class_id" name="class_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($classlist as $class) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $class['id'] ?>" <?php
-                                            if (set_value('class_id') == $class['id']) {
-                                                echo "selected=selected";
-                                            }
-                                            ?>>
+                                                                                        if (set_value('class_id') == $class['id']) {
+                                                                                            echo "selected=selected";
+                                                                                        }
+                                                                                        ?>>
                                                 <?php echo $class['class'] ?></option>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                 </div>
-                                <div class="form-group"> <!-- Radio group !-->
+                                
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
+                                    <input autofocus="" id="name" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
+                                    <span class="text-danger"><?php echo form_error('name'); ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <!-- Radio group !-->
                                     <label class="control-label"><?php echo $this->lang->line('sections'); ?></label><small class="req"> *</small>
                                     <div class="section_checkbox">
                                         <?php echo $this->lang->line('no') . " " . $this->lang->line('section') ?>
@@ -66,16 +77,16 @@
 
                                     <?php
                                     foreach ($subjectlist as $subject) {
-                                        ?>
+                                    ?>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="subject[]" value="<?php echo $subject['id'] ?>" <?php echo set_checkbox('subject[]', $subject['id']); ?> ><?php echo $subject['name'] ?>
+                                                <input type="checkbox" name="subject[]" value="<?php echo $subject['id'] ?>" <?php echo set_checkbox('subject[]', $subject['id']); ?>><?php echo $subject['name'] ?>
 
 
 
                                             </label>
                                         </div>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
 
@@ -95,16 +106,17 @@
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('subject_group', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>"> 
+                                if ($this->rbac->hasPrivilege('subject_group', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -116,7 +128,7 @@
                         <div class="table-responsive mailbox-messages" id="subject_list">
                             <div class="download_label"><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') . " " . $this->lang->line('list'); ?></div>
 
-                            <a class="btn btn-default btn-xs pull-right" id="print" onclick="printDiv()" ><i class="fa fa-print"></i></a> <a class="btn btn-default btn-xs pull-right" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </a>
+                            <a class="btn btn-default btn-xs pull-right" id="print" onclick="printDiv()"><i class="fa fa-print"></i></a> <a class="btn btn-default btn-xs pull-right" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </a>
                             <table class="table table-striped  table-hover " id="headerTable">
                                 <thead>
                                     <tr>
@@ -129,7 +141,7 @@
                                 <tbody>
                                     <?php
                                     foreach ($subjectgroupList as $subjectgroup) {
-                                        ?>
+                                    ?>
                                         <tr>
                                             <td class="mailbox-name">
                                                 <a href="#" data-toggle="popover" class="detail_popover"><?php echo $subjectgroup->name; ?></a>
@@ -137,13 +149,13 @@
                                                 <div class="fee_detail_popover" style="display: none">
                                                     <?php
                                                     if ($subjectgroup->description == "") {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                        <?php
+                                                    <?php
                                                     } else {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-info"><?php echo $subjectgroup->description; ?></p>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </div>
@@ -153,9 +165,11 @@
 
 
                                                     <?php foreach ($subjectgroup->sections as $group_section_key => $group_section_value) { ?>
-                                                        <tr><td><?php echo "<div>" . $group_section_value->class . " - " . $group_section_value->section . "</div>"; ?></td></tr>
+                                                        <tr>
+                                                            <td><?php echo "<div>" . $group_section_value->class . " - " . $group_section_value->section . "</div>"; ?></td>
+                                                        </tr>
 
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </table>
@@ -164,12 +178,14 @@
                                                 <table width="100%">
                                                     <?php
                                                     foreach ($subjectgroup->group_subject as $group_subject_key => $group_subject_value) {
-                                                        ?>
-                                                        <tr><td>
+                                                    ?>
+                                                        <tr>
+                                                            <td>
                                                                 <?php echo "<div>" . $group_subject_value->name . "</div>"; ?>
-                                                            </td></tr>
+                                                            </td>
+                                                        </tr>
 
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </table>
@@ -178,21 +194,21 @@
 
                                                 <?php
                                                 if ($this->rbac->hasPrivilege('subject_group', 'can_edit')) {
-                                                    ?>
+                                                ?>
                                                     <a href="<?php echo base_url(); ?>admin/subjectgroup/edit/<?php echo $subjectgroup->id; ?>" class="btn btn-default btn-xs no_print displayinline" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
                                                 <?php } ?>
                                                 <?php
                                                 if ($this->rbac->hasPrivilege('subject_group', 'can_delete')) {
-                                                    ?>
-                                                    <a  href="<?php echo base_url(); ?>admin/subjectgroup/delete/<?php echo $subjectgroup->id; ?>"class="btn btn-default btn-xs no_print displayinline" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
-                                                        <i  class="fa fa-remove"></i>
+                                                ?>
+                                                    <a href="<?php echo base_url(); ?>admin/subjectgroup/delete/<?php echo $subjectgroup->id; ?>" class="btn btn-default btn-xs no_print displayinline" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                        <i class="fa fa-remove"></i>
                                                     </a>
                                                 <?php } ?>
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </tbody>
@@ -203,7 +219,8 @@
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
 
             <!-- right column -->
 
@@ -214,22 +231,24 @@
             <!-- right column -->
             <div class="col-md-12">
 
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
 
 <script>
     var post_section_array = <?php echo json_encode($section_array); ?>;
-    $(document).ready(function () {
+    $(document).ready(function() {
         var post_class_id = '<?php echo set_value('class_id', 0) ?>';
-        // var post_sections= '<?php //print_r($section_array);        ?>';
+        // var post_sections= '<?php //print_r($section_array);        
+                                ?>';
 
 
         if (post_section_array !== null && post_section_array.length > 1) {
 
-            $.each(post_section_array, function (i, elem) {
+            $.each(post_section_array, function(i, elem) {
 
             });
 
@@ -241,13 +260,13 @@
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
 
 
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             var class_id = $(this).val();
             getSectionByClass(class_id, 0);
         });
@@ -260,15 +279,16 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
 
 
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         console.log(post_section_array);
                         console.log();
                         var check = "";
@@ -287,11 +307,11 @@
                     });
                     $('.section_checkbox').html(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
 
                 }
             });
@@ -308,46 +328,43 @@
         var divElements = document.getElementById('subject_list').innerHTML;
         var oldPage = document.body.innerHTML;
         document.body.innerHTML =
-                "<html><head><title></title></head><body>" +
-                divElements + "</body>";
+            "<html><head><title></title></head><body>" +
+            divElements + "</body>";
         window.print();
         document.body.innerHTML = oldPage;
 
         location.reload(true);
     }
 
-    function fnExcelReport()
-    {
+    function fnExcelReport() {
         var tab_text = "<table border='2px'><tr >";
         var textRange;
         var j = 0;
         tab = document.getElementById('headerTable'); // id of table
 
-        for (j = 0; j < tab.rows.length; j++)
-        {
+        for (j = 0; j < tab.rows.length; j++) {
             tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
             //tab_text=tab_text+"</tr>";
         }
 
         tab_text = tab_text + "</table>";
-        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
         tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
         tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
 
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
         {
             txtArea1.document.open("txt/html", "replace");
             txtArea1.document.write(tab_text);
             txtArea1.document.close();
             txtArea1.focus();
             sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-        } else                 //other browser not tested on IE 11
+        } else //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
         return (sa);
     }
-
 </script>

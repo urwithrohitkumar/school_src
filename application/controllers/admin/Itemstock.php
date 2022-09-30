@@ -84,7 +84,8 @@ class Itemstock extends Admin_Controller
     public function getItemByCategory()
     {
         $item_category_id = $this->input->get('item_category_id');
-        $data             = $this->item_model->getItemByCategory($item_category_id);
+        $branch_id = $this->input->get('branch_id');
+        $data             = $this->item_model->getItemByCategory($item_category_id,$branch_id);
         echo json_encode($data);
     }
 

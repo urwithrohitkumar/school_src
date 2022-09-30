@@ -3,16 +3,23 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class roomtype_model extends MY_Model {
+class roomtype_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $this->db->select();
         $this->db->from('room_types');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         if ($id != null) {
             $this->db->where('id', $id);
         } else {
@@ -25,8 +32,17 @@ class roomtype_model extends MY_Model {
             return $query->result_array();
         }
     }
+    public function getRoomTypeByBranch($branch_id){
+        $this->db->select()->from('room_types');
+        $this->db->where('branch_id', $branch_id);
+        $this->db->order_by('id');
+        $query = $this->db->get();
+        return $query->result_array();
 
-    public function remove($id) {
+    }
+
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -48,7 +64,8 @@ class roomtype_model extends MY_Model {
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -94,10 +111,10 @@ class roomtype_model extends MY_Model {
         }
     }
 
-    public function lists() {
+    public function lists()
+    {
         $this->db->select()->from('room_types');
         $listroomtype = $this->db->get();
         return $listroomtype->result_array();
     }
-
 }

@@ -551,11 +551,12 @@ class Staff_model extends MY_Model
        
         $field_var = count($field_k_array) > 0 ? "," . implode(',', $field_k_array) : "";
        
-        $this->db->select("staff.*,staff_designation.designation,department.department_name as department,roles.name as user_type" . $field_var)->from('staff');
+        $this->db->select("staff.*,staff_designation.designation,tb_branch.branch_name,department.department_name as department,roles.name as user_type" . $field_var)->from('staff');
         $this->db->join('staff_designation', "staff_designation.id = staff.designation", "left");
         $this->db->join('staff_roles', "staff_roles.staff_id = staff.id", "left");
         $this->db->join('roles', "roles.id = staff_roles.role_id", "left");
         $this->db->join('department', "department.id = staff.department", "left");       
+        $this->db->join('tb_branch', "tb_branch.id = staff.branch_id", "left");       
 
         if ($class_id != "") {
             $this->db->join('class_teacher', 'staff.id=class_teacher.staff_id', 'left');
@@ -1006,15 +1007,17 @@ class Staff_model extends MY_Model
     {
         if($this->session->userdata['admin']['role_id'] != 7)
         {
-            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id")
+            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id,tb_branch.branch_name")
             ->from('staff')
+            ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
             ->where('staff.is_active', 1)
             ->where('staff.id', $this->session->userdata['admin']['id'])
             ->get()->result_array();
         }
         else{
-            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id")
+            $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id,tb_branch.branch_name")
             ->from('staff')
+            ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
             ->where('staff.is_active', 1)
             ->get()->result_array();
         }

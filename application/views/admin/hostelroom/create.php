@@ -42,7 +42,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control branch_details">
+                                        <option value="">Select</option>
                                         <?php foreach ($branch as $key => $value) {  ?>
                                             <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
                                         <?php } ?>
@@ -59,25 +60,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('hostel'); ?></label><small class="req"> *</small>
                                     <select id="hostel_id" name="hostel_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($hostellist as $hostel) {
-                                        ?>
-                                            <option value="<?php echo $hostel['id'] ?>" <?php
-                                                                                        if (set_value('hostel_id') == $hostel['id']) {
-                                                                                            echo "selected =selected";
-                                                                                        }
-                                                                                        ?>><?php echo $hostel['hostel_name'] ?></option>
-
-                                        <?php
-                                            $count++;
-                                        }
-                                        ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('hostel_id'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('room_type'); ?></label><small class="req"> *</small>
                                     <select id="room_type_id" name="room_type_id" class="form-control">
+                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                    </select>
+                                    <!-- <select id="room_type_id" name="room_type_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($roomtypelist as $roomtype) {
@@ -92,7 +83,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             $count++;
                                         }
                                         ?>
-                                    </select>
+                                    </select> -->
                                     <span class="text-danger"><?php echo form_error('room_type_id'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -279,4 +270,37 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             }
         });
     });
+</script>
+<script>
+    $(".branch_details").on('change', function() {
+        $('#hostel_id').html("");
+        $('#room_type_id').html("");
+        var branch_id = $(this).val();
+        var hosteldiv_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+        var roomdiv_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/hostelroom/getRoomByBranch",
+            data: {
+                'branch_id': branch_id,
+            },
+            dataType: "json",
+            success: function(data) {
+                var hostel = data.hostel;
+                var room = data.room;
+                console.log(room);
+                $.each(hostel, function(i, obj) {
+                    hosteldiv_data += "<option value=" + obj.id + " >" + obj.hostel_name + "</option>";
+                });
+                $('#hostel_id').append(hosteldiv_data);
+                $.each(room, function(j, roomobj) {
+                    roomdiv_data += "<option value=" + roomobj.id + " >" + roomobj.room_type + "</option>";
+                });
+                $('#room_type_id').append(roomdiv_data);
+            }
+
+        });
+
+
+    })
 </script>

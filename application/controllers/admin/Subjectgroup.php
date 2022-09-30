@@ -21,6 +21,8 @@ class Subjectgroup extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'subjectgroup/index');
         $data['title'] = 'Add Class';
         $data['title_list'] = 'Class List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $class = $this->class_model->get();
         $data['classlist'] = $class;
         $data['section_array'] = $json_array;
@@ -55,6 +57,7 @@ class Subjectgroup extends Admin_Controller {
                 'name' => $this->input->post('name'),
                 'session_id' => $session,
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $subject = $this->input->post('subject');
             $sections = $this->input->post('sections');
@@ -181,6 +184,7 @@ class Subjectgroup extends Admin_Controller {
         } else {
             $student_session_id = $this->input->post('student_session_id');
             $subject_group_id = $this->input->post('subject_group_id');
+            $branch_id = $this->input->post('branch_id');
             $student_sesssion_array = isset($student_session_id) ? $student_session_id : array();
             $student_ids = $this->input->post('student_ids');
             $delete_student = array_diff($student_ids, $student_sesssion_array);
@@ -192,6 +196,7 @@ class Subjectgroup extends Admin_Controller {
                     $insert_array = array(
                         'student_session_id' => $value,
                         'subject_group_id' => $subject_group_id,
+                        'branch_id' => $branch_id,
                     );
                     $inserted_id = $this->studentsubjectgroup_model->add($insert_array);
 

@@ -1,4 +1,3 @@
-
 <style type="text/css">
     @media(max-width:767px){
         .dhide{display:none !important}
@@ -33,8 +32,9 @@
                                         <?php
                                         if (!empty($staff_list)) {
                                             foreach ($staff_list as $staff_key => $staff_value) {
+                                               
                                                 ?>
-                                                <option value="<?php echo $staff_value['id']; ?>"><?php echo $staff_value["name"] . " " . $staff_value["surname"] . " (" . $staff_value['employee_id'] . ")"; ?></option>
+                                                <option value="<?php echo $staff_value['id']; ?>"><?php echo $staff_value["name"] . " " . $staff_value["surname"] . " (" . $staff_value['employee_id'] . ")( ".$staff_value['branch_name']." ) "; ?></option>
                                                 <?php
                                             }
                                         }

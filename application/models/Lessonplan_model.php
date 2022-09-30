@@ -356,10 +356,10 @@ class Lessonplan_model extends MY_model {
         $branch_id = $this->session->admin['branch_id'];    
         $arr = [];
         if($branch_id>0){
-            $arr = ['lesson.branch_id'=>$branch_id];
+            $arr = ['topic.branch_id'=>$branch_id];
         }
         $this->datatables
-            ->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id,lesson.branch_id')
+            ->select('topic.*,subject_groups.name as sgname,subjects.name as subname,sections.section as sname,sections.id as sectionid,subject_groups.id as subjectgroupsid,subjects.id as subjectid,class_sections.id as csectionid,classes.class as cname,classes.id as classid,lesson.name as lessonname,lesson.subject_group_class_sections_id,lesson.subject_group_subject_id')
             ->searchable('classes.class,sections.section,subjects.name,subject_groups.name,classes.class,lesson.name')
             ->orderable('cname,sname,sgname,subname,lessonname," " ')
         ->join("lesson", "lesson.id = topic.lesson_id")

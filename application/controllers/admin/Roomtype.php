@@ -15,6 +15,8 @@ class Roomtype extends Admin_Controller {
         }
         $roomtypelist = $this->roomtype_model->get();
         $data['roomtypelist'] = $roomtypelist;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->session->set_userdata('top_menu', 'Hostel');
         $this->session->set_userdata('sub_menu', 'roomtype/index');
         $listroomtype = $this->roomtype_model->lists();
@@ -41,7 +43,9 @@ class Roomtype extends Admin_Controller {
         } else {
             $data = array(
                 'room_type' => $this->input->post('room_type'),
-                'description' => $this->input->post('description')
+                'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id')
+
             );
             $this->roomtype_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');

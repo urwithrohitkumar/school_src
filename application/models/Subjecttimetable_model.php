@@ -105,12 +105,15 @@ class Subjecttimetable_model extends MY_Model {
                 }
             }
         }
+        if (isset($branch_id) && $branch_id != '') {
+            $subject_condition = $subject_condition ." AND staff.branch_id='" . $branch_id . "'";
+        }
         $subject_condition = $subject_condition . " and staff.is_active=1 order by subject_timetable.start_time asc";
+
 
         $sql = "SELECT `subject_group_subjects`.`subject_id`,subjects.name as `subject_name`,subjects.code,subjects.type,staff.name,staff.surname,staff.employee_id,`subject_timetable`.* FROM `subject_timetable` JOIN `subject_group_subjects` ON `subject_timetable`.`subject_group_subject_id` = `subject_group_subjects`.`id`inner JOIN subjects on subject_group_subjects.subject_id = subjects.id INNER JOIN staff on staff.id=subject_timetable.staff_id   WHERE  `subject_timetable`.`class_id` = " . $class_id . " AND `subject_timetable`.`section_id` = " . $section_id . " AND `subject_timetable`.`day` = " . $this->db->escape($day) . " AND `subject_timetable`.`session_id` = " . $this->current_session . "" . $subject_condition;
 
         $query = $this->db->query($sql);
-
         return $query->result();
     }
 

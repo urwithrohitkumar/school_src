@@ -228,4 +228,16 @@ class Hostelroom extends Admin_Controller {
 
     }
 
+    public function getRoomByBranch()
+    {
+        $branch_id = $this->input->get('branch_id');
+        $hostel = $this->hostel_model->getRoomByBranch($branch_id);
+        $room = $this->roomtype_model->getRoomTypeByBranch($branch_id);
+        $data = array(
+            'hostel' => $hostel,
+            'room' => $room,
+        );
+        echo json_encode($data);
+    }
+
 }

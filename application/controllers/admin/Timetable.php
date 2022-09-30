@@ -209,6 +209,8 @@ class Timetable extends Admin_Controller
         $data['subject_id']      = "";
         $data['class_id']        = "";
         $data['section_id']      = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $exam                    = $this->exam_model->get();
         $class                   = $this->class_model->get('', $classteacher = 'yes');
         $data['examlist']        = $exam;
@@ -227,12 +229,14 @@ class Timetable extends Admin_Controller
 
                 $class_id    = $this->input->post('class_id');
                 $section_id  = $this->input->post('section_id');
+                $branch_id  = $this->input->post('branch_id');
                 $days        = $this->customlib->getDaysname();
                 $days_record = array();
                 foreach ($days as $day_key => $day_value) {
                     $class_id              = $this->input->post('class_id');
                     $section_id            = $this->input->post('section_id');
-                    $days_record[$day_key] = $this->subjecttimetable_model->getSubjectByClassandSectionDay($class_id, $section_id, $day_key);
+                    $branch_id  = $this->input->post('branch_id');
+                    $days_record[$day_key] = $this->subjecttimetable_model->getSubjectByClassandSectionDay($class_id, $section_id, $day_key,$branch_id);
                 }
 
                 $data['timetable'] = $days_record;

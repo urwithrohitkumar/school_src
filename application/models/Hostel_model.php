@@ -21,6 +21,10 @@ class Hostel_model extends MY_Model
     public function get($id = null)
     {
         $this->db->select()->from('hostel');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         if ($id != null) {
             $this->db->where('hostel.id', $id);
         } else {
@@ -33,6 +37,25 @@ class Hostel_model extends MY_Model
             return $query->result_array();
         }
     }
+
+
+    public function getRoomByBranch($branch_id)
+    {
+        $this->db->select()->from('hostel');
+        $this->db->where('branch_id', $branch_id);
+        $this->db->order_by('hostel.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+
+
+
+
+
+
+
 
     /**
      * This function will delete the record based on the id

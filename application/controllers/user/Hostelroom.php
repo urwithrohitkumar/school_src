@@ -102,6 +102,17 @@ class Hostelroom extends Student_Controller {
         redirect('admin/hostelroom/index');
     }
 
+
+    public function getRoomByBranch()
+    {
+        die("sdsds");
+        $branch_id = $this->input->get('branch_id');
+        $data = $this->hostel_model->getRoomByBranch($branch_id);
+        print_r($data);
+        exit;
+        echo json_encode($data);
+    }
+
 }
 
 ?>
