@@ -288,7 +288,7 @@ class Student_model extends MY_Model
         return false;
     }
 
-    public function search_alumniStudent($class_id = null, $section_id = null, $session_id = null)
+    public function search_alumniStudent($class_id = null, $section_id = null, $session_id = null ,$branch_id)
     {
 
         $i = 1;
@@ -312,6 +312,7 @@ class Student_model extends MY_Model
         $this->db->join('sections', 'sections.id = student_session.section_id');
         $this->db->join('categories', 'students.category_id = categories.id', 'left');
         $this->db->where('student_session.is_alumni', 1);
+        $this->db->where('student_session.branch_id', $branch_id);
         $this->db->where('students.is_active', "yes");
         if ($class_id != null) {
             $this->db->where('student_session.class_id', $class_id);
@@ -331,7 +332,7 @@ class Student_model extends MY_Model
         return $query->result_array();
     }
 
-    public function search_alumniStudentbyAdmissionNo($searchterm, $carray)
+    public function search_alumniStudentbyAdmissionNo($searchterm, $carray ,$branch_id)
     {
 
         $userdata = $this->customlib->getUserData();
@@ -370,6 +371,7 @@ class Student_model extends MY_Model
         $this->db->join('sections', 'sections.id = student_session.section_id');
         $this->db->join('categories', 'students.category_id = categories.id', 'left');
         $this->db->where('student_session.session_id', $this->current_session);
+        $this->db->where('student_session.branch_id', $branch_id);
         $this->db->where('students.is_active', 'yes');
         $this->db->where('student_session.is_alumni', '1');
         $this->db->group_start();

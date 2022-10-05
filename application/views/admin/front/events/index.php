@@ -1,4 +1,3 @@
-
 <script src="<?php echo base_url(); ?>backend/plugins/ckeditor/ckeditor.js"></script>
 
 <!-- Content Wrapper. Contains page content -->
@@ -45,6 +44,7 @@
                                             <th><?php echo $this->lang->line('title'); ?></th>
                                             <th><?php echo $this->lang->line('date'); ?></th>
                                             <th><?php echo $this->lang->line('venue'); ?></th>
+                                            <th><?php echo $this->lang->line('branch'); ?></th>
                                             <th class="text-right">
                                                 <?php echo $this->lang->line('action'); ?>
                                             </th>
@@ -95,6 +95,7 @@
 
 
                                                     <td class="mailbox-name"> <?php echo $event['event_venue'] ?></td>
+                                                    <td class="mailbox-name"> <?php echo $event['branch_name'] ?></td>
 
                                                     <td class="mailbox-date pull-right no-print">
                                                         <?php

@@ -110,7 +110,13 @@ class Alumni_model extends MY_Model {
     }
 
     function getevents() {
-        return $this->db->select('*')->from('alumni_events')->order_by('alumni_events.from_date', 'desc')->get()->result_array();
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+            return $this->db->select('*')->from('alumni_events')->where('branch_id', $this->session->userdata['admin']['branch_id'])->order_by('alumni_events.from_date', 'desc')->get()->result_array();
+        }else{
+            return $this->db->select('*')->from('alumni_events')->order_by('alumni_events.from_date', 'desc')->get()->result_array();
+        }
+       
     }
 
     function get_eventbydate($date) {

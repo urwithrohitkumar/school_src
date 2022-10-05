@@ -35,7 +35,7 @@ class Staff extends Admin_Controller
         if (!$this->rbac->hasPrivilege('staff', 'can_view')) {
             access_denied();
         }
-
+      
         $data['title']  = 'Staff Search';
         $data['fields'] = $this->customfield_model->get_custom_fields('staff', 1);
         $this->session->set_userdata('top_menu', 'HR');
@@ -48,6 +48,7 @@ class Staff extends Admin_Controller
         $data["role_id"]    = "";
         $search_text        = $this->input->post('search_text');
         if (isset($search)) {
+           
             if ($search == 'search_filter') {
                 $this->form_validation->set_rules('role', $this->lang->line('role'), 'trim|required|xss_clean');
                 if ($this->form_validation->run() == false) {
@@ -58,8 +59,9 @@ class Staff extends Admin_Controller
                     $role                = $this->input->post('role');
                     $data['employee_id'] = $this->input->post('empid');
                     $data["role_id"]     = $role;
+                    $branch = '';
                     $data['search_text'] = $this->input->post('search_text');
-                    $resultlist          = $this->staff_model->getEmployee($role, 1);
+                    $resultlist          = $this->staff_model->getEmployee($role, 1,$branch);
                     $data['resultlist']  = $resultlist;
                 }
             } else if ($search == 'search_full') {
