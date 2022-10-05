@@ -27,6 +27,8 @@ class Generatecertificate extends Admin_Controller
         $data['certificateList'] = $certificateList;
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('admin/certificate/generatecertificate', $data);
         $this->load->view('layout/footer', $data);
@@ -39,6 +41,8 @@ class Generatecertificate extends Admin_Controller
 
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $certificateList         = $this->Certificate_model->getstudentcertificate();
         $data['certificateList'] = $certificateList;
         $button                  = $this->input->post('search');
@@ -51,6 +55,7 @@ class Generatecertificate extends Admin_Controller
             $section     = $this->input->post('section_id');
             $search      = $this->input->post('search');
             $certificate = $this->input->post('certificate_id');
+            $branch_id = $this->input->post('branch_id');
             if (isset($search)) {
                 $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
 
@@ -64,7 +69,7 @@ class Generatecertificate extends Admin_Controller
                     $certificate               = $this->input->post('certificate_id');
                     $certificateResult         = $this->Generatecertificate_model->getcertificatebyid($certificate);
                     $data['certificateResult'] = $certificateResult;
-                    $resultlist                = $this->student_model->searchByClassSection($class, $section);
+                    $resultlist                = $this->student_model->searchByClassSection($class, $section ,$branch_id);
                     $data['resultlist']        = $resultlist;
                     $title                     = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
                     $data['title']             = $this->lang->line('std_dtl_for') . ' ' . $title['class'] . "(" . $title['section'] . ")";

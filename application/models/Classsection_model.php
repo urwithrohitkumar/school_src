@@ -247,1529 +247,55 @@ class Classsection_model extends MY_Model
      */
     private function prepareAgeReport($students = []): array
     {
+
+        $className = [];
+        $classData = $this->db->get('classes')->result();
+         /**
+         * Fetch student details from database and preparing student data classwise
+         */
+        foreach ($classData as $key => $class) {
+            $class = strtolower(str_replace(' ','_',$class->class));
+            $className[$class] = [
+                'male' => 0,
+                'female' => 0,
+                'transgender' => 0,
+            ];
+            
+        }
+        
         $studentAgeWise = [];
         /**
          * Defining static array  for all column.
          */
         $ageGroupArr = [
-            '<4' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '4<5' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '5<6' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 1,
-                    'female' => 2,
-                    'transgender' => 5,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '6<7' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '7<8' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '8<9' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '9<10' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '10<11' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '11<12' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '12<13' => [
-                'nursery' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'lkg' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_1' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '13<14' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '14<15' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '15<16' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-            ],
-            '16<17' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '17<18' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_5' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_6' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_7' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_8' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '18<19' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '19<20' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '20<21' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '21<22' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-            '<22' => [
-                'nursery' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'lkg' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_1' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_2' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_3' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_4' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_5' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_6' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_7' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_8' => [
-                    'male' => "",
-                    'female' => "",
-                    'transgender' => "",
-                ],
-                'class_9' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_10' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_11' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-                'class_12' => [
-                    'male' => 0,
-                    'female' => 0,
-                    'transgender' => 0,
-                ],
-            ],
-
+            '<4' => $className,
+            '4<5' => $className,
+            '5<6' =>$className,
+            '6<7' => $className,
+            '7<8' =>$className,
+            '8<9' => $className,
+            '9<10' => $className,
+            '10<11' =>$className,
+            '11<12' => $className,
+            '12<13' => $className,
+            '13<14' => $className,
+            '14<15' => $className,
+            '15<16' =>$className,
+            '16<17' => $className,
+            '17<18' => $className,
+            '18<19' => $className,
+            '19<20' =>$className,
+            '20<21' =>$className,
+            '21<22' => $className,
+            '<22' =>$className,
         ];
-
+       
         /**
          * Defining static array  for total.
          */
-        $total = [
-            'nursery' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'lkg' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_1' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_2' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_3' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_4' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_5' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_6' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_7' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_8' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_9' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_10' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_11' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ],
-            'class_12' => [
-                'male' => 0,
-                'female' => 0,
-                'transgender' => 0,
-            ]
-        ];
+        $total = $className;
+        
+       
 
         // Createing agewise Array for students.
         foreach ($students as $key => $student) {
@@ -1835,40 +361,1663 @@ class Classsection_model extends MY_Model
                 unset($students[$key]);
             }
         }
-
+       
         // Calculating table column value by gender
         foreach ($studentAgeWise as $key => $saw) {
             foreach ($saw as $class_key => $st) {
-
                 $class =  strtolower(str_replace(' ', '_', $st->class));
                 if (strtolower($st->gender) == 'male') {
-
                     $m = intval($ageGroupArr[$key][$class]['male']);
                     $ageGroupArr[$key][$class]['male'] = $m + 1;
                 } else if (strtolower($st->gender) == 'female') {
-
                     $f = intval($ageGroupArr[$key][$class]['female']);
                     $ageGroupArr[$key][$class]['female'] = $f + 1;
                 } else {
-
                     $t = intval($ageGroupArr[$key][$class]['transgender']);
                     $ageGroupArr[$key][$class]['transgender'] = $t + 1;
                 }
             }
         }
+      
 
         // Preparing data for total in footer
         foreach ($ageGroupArr as $key => $st_class) {
             foreach ($st_class as $_key => $value) {
-                $total[$_key]['male'] += intval($st_class[$_key]['male']);
-                $total[$_key]['female'] += intval($st_class[$_key]['female']);
-                $total[$_key]['transgender'] += intval($st_class[$_key]['transgender']);
+                $total[$_key]['male'] = intval($total[$_key]['male']) + intval($st_class[$_key]['male']);
+                $total[$_key]['female'] = intval($total[$_key]['female']) + intval($st_class[$_key]['female']);
+                $total[$_key]['transgender'] = intval($total[$_key]['transgender']) + intval($st_class[$_key]['transgender']);
+
             }
         }
+
         $ageGroupArr['Total'] = $total;
 
         return $ageGroupArr;
     }
+    // private function prepareAgeReport($students = []): array
+    // {
+    //     $studentAgeWise = [];
+    //     /**
+    //      * Defining static array  for all column.
+    //      */
+    //     $ageGroupArr = [
+    //         '<4' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '4<5' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '5<6' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 1,
+    //                 'female' => 2,
+    //                 'transgender' => 5,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '6<7' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '7<8' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '8<9' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '9<10' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '10<11' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '11<12' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '12<13' => [
+    //             'nursery' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'lkg' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_1' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '13<14' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '14<15' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '15<16' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //         ],
+    //         '16<17' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '17<18' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_5' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_6' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_7' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_8' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '18<19' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '19<20' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '20<21' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '21<22' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+    //         '<22' => [
+    //             'nursery' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'lkg' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_1' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_2' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_3' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_4' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_5' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_6' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_7' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_8' => [
+    //                 'male' => "",
+    //                 'female' => "",
+    //                 'transgender' => "",
+    //             ],
+    //             'class_9' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_10' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_11' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //             'class_12' => [
+    //                 'male' => 0,
+    //                 'female' => 0,
+    //                 'transgender' => 0,
+    //             ],
+    //         ],
+
+    //     ];
+
+    //     /**
+    //      * Defining static array  for total.
+    //      */
+    //     $total = [
+    //         'nursery' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'lkg' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_1' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_2' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_3' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_4' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_5' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_6' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_7' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_8' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_9' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_10' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_11' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ],
+    //         'class_12' => [
+    //             'male' => 0,
+    //             'female' => 0,
+    //             'transgender' => 0,
+    //         ]
+    //     ];
+
+    //     // Createing agewise Array for students.
+    //     foreach ($students as $key => $student) {
+
+    //         $studentAge = intval($student->Age);
+
+    //         if ($studentAge < 4) {
+    //             $studentAgeWise['<4'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 5)) {
+    //             $studentAgeWise['4<5'][] = $student;
+    //             unset($students[$key]);
+    //         } else if ($studentAge < 6) {
+    //             $studentAgeWise['5<6'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 7)) {
+    //             $studentAgeWise['6<7'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 8)) {
+    //             $studentAgeWise['7<8'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 9)) {
+    //             $studentAgeWise['8<9'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 10)) {
+    //             $studentAgeWise['9<10'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 11)) {
+    //             $studentAgeWise['10<11'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 12)) {
+    //             $studentAgeWise['11<12'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 13)) {
+    //             $studentAgeWise['12<13'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 14)) {
+    //             $studentAgeWise['13<14'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 15)) {
+    //             $studentAgeWise['14<15'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 16)) {
+    //             $studentAgeWise['15<16'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 17)) {
+    //             $studentAgeWise['16<17'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 18)) {
+    //             $studentAgeWise['17<18'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 19)) {
+    //             $studentAgeWise['18<19'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 20)) {
+    //             $studentAgeWise['19<20'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 21)) {
+    //             $studentAgeWise['20<21'][] = $student;
+    //             unset($students[$key]);
+    //         } else if (($studentAge < 22)) {
+    //             $studentAgeWise['21<22'][] = $student;
+    //             unset($students[$key]);
+    //         }
+    //     }
+
+    //     // Calculating table column value by gender
+    //     foreach ($studentAgeWise as $key => $saw) {
+    //         foreach ($saw as $class_key => $st) {
+
+    //             $class =  strtolower(str_replace(' ', '_', $st->class));
+    //             if (strtolower($st->gender) == 'male') {
+
+    //                 $m = intval($ageGroupArr[$key][$class]['male']);
+    //                 $ageGroupArr[$key][$class]['male'] = $m + 1;
+    //             } else if (strtolower($st->gender) == 'female') {
+
+    //                 $f = intval($ageGroupArr[$key][$class]['female']);
+    //                 $ageGroupArr[$key][$class]['female'] = $f + 1;
+    //             } else {
+
+    //                 $t = intval($ageGroupArr[$key][$class]['transgender']);
+    //                 $ageGroupArr[$key][$class]['transgender'] = $t + 1;
+    //             }
+    //         }
+    //     }
+
+    //     // Preparing data for total in footer
+    //     foreach ($ageGroupArr as $key => $st_class) {
+    //         foreach ($st_class as $_key => $value) {
+    //             $total[$_key]['male'] += intval($st_class[$_key]['male']);
+    //             $total[$_key]['female'] += intval($st_class[$_key]['female']);
+    //             $total[$_key]['transgender'] += intval($st_class[$_key]['transgender']);
+    //         }
+    //     }
+    //     $ageGroupArr['Total'] = $total;
+
+    //     return $ageGroupArr;
+    // }
 
     /**
      * Get student category reports 

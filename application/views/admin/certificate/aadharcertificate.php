@@ -1,5 +1,4 @@
 <?php
-
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
 <div class="content-wrapper">
@@ -26,6 +25,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 echo "<div class='alert alert-danger'>" . $error_message . "</div>";
                             }
                             ?>
+
+                            <div class='form-group'>
+                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                    <?php foreach ($branch as $key => $value) {  ?>
+                                        <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                            </div>
+
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label> <select id="class_id" name="class_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
@@ -47,9 +57,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             </div>
 
                         </div><!-- /.box-body -->
-                        <div class="box-footer">
+                        <!-- <div class="box-footer">
                             <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -396,6 +406,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $('#student_id').html("");
         var section_id = $(this).val();
         var class_id = $("#class_id").val();
+        var branch_id = $('#branch_id').find(":selected").val();
         var base_url = '<?php echo base_url() ?>';
         var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
         $.ajax({
@@ -403,11 +414,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             url: base_url + "student/getBySectionClass",
             data: {
                 'class_id': class_id,
-                'section_id': section_id
+                'section_id': section_id,
+                'branch_id': branch_id,
             },
             dataType: "json",
             success: function(data) {
-               
+
 
                 $.each(data, function(i, obj) {
                     div_data += "<option value=" + obj.id + ">" + obj.firstname + "" + obj.lastname + "</option>";
@@ -423,6 +435,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $('#adharCardForm')[0].reset();
         var student_id = $(this).val();
         $("#downlod").attr("href", "<?php echo base_url() ?>/admin/student_aadhar_card/downlod/" + student_id);
+        $("#downlod").attr("target", "blank")
         $("#downlod").attr("style", "display: block;")
         var base_url = '<?php echo base_url() ?>';
         $("#houseNo").val('');
@@ -450,7 +463,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     if (student_aadhar_data.house_no) {
                         $("#houseNo").val(student_aadhar_data.house_no);
                     }
-                   
+
                     if (student_aadhar_data.street) {
                         $("#street").val(student_aadhar_data.street);
                     }

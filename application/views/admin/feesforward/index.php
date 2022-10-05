@@ -199,6 +199,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         var section_id = '<?php echo set_value('section_id', 0) ?>';
         var hostel_id = $('#hostel_id').val();
         var hostel_room_id = '<?php echo set_value('hostel_room_id', 0) ?>';
+        console.log(class_id);
 
         getSectionByClass(class_id, section_id);
     });

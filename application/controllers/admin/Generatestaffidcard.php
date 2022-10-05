@@ -21,6 +21,8 @@ class Generatestaffidcard extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/generatestaffidcard');
         $idcardlist            = $this->Generatestaffidcard_model->getstaffidcard();
         $data['idcardlist']    = $idcardlist;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $staffRole             = $this->staff_model->getStaffRole();
         $data['staffRolelist'] = $staffRole;
         $this->load->view('layout/header');
@@ -34,6 +36,8 @@ class Generatestaffidcard extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/generatestaffidcard');
         $staffRole               = $this->staff_model->getStaffRole();
         $data['staffRolelist']   = $staffRole;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $idcardlist              = $this->Generatestaffidcard_model->getstaffidcard();
         $data['idcardlist']      = $idcardlist;
@@ -42,9 +46,11 @@ class Generatestaffidcard extends Admin_Controller
             $role                 = $this->input->post('role_id');
             $data['role_id']      = $this->input->post('role_id');
             $id_card              = $this->input->post('id_card');
+            $branch_id = $this->input->post('branch_id');
+           
             $idcardResult         = $this->Generatestaffidcard_model->getidcardbyid($id_card);
             $data['idcardResult'] = $idcardResult;
-            $resultlist           = $this->staff_model->getEmployee($role, 1);
+            $resultlist           = $this->staff_model->getEmployee($role, 1 ,$branch_id);
             $data['resultlist']   = $resultlist;
         }
 

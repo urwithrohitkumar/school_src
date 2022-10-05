@@ -124,9 +124,12 @@ if($id_card[0]->enable_vertical_card)
                                          <li><?php echo $this->lang->line('d_o_b');?>
                                         <span>
                                                     <?php
-                                                    echo $dob = "";
-                                                    if ($student->dob != "0000-00-00") {
-                                                        $dob = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($student->dob));
+                                                    $dob = "";
+                                                    if(!empty($student->dob))
+                                                    {
+                                                        if ($student->dob != "0000-00-00") {
+                                                            $dob = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($student->dob));
+                                                        }
                                                     }
                                                     echo $dob;
                                                     ?>

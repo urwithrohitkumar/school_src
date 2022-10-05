@@ -29,6 +29,8 @@ class Generateidcard extends Admin_Controller
         $data['sch_setting']     = $this->sch_setting_detail;
         $idcardlist              = $this->Generateidcard_model->getstudentidcard();
         $data['idcardlist']      = $idcardlist;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $button                  = $this->input->post('search');
         if ($this->input->server('REQUEST_METHOD') == "GET") {
             $this->load->view('layout/header', $data);
@@ -39,6 +41,7 @@ class Generateidcard extends Admin_Controller
             $section = $this->input->post('section_id');
             $search  = $this->input->post('search');
             $id_card = $this->input->post('id_card');
+            $branch_id = $this->input->post('branch_id');
             if (isset($search)) {
                 $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
 
@@ -52,7 +55,7 @@ class Generateidcard extends Admin_Controller
                     $id_card              = $this->input->post('id_card');
                     $idcardResult         = $this->Generateidcard_model->getidcardbyid($id_card);
                     $data['idcardResult'] = $idcardResult;
-                    $resultlist           = $this->student_model->searchByClassSection($class, $section);
+                    $resultlist           = $this->student_model->searchByClassSection($class, $section ,$branch_id);
                     $data['resultlist']   = $resultlist;
                     $title                = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
                     $data['title']        = 'Student Details for ' . $title['class'] . "(" . $title['section'] . ")";

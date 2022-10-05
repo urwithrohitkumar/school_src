@@ -19,6 +19,8 @@ class Student_aadhar_card extends Admin_Controller
         }
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->session->set_userdata('top_menu', 'Certificate');
         $this->session->set_userdata('sub_menu', 'admin/student_aadhar_card');
         $this->load->view('layout/header');

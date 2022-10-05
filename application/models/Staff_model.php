@@ -530,9 +530,11 @@ class Staff_model extends MY_Model
         return $query->result_array();
     }
 
-    public function getEmployee($role, $active = 1, $class_id = null)
+    public function getEmployee($role, $class_id = null,$branch_id)
     {   
-        $branch_id = $this->session->admin['branch_id'];
+        $active = 1;
+        // $branch_id = $this->session->admin['branch_id'];
+      
         $i = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
 
@@ -558,18 +560,22 @@ class Staff_model extends MY_Model
         $this->db->join('department', "department.id = staff.department", "left");       
         $this->db->join('tb_branch', "tb_branch.id = staff.branch_id", "left");       
 
-        if ($class_id != "") {
-            $this->db->join('class_teacher', 'staff.id=class_teacher.staff_id', 'left');
-            $this->db->or_where('class_teacher.class_id', $student_current_class->class_id);
+        // if ($class_id != "") {
+        //     $this->db->join('class_teacher', 'staff.id=class_teacher.staff_id', 'left');
+        //     $this->db->or_where('class_teacher.class_id', $student_current_class->class_id);
+        // }
+        if($branch_id)
+        {
+            $this->db->where("staff.branch_id", $branch_id);  
         }
         $this->db->where("staff.is_active", $active);  
         if($role != ""){
             $this->db->where("roles.id", $role);
         }  
         
-        if($branch_id>0){
-            $this->db->where("staff.branch_id", $branch_id);
-        }
+        // if($branch_id>0){
+        //     $this->db->where("staff.branch_id", $branch_id);
+        // }
         $query = $this->db->get();
 
         return $query->result_array();

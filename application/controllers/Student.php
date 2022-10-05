@@ -2443,8 +2443,10 @@ class Student extends Admin_Controller
     {
         $class_id = $this->input->get('class_id');
         $section_id = $this->input->get('section_id');
+        $branch_id = $this->input->get('branch_id');
         $student_id     = $this->student_model->studentId($class_id, $section_id);
-        $data     = $this->student_model->getStudentsDetails($student_id);
+        // $data     = $this->student_model->getStudentsDetails($student_id);
+        $data     = $this->student_model->getStudentsDetails($branch_id);
         echo json_encode($data);
     }
     /**
