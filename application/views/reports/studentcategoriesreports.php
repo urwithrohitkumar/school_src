@@ -19,15 +19,39 @@ $classNameCount = count($className);
 
                 <div class="box removeboxmius">
 
+                    <div class="box-header ptbnull"></div>
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
+                    </div>
+
+                    <form id="reportform" method="post">
+                        <div class="box-body row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                    <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <option selected disabled>Select</option>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" name="search" value="search_filter" class="btn btn-primary btn-sm  pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
 
                     <div class="box-header ptbnull">
-
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_category_report'); ?> </h3>
-
                     </div>
                     <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
                         <a href="<?php echo base_url(); ?>student/getStudentCatreportpdf" target="_blank" class="btn btn-sm mr-2 btn-primary">Download</a>
-                        <!-- <button class="btn btn-sm mr-2 btn-primary">Download</button> -->
                     </div>
 
                     <div class="box-body table-responsive">
@@ -190,5 +214,11 @@ $classNameCount = count($className);
                 targets: -1,
             }, ],
         });
+
+    });
+
+    $(document).on('change', '#branch_id', function() {
+        let URL = "<?= site_url('student/studentscategoriesreport') ?>" + '/' + $(this).val();
+        $('#reportform').attr('action', URL);
     });
 </script>

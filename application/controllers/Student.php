@@ -115,7 +115,7 @@ class Student extends Admin_Controller
      *
      * @return html
      */
-    public function studentscategoriesreport()
+    public function studentscategoriesreport($branchid = 0)
     {
         if (!$this->rbac->hasPrivilege('student_categories_report', 'can_view')) {
             access_denied();
@@ -125,8 +125,12 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
-        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
-        $data['section_list'] = $this->classsection_model->sectionList();
+        if ($branchid) {
+            $data['students_list'] = $this->classsection_model->StudentCategoryReport();
+            $data['section_list'] = $this->classsection_model->sectionList();
+        }
+
+        $data["branch"]  = $this->staff_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);
         $this->load->view('layout/footer', $data);
@@ -1823,7 +1827,7 @@ class Student extends Admin_Controller
             $data["resultlist"] = "";
         } else {
 
-            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id ,$branch_id);
+            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id, $branch_id);
             $data["resultlist"] = $resultlist;
         }
 
