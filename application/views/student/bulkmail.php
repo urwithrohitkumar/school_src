@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="min-height: 946px;">    
+<div class="content-wrapper" style="min-height: 946px;">
     <!-- Main content -->
     <section class="content">
         <div class="row">
@@ -8,35 +8,52 @@
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="row">  
-                            <?php if ($this->session->flashdata('msg')) { ?> <div class="alert alert-success">  <?php echo $this->session->flashdata('msg') ?> </div> <?php } ?>
+                        <div class="row">
+                            <?php if ($this->session->flashdata('msg')) { ?> <div class="alert alert-success"> <?php echo $this->session->flashdata('msg') ?> </div> <?php } ?>
                             <form role="form" action="<?php echo site_url('student/bulkmail') ?>" method="post" class="">
                                 <?php echo $this->customlib->getCSRF(); ?>
-                                <div class="col-sm-6">
+
+
+                                <div class='col-sm-4'>
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label><?php echo $this->lang->line('class'); ?> <small class="req"> *</small></label> 
-                                        <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                        <label><?php echo $this->lang->line('class'); ?> <small class="req"> *</small></label>
+                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($classlist as $class) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo $class['id'] ?>" <?php
-                                                if (set_value('class_id') == $class['id']) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
+                                                                                            if (set_value('class_id') == $class['id']) {
+                                                                                                echo "selected=selected";
+                                                                                            }
+                                                                                            ?>><?php echo $class['class'] ?></option>
+                                            <?php
+                                                $count++;
+                                            }
+                                            ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('section'); ?></label>
-                                        <select  id="section_id" name="section_id" class="form-control" >
+                                        <select id="section_id" name="section_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
@@ -48,7 +65,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>  
+                        </div>
                     </div>
                     <div class="box-body bordertop">
                         <div class="row">
@@ -56,41 +73,41 @@
                                 <form action="<?php echo site_url('student/sendbulkmail') ?>" method="POST" id="bulkmail">
                                     <?php
                                     if (isset($resultlist)) {
-                                        ?> 
-									<div class="row">
-										<div class="col-md-12 col-sm-12">
-											<div class="col-sm-2">
-												<div class="form-group">
-													<label><?php echo $this->lang->line('select') . " " . $this->lang->line('all') ?> </label><br>
-													<input type="checkbox" name="checkAll">
-												</div>																	
-											</div> 	
-											<div class="col-sm-3">										
-												<div class="form-group">
-													<label><?php echo $this->lang->line('message_to'); ?> <small class="req"> *</small></label>
-													<select  id="message_to" name="message_to" class="form-control" >
-														<option value=""><?php echo $this->lang->line('select'); ?></option>
-														<?php foreach($bulkmailto as $key => $bulkmailto_value){ ?>
-														<option value="<?php echo $key; ?>"><?php echo $bulkmailto_value; ?></option>
-														<?php } ?>											
-													</select>
-												</div>                                
-											</div>   
-											<div class="col-sm-3">                             
-												<div class="form-group">
-													<label><?php echo $this->lang->line('notification_type'); ?> <small class="req"> *</small></label>
-													<select  id="notification_type" name="notification_type" class="form-control" >
-														<option value=""><?php echo $this->lang->line('select'); ?></option>
-														<?php foreach($notificationtype as $key => $notificationtype_value){ ?>
-														<option value="<?php echo $key; ?>"><?php echo $notificationtype_value; ?></option>
-														<?php } ?>											
-													</select>
-												</div>
-											</div>
-										</div>
-                                    </div>											
-                                    <div class="table-responsive">
-                                        <div class="download_label"><?php echo $this->lang->line('bulk_mail') ?></div>
+                                    ?>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <label><?php echo $this->lang->line('select') . " " . $this->lang->line('all') ?> </label><br>
+                                                        <input type="checkbox" name="checkAll">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label><?php echo $this->lang->line('message_to'); ?> <small class="req"> *</small></label>
+                                                        <select id="message_to" name="message_to" class="form-control">
+                                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                                            <?php foreach ($bulkmailto as $key => $bulkmailto_value) { ?>
+                                                                <option value="<?php echo $key; ?>"><?php echo $bulkmailto_value; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label><?php echo $this->lang->line('notification_type'); ?> <small class="req"> *</small></label>
+                                                        <select id="notification_type" name="notification_type" class="form-control">
+                                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                                            <?php foreach ($notificationtype as $key => $notificationtype_value) { ?>
+                                                                <option value="<?php echo $key; ?>"><?php echo $notificationtype_value; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <div class="download_label"><?php echo $this->lang->line('bulk_mail') ?></div>
                                             <table id="example" class="table table-striped table-bordered table-hover " cellspacing="0" width="100%">
                                                 <thead>
                                                     <tr>
@@ -106,9 +123,9 @@
                                                         }
                                                         if (!empty($fields)) {
                                                             foreach ($fields as $fields_key => $fields_value) {
-                                                                ?>
+                                                            ?>
                                                                 <th><?php echo $fields_value->name; ?></th>
-                                                                <?php
+                                                        <?php
                                                             }
                                                         }
                                                         ?>
@@ -117,25 +134,25 @@
                                                 <tbody>
                                                     <?php
                                                     if (empty($resultlist)) {
-                                                        ?>
+                                                    ?>
 
                                                         <?php
                                                     } else {
                                                         $count = 1;
                                                         foreach ($resultlist as $student) {
-                                                            ?>
+                                                        ?>
                                                             <tr>
                                                                 <td>
                                                                     <input type="checkbox" name="student[]" value="<?php echo $student['id']; ?>">
                                                                 </td>
                                                                 <td><?php echo $student['admission_no']; ?></td>
                                                                 <td>
-                                                                    <a href="<?php echo base_url(); ?>student/view/<?php echo $student['id']; ?>"><?php echo $this->customlib->getFullName($student['firstname'],$student['middlename'],$student['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?>
+                                                                    <a href="<?php echo base_url(); ?>student/view/<?php echo $student['id']; ?>"><?php echo $this->customlib->getFullName($student['firstname'], $student['middlename'], $student['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?>
                                                                     </a>
                                                                 </td>
                                                                 <td><?php echo $student['class'] . "(" . $student['section'] . ")" ?></td>
                                                                 <td><?php
-                                                                    if ($student["dob"] != null && $student["dob"]!='0000-00-00') {
+                                                                    if ($student["dob"] != null && $student["dob"] != '0000-00-00') {
                                                                         echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student['dob']));
                                                                     }
                                                                     ?></td>
@@ -151,17 +168,17 @@
                                                                         if ($fields_value->type == "link") {
                                                                             $display_field = "<a href=" . $student[$fields_value->name] . " target='_blank'>" . $student[$fields_value->name] . "</a>";
                                                                         }
-                                                                        ?>
+                                                                    ?>
                                                                         <td>
                                                                             <?php echo $display_field; ?>
 
                                                                         </td>
-                                                                        <?php
+                                                                <?php
                                                                     }
                                                                 }
                                                                 ?>
                                                             </tr>
-                                                            <?php
+                                                    <?php
                                                             $count++;
                                                         }
                                                     }
@@ -171,15 +188,15 @@
 
                                             <?php
                                             if (!empty($resultlist)) {
-                                                ?>                              
+                                            ?>
                                                 <button type="submit" class="btn btn-primary pull-right btn-sm mt10" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please wait..."> <?php echo $this->lang->line('send') ?></button>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
-                                            <?php
-                                        }
-                                        ?>                               
-									</div>           
+                                        <?php
+                                    }
+                                        ?>
+                                        </div>
                                 </form>
                             </div>
                         </div>
@@ -189,7 +206,6 @@
     </section>
 </div>
 <script type="text/javascript">
-
     function getSectionByClass(class_id, section_id) {
         if (class_id != "" && section_id != "") {
             $('#section_id').html("");
@@ -198,11 +214,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -214,12 +231,12 @@
             });
         }
     }
-	
-    $(document).ready(function () {
+
+    $(document).ready(function() {
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
         getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             var base_url = '<?php echo base_url() ?>';
@@ -227,11 +244,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                     });
                     $('#section_id').append(div_data);
@@ -241,85 +259,85 @@
     });
 </script>
 <script type="text/javascript">
-    $("#bulkmail").submit(function (e) {
+    $("#bulkmail").submit(function(e) {
         e.preventDefault(); // avoid to execute the actual submit of the form.
         var checkCount = $("input[name='student[]']:checked").length;
 
-        if (checkCount == 0)
-        {
+        if (checkCount == 0) {
             alert("<?php echo $this->lang->line('atleast_one_student_should_be_select'); ?>");
 
         } else {
-            
 
-                var form = $(this);
-                var url = form.attr('action');
-                var submit_button = form.find(':submit');
 
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(), // serializes the form's elements.
-                    dataType: "JSON", // serializes the form's elements.
-                    beforeSend: function () {
+            var form = $(this);
+            var url = form.attr('action');
+            var submit_button = form.find(':submit');
 
-                        submit_button.button('loading');
-                    },
-                    success: function (data)
-                    {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                dataType: "JSON", // serializes the form's elements.
+                beforeSend: function() {
 
-                        var message = "";
-                        if (!data.status) {
+                    submit_button.button('loading');
+                },
+                success: function(data) {
 
-                            $.each(data.error, function (index, value) {
+                    var message = "";
+                    if (!data.status) {
 
-                                message += value;
-                            });
+                        $.each(data.error, function(index, value) {
 
-                            errorMsg(message);
+                            message += value;
+                        });
 
-                        } else {
-                            successMsg(data.message);
-                            location.reload();
-                        }
-                    },
-                    error: function (xhr) { // if error occured
-                        submit_button.button('reset');
-                        alert("Error occured.please try again");
+                        errorMsg(message);
 
-                    },
-                    complete: function () {
-                        submit_button.button('reset');
+                    } else {
+                        successMsg(data.message);
+                        location.reload();
                     }
-                });
-            
+                },
+                error: function(xhr) { // if error occured
+                    submit_button.button('reset');
+                    alert("Error occured.please try again");
+
+                },
+                complete: function() {
+                    submit_button.button('reset');
+                }
+            });
+
         }
 
     });
 
-    $("input[name='checkAll']").click(function () {
+    $("input[name='checkAll']").click(function() {
         $("input[name='student[]']").not(this).prop('checked', this.checked);
     });
-    
-  
-   </script>
+</script>
 
-</scriript src="https://code.jquery.com/jquery-3.5.1.js" ></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" ></script>
+</scriript src="https://code.jquery.com/jquery-3.5.1.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script>
-      $('#example').dataTable({
-       "bInfo" : true,
-         "lengthMenu": [[10, 20, 30, 40, 50, -1], [10, 20, 30, 40, 50, "All"]]
+    $('#example').dataTable({
+        "bInfo": true,
+        "lengthMenu": [
+            [10, 20, 30, 40, 50, -1],
+            [10, 20, 30, 40, 50, "All"]
+        ]
 
-   });
-   
+    });
 </script>
 <style>
-    .dataTables_length{
-        display:block !important;
+    .dataTables_length {
+        display: block !important;
     }
+
     .dataTables_wrapper .dataTables_filter {
-     float: none !important; 
-    text-align: right;
-}
+        float: none !important;
+        text-align: right;
+    }
 </style>

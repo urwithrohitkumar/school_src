@@ -95,6 +95,8 @@ class Staff extends Admin_Controller
         $this->session->set_userdata('top_menu', 'HR');
         $this->session->set_userdata('sub_menu', 'HR/staff/disablestafflist');
         $data['title'] = 'Staff Search';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $staffRole     = $this->staff_model->getStaffRole();
 
         $data["role"]       = $staffRole;
@@ -105,6 +107,7 @@ class Staff extends Admin_Controller
 
         if (isset($search)) {
             if ($search == 'search_filter') {
+                $branch_id = $this->input->post('branch_id');
                 $this->form_validation->set_rules('role', $this->lang->line('role'), 'trim|required|xss_clean');
                 if ($this->form_validation->run() == false) {
                     $resultlist         = array();
@@ -115,7 +118,7 @@ class Staff extends Admin_Controller
                     $data['employee_id'] = $this->input->post('empid');
 
                     $data['search_text'] = $this->input->post('search_text');
-                    $resultlist          = $this->staff_model->getEmployee($role, 0);
+                    $resultlist          = $this->staff_model->getEmployee($role, 0 ,$branch_id);
                     $data['resultlist']  = $resultlist;
                 }
             } else if ($search == 'search_full') {
@@ -145,6 +148,9 @@ class Staff extends Admin_Controller
         $data["id"]    = $id;
         $data['title'] = 'Staff Details';
         $staff_info    = $this->staff_model->getProfile($id);
+        
+        $branch_info    = $this->branch_model->getBranchName($staff_info['branch_id']);
+
         $userdata      = $this->customlib->getUserData();
 
         $userid          = $userdata['id'];
@@ -179,6 +185,7 @@ class Staff extends Admin_Controller
         $data["staff_leaves"]  = $staff_leaves;
         $data['staff_doc_id']  = $id;
         $data['staff']         = $staff_info;
+        $data['branch_info']         = $branch_info;
         $data['staff_payroll'] = $staff_payroll;
         $data['salary']        = $salary;
 

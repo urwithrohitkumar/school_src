@@ -11,20 +11,20 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <form id="form1" action="<?php echo base_url() ?>admin/notification/edit/<?php echo $id ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                <form id="form1" action="<?php echo base_url() ?>admin/notification/edit/<?php echo $id ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
                     <?php
                     $prev_roles = explode(',', $notification['roles']);
                     foreach ($prev_roles as $prev_roles_key => $prev_roles_value) {
-                        ?>
+                    ?>
 
                         <input type="hidden" name="prev_roles[]" value="<?php echo $prev_roles_value; ?>">
-                        <?php
+                    <?php
                     }
                     ?>
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><i class="fa fa-commenting-o"></i> <?php echo $this->lang->line('edit_message'); ?></h3>
-                        </div>                     
+                        </div>
                         <div class="box-body">
 
                             <?php if ($this->session->flashdata('msg')) { ?>
@@ -34,7 +34,7 @@
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('title'); ?></label>
-                                    <input autofocus="" id="title" name="title" placeholder="" type="text" class="form-control"  value="<?php echo set_value('title', $notification['title']); ?>" />
+                                    <input autofocus="" id="title" name="title" placeholder="" type="text" class="form-control" value="<?php echo set_value('title', $notification['title']); ?>" />
                                     <span class="text-danger"><?php echo form_error('title'); ?></span>
                                 </div>
                                 <div class="form-group"><label><?php echo $this->lang->line('message'); ?></label>
@@ -51,14 +51,25 @@
                                         echo "<div class='alert alert-danger'>" . $error_message . "</div>";
                                     }
                                     ?>
+
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('notice_date'); ?></label>
-                                        <input id="date" name="date"  placeholder="" type="text" class="form-control date"  value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($notification['date']))); ?>" />
+                                        <input id="date" name="date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($notification['date']))); ?>" />
                                         <span class="text-danger"><?php echo form_error('date'); ?></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('publish_on'); ?></label>
-                                        <input id="publish_date" name="publish_date"  placeholder="" type="text" class="form-control date"  value="<?php echo set_value('publish_date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($notification['publish_date']))); ?>" />
+                                        <input id="publish_date" name="publish_date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('publish_date', date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($notification['publish_date']))); ?>" />
                                         <span class="text-danger"><?php echo form_error('publish_date'); ?></span>
                                     </div>
                                     <div class="form-horizontal">
@@ -66,47 +77,45 @@
                                         <div class="checkbox">
                                             <label><input type="checkbox" name="visible[]" value="student" <?php echo set_checkbox('visible[]', 'student', (set_value('visible[]', $notification['visible_student']) == 'Yes') ? TRUE : FALSE); ?> /> <b><?php echo $this->lang->line('student'); ?></b> </label>
                                         </div>
-                                        <div class="checkbox">                                     
-                                            <label><input type="checkbox" name="visible[]"  value="parent"  <?php echo set_checkbox('visible[]', 'student', (set_value('visible[]', $notification['visible_parent']) == 'Yes') ? TRUE : FALSE); ?>  /> <b><?php echo $this->lang->line('parent'); ?></b></label>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="visible[]" value="parent" <?php echo set_checkbox('visible[]', 'student', (set_value('visible[]', $notification['visible_parent']) == 'Yes') ? TRUE : FALSE); ?> /> <b><?php echo $this->lang->line('parent'); ?></b></label>
                                         </div>
                                         <?php
                                         foreach ($roles as $role_key => $role_value) {
-                                            ?>
+                                        ?>
                                             <div class="checkbox">
 
                                                 <label>
-                                                    <input type="checkbox" name="visible[]" value="<?php echo $role_value['id']; ?>" 
-                                                    <?php echo set_checkbox('visible[]', $role_value['id'], (set_value('visible[]', in_array($role_value['id'], $prev_roles)) == 1) ? TRUE : FALSE); ?>
-                                                           /> <b><?php echo $role_value['name']; ?></b> 
+                                                    <input type="checkbox" name="visible[]" value="<?php echo $role_value['id']; ?>" <?php echo set_checkbox('visible[]', $role_value['id'], (set_value('visible[]', in_array($role_value['id'], $prev_roles)) == 1) ? TRUE : FALSE); ?> /> <b><?php echo $role_value['name']; ?></b>
                                                 </label>
                                             </div>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </div>
                                     <span class="text-danger"><?php echo form_error('visible[]'); ?></span>
                                 </div>
-                            </div>                         
+                            </div>
                             <div class="box-footer" style="clear: both;">
                                 <div class="pull-right">
 
                                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-envelope-o"></i> <?php echo $this->lang->line('send'); ?> </button>
                                 </div>
-                            </div>                           
-                        </div>                      
+                            </div>
+                        </div>
                     </div>
-                </form>              
+                </form>
             </div>
         </div>
-        <div class="row">           
+        <div class="row">
             <div class="col-md-12">
             </div>
-        </div>  
+        </div>
     </section>
 </div>
 
 <script>
-    $(function () {
+    $(function() {
 
         $("#compose-textarea").wysihtml5();
     });

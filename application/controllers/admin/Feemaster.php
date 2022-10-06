@@ -15,6 +15,8 @@ class Feemaster extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
         $data['title'] = 'Feemaster List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $feegroup = $this->feegroup_model->get();
         $data['feegroupList'] = $feegroup;
         $feetype = $this->feetype_model->get();
@@ -52,6 +54,7 @@ class Feemaster extends Admin_Controller {
                 'fee_groups_id' => $this->input->post('fee_groups_id'),
                 'feetype_id' => $this->input->post('feetype_id'),
                 'amount' => $this->input->post('amount'),
+                'branch_id' => $this->input->post('branch_id'),
                 'due_date' => $this->customlib->dateFormatToYYYYMMDD($this->input->post('due_date')),
                 'session_id' => $this->setting_model->getCurrentSession(),
                 'fine_type' => $this->input->post('account_type'),

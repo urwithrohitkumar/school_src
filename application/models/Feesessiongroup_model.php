@@ -40,6 +40,7 @@ class Feesessiongroup_model extends MY_Model {
         $this->db->select('fee_session_groups.*,fee_groups.name as `group_name`');
         $this->db->from('fee_session_groups');
         $this->db->join('fee_groups', 'fee_groups.id = fee_session_groups.fee_groups_id');
+       
         $this->db->where('fee_session_groups.session_id', $this->current_session);
         $this->db->where('fee_groups.is_system', 0);
         if ($id != null) {
@@ -55,9 +56,10 @@ class Feesessiongroup_model extends MY_Model {
     }
 
     public function getfeeTypeByGroup($fee_session_group_id, $id = null) {
-        $this->db->select('fee_groups_feetype.*,feetype.type,feetype.code');
+        $this->db->select('fee_groups_feetype.*,feetype.type,feetype.code, tb_branch.branch_name');
         $this->db->from('fee_groups_feetype');
         $this->db->join('feetype', 'feetype.id=fee_groups_feetype.feetype_id');
+        $this->db->join('tb_branch', 'tb_branch.id = fee_groups_feetype.branch_id' , 'Left');
         $this->db->where('fee_groups_feetype.fee_groups_id', $id);
         $this->db->where('fee_groups_feetype.fee_session_group_id', $fee_session_group_id);
         $this->db->order_by('fee_groups_feetype.id', 'asc');
