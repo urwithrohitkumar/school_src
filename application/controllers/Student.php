@@ -92,7 +92,7 @@ class Student extends Admin_Controller
      *
      * @return html
      */
-    public function studentsagereport()
+    public function studentsagereport($branchid = 0)
     {
         if (!$this->rbac->hasPrivilege('student_age_report', 'can_view')) {
             access_denied();
@@ -102,8 +102,13 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
         $data['title'] = 'Students Age Report';
+        $data["branch"]  = $this->staff_model->getBranch();
+        $data['selected_branch'] = $branchid;
+        if ($branchid != 0) {
+      
+            $data['students_list'] = $this->classsection_model->getStudentAgeReports($branchid);
+        }
 
-        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
         $this->load->view('layout/footer', $data);
@@ -125,9 +130,12 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
+        $data['selected_branch'] = $branchid;
+
         if ($branchid) {
-            $data['students_list'] = $this->classsection_model->StudentCategoryReport();
-            $data['section_list'] = $this->classsection_model->sectionList();
+     
+            $data['students_list'] = $this->classsection_model->StudentCategoryReport($branchid);
+            $data['section_list'] = $this->classsection_model->sectionList($branchid);
         }
 
         $data["branch"]  = $this->staff_model->getBranch();
@@ -2471,9 +2479,9 @@ class Student extends Admin_Controller
     /**
      * Downlod student age report pdf
      */
-    public function getStudentAgereportpdf()
+    public function getStudentAgereportpdf($branchid = 0)
     {
-        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
+        $data['students_list'] = $this->classsection_model->getStudentAgeReports($branchid);
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentAgeReportPdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false, 'A4', 'landscape');

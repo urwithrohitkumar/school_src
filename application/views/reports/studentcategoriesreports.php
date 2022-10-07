@@ -25,14 +25,18 @@ $classNameCount = count($className);
                     </div>
 
                     <form id="reportform" method="post">
+                     
                         <div class="box-body row">
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-3">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
                                     <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
                                         <option selected disabled>Select</option>
-                                        <?php foreach ($branch as $key => $value) {  ?>
-                                            <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                        <?php foreach ($branch as $key => $value) {
+
+                                            $selected =  ($selected_branch ==  $value['id']) ? 'selected' : '';
+                                        ?>
+                                            <option value="<?php echo $value['id'] ?>" <?= $selected; ?>><?php echo $value["branch_name"] ?></option>
                                         <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('branch'); ?></span>
@@ -51,7 +55,7 @@ $classNameCount = count($className);
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_category_report'); ?> </h3>
                     </div>
                     <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
-                        <a href="<?php echo base_url(); ?>student/getStudentCatreportpdf" target="_blank" class="btn btn-sm mr-2 btn-primary">Download</a>
+                        <a href="<?php echo base_url('student/getStudentCatreportpdf/'.$selected_branch); ?>" target="_blank" class="btn btn-sm mr-2 btn-primary">Download</a>
                     </div>
 
                     <div class="box-body table-responsive">

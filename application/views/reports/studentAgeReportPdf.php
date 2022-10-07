@@ -26,11 +26,14 @@
 
 <body>
     <div class="content-wrapper" style="min-height: 946px;">
+    <div class="box-header ptbnull"></div>
+                   
         <section class="content-header">
             <h1>
                 Students Age Reports
             </h1>
         </section>
+
         <table class="table table-striped table-bordered table-hover example">
             <caption class="text text-center h4"><?php echo $this->lang->line('age_report_title'); ?>
                 <span class="text text-center h4" style="color: red; display:inline;"> (B= Boys, G= Girls, T= Transgender)</span>
