@@ -209,8 +209,10 @@ class Student extends Admin_Controller
         $student_discount_fee         = $this->feediscount_model->getStudentFeesDiscount($student['student_session_id']);
         $data['student_discount_fee'] = $student_discount_fee;
         $data['student_due_fee']      = $student_due_fee;
-        $student_branch_name         = $this->branch_model->getBranchName($student['student_session_id']);
-        $data['student_branch_name']    = $student_branch_name;
+       
+        // $student_branch_name         = $this->branch_model->getBranchName();
+
+        // $data['student_branch_name']    = $student_branch_name;
         $siblings                     = $this->student_model->getMySiblings($student['parent_id'], $student['id']);
 
         $student_doc = $this->student_model->getstudentdoc($id);
@@ -225,9 +227,11 @@ class Student extends Admin_Controller
         $data['student']        = $student;
         $data['siblings']       = $siblings;
         $class_section          = $this->student_model->getClassSection($student["class_id"]);
+        
         $data["class_section"]  = $class_section;
         $session                = $this->setting_model->getCurrentSession();
 
+       
         $studentlistbysection         = $this->student_model->getStudentClassSection($student["class_id"], $session);
         $data["studentlistbysection"] = $studentlistbysection;
 
@@ -239,6 +243,7 @@ class Student extends Admin_Controller
         }
         $data['exam_result'] = $this->examgroupstudent_model->searchStudentExams($student['student_session_id'], true, true);
         $data['exam_grade']  = $this->grade_model->getGradeDetails();
+        
 
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentShow', $data);
@@ -2503,9 +2508,10 @@ class Student extends Admin_Controller
     /**
      * Downlod student age report pdf
      */
-    public function getStudentCatreportpdf()
+    public function getStudentCatreportpdf($branch_id = 0)
     {
-        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
+
+        $data['students_list'] = $this->classsection_model->StudentCategoryReport($branch_id);
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentcategoriesreportspdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false);
