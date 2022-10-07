@@ -1,7 +1,11 @@
 <?php
 $className = !empty($students_list['<4']) ? $students_list['<4'] : [];
 $classNameCount = count($className);
+<<<<<<< HEAD
 ?>
+=======
+ ?>
+>>>>>>> c62053b0cb107a905128a5da01c2a2391bf04cc9
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content-header">
         <h1>
@@ -57,7 +61,11 @@ $classNameCount = count($className);
                         <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student_age_report'); ?> </h3>
                     </div>
                     <div class="d-flex justify-content-center;" style="display: flex;justify-content: end;">
+<<<<<<< HEAD
                         <a href="<?php echo base_url('student/getStudentAgereportpdf/' . $selected_branch); ?>" target="_blank" class="btn btn-sm mr-2 btn-primary">Download</a>
+=======
+                        <a href="<?php echo base_url(); ?>student/getStudentAgereportpdf" target="_blank" class="btn btn-sm mr-2 btn-primary">Download</a>
+>>>>>>> c62053b0cb107a905128a5da01c2a2391bf04cc9
 
                     </div>
                     <div class="box-body table-responsive">
@@ -74,7 +82,11 @@ $classNameCount = count($className);
                                         <th class="text text-center"><?php echo $this->lang->line('class'); ?></th>
                                         <?php
                                         foreach ($className as $key => $value) {
+<<<<<<< HEAD
                                             $key = strtoupper(str_replace('_', ' ', $key)); ?>
+=======
+                                            $key = ucfirst(str_replace('_', ' ', $key)); ?>
+>>>>>>> c62053b0cb107a905128a5da01c2a2391bf04cc9
                                             <th class="text text-center" colspan="3"><?= $key ?></th>
                                         <?php } ?>
                                     </tr>

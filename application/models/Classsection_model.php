@@ -225,16 +225,13 @@ class Classsection_model extends MY_Model
      *
      * @return void
      */
-    public function getStudentAgeReports($branchId = 0)
+    public function getStudentAgeReports()
     {
         $query = "SELECT students.id,students.gender,students.dob,classes.class,categories.category,
             DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),students.dob)), '%Y')+0 AS Age
-         FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id ";
+         FROM student_session LEFT JOIN students on students.id=student_session.student_id LEFT JOIN classes on classes.id=student_session.class_id LEFT JOIN categories on categories.id=students.category_id;";
         if ($this->session->userdata['admin']['branch_id'] != 0) {
             $query = $query . " where student_session.branch_id =" . $this->session->userdata['admin']['branch_id'];
-        }
-        if ($branchId != 0) {
-            $query = $query . " where student_session.branch_id = " . $branchId;
         }
 
         $query = $this->db->query($query);
@@ -253,18 +250,19 @@ class Classsection_model extends MY_Model
 
         $className = [];
         $classData = $this->db->get('classes')->result();
-        /**
+         /**
          * Fetch student details from database and preparing student data classwise
          */
         foreach ($classData as $key => $class) {
-            $class = strtolower(str_replace(' ', '_', $class->class));
+            $class = strtolower(str_replace(' ','_',$class->class));
             $className[$class] = [
                 'male' => 0,
                 'female' => 0,
                 'transgender' => 0,
             ];
+            
         }
-
+        
         $studentAgeWise = [];
         /**
          * Defining static array  for all column.
@@ -272,32 +270,32 @@ class Classsection_model extends MY_Model
         $ageGroupArr = [
             '<4' => $className,
             '4<5' => $className,
-            '5<6' => $className,
+            '5<6' =>$className,
             '6<7' => $className,
-            '7<8' => $className,
+            '7<8' =>$className,
             '8<9' => $className,
             '9<10' => $className,
-            '10<11' => $className,
+            '10<11' =>$className,
             '11<12' => $className,
             '12<13' => $className,
             '13<14' => $className,
             '14<15' => $className,
-            '15<16' => $className,
+            '15<16' =>$className,
             '16<17' => $className,
             '17<18' => $className,
             '18<19' => $className,
-            '19<20' => $className,
-            '20<21' => $className,
+            '19<20' =>$className,
+            '20<21' =>$className,
             '21<22' => $className,
-            '<22' => $className,
+            '<22' =>$className,
         ];
-
+       
         /**
          * Defining static array  for total.
          */
         $total = $className;
-
-
+        
+       
 
         // Createing agewise Array for students.
         foreach ($students as $key => $student) {
@@ -363,7 +361,7 @@ class Classsection_model extends MY_Model
                 unset($students[$key]);
             }
         }
-
+       
         // Calculating table column value by gender
         foreach ($studentAgeWise as $key => $saw) {
             foreach ($saw as $class_key => $st) {
@@ -380,7 +378,7 @@ class Classsection_model extends MY_Model
                 }
             }
         }
-
+      
 
         // Preparing data for total in footer
         foreach ($ageGroupArr as $key => $st_class) {
@@ -388,6 +386,7 @@ class Classsection_model extends MY_Model
                 $total[$_key]['male'] = intval($total[$_key]['male']) + intval($st_class[$_key]['male']);
                 $total[$_key]['female'] = intval($total[$_key]['female']) + intval($st_class[$_key]['female']);
                 $total[$_key]['transgender'] = intval($total[$_key]['transgender']) + intval($st_class[$_key]['transgender']);
+
             }
         }
 
@@ -2025,7 +2024,7 @@ class Classsection_model extends MY_Model
      *
      * @return void
      */
-    public function StudentCategoryReport($branchId = 0)
+    public function StudentCategoryReport()
     {
         $query = "SELECT students.id,students.gender,students.dob,classes.class,categories.category,religion.religion,students.bpl,aadhar_card.id as adharId 
         FROM student_session LEFT JOIN students on students.id=student_session.student_id 
@@ -2036,11 +2035,6 @@ class Classsection_model extends MY_Model
         if ($this->session->userdata['admin']['branch_id'] != 0) {
             $query = $query . " where student_session.branch_id =" . $this->session->userdata['admin']['branch_id'];
         }
-        if ($branchId != 0) {
-            $query = $query . " where student_session.branch_id = " . $branchId;
-        }
-
-
         $query = $this->db->query($query);
         $res = $this->prepareCategoryReport($query->result());
 
@@ -2160,7 +2154,6 @@ class Classsection_model extends MY_Model
 
                 default:
             }
-
             switch ($relegions) {
                 case 'parsi':
                     if ($gender === 'male')
@@ -2224,7 +2217,6 @@ class Classsection_model extends MY_Model
                 else
                     $docDetsils[$class]['BPL']['transgender'][] = $student;
             }
-
             if (!empty($adharId)) {
                 if ($gender === 'male')
                     $docDetsils[$class]['having_aadhar']['male'][] = $student;
@@ -2234,7 +2226,7 @@ class Classsection_model extends MY_Model
                     $docDetsils[$class]['having_aadhar']['transgender'][] = $student;
             }
         }
-
+        // exit;
         foreach ($studentCategory as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2260,7 +2252,6 @@ class Classsection_model extends MY_Model
                 $categories['total']['section1'][$_class]['transgender'] += ($categories[$cat_key]['section1'][$_class]['transgender']);
             }
         }
-
         foreach ($minoritiesDetsils as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2287,7 +2278,6 @@ class Classsection_model extends MY_Model
                 $minorities['total']['section1'][$_class]['transgender'] += ($minorities[$cat_key]['section1'][$_class]['transgender']);
             }
         }
-
         foreach ($docDetsils as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2311,7 +2301,8 @@ class Classsection_model extends MY_Model
                 }
             }
         }
-        
+
+
         return ['category' => $categories, 'minorities' => $minorities, 'documents' => $isDocuments];
     }
 

@@ -218,8 +218,20 @@
                                         <?php } ?>
                                     </div>
                                     <div class="row">
-                                        <?php if ($sch_setting->admission_date) { ?>
-                                            <div class="col-md-3">
+                                        <?php 
+                                        if ($sch_setting->national_identification_no) { ?>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">
+                                                        <?php echo $this->lang->line('national_identification_no'); ?>
+                                                    </label><small class="req"> *</small>
+                                                    <input id="adhar_no" name="adhar_no" placeholder=""  maxlength="12" type="text" class="form-control" value="<?php echo set_value('adhar_no'); ?>" onkeypress="return isNumberKey(event)" />
+                                                    <span class="text-danger"><?php echo form_error('adhar_no'); ?></span>
+                                                </div>
+                                            </div>
+                                        <?php }
+                                        if ($sch_setting->admission_date) { ?>
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('admission_date'); ?></label>
                                                     <input id="admission_date" name="admission_date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('admission_date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="readonly" />
@@ -227,20 +239,28 @@
                                                 </div>
                                             </div>
                                         <?php }
-                                        if ($sch_setting->student_photo) { ?>
-                                            <div class="col-md-3">
+                                         if ($sch_setting->is_student_house) {
+                                        ?>
+                                            <div class="col-md-4 col-xs-12">
                                                 <div class="form-group">
-                                                    <label for="exampleInputFile"><?php echo $this->lang->line('student') . " " . $this->lang->line('photo'); ?></label>
-                                                    <div><input class="filestyle form-control" type='file' name='file' id="file" size='20' />
-                                                    </div>
-                                                    <span class="text-danger"><?php echo form_error('file'); ?></span>
+                                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('house') ?></label>
+                                                    <select class="form-control" rows="3" placeholder="" name="house">
+                                                        <option value=""><?php echo $this->lang->line('select') ?></option>
+                                                        <?php foreach ($houses as $hkey => $hvalue) {
+                                                        ?>
+                                                            <option value="<?php echo $hvalue["id"] ?>"><?php echo $hvalue["house_name"] ?></option>
+
+                                                        <?php } ?>
+                                                    </select>
+                                                    <span class="text-danger"><?php echo form_error('house'); ?></span>
                                                 </div>
                                             </div>
+
                                         <?php
                                         }
                                         if ($sch_setting->is_blood_group) {
                                         ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('blood_group'); ?></label>
                                                     <?php
@@ -259,30 +279,12 @@
                                             </div>
                                         <?php
                                         }
-                                        if ($sch_setting->is_student_house) {
-                                        ?>
-                                            <div class="col-md-3 col-xs-12">
-                                                <div class="form-group">
-                                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('house') ?></label>
-                                                    <select class="form-control" rows="3" placeholder="" name="house">
-                                                        <option value=""><?php echo $this->lang->line('select') ?></option>
-                                                        <?php foreach ($houses as $hkey => $hvalue) {
-                                                        ?>
-                                                            <option value="<?php echo $hvalue["id"] ?>"><?php echo $hvalue["house_name"] ?></option>
-
-                                                        <?php } ?>
-                                                    </select>
-                                                    <span class="text-danger"><?php echo form_error('house'); ?></span>
-                                                </div>
-                                            </div>
-
-                                        <?php
-                                        }
+                                       
                                         ?>
 
 
                                         <?php if ($sch_setting->student_height) { ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('height'); ?></label>
                                                     <?php ?>
@@ -292,7 +294,7 @@
                                             </div>
                                         <?php }
                                         if ($sch_setting->student_weight) { ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('weight'); ?></label>
                                                     <?php ?>
@@ -302,7 +304,7 @@
                                             </div>
                                         <?php }
                                         if ($sch_setting->measurement_date) { ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('measurement_date'); ?></label>
                                                     <?php ?>
@@ -311,7 +313,7 @@
                                                 </div>
                                             </div>
                                         <?php } ?>
-                                        <div class="col-md-3" style="display:none;">
+                                        <div class="col-md-2" style="display:none;">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('fees_discount'); ?></label>
                                                 <input id="fees_discount" name="fees_discount" placeholder="" type="text" class="form-control" value="<?php echo set_value('fees_discount', 0); ?>" />
@@ -700,17 +702,7 @@
                                             </div>
 
                                             <div class="row around10">
-                                                <?php if ($sch_setting->national_identification_no) { ?>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="exampleInputEmail1">
-                                                                <?php echo $this->lang->line('national_identification_no'); ?>
-                                                            </label>
-                                                            <input id="adhar_no" name="adhar_no" placeholder="" type="text" class="form-control" value="<?php echo set_value('adhar_no'); ?>" />
-                                                            <span class="text-danger"><?php echo form_error('adhar_no'); ?></span>
-                                                        </div>
-                                                    </div>
-                                                <?php }
+                                                <?php 
                                                 if ($sch_setting->local_identification_no) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
@@ -737,7 +729,7 @@
                                                     </div>
                                                 <?php }
                                                 if ($sch_setting->previous_school_details) { ?>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-9">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('previous_school_details'); ?></label>
                                                             <textarea class="form-control" rows="3" placeholder="" name="previous_school"></textarea>
@@ -1187,5 +1179,13 @@
         }
 
     });
+</script>
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
 </script>
 <script type="text/javascript" src="<?php echo base_url(); ?>backend/dist/js/savemode.js"></script>

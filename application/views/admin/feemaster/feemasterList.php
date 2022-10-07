@@ -105,6 +105,26 @@
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
+                                                <label for="fine_term_id"><?php echo $this->lang->line('fine_terms'); ?></label><small class="req"> *</small>
+
+                                                <select id="fine_term_id" name="fine_term_id" class="form-control">
+                                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                                    <?php
+                                                    foreach ($finetypeList as $finetype) {
+                                                    ?>
+                                                        <option value="<?php echo $finetype->id ?>" <?= (set_value('fine_term_id') == $finetype->id) ? "selected =selected" : '' ?>>
+                                                            <?= ucfirst($finetype->title) ?>
+                                                        </option>
+
+                                                    <?php
+                                                        $count++;
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <span class="text-danger"><?php echo form_error('fine_term_id'); ?></span>
+                                            </div>
+                                            <div class="form-group">
+
                                                 <label for="input-type"><?php echo $this->lang->line('fine') . " " . $this->lang->line('type') ?></label>
                                                 <div id="input-type" class="row">
                                                     <div class="col-sm-4">

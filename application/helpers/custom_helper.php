@@ -6,10 +6,12 @@ if (!defined('BASEPATH')) {
 
 if (!function_exists('is_subAttendence')) {
 
-    function is_subAttendence() {
+    function is_subAttendence()
+    {
 
         $CI = &get_instance();
-        $CI->db->select('sch_settings.id,sch_settings.lang_id,sch_settings.attendence_type,sch_settings.is_rtl,sch_settings.timezone,
+        $CI->db->select(
+            'sch_settings.id,sch_settings.lang_id,sch_settings.attendence_type,sch_settings.is_rtl,sch_settings.timezone,
           sch_settings.name,sch_settings.email,sch_settings.biometric,sch_settings.biometric_device,sch_settings.phone,languages.language,
           sch_settings.address,sch_settings.dise_code,sch_settings.date_format,sch_settings.currency,sch_settings.currency_symbol,sch_settings.start_month,sch_settings.session_id,sch_settings.image,sch_settings.theme,sessions.session'
         );
@@ -25,12 +27,12 @@ if (!function_exists('is_subAttendence')) {
         }
         return false;
     }
-
 }
 
 if (!function_exists('get_subjects')) {
 
-    function get_subjects($class_batch_id) {
+    function get_subjects($class_batch_id)
+    {
         $CI = &get_instance();
         $CI->db->select('class_batch_subjects.*,subjects.name as `subject_name`');
         $CI->db->from('class_batch_subjects');
@@ -48,12 +50,12 @@ if (!function_exists('get_subjects')) {
         }
         return $return_string;
     }
-
 }
 
 if (!function_exists('readmorelink')) {
 
-    function readmorelink($string, $link = false) {
+    function readmorelink($string, $link = false)
+    {
         $string = strip_tags($string);
         if (strlen($string) > 150) {
 
@@ -68,12 +70,12 @@ if (!function_exists('readmorelink')) {
 
         return $string;
     }
-
 }
 
 if (!function_exists('readmorelinkUser')) {
 
-    function readmorelinkUser($string, $link = false) {
+    function readmorelinkUser($string, $link = false)
+    {
         $string = strip_tags($string);
         if (strlen($string) > 150) {
 
@@ -89,10 +91,10 @@ if (!function_exists('readmorelinkUser')) {
 
         return $string;
     }
-
 }
 
-function expensegraphColors($color = null) {
+function expensegraphColors($color = null)
+{
 
     $colors = array(
         '1' => "#9966ff",
@@ -111,7 +113,8 @@ function expensegraphColors($color = null) {
     }
 }
 
-function incomegraphColors($color = null) {
+function incomegraphColors($color = null)
+{
 
     $colors = array(
         '1' => "#66aa18",
@@ -130,15 +133,27 @@ function incomegraphColors($color = null) {
     }
 }
 
-function isJSON($string) {
+function isJSON($string)
+{
     return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
 }
 
-function currentTime() {
+function app_date_diff($d1 = null, $d2 = null)
+{
+
+    $date1 = date_create($d1);
+    $date2 = date_create($d2);
+    $diff = date_diff($date1, $date2);
+    return $diff->format("%R%a");
+}
+
+function currentTime()
+{
     return date("d/m/y : H:i:s", time());
 }
 
-function markSheetDigit() {
+function markSheetDigit()
+{
     $number = 190908100.25;
     $no = floor($number);
     $point = round($number - $no, 2) * 100;
@@ -146,7 +161,8 @@ function markSheetDigit() {
     $digits_1 = strlen($no);
     $i = 0;
     $str = array();
-    $words = array('0' => '', '1' => 'one', '2' => 'two',
+    $words = array(
+        '0' => '', '1' => 'one', '2' => 'two',
         '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
         '7' => 'seven', '8' => 'eight', '9' => 'nine',
         '10' => 'ten', '11' => 'eleven', '12' => 'twelve',
@@ -155,7 +171,8 @@ function markSheetDigit() {
         '18' => 'eighteen', '19' => 'nineteen', '20' => 'twenty',
         '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
         '60' => 'sixty', '70' => 'seventy',
-        '80' => 'eighty', '90' => 'ninety');
+        '80' => 'eighty', '90' => 'ninety'
+    );
     $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
     while ($i < $digits_1) {
         $divider = ($i == 2) ? 10 : 100;
@@ -166,10 +183,10 @@ function markSheetDigit() {
             $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
             $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
             $str[] = ($number < 21) ? $words[$number] .
-                    " " . $digits[$counter] . $plural . " " . $hundred :
-                    $words[floor($number / 10) * 10]
-                    . " " . $words[$number % 10] . " "
-                    . $digits[$counter] . $plural . " " . $hundred;
+                " " . $digits[$counter] . $plural . " " . $hundred :
+                $words[floor($number / 10) * 10]
+                . " " . $words[$number % 10] . " "
+                . $digits[$counter] . $plural . " " . $hundred;
         } else {
             $str[] = null;
         }
@@ -177,13 +194,14 @@ function markSheetDigit() {
     $str = array_reverse($str);
     $result = implode('', $str);
     $points = ($point) ?
-            "." . $words[$point / 10] . " " .
-            $words[$point = $point % 10] : '';
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
     return $result . $points;
 }
 
-function getSecondsFromHMS($time) {
-    $timeArr = array_reverse(explode(":", $time));    
+function getSecondsFromHMS($time)
+{
+    $timeArr = array_reverse(explode(":", $time));
     $seconds = 0;
     foreach ($timeArr as $key => $value) {
         if ($key > 2)
@@ -193,9 +211,10 @@ function getSecondsFromHMS($time) {
     return $seconds;
 }
 
-function getHMSFromSeconds($seconds) {
-  $t = round($seconds);
-  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+function getHMSFromSeconds($seconds)
+{
+    $t = round($seconds);
+    return sprintf('%02d:%02d:%02d', ($t / 3600), ($t / 60 % 60), $t % 60);
 }
 
 
@@ -213,6 +232,13 @@ function array_insert(&$array, $position, $insert)
     }
 }
 
-function amountFormat($amount){
+function amountFormat($amount)
+{
     return number_format((float)$amount, 2, '.', '');
 }
+
+
+// function date_format($date = '', $format = 'd-m-y')
+// {
+//     $convertDate = date($format, strtotime($date));
+// }

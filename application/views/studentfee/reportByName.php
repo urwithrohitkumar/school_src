@@ -34,7 +34,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </div>
                                 </div>
 
-                               <div class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
                                         <select autofocus="" id="class_id" name="class_id" class="form-control">
@@ -54,7 +54,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                               <div class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
                                         <select id="section_id" name="section_id" class="form-control">
@@ -63,7 +63,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
                                 </div>
-                               <div class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('student'); ?></label>
                                         <select id="student_id" name="student_id" class="form-control">
@@ -238,7 +238,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                                     if ($fee_value->due_date == "0000-00-00") {
                                                                     } else {
 
-                                                                        echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($fee_value->due_date));
+                                                                        echo ($fee_value->due_date) ? date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($fee_value->due_date)) : '';
                                                                     }
                                                                     ?>
                                                                 </td>
