@@ -32,6 +32,8 @@ class Alumni extends Admin_Controller {
         $data['fields'] = $this->customfield_model->get_custom_fields('students', 1);
         $class = $this->class_model->get();
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['session_id'] = $session_id = "";
         $userdata = $this->customlib->getUserData();
         $carray = array();
@@ -57,9 +59,13 @@ class Alumni extends Admin_Controller {
             $class = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $search = $this->input->post('search');
+            $branch_id = $this->input->post('branch_id');
             $search_text = $this->input->post('search_text');
             $data['session_id'] = $session_id = $this->input->post('session_id');
             if (isset($search)) {
+                echo "<pre>";
+                print_r($_POST);
+                exit;
                 if ($search == 'search_filter') {
                     $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'trim|required|xss_clean');
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -70,14 +76,14 @@ class Alumni extends Admin_Controller {
                         $data['class_id'] = $this->input->post('class_id');
                         $data['section_id'] = $this->input->post('section_id');
                         $data['search_text'] = $this->input->post('search_text');
-                        $resultlist = $this->student_model->search_alumniStudent($class, $section, $session_id);
+                        $resultlist = $this->student_model->search_alumniStudent($class, $section, $session_id ,$branch_id);
                         $data['resultlist'] = $resultlist;
                     }
                 } else if ($search == 'search_full') {
                     $data['searchby'] = "text";
 
                     $data['search_text'] = trim($this->input->post('search_text'));
-                    $resultlist = $this->student_model->search_alumniStudentbyAdmissionNo($search_text, $carray);
+                    $resultlist = $this->student_model->search_alumniStudentbyAdmissionNo($search_text, $carray,$branch_id);
                     $data['resultlist'] = $resultlist;
                 }
             }
@@ -191,6 +197,8 @@ class Alumni extends Admin_Controller {
         }
         $data['title'] = 'Event List';
         $data['sessionlist'] = $this->session_model->get();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $eventlist = $this->alumni_model->getevents();
 
         foreach ($eventlist as $key => $class) {
@@ -276,6 +284,7 @@ class Alumni extends Admin_Controller {
                 'event_for' => $this->input->post('event_for'),
                 'session_id' => $this->input->post('session_id'),
                 'class_id' => $this->input->post('class_id'),
+                'branch_id' => $this->input->post('branch_id'),
                 'section' => json_encode($this->input->post('user')),
                 'from_date' => $event_starting_date,
                 'to_date' => $event_end_date,

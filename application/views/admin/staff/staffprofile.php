@@ -1,5 +1,4 @@
 <?php
-
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
 <style type="text/css">
@@ -133,6 +132,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 							
                             <li class="list-group-item listnoback">
                                 <b><?php echo $this->lang->line('staff_id'); ?></b> <a class="pull-right text-aqua"><?php echo $staff['employee_id']; ?></a>
+                            </li>
+                            <li class="list-group-item listnoback">
+                                <b><?php echo $this->lang->line('branch'); ?></b> <a class="pull-right text-aqua"><?php echo $branch_info['branch_name']; ?></a>
                             </li>
 						
                             <li class="list-group-item listnoback">

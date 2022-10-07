@@ -134,6 +134,8 @@ class Notification extends Admin_Controller
 
         $userdata         = $this->customlib->getUserData();
         $user_id          = $userdata["id"];
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $usernotification = $this->notification_model->get($id);
         if ((!$this->rbac->hasPrivilege('notice_board', 'can_edit'))) {
             if ($usernotification['created_id'] != $user_id) {
@@ -193,6 +195,7 @@ class Notification extends Admin_Controller
                 'id'              => $id,
                 'message'         => $this->input->post('message'),
                 'title'           => $this->input->post('title'),
+                'branch_id'           => $this->input->post('branch_id'),
                 'date'            => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('date'))),
                 'created_by'      => $userdata["user_type"],
                 'created_id'      => $this->customlib->getStaffID(),

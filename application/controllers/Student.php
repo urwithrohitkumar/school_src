@@ -209,6 +209,8 @@ class Student extends Admin_Controller
         $student_discount_fee         = $this->feediscount_model->getStudentFeesDiscount($student['student_session_id']);
         $data['student_discount_fee'] = $student_discount_fee;
         $data['student_due_fee']      = $student_due_fee;
+        $student_branch_name         = $this->branch_model->getBranchName($student['student_session_id']);
+        $data['student_branch_name']    = $student_branch_name;
         $siblings                     = $this->student_model->getMySiblings($student['parent_id'], $student['id']);
 
         $student_doc = $this->student_model->getstudentdoc($id);
@@ -217,6 +219,8 @@ class Student extends Admin_Controller
         $data['student_doc_id'] = $id;
         $category_list          = $this->category_model->get();
         $data['category_list']  = $category_list;
+        $relegion_list          = $this->religion_model->get();
+        $data['relegion_list']  = $relegion_list;
         $data['gradeList']      = $gradeList;
         $data['student']        = $student;
         $data['siblings']       = $siblings;
@@ -1021,6 +1025,8 @@ class Student extends Admin_Controller
         $class              = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']  = $class;
         $userdata           = $this->customlib->getUserData();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $category = $this->category_model->get();
 
@@ -1046,6 +1052,7 @@ class Student extends Admin_Controller
             }
             $class_id   = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
+            $branch_id = $this->input->post('branch_id');
 
             $session = $this->setting_model->getCurrentSession();
             if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
@@ -1134,6 +1141,7 @@ class Student extends Admin_Controller
                                     'class_id'   => $class_id,
                                     'section_id' => $section_id,
                                     'session_id' => $session,
+                                    'branch_id'=>   $branch_id,
                                 );
 
                                 $this->student_model->add_student_session($data_new);
@@ -1637,6 +1645,7 @@ class Student extends Admin_Controller
             $class   = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $search  = $this->input->post('search');
+            $branch_id = $this->input->post('branch_id');
             $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
             $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -2142,6 +2151,8 @@ class Student extends Admin_Controller
         $data['sch_setting']      = $this->sch_setting_detail;
         $data['bulkmailto']       = $this->customlib->bulkmailto();
         $data['notificationtype'] = $this->customlib->bulkmailnotificationtype();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['fields']           = $this->customfield_model->get_custom_fields('students', 1);
         if ($this->input->server('REQUEST_METHOD') == "GET") {
             $this->load->view('layout/header', $data);
@@ -2150,13 +2161,15 @@ class Student extends Admin_Controller
         } else {
             $class   = $this->input->post('class_id');
             $section = $this->input->post('section_id');
+            $branch_id = $this->input->post('branch_id');
 
             $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == false) {
             } else {
                 $data['class_id']   = $this->input->post('class_id');
                 $data['section_id'] = $this->input->post('section_id');
-                $resultlist         = $this->student_model->searchByClassSection($class, $section);
+                $data['branch_id'] = $this->input->post('branch_id');
+                $resultlist         = $this->student_model->searchByClassSection($branch_id , $class, $section );
                 $data['resultlist'] = $resultlist;
             }
 

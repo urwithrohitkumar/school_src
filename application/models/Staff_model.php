@@ -530,7 +530,7 @@ class Staff_model extends MY_Model
         return $query->result_array();
     }
 
-    public function getEmployee($role, $class_id = null,$branch_id)
+    public function getEmployee($role, $class_id = null, $branch_id)
     {   
         $active = 1;
         // $branch_id = $this->session->admin['branch_id'];
