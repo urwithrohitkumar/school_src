@@ -316,6 +316,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('category_id', $this->lang->line('category_id'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('religion', $this->lang->line('religion'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
             $this->form_validation->set_rules('guardian_is', $this->lang->line('guardian'), 'trim|required|xss_clean');
@@ -1149,7 +1150,7 @@ class Student extends Admin_Controller
                                 );
 
                                 $this->user_model->add($data_student_login);
-                                // $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
+                                $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                                 $user_password = '123456';
 
                                 $temp              = $insert_id;
@@ -1319,6 +1320,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('gender', $this->lang->line('gender'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
 
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
@@ -2436,7 +2438,6 @@ class Student extends Admin_Controller
 
     public function getStudentByClassSection()
     {
-
         $data                 = array();
         $cls_section_id       = $this->input->post('cls_section_id');
         $data['fields']       = $this->customfield_model->get_custom_fields('students', 1);
@@ -2461,6 +2462,7 @@ class Student extends Admin_Controller
         $data     = $this->student_model->getStudentsDetails($branch_id);
         echo json_encode($data);
     }
+
     /**
      * Get student details by Student id
      */
@@ -2476,6 +2478,7 @@ class Student extends Admin_Controller
         );
         echo json_encode($result);
     }
+
     /**
      * Downlod student age report pdf
      */
@@ -2487,6 +2490,7 @@ class Student extends Admin_Controller
         $this->pdf->createPDF($html, 'mypdf', false, 'A4', 'landscape');
         // $this->pdf->createPDF($html, 'mypdf', false);
     }
+
     /**
      * Downlod student age report pdf
      */

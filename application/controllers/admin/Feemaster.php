@@ -3,14 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feemaster extends Admin_Controller {
+class Feemaster extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function index() {
+    function index()
+    {
 
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
@@ -19,32 +22,34 @@ class Feemaster extends Admin_Controller {
         $data['feegroupList'] = $feegroup;
         $feetype = $this->feetype_model->get();
         $data['feetypeList'] = $feetype;
- 
+        $data['finetypeList'] = $this->Finetype_model->getFineType();
+
         $feegroup_result = $this->feesessiongroup_model->getFeesByGroup();
         $data['feemasterList'] = $feegroup_result;
 
         $this->form_validation->set_rules('feetype_id', $this->lang->line('feetype'), 'required');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'required|numeric');
+        $this->form_validation->set_rules('fine_term_id', $this->lang->line('fine_terms'), 'required');
 
         $this->form_validation->set_rules(
-                'fee_groups_id', $this->lang->line('feegroup'), array(
-            'required',
-            array('check_exists', array($this->feesessiongroup_model, 'valid_check_exists'))
-                )
+            'fee_groups_id',
+            $this->lang->line('feegroup'),
+            array(
+                'required',
+                array('check_exists', array($this->feesessiongroup_model, 'valid_check_exists'))
+            )
         );
 
-        if(isset($_POST['account_type'] ) && $_POST['account_type'] =='fix'){
+        if (isset($_POST['account_type']) && $_POST['account_type'] == 'fix') {
             $this->form_validation->set_rules('fine_amount', $this->lang->line('fine') . " " . $this->lang->line('amount'), 'required|numeric');
             $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
-
-        }elseif(isset($_POST['account_type']) && ($_POST['account_type']=='percentage')){
+        } elseif (isset($_POST['account_type']) && ($_POST['account_type'] == 'percentage')) {
             $this->form_validation->set_rules('fine_percentage', $this->lang->line('percentage'), 'required|numeric');
             $this->form_validation->set_rules('fine_amount', $this->lang->line('fine') . " " . $this->lang->line('amount'), 'required|numeric');
-             $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
+            $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
         }
 
         if ($this->form_validation->run() == FALSE) {
-            
         } else {
 
 
@@ -54,22 +59,24 @@ class Feemaster extends Admin_Controller {
                 'amount' => $this->input->post('amount'),
                 'due_date' => $this->customlib->dateFormatToYYYYMMDD($this->input->post('due_date')),
                 'session_id' => $this->setting_model->getCurrentSession(),
+                'fine_term_id' => $this->input->post('fine_term_id'),
                 'fine_type' => $this->input->post('account_type'),
                 'fine_percentage' => $this->input->post('fine_percentage'),
                 'fine_amount' => $this->input->post('fine_amount'),
-            ); 
+            );
 
             $feegroup_result = $this->feesessiongroup_model->add($insert_array);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
             redirect('admin/feemaster/index');
         }
- 
+
         $this->load->view('layout/header', $data);
         $this->load->view('admin/feemaster/feemasterList', $data);
         $this->load->view('layout/footer', $data);
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('fees_master', 'can_delete')) {
             access_denied();
         }
@@ -78,13 +85,15 @@ class Feemaster extends Admin_Controller {
         redirect('admin/feemaster/index');
     }
 
-    function deletegrp($id) {
+    function deletegrp($id)
+    {
         $data['title'] = 'Fees Master List';
         $this->feesessiongroup_model->remove($id);
         redirect('admin/feemaster');
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('fees_master', 'can_edit')) {
             access_denied();
         }
@@ -92,30 +101,38 @@ class Feemaster extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
         $data['id'] = $id;
         $feegroup_type = $this->feegrouptype_model->get($id);
+
+        // print_r( $feegroup_type);die;
+
         $data['feegroup_type'] = $feegroup_type;
         $feegroup = $this->feegroup_model->get();
         $data['feegroupList'] = $feegroup;
         $feetype = $this->feetype_model->get();
         $data['feetypeList'] = $feetype;
+        $data['finetypeList'] = $this->Finetype_model->getFineType();
         $feegroup_result = $this->feesessiongroup_model->getFeesByGroup();
         $data['feemasterList'] = $feegroup_result;
         $this->form_validation->set_rules('feetype_id', $this->lang->line('feetype'), 'required');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'required');
         $this->form_validation->set_rules(
-                'fee_groups_id', $this->lang->line('feegroup'), array(
-            'required',
-            array('check_exists', array($this->feesessiongroup_model, 'valid_check_exists'))
-                )
+            'fee_groups_id',
+            $this->lang->line('feegroup'),
+            array(
+                'required',
+                array('check_exists', array($this->feesessiongroup_model, 'valid_check_exists'))
+            )
         );
 
-        if(isset($_POST['account_type'] ) && $_POST['account_type'] =='fix'){
+        $this->form_validation->set_rules('fine_term_id', $this->lang->line('fine_terms') . " " . $this->lang->line('fine_term_id'), 'required');
+
+        if (isset($_POST['account_type']) && $_POST['account_type'] == 'fix') {
+
             $this->form_validation->set_rules('fine_amount', $this->lang->line('fine') . " " . $this->lang->line('amount'), 'required|numeric');
             $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
-
-        }elseif(isset($_POST['account_type']) && ($_POST['account_type']=='percentage')){
+        } elseif (isset($_POST['account_type']) && ($_POST['account_type'] == 'percentage')) {
             $this->form_validation->set_rules('fine_percentage', $this->lang->line('percentage'), 'required|numeric');
             $this->form_validation->set_rules('fine_amount', $this->lang->line('fine') . " " . $this->lang->line('amount'), 'required|numeric');
-             $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
+            $this->form_validation->set_rules('due_date', $this->lang->line('due_date'), 'trim|required|xss_clean');
         }
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('layout/header', $data);
@@ -127,11 +144,12 @@ class Feemaster extends Admin_Controller {
                 'feetype_id' => $this->input->post('feetype_id'),
                 'due_date' => $this->customlib->dateFormatToYYYYMMDD($this->input->post('due_date')),
                 'amount' => $this->input->post('amount'),
+                'fine_term_id' => $this->input->post('fine_term_id'),
                 'fine_type' => $this->input->post('account_type'),
                 'fine_percentage' => $this->input->post('fine_percentage'),
                 'fine_amount' => $this->input->post('fine_amount'),
             );
-            
+
             $feegroup_result = $this->feegrouptype_model->add($insert_array);
 
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('update_message') . '</div>');
@@ -139,7 +157,8 @@ class Feemaster extends Admin_Controller {
         }
     }
 
-    function assign($id) {
+    function assign($id)
+    {
         if (!$this->rbac->hasPrivilege('fees_group_assign', 'can_view')) {
             access_denied();
         }
@@ -179,7 +198,4 @@ class Feemaster extends Admin_Controller {
         $this->load->view('admin/feemaster/assign', $data);
         $this->load->view('layout/footer', $data);
     }
-
 }
-
-?>

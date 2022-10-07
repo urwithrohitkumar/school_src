@@ -325,7 +325,7 @@
                                                         
                                                     } else {
 
-                                                        echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($feeList->due_date));
+                                                        echo (!$feeList->due_date)?'':date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($feeList->due_date));
                                                     }
                                                     ?>
                                                 </td>

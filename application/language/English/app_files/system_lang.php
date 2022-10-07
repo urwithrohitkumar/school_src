@@ -1788,6 +1788,17 @@ $lang['student_caste'] = "Student Caste";
 $lang['create_caste'] = "Create Caste";
 $lang['caste_list'] = "Caste List";
 
+// Fine terms.
+$lang['fine_terms'] = "Fine Applied On";
+$lang['refund_comments'] = "Reason for Revert";
+$lang['refund_comments_placeholder'] = "Enter Reason for Revert";
+$lang['refund'] = "Refund";
+$lang['receipt_number'] = "Receipt Number";
+$lang['refund_by'] = "Refund By";
+$lang['refund_date'] = "Refund Date";
+
+
+
 $lang['branch'] = "Branch";
 $lang['branch_list'] = 'Branch List';
 $lang['branch_title'] = 'Branch Title';
