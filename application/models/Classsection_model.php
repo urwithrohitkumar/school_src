@@ -2160,6 +2160,7 @@ class Classsection_model extends MY_Model
 
                 default:
             }
+
             switch ($relegions) {
                 case 'parsi':
                     if ($gender === 'male')
@@ -2223,6 +2224,7 @@ class Classsection_model extends MY_Model
                 else
                     $docDetsils[$class]['BPL']['transgender'][] = $student;
             }
+
             if (!empty($adharId)) {
                 if ($gender === 'male')
                     $docDetsils[$class]['having_aadhar']['male'][] = $student;
@@ -2232,7 +2234,7 @@ class Classsection_model extends MY_Model
                     $docDetsils[$class]['having_aadhar']['transgender'][] = $student;
             }
         }
-        // exit;
+
         foreach ($studentCategory as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2258,6 +2260,7 @@ class Classsection_model extends MY_Model
                 $categories['total']['section1'][$_class]['transgender'] += ($categories[$cat_key]['section1'][$_class]['transgender']);
             }
         }
+
         foreach ($minoritiesDetsils as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2284,6 +2287,7 @@ class Classsection_model extends MY_Model
                 $minorities['total']['section1'][$_class]['transgender'] += ($minorities[$cat_key]['section1'][$_class]['transgender']);
             }
         }
+
         foreach ($docDetsils as $st_key => $st) {
             foreach ($st as $cat_key => $cate) {
                 foreach ($cate as $_gender_key => $gender) {
@@ -2307,8 +2311,7 @@ class Classsection_model extends MY_Model
                 }
             }
         }
-
-
+        
         return ['category' => $categories, 'minorities' => $minorities, 'documents' => $isDocuments];
     }
 
