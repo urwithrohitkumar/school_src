@@ -40,18 +40,7 @@ CREATE TABLE `student_fees_refund` (
   `refund_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `student_fees_refund`
---
 
-INSERT INTO `student_fees_refund` (`id`, `student_id`, `receipt_number`, `student_fees_master_id`, `fee_groups_feetype_id`, `amount_detail`, `is_active`, `created_at`, `remark`, `refund_by`) VALUES
-(1, 1, 'R2209171663412785', 426, 26, '{\"4\":{\"amount\":\"298\",\"date\":\"2022-09-16\",\"amount_discount\":\"0\",\"amount_fine\":\"0\",\"description\":\"\",\"collected_by\":\"Super Admin(9000)\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":4}}', 'yes', '2022-09-19 08:31:43', 'Test', 1),
-(2, 1, 'R22091716634128401', 426, 25, '{\"1\":{\"amount\":\"600.00\",\"date\":\"2022-09-01\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-19 08:31:45', 'Test', 1),
-(3, 1, 'R22091716634128492', 426, 24, '{\"1\":{\"amount\":\"1500.00\",\"date\":\"2022-09-01\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-19 08:31:48', 'Test', 1),
-(4, 1, 'R22091916635756463', 426, 16, '{\"1\":{\"amount\":\"1500.00\",\"date\":\"2022-09-01\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-19 08:31:50', 'Teste', 1),
-(5, 1, 'R22091916635756734', 426, 28, '{\"1\":{\"amount\":\"1500.00\",\"date\":\"2022-09-01\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-19 08:31:53', 'Teste', 1),
-(6, 1, 'R22091916635913215', 426, 23, '{\"1\":{\"amount\":\"1500.00\",\"date\":\"2022-09-01\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-19 12:42:01', 'ddddddddddddddddddddddddddddddddddddddddddddd', 1),
-(7, 2, 'R22092016636547976', 427, 15, '{\"1\":{\"amount\":\"1500.00\",\"date\":\"2022-09-16\",\"description\":\" Collected By: Super Admin\",\"amount_discount\":0,\"amount_fine\":\"0\",\"payment_mode\":\"Cash\",\"received_by\":\"1\",\"inv_no\":1}}', 'yes', '2022-09-20 06:19:57', 'TEsteeeeee', 1);
 
 --
 -- Indexes for dumped tables

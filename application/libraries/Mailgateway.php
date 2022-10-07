@@ -51,7 +51,7 @@ class Mailgateway {
 
     public function sentAddFeeMail($detail, $template, $subject) {
         $send_to = $detail->email;
-        $msg = $this->getAddFeeContent($detail, $template);
+        $msg = $this->getAddFeeContent($branch=0,$detail, $template);
         if (!empty($this->_CI->mail_config) && $send_to != "") {
             $this->_CI->mailer->send_mail($send_to, $subject, $msg);
         }
@@ -184,14 +184,14 @@ class Mailgateway {
         }
     }
  
-    public function getAddFeeContent($data, $template) {
+    public function getAddFeeContent($branch,$data, $template) {
         
         $currency_symbol = $this->sch_setting->currency_symbol;
         $school_name = $this->sch_setting->name;
         $invoice_data = json_decode($data->invoice);
         $data->invoice_id = $invoice_data->invoice_id;
         $data->sub_invoice_id = $invoice_data->sub_invoice_id;
-        $fee = $this->_CI->studentfeemaster_model->getFeeByInvoice($data->invoice_id, $data->sub_invoice_id);
+        $fee = $this->_CI->studentfeemaster_model->getFeeByInvoice($branch,$data->invoice_id, $data->sub_invoice_id);
         $a = json_decode($fee->amount_detail);
         $record = $a->{$data->sub_invoice_id};
         $fee_amount = number_format((($record->amount + $record->amount_fine)), 2, '.', ',');
