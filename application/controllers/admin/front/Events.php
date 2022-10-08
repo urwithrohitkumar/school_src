@@ -163,6 +163,8 @@ class Events extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/front/events');
         $data['title']      = 'Edit Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $result             = $this->cms_program_model->getBySlug(urldecode($slug));
 
         $data['result'] = $result;
@@ -182,6 +184,7 @@ class Events extends Admin_Controller
             $data = array(
                 'id'               => $this->input->post('id'),
                 'title'            => $this->input->post('title'),
+                'branch_id'            => $this->input->post('branch_id'),
                 'description'      => htmlspecialchars_decode($this->input->post('description', false)),
                 'meta_title'       => $this->input->post('meta_title'),
                 'meta_keyword'     => $this->input->post('meta_keywords'),

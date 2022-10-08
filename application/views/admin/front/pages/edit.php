@@ -1,29 +1,31 @@
+
 <script src="<?php echo base_url(); ?>backend/plugins/ckeditor/ckeditor.js"></script>
 <style type="text/css">
-    .material-switch > input[type="checkbox"] {
-        display: none;   
+    .material-switch>input[type="checkbox"] {
+        display: none;
     }
 
-    .material-switch > label {
+    .material-switch>label {
         cursor: pointer;
         height: 0px;
-        position: relative; 
-        width: 40px;  
+        position: relative;
+        width: 40px;
     }
 
-    .material-switch > label::before {
+    .material-switch>label::before {
         background: rgb(0, 0, 0);
         box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
         border-radius: 8px;
         content: '';
         height: 16px;
         margin-top: -8px;
-        position:absolute;
+        position: absolute;
         opacity: 0.3;
         transition: all 0.4s ease-in-out;
         width: 40px;
     }
-    .material-switch > label::after {
+
+    .material-switch>label::after {
         background: rgb(255, 255, 255);
         border-radius: 16px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
@@ -36,11 +38,13 @@
         transition: all 0.3s ease-in-out;
         width: 24px;
     }
-    .material-switch > input[type="checkbox"]:checked + label::before {
+
+    .material-switch>input[type="checkbox"]:checked+label::before {
         background: inherit;
         opacity: 0.5;
     }
-    .material-switch > input[type="checkbox"]:checked + label::after {
+
+    .material-switch>input[type="checkbox"]:checked+label::after {
         background: inherit;
         left: 20px;
     }
@@ -76,17 +80,32 @@
                             if (isset($error_message)) {
                                 echo "<div class='alert alert-danger'>" . $error_message . "</div>";
                             }
-                            ?>      
-                            <?php echo $this->customlib->getCSRF(); ?>  
+                            ?>
+                            <?php echo $this->customlib->getCSRF(); ?>
 
-                            <input type="hidden" name="id" value="<?php echo $result['id'] ?>"/>
+                            <input type="hidden" name="id" value="<?php echo $result['id'] ?>" />
                             <div class="form-group">
                                 <span><a href="<?php echo site_url() . $result['url']; ?>" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i> <?php echo site_url() . $result['url']; ?></a></span>
 
                             </div>
+
+
+                            <div class='form-group'>
+                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                    <?php foreach ($branch as $key => $value) {  ?>
+                                        <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                            </div>
+
+
+
+
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('title'); ?></label><small class="req"> *</small>
-                                <input id="title" name="title" placeholder="" type="text" class="form-control"  value="<?php echo set_value('title', $result['title']); ?>" />
+                                <input id="title" name="title" placeholder="" type="text" class="form-control" value="<?php echo set_value('title', $result['title']); ?>" />
                                 <span class="text-danger"><?php echo form_error('title'); ?></span>
                             </div>
                             <div class="form-group">
@@ -94,60 +113,62 @@
                                 <label class="pr20"><?php echo $this->lang->line('page_type'); ?></label>
                                 <?php
                                 foreach ($category as $cat_key => $cat_value) {
-                                    ?>
+                                ?>
 
                                     <label class="radio-inline">
-                                        <input type="radio" value="<?php echo $cat_key ?>" name="content_category" <?php echo set_checkbox('content_category', $cat_key, set_value('content_category', in_array($cat_key, $result['category_content'])) ? TRUE : FALSE); ?> > <?php echo $this->lang->line($cat_key); ?></label>
-                                    <?php
+                                        <input type="radio" value="<?php echo $cat_key ?>" name="content_category" <?php echo set_checkbox('content_category', $cat_key, set_value('content_category', in_array($cat_key, $result['category_content'])) ? TRUE : FALSE); ?>> <?php echo $this->lang->line($cat_key); ?></label>
+                                <?php
                                 }
                                 ?>
 
                                 <span class="text-danger"></span>
                             </div>
                             <div class="dividerhr"></div>
-                            <div class="formgroup10 mb10"> <!-- Submit button !-->
+                            <div class="formgroup10 mb10">
+                                <!-- Submit button !-->
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('description'); ?></label>
                                 <button type="button" class="btn btn-primary btn-sm pull-right" id="media_images" data-toggle="modal" data-target="#mediaModal"><i class="fa fa-plus"></i>
                                     <?php echo $this->lang->line('add_media'); ?>
                                 </button>
-                            </div>  
+                            </div>
 
 
 
-                            <div class="form-group">  
-                                <textarea id="editor1" name="description" placeholder="" type="text" class="form-control ss" >
+                            <div class="form-group">
+                                <textarea id="editor1" name="description" placeholder="" type="text" class="form-control ss">
                                     <?php echo set_value('description', $result['description']); ?>
-                                </textarea>   
+                                </textarea>
                                 <span class="text-danger"><?php echo form_error('description'); ?></span>
                             </div>
                         </div><!-- /.box-body -->
-                    </div>     
-                    <div class="panel box box-primary collapsed-box">     
+                    </div>
+                    <div class="panel box box-primary collapsed-box">
                         <div class="box-header with-border">
                             <a class="btn boxplus" data-widget="collapse" data-original-title="Collapse"><?php echo $this->lang->line('seo_detail'); ?><i class="fa fa-plus"></i>
                             </a>
-                        </div> 
+                        </div>
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('meta_title'); ?></label>
-                                <input id="meta_title" name="meta_title" placeholder="" type="text" class="form-control"  value="<?php echo set_value('meta_title', $result['meta_title']); ?>" />
+                                <input id="meta_title" name="meta_title" placeholder="" type="text" class="form-control" value="<?php echo set_value('meta_title', $result['meta_title']); ?>" />
                                 <span class="text-danger"><?php echo form_error('meta_title'); ?></span>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('meta_keyword'); ?></label>
-                                <input id="meta_keywords" name="meta_keywords" placeholder="" type="text" class="form-control"  value="<?php echo set_value('meta_keywords', $result['meta_keyword']); ?>" />
+                                <input id="meta_keywords" name="meta_keywords" placeholder="" type="text" class="form-control" value="<?php echo set_value('meta_keywords', $result['meta_keyword']); ?>" />
                                 <span class="text-danger"><?php echo form_error('meta_keywords'); ?></span>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('meta_description'); ?></label>
-                                <textarea id="editor1" name="meta_description" placeholder="" type="text" class="form-control" ><?php echo set_value('meta_description', $result['meta_description']); ?></textarea>
+                                <textarea id="editor1" name="meta_description" placeholder="" type="text" class="form-control"><?php echo set_value('meta_description', $result['meta_description']); ?></textarea>
                                 <span class="text-danger"><?php echo form_error('meta_description'); ?></span>
-                            </div> 
+                            </div>
                         </div>
                     </div>
 
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
                 <div class="col-md-3 col-sm-12">
                     <!-- page settings -->
@@ -157,7 +178,7 @@
                             <div class="box-tools pull-right">
                                 <!-- Buttons, labels, and many other things can be placed here! -->
                                 <!-- Here is a label for example -->
-                                <button class="btn btn-box-tool" data-placement="left" data-widget="collapse" data-toggle="tooltip"  title="Collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-placement="left" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                             </div><!-- /.box-tools -->
                         </div><!-- /.box-header -->
 
@@ -168,13 +189,13 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('sidebar'); ?></label>
                                 <div class="material-switch pull-right">
-                                    <input id="sidebar" name="sidebar" type="checkbox" class="chk"  <?php echo set_checkbox('sidebar', '1', (set_value('sidebar', $result['sidebar']) == 1) ? TRUE : FALSE); ?> value="1"  />
+                                    <input id="sidebar" name="sidebar" type="checkbox" class="chk" <?php echo set_checkbox('sidebar', '1', (set_value('sidebar', $result['sidebar']) == 1) ? TRUE : FALSE); ?> value="1" />
                                     <label for="sidebar" class="label-success"></label>
                                 </div>
-                            </div>                      
+                            </div>
 
                         </div><!-- /.box-body -->
-                    </div><!-- /.box -->              
+                    </div><!-- /.box -->
 
                     <!-- page image -->
                     <div class="box box-primary">
@@ -192,8 +213,8 @@
                                 <div class="input-group input-group-sm">
                                     <input class="form-control iframe-btn" placeholder="<?php echo $this->lang->line('select_image'); ?>" type="text" name="image" id="image" value="<?php echo $result['feature_image']; ?>">
                                     <span class="input-group-btn">
-                                        <a href="#" class="btn cfees feture_image_btn" id="feture_image" data-toggle="tooltip" data-title="<?php echo $this->lang->line('select_image'); ?>" type="button" ><i class="fa fa-folder-open"></i></a>
-                                        <a  href="#" class="btn removegraybtn delete_media" id="image" data-toggle="tooltip" data-title="<?php echo $this->lang->line('delete'); ?>" type="button"><i class="fa fa-trash"></i></a>
+                                        <a href="#" class="btn cfees feture_image_btn" id="feture_image" data-toggle="tooltip" data-title="<?php echo $this->lang->line('select_image'); ?>" type="button"><i class="fa fa-folder-open"></i></a>
+                                        <a href="#" class="btn removegraybtn delete_media" id="image" data-toggle="tooltip" data-title="<?php echo $this->lang->line('delete'); ?>" type="button"><i class="fa fa-trash"></i></a>
 
                                     </span>
                                 </div>
@@ -204,7 +225,7 @@
                                 }
                                 ?>
                                 <div id="image_preview" class="thumbnail" style="margin-top: 10px; <?php echo $image_display; ?>">
-                                    <img src="<?php echo $result['feature_image']; ?>" class="img-responsive feature_image_url" >
+                                    <img src="<?php echo $result['feature_image']; ?>" class="img-responsive feature_image_url">
                                 </div>
                             </div>
                         </div><!-- /.box-body -->
@@ -223,25 +244,23 @@
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <script>
-
-    $(document).ready(function () {
+    $(document).ready(function() {
         var popup_target = 'media_images';
-    
-        CKEDITOR.replace('editor1',
-                {
-                    entities: false//
 
-                });
+        CKEDITOR.replace('editor1', {
+            entities: false //
+
+        });
         $('#mediaModal').modal({
             backdrop: 'static',
             keyboard: false,
             show: false
         });
-        $(document).on('click', '.feture_image_btn', function (event) {
-//          $('#mediaModal').modal("show");
+        $(document).on('click', '.feture_image_btn', function(event) {
+            //          $('#mediaModal').modal("show");
             $("#mediaModal").modal('toggle', $(this));
         });
-        $('#mediaModal').on('show.bs.modal', function (event) {
+        $('#mediaModal').on('show.bs.modal', function(event) {
             var a = $(event.relatedTarget) // Button that triggered the modal
             popup_target = a[0].id;
             var button = $(event.relatedTarget) // Button that triggered the modal
@@ -253,17 +272,17 @@
                 url: baseurl + "admin/front/media/getMedia",
                 dataType: 'text',
                 data: {},
-                beforeSend: function () {
+                beforeSend: function() {
 
                     $modalDiv.addClass('modal_loading');
                 },
-                success: function (data) {
+                success: function(data) {
                     $('.modal-media-body').html(data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     $modalDiv.removeClass('modal_loading');
                 },
-                complete: function () {
+                complete: function() {
                     $modalDiv.removeClass('modal_loading');
                 },
             });
@@ -274,7 +293,7 @@
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
@@ -283,13 +302,13 @@
 
 
 
-        $(document).on('click', '.img_div_modal', function (event) {
+        $(document).on('click', '.img_div_modal', function(event) {
             $('.img_div_modal div.fadeoverlay').removeClass('active');
             $(this).closest('.img_div_modal').find('.fadeoverlay').addClass('active');
 
         });
 
-        $(document).on('click', '.add_media', function (event) {
+        $(document).on('click', '.add_media', function(event) {
             var content_html = $('div#media_div').find('.fadeoverlay.active').find('img').data('img');
             var is_image = $('div#media_div').find('.fadeoverlay.active').find('img').data('is_image');
             var content_name = $('div#media_div').find('.fadeoverlay.active').find('img').data('content_name');
@@ -328,6 +347,7 @@
             }
 
         });
+
         function YouTubeGetID(url) {
             var ID = '';
             url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -339,19 +359,20 @@
             }
             return ID;
         }
-        $(document).on("click", ".pagination li a", function (event) {
+        $(document).on("click", ".pagination li a", function(event) {
             event.preventDefault();
             var page = $(this).data("ci-pagination-page");
             load_country_data(page);
         });
     });
+
     function addImage(content_html) {
         $('.feature_image_url').attr('src', content_html);
         $('#image').val(content_html);
         $('#image_preview').css("display", "block");
     }
 
-    $(document).on('click', '.delete_media', function () {
+    $(document).on('click', '.delete_media', function() {
         $('.feature_image_url').attr('src', '');
         $('#image').val('');
         $('#image_preview').css("display", "none");
@@ -363,15 +384,11 @@
 
 
         // Check the active editing mode.
-        if (editor.mode == 'wysiwyg')
-        {
+        if (editor.mode == 'wysiwyg') {
             editor.insertHtml(content_html);
         } else
             alert('You must be in WYSIWYG mode!');
     }
-
-
-
 </script>
 
 

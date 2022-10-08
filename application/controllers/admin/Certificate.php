@@ -111,6 +111,8 @@ class Certificate extends Admin_Controller
         }
         $data['title']                 = 'Add Hostel';
         $data['id']                    = $id;
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
         $editcertificate               = $this->certificate_model->get($id);
         $this->data['editcertificate'] = $editcertificate;
 
@@ -170,6 +172,7 @@ class Certificate extends Admin_Controller
                     $picture = '';
                     $data    = array(
                         'id'                   => $this->input->post('id'),
+                        'branch_id'            => $this->input->post('branch_id'),
                         'certificate_name'     => $this->input->post('certificate_name'),
                         'certificate_text'     => $this->input->post('certificate_text'),
                         'left_header'          => $this->input->post('left_header'),
@@ -189,6 +192,7 @@ class Certificate extends Admin_Controller
             } else {
                 $data = array(
                     'id'                   => $this->input->post('id'),
+                    'branch_id'            => $this->input->post('branch_id'),
                     'certificate_name'     => $this->input->post('certificate_name'),
                     'certificate_text'     => $this->input->post('certificate_text'),
                     'left_header'          => $this->input->post('left_header'),

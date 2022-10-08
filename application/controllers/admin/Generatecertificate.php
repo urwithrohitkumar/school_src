@@ -72,7 +72,7 @@ class Generatecertificate extends Admin_Controller
                     $resultlist                = $this->student_model->searchByClassSection($class, $section ,$branch_id);
                     $data['resultlist']        = $resultlist;
                     $title                     = $this->classsection_model->getDetailbyClassSection($data['class_id'], $data['section_id']);
-                    $data['title']             = $this->lang->line('std_dtl_for') . ' ' . $title['class'] . "(" . $title['section'] . ")";
+                    // $data['title']             = $this->lang->line('std_dtl_for') . ' ' . $title['class'] . "(" . $title['section'] . ")";
                 }
             }
             $data['sch_setting'] = $this->sch_setting_detail;

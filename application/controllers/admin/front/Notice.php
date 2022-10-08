@@ -94,6 +94,8 @@ class Notice extends Admin_Controller
         }
         $data['title']      = 'Edit Book';
         $data['title_list'] = 'Book Details';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->session->set_userdata('top_menu', 'Front CMS');
         $this->session->set_userdata('sub_menu', 'admin/front/notice');
         $result         = $this->cms_program_model->getBySlug(urldecode($slug));
@@ -112,6 +114,7 @@ class Notice extends Admin_Controller
             $data = array(
                 'id'               => $this->input->post('id'),
                 'title'            => $this->input->post('title'),
+                'branch_id'            => $this->input->post('branch_id'),
                 'url'              => $this->config->item('ci_front_page_url') . $this->input->post('url'),
                 'description'      => htmlspecialchars_decode($this->input->post('description', false)),
                 'meta_title'       => $this->input->post('meta_title'),

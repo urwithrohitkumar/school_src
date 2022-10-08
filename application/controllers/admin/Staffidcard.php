@@ -176,6 +176,8 @@ class Staffidcard extends Admin_Controller
         }
         $data['id']                    = $id;
         $editstaffidcard               = $this->Staffidcard_model->get($id);
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
         $this->data['editstaffidcard'] = $editstaffidcard;
         $this->form_validation->set_rules('school_name', $this->lang->line('school_name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('address', $this->lang->line('address_phone_email'), 'trim|required|xss_clean');

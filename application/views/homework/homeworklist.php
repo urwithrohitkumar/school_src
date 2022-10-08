@@ -153,8 +153,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control branchOption">
-                                        <option value="" disabled selected>Select</option>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control modelbranchOption">
+                                            <option value="" disabled selected>Select</option>
                                             <?php foreach ($branch as $key => $value) {
                                             ?>
                                                 <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
@@ -167,8 +167,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class') ?></label><small class="req"> *</small>
-                                        <select class="form-control modal_class_id classOption" name="modal_class_id" id="modal_class_id">
-                                             <option value="" disabled selected>Select</option>
+                                        <select class="form-control modal_class_id modelclassOption" name="modal_class_id" id="modal_class_id">
+                                            <option value="" disabled selected>Select</option>
                                             <?php foreach ($classlist as $key => $value) {
                                             ?>
                                                 <option value="<?php echo $value["id"] ?>"><?php echo $value["class"] ?></option>
@@ -183,8 +183,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('section') ?></label><small class="req"> *</small>
-                                        <select class="form-control modal_section_id sectionOption" name="modal_section_id" id="modal_section_id">
-                                             <option value="" disabled selected>Select</option>
+                                        <select class="form-control modal_section_id modelsectionOption" name="modal_section_id" id="modal_section_id">
+                                            <option value="" disabled selected>Select</option>
 
                                         </select>
                                         <span id="name_add_error" class="text-danger"></span>
@@ -193,8 +193,8 @@ $language_name = $language["short_code"];
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label><small class="req"> *</small>
-                                        <select id="modal_subject_group_id" name="modal_subject_group_id" class="form-control subjectgroupOption">
-                                             <option value="" disabled selected>Select</option>
+                                        <select id="modal_subject_group_id" name="modal_subject_group_id" class="form-control modelsubjectgroupOption">
+                                            <option value="" disabled selected>Select</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -205,8 +205,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('subject') ?></label><small class="req"> *</small>
-                                        <select class="form-control subjectOption" name="modal_subject_id" id="modal_subject_id">
-                                             <option value="" disabled selected>Select</option>
+                                        <select class="form-control modelsubjectOption" name="modal_subject_id" id="modal_subject_id">
+                                            <option value="" disabled selected>Select</option>
 
 
                                         </select>
@@ -393,8 +393,8 @@ $language_name = $language["short_code"];
 <script type="text/javascript">
     $(document).ready(function(e) {
         getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
-        getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
-        getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
+        // getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
+        // getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
 
     });
 
@@ -813,9 +813,9 @@ $language_name = $language["short_code"];
     /* On Change of Branch */
     $(document).on('change', '.branchOption', function() {
         let branch_id = $(this).val();
-        let class_id = $('.classOption').find(":selected").val();
-        let section_id = $('.sectionOption').find(":selected").val();
-        let subject_group_id = $('.subjectgroupOption').find(":selected").val();
+        let class_id = $(document).find('.classOption').find(":selected").val();
+        let section_id = $(document).find('.sectionOption').find(":selected").val();
+        let subject_group_id = $(document).find('.subjectgroupOption').find(":selected").val();
         onchangefunction(branch_id, class_id, section_id, subject_group_id);
 
     })
@@ -823,9 +823,9 @@ $language_name = $language["short_code"];
     /* On Change of Class */
     $(document).on('change', '.classOption', function() {
         let class_id = $(this).val();
-        var branch_id = $('.branchOption').find(":selected").val();
-        let section_id = $('.sectionOption').find(":selected").val();
-        let subject_group_id = $('.subjectgroupOption').find(":selected").val();
+        var branch_id = $(document).find('.branchOption').find(":selected").val();
+        let section_id = $(document).find('.sectionOption').find(":selected").val();
+        let subject_group_id = $(document).find('.subjectgroupOption').find(":selected").val();
         onchangefunction(branch_id, class_id, section_id, subject_group_id);
 
     })
@@ -846,6 +846,47 @@ $language_name = $language["short_code"];
         var branch_id = $('.branchOption').find(":selected").val();
         let class_id = $('.classOption').find(":selected").val();
         let section_id = $('.sectionOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+
+    /* On Change of Model Branch */
+    $(document).on('change', '.modelbranchOption', function() {
+        let branch_id = $(this).val();
+        let class_id = $(document).find('.modelclassOption').find(":selected").val();
+        let section_id = $(document).find('.modelsectionOption').find(":selected").val();
+        let subject_group_id = $(document).find('.modelsubjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Model Class */
+    $(document).on('change', '.modelclassOption', function() {
+        let class_id = $(this).val();
+        var branch_id = $(document).find('.modelbranchOption').find(":selected").val();
+        let section_id = $(document).find('.modelsectionOption').find(":selected").val();
+        let subject_group_id = $(document).find('.modelsubjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Model Section */
+    $(document).on('change', '.modelsectionOption', function() {
+        let section_id = $(this).val();
+        var branch_id = $('.modelbranchOption').find(":selected").val();
+        let class_id = $('.modelclassOption').find(":selected").val();
+        let subject_group_id = $('.modelsubjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Model Subject Group */
+    $(document).on('change', '.modelsubjectgroupOption', function() {
+        let subject_group_id = $(this).val();
+        var branch_id = $('.modelbranchOption').find(":selected").val();
+        let class_id = $('.modelclassOption').find(":selected").val();
+        let section_id = $('.modelsectionOption').find(":selected").val();
         onchangefunction(branch_id, class_id, section_id, subject_group_id);
 
     })
@@ -871,23 +912,25 @@ $language_name = $language["short_code"];
                  * Item Details Option data according to branch id
                  */
                 if (subject_group_details) {
-                    var html = '<option selected disabled>Select</option>';
+                    var html = '<option value = "">Select</option>';
                     for (var count = 0; count < subject_group_details.length; count++) {
                         html += '<option value="' + subject_group_details[count].id + '">' + subject_group_details[count].name + '</option>';
                     }
                     $('.subjectgroupOption').html(html);
+                    $('.modelsubjectgroupOption').html(html);
                 }
                 /**
                  * Item Details Option data according to branch id
                  */
                 if (subject) {
-                    var html = '<option selected disabled>Select</option>';
+                    var html = '<option value = "">Select</option>';
                     for (var count = 0; count < subject.length; count++) {
                         html += '<option value="' + subject[count].id + '">' + subject[count].name + '</option>';
                     }
                     $('.subjectOption').html(html);
+                    $('.modelsubjectOption').html(html);
                 }
-               
+
 
             }
         });

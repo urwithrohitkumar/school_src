@@ -223,6 +223,8 @@ class studentidcard extends Admin_Controller {
 
         $data['title'] = 'Edit ID Card';
         $data['id'] = $id;
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
         $editidcard = $this->Student_id_card_model->get($id);
         $this->data['editidcard'] = $editidcard;
         $this->form_validation->set_rules('school_name', $this->lang->line('school_name'), 'trim|required|xss_clean');

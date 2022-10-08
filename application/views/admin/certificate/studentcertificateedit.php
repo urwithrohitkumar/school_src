@@ -12,7 +12,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         <div class="row">
             <?php
             if ($this->rbac->hasPrivilege('student_certificate', 'can_add') || $this->rbac->hasPrivilege('student_certificate', 'can_edit')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
@@ -20,7 +20,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <h3 class="box-title"><?php echo $this->lang->line('edit '); ?> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('certificate'); ?></h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form action="<?php echo site_url('admin/certificate/edit/' . $editcertificate[0]->id) ?>"  id="certificateform" enctype="multipart/form-data" name="certificateform" method="post" accept-charset="utf-8">
+                        <form action="<?php echo site_url('admin/certificate/edit/' . $editcertificate[0]->id) ?>" id="certificateform" enctype="multipart/form-data" name="certificateform" method="post" accept-charset="utf-8">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
@@ -32,23 +32,35 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
 
-                                <input type="hidden" name="id" value="<?php echo set_value('id', $editcertificate[0]->id); ?>" >
+                                <input type="hidden" name="id" value="<?php echo set_value('id', $editcertificate[0]->id); ?>">
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>' <?php if ($editcertificate[0]->branch_id == $value['id']) {
+                                                                                            echo "selected";
+                                                                                        } ?>><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('name'); ?></label><small class="req"> *</small>
-                                    <input autofocus="" id="certificate_name" name="certificate_name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('certificate_name', $editcertificate[0]->certificate_name); ?>" />
+                                    <input autofocus="" id="certificate_name" name="certificate_name" placeholder="" type="text" class="form-control" value="<?php echo set_value('certificate_name', $editcertificate[0]->certificate_name); ?>" />
                                     <span class="text-danger"><?php echo form_error('certificate_name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('header_left_text'); ?></label>
-                                    <input autofocus="" id="left_header" name="left_header" placeholder="" type="text" class="form-control"  value="<?php echo set_value('left_header', $editcertificate[0]->left_header); ?>" />
+                                    <input autofocus="" id="left_header" name="left_header" placeholder="" type="text" class="form-control" value="<?php echo set_value('left_header', $editcertificate[0]->left_header); ?>" />
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('header_center_text'); ?></label>
-                                    <input autofocus="" id="center_header" name="center_header" placeholder="" type="text" class="form-control"  value="<?php echo set_value('center_header', $editcertificate[0]->center_header); ?>" />
+                                    <input autofocus="" id="center_header" name="center_header" placeholder="" type="text" class="form-control" value="<?php echo set_value('center_header', $editcertificate[0]->center_header); ?>" />
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('header_right_text'); ?></label>
-                                    <input autofocus="" id="right_header" name="right_header" placeholder="" type="text" class="form-control"  value="<?php echo set_value('right_header', $editcertificate[0]->right_header); ?>" />
+                                    <input autofocus="" id="right_header" name="right_header" placeholder="" type="text" class="form-control" value="<?php echo set_value('right_header', $editcertificate[0]->right_header); ?>" />
                                 </div>
 
                                 <div class="form-group">
@@ -70,44 +82,48 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('footer_left_text'); ?></label>
-                                    <input autofocus="" id="left_footer" name="left_footer" placeholder="" type="text" class="form-control"  value="<?php echo set_value('left_footer', $editcertificate[0]->left_footer); ?>" />
+                                    <input autofocus="" id="left_footer" name="left_footer" placeholder="" type="text" class="form-control" value="<?php echo set_value('left_footer', $editcertificate[0]->left_footer); ?>" />
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('footer_center_text'); ?></label>
-                                    <input autofocus="" id="center_footer" name="center_footer" placeholder="" type="text" class="form-control"  value="<?php echo set_value('center_footer', $editcertificate[0]->center_footer); ?>" />
+                                    <input autofocus="" id="center_footer" name="center_footer" placeholder="" type="text" class="form-control" value="<?php echo set_value('center_footer', $editcertificate[0]->center_footer); ?>" />
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('footer_right_text'); ?></label>
-                                    <input autofocus="" id="right_footer" name="right_footer" placeholder="" type="text" class="form-control"  value="<?php echo set_value('right_footer', $editcertificate[0]->right_footer); ?>" />
+                                    <input autofocus="" id="right_footer" name="right_footer" placeholder="" type="text" class="form-control" value="<?php echo set_value('right_footer', $editcertificate[0]->right_footer); ?>" />
                                 </div>
 
 
-                                <div class="mediarow">    
+                                <div class="mediarow">
                                     <div class="row">
                                         <div class="img_div_modal"><label><?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('design'); ?></label></div>
                                         <div class="col-md-6 col-sm-6 img_div_modal">
                                             <div class="form-group">
                                                 <input id="header_height" name="header_height" placeholder="<?php echo $this->lang->line('header'); ?> <?php echo $this->lang->line('height'); ?>" type="number" class="form-control" min="0" value="<?php echo set_value('header_height', $editcertificate[0]->header_height); ?>" />
                                             </div>
-                                        </div><!--./col-md-6-->   
-                                        <div class="col-md-6 col-sm-6 img_div_modal"> 
+                                        </div>
+                                        <!--./col-md-6-->
+                                        <div class="col-md-6 col-sm-6 img_div_modal">
                                             <div class="form-group">
                                                 <input id="footer_height" name="footer_height" placeholder="<?php echo $this->lang->line('footer'); ?> <?php echo $this->lang->line('height'); ?>" type="number" class="form-control" min="0" value="<?php echo set_value('footer_height', $editcertificate[0]->footer_height); ?>" />
                                             </div>
-                                        </div><!--./col-md-6-->
+                                        </div>
+                                        <!--./col-md-6-->
                                         <div class="col-md-6 col-sm-6 img_div_modal">
                                             <div class="form-group">
                                                 <input id="content_height" name="content_height" placeholder="<?php echo $this->lang->line('body'); ?> <?php echo $this->lang->line('height'); ?>" type="number" class="form-control" min="0" value="<?php echo set_value('content_height', $editcertificate[0]->content_height); ?>" />
                                             </div>
-                                        </div><!--./col-md-6-->
+                                        </div>
+                                        <!--./col-md-6-->
 
 
 
-                                        <div class="col-md-6 col-sm-6 img_div_modal"> 
+                                        <div class="col-md-6 col-sm-6 img_div_modal">
                                             <div class="form-group">
                                                 <input id="content_width" name="content_width" placeholder="<?php echo $this->lang->line('body'); ?> <?php echo $this->lang->line('width'); ?>" type="number" class="form-control" min="0" value="<?php echo set_value('content_width', $editcertificate[0]->content_width); ?>" />
                                             </div>
-                                        </div><!--./col-md-6-->
+                                        </div>
+                                        <!--./col-md-6-->
                                         <div class="col-md-6 col-sm-6 img_div_modal minh45">
                                             <div class="form-group switch-inline">
                                                 <label><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('photo'); ?></label>
@@ -116,20 +132,23 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     <label for="enable_student_img" class="label-success"></label>
                                                 </div>
                                             </div>
-                                        </div><!--./col-md-6-->
+                                        </div>
+                                        <!--./col-md-6-->
                                         <div class="col-md-6 col-sm-6 img_div_modal">
                                             <div class="form-group" id="enableImageDiv" hidden>
                                                 <input id="image_height" name="image_height" placeholder="<?php echo $this->lang->line('photo'); ?> <?php echo $this->lang->line('height'); ?>" type="text" value="<?php echo set_value('image_height', $editcertificate[0]->enable_image_height); ?>" class="form-control" min="0" />
                                             </div>
                                         </div>
 
-                                    </div><!--./row-->  
-                                </div><!--./mediarow-->
+                                    </div>
+                                    <!--./row-->
+                                </div>
+                                <!--./mediarow-->
 
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('background_image'); ?></label>
-                                    <input id="documents" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="background_image">
+                                    <input id="documents" placeholder="" type="file" class="filestyle form-control" data-height="40" name="background_image">
                                 </div>
 
                                 <?php
@@ -146,16 +165,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             </div>
                         </form>
                     </div>
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('student_certificate', 'can_add') || $this->rbac->hasPrivilege('student_certificate', 'can_edit')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('student_certificate', 'can_add') || $this->rbac->hasPrivilege('student_certificate', 'can_edit')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -170,7 +190,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="mailbox-messages">
                             <div class="download_label"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('list'); ?></div>
-                            <div class="table-responsive">  
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover example">
                                     <thead>
                                         <tr>
@@ -182,16 +202,16 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </thead>
                                     <tbody>
                                         <?php if (empty($certificateList)) {
-                                            ?>
+                                        ?>
 
                                             <?php
                                         } else {
                                             $count = 1;
                                             foreach ($certificateList as $certificate) {
-                                                ?>
+                                            ?>
                                                 <tr>
                                                     <td class="mailbox-name">
-                                                        <a href="#" data-toggle="popover" class="detail_popover" ><?php echo $certificate->certificate_name; ?></a>
+                                                        <a href="#" data-toggle="popover" class="detail_popover"><?php echo $certificate->certificate_name; ?></a>
                                                     </td>
                                                     <td class="mailbox-name">
                                                         <?php if ($certificate->background_image != '' && !is_null($certificate->background_image)) { ?>
@@ -205,41 +225,43 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                             <i class="fa fa-reorder"></i>
                                                         </a>
                                                         <?php if ($this->rbac->hasPrivilege('student_certificate', 'can_edit')) { ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/certificate/edit/<?php echo $certificate->id ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/certificate/edit/<?php echo $certificate->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         if ($this->rbac->hasPrivilege('student_certificate', 'can_delete')) {
-                                                            ?>
-                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/certificate/delete/<?php echo $certificate->id ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                        ?>
+                                                            <a data-placement="left" href="<?php echo base_url(); ?>admin/certificate/delete/<?php echo $certificate->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                                 <i class="fa fa-remove"></i>
                                                             </a>
                                                         <?php } ?>
                                                     </td>
                                                 </tr>
-                                                <?php
+                                        <?php
                                             }
                                             $count++;
                                         }
                                         ?>
                                     </tbody>
                                 </table>
-                            </div>  
+                            </div>
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
             <!-- right column -->
         </div>
         <div class="row">
             <div class="col-md-12">
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog" style="width: 100%;" >
+<div class="modal fade" id="myModal" role="dialog" style="width: 100%;">
     <div class="modal-dialog modal-lg" style="width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -254,13 +276,13 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
@@ -275,14 +297,16 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 </script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.view_data').click(function () {
+    $(document).ready(function() {
+        $('.view_data').click(function() {
             var certificateid = $(this).attr("id");
             $.ajax({
                 url: "<?php echo base_url('admin/certificate/view') ?>",
                 method: "post",
-                data: {certificateid: certificateid},
-                success: function (data) {
+                data: {
+                    certificateid: certificateid
+                },
+                success: function(data) {
                     $('#certificate_detail').html(data);
                     $('#myModal').modal("show");
                 }
@@ -291,8 +315,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 </script>
 <script type="text/javascript">
-    function valueChanged()
-    {
+    function valueChanged() {
         if ($('#enable_student_img').is(":checked"))
             $("#enableImageDiv").show();
         else

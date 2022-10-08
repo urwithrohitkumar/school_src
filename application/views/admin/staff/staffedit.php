@@ -1,4 +1,4 @@
-<div class="content-wrapper">  
+<div class="content-wrapper">
     <section class="content-header">
         <h1><i class="fa fa-sitemap"></i> <?php echo $this->lang->line('human_resource'); ?></h1>
     </section>
@@ -10,19 +10,19 @@
                 <div class="box box-primary">
 
 
-                    <form id="form1" action="<?php echo site_url('admin/staff/edit/' . $staff["id"]) ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <form id="form1" action="<?php echo site_url('admin/staff/edit/' . $staff["id"]) ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                         <div class="box-body">
                             <div class="alert alert-info">
                                 Staff email is their login username, password is generated automatically and send to staff email. Superadmin can change staff password on their staff profile page.
 
                             </div>
-                            <div class="tshadow mb25 bozero">    
+                            <div class="tshadow mb25 bozero">
 
                                 <h4 class="pagetitleh2"><?php echo $this->lang->line('basic_information'); ?> </h4>
                                 <div class="around10">
                                     <?php if ($this->session->flashdata('msg')) { ?>
                                         <?php echo $this->session->flashdata('msg') ?>
-                                    <?php } ?>  
+                                    <?php } ?>
                                     <?php echo $this->customlib->getCSRF(); ?>
 
                                     <div class="row">
@@ -30,7 +30,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('staff_id'); ?></label><small class="req"> *</small>
-                                                    <input autofocus="" id="employee_id" name="employee_id" placeholder="" value="<?php echo $staff["employee_id"] ?>" type="text" class="form-control"  value="" />
+                                                    <input autofocus="" id="employee_id" name="employee_id" placeholder="" value="<?php echo $staff["employee_id"] ?>" type="text" class="form-control" value="" />
                                                     <span class="text-danger"><?php echo form_error('employee_id'); ?></span>
                                                 </div>
                                             </div>
@@ -40,58 +40,72 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('role'); ?></label><small class="req"> *</small>
                                                 <input type="hidden" name="editid" value="<?php echo $staff['id']; ?>">
-                                                <select  id="role" name="role" class="form-control" >
-                                                    <option value=""   ><?php echo $this->lang->line('select'); ?></option>
+                                                <select id="role" name="role" class="form-control">
+                                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                     <?php
                                                     foreach ($getStaffRole as $key => $role) {
-                                                        ?>
+                                                    ?>
                                                         <option value="<?php echo $role["id"] ?>" <?php
-                                                        if ($staff["user_type"] == $role["type"]) {
-                                                            echo "selected";
-                                                        }
-                                                        ?>><?php echo $role["type"] ?></option>
-                                                            <?php }
-                                                            ?>
+                                                                                                    if ($staff["user_type"] == $role["type"]) {
+                                                                                                        echo "selected";
+                                                                                                    }
+                                                                                                    ?>><?php echo $role["type"] ?></option>
+                                                    <?php }
+                                                    ?>
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('role'); ?></span>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class='form-group'>
+                                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                    <?php foreach ($branch as $key => $value) {  ?>
+                                                        <option value='<?php echo $value['id'] ?>'  <?php if($staff['branch_id'] == $value['id']) { echo "selected"; } ?> ><?php echo $value['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                            </div>
+                                        </div>
+
+
                                         <?php if ($sch_setting->staff_designation) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('designation'); ?></label>
 
-                                                    <select id="designation" name="designation" placeholder="" type="text" class="form-control" >
+                                                    <select id="designation" name="designation" placeholder="" type="text" class="form-control">
                                                         <option value="select"><?php echo $this->lang->line('select') ?></option>
                                                         <?php foreach ($designation as $key => $value) {
-                                                            ?>
+                                                        ?>
                                                             <option value="<?php echo $value["id"] ?>" <?php
-                                                            if ($staff["designation"] == $value["id"]) {
-                                                                echo "selected";
-                                                            }
-                                                            ?>><?php echo $value["designation"] ?></option>
-                                                                <?php }
-                                                                ?>
+                                                                                                        if ($staff["designation"] == $value["id"]) {
+                                                                                                            echo "selected";
+                                                                                                        }
+                                                                                                        ?>><?php echo $value["designation"] ?></option>
+                                                        <?php }
+                                                        ?>
                                                     </select>
                                                     <span class="text-danger"><?php echo form_error('designation'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_department) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_department) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('department'); ?></label>
-                                                    <select id="department" name="department" placeholder="" type="text" class="form-control" >
+                                                    <select id="department" name="department" placeholder="" type="text" class="form-control">
                                                         <option value="select"><?php echo $this->lang->line('select') ?></option>
                                                         <?php foreach ($department as $key => $value) {
-                                                            ?>
+                                                        ?>
                                                             <option value="<?php echo $value["id"] ?>" <?php
-                                                            if ($staff["department"] == $value["id"]) {
-                                                                echo "selected";
-                                                            }
-                                                            ?>><?php echo $value["department_name"] ?></option>
-                                                                <?php }
-                                                                ?>
-                                                    </select> 
+                                                                                                        if ($staff["department"] == $value["id"]) {
+                                                                                                            echo "selected";
+                                                                                                        }
+                                                                                                        ?>><?php echo $value["department_name"] ?></option>
+                                                        <?php }
+                                                        ?>
+                                                    </select>
                                                     <span class="text-danger"><?php echo form_error('department'); ?></span>
                                                 </div>
                                             </div>
@@ -102,7 +116,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('first_name'); ?></label><small class="req"> *</small>
-                                                <input id="firstname" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name', $staff["name"]); ?>" />
+                                                <input id="firstname" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name', $staff["name"]); ?>" />
                                                 <span class="text-danger"><?php echo form_error('name'); ?></span>
                                             </div>
                                         </div>
@@ -110,23 +124,25 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('last_name'); ?></label>
-                                                    <input id="surname" name="surname" placeholder="" type="text" class="form-control"  value="<?php echo set_value('surname', $staff["surname"]); ?>" />
+                                                    <input id="surname" name="surname" placeholder="" type="text" class="form-control" value="<?php echo set_value('surname', $staff["surname"]); ?>" />
                                                     <span class="text-danger"><?php echo form_error('surname'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_father_name) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_father_name) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('father_name'); ?></label>
-                                                    <input id="father_name" name="father_name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('father_name', $staff["father_name"]); ?>" />
+                                                    <input id="father_name" name="father_name" placeholder="" type="text" class="form-control" value="<?php echo set_value('father_name', $staff["father_name"]); ?>" />
                                                     <span class="text-danger"><?php echo form_error('father_name'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_mother_name) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_mother_name) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('mother_name'); ?></label>
-                                                    <input id="mother_name" name="mother_name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('mother_name', $staff["mother_name"]); ?>" />
+                                                    <input id="mother_name" name="mother_name" placeholder="" type="text" class="form-control" value="<?php echo set_value('mother_name', $staff["mother_name"]); ?>" />
                                                     <span class="text-danger"><?php echo form_error('mother_name'); ?></span>
                                                 </div>
                                             </div>
@@ -136,7 +152,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('email'); ?></label><small class="req"> *</small>
-                                                <input id="email" name="email" placeholder="" type="text" class="form-control"  value="<?php echo set_value('email', $staff["email"]); ?>" />
+                                                <input id="email" name="email" placeholder="" type="text" class="form-control" value="<?php echo set_value('email', $staff["email"]); ?>" />
                                                 <span class="text-danger"><?php echo form_error('email'); ?></span>
                                             </div>
                                         </div>
@@ -147,9 +163,9 @@
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                     <?php
                                                     foreach ($genderList as $key => $value) {
-                                                        ?>
+                                                    ?>
                                                         <option value="<?php echo $key; ?>" <?php if ($staff['gender'] == $key) echo "selected"; ?>><?php echo $value; ?></option>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </select>
@@ -160,11 +176,11 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('date_of_birth'); ?></label><small class="req"> *</small>
-                                                <input id="dob" name="dob" placeholder="" type="text" class="form-control date"  value="<?php
-                                                if (!empty($staff["date_of_leaving"])) {
-                                                    echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["dob"]));
-                                                }
-                                                ?>" />
+                                                <input id="dob" name="dob" placeholder="" type="text" class="form-control date" value="<?php
+                                                                                                                                        if (!empty($staff["date_of_leaving"])) {
+                                                                                                                                            echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["dob"]));
+                                                                                                                                        }
+                                                                                                                                        ?>" />
                                                 <span class="text-danger"><?php echo form_error('dob'); ?></span>
                                             </div>
                                         </div>
@@ -172,11 +188,11 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('date_of_joining'); ?></label>
-                                                    <input id="date_of_joining" name="date_of_joining" placeholder="" type="text" class="form-control date"  value="<?php
-                                                    if ($staff["date_of_joining"] != '0000-00-00') {
-                                                        echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["date_of_joining"]));
-                                                    }
-                                                    ?>"  />
+                                                    <input id="date_of_joining" name="date_of_joining" placeholder="" type="text" class="form-control date" value="<?php
+                                                                                                                                                                    if ($staff["date_of_joining"] != '0000-00-00') {
+                                                                                                                                                                        echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["date_of_joining"]));
+                                                                                                                                                                    }
+                                                                                                                                                                    ?>" />
                                                     <span class="text-danger"><?php echo form_error('date_of_joining'); ?></span>
                                                 </div>
                                             </div>
@@ -188,34 +204,36 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('phone'); ?></label>
-                                                    <input id="mobileno" name="contactno" placeholder="" type="text" class="form-control"  value="<?php echo set_value('contactno', $staff["contact_no"]); ?>" />
-                                                    <input id="editid" name="editid" placeholder="" type="hidden" class="form-control"  value="<?php echo $staff["id"]; ?>" />
+                                                    <input id="mobileno" name="contactno" placeholder="" type="text" class="form-control" value="<?php echo set_value('contactno', $staff["contact_no"]); ?>" />
+                                                    <input id="editid" name="editid" placeholder="" type="hidden" class="form-control" value="<?php echo $staff["id"]; ?>" />
 
                                                     <span class="text-danger"><?php echo form_error('contactno'); ?></span>
                                                 </div>
-                                            </div> 
-                                        <?php } if ($sch_setting->staff_emergency_contact) { ?>
+                                            </div>
+                                        <?php }
+                                        if ($sch_setting->staff_emergency_contact) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('emergency_contact_number'); ?></label>
-                                                    <input id="mobileno" name="emergency_no" placeholder="" type="text" class="form-control"  value="<?php echo set_value('emergency_no', $staff["emergency_contact_no"]); ?>" />
+                                                    <input id="mobileno" name="emergency_no" placeholder="" type="text" class="form-control" value="<?php echo set_value('emergency_no', $staff["emergency_contact_no"]); ?>" />
                                                     <span class="text-danger"><?php echo form_error('emergency_no'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_marital_status) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_marital_status) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('marital_status'); ?></label>
                                                     <select class="form-control" name="marital_status">
                                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                         <?php foreach ($marital_status as $makey => $mavalue) {
-                                                            ?>
+                                                        ?>
                                                             <option <?php
-                                                            if ($staff["marital_status"] == $mavalue) {
-                                                                echo "selected";
-                                                            }
-                                                            ?> value="<?php echo $mavalue; ?>"><?php echo $mavalue; ?></option>
-                                                            <?php } ?> 
+                                                                    if ($staff["marital_status"] == $mavalue) {
+                                                                        echo "selected";
+                                                                    }
+                                                                    ?> value="<?php echo $mavalue; ?>"><?php echo $mavalue; ?></option>
+                                                        <?php } ?>
 
                                                     </select>
                                                     <span class="text-danger"><?php echo form_error('marital_status'); ?></span>
@@ -223,14 +241,16 @@
                                             </div>
 
 
-                                        <?php } if ($sch_setting->staff_photo) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_photo) { ?>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputFile"><?php echo $this->lang->line('photo'); ?></label>
                                                     <div><input class="filestyle form-control" type='file' name='file' id="file" size='20' />
                                                     </div>
-                                                    <span class="text-danger"><?php echo form_error('file'); ?></span></div>
-                                            </div>                          
+                                                    <span class="text-danger"><?php echo form_error('file'); ?></span>
+                                                </div>
+                                            </div>
                                         <?php } ?>
 
                                     </div>
@@ -241,26 +261,31 @@
                                                     <label for="exampleInputFile"><?php echo $this->lang->line('current'); ?> <?php echo $this->lang->line('address'); ?></label>
                                                     <div><textarea name="address" class="form-control"><?php echo set_value('address', $staff["local_address"]) ?></textarea>
                                                     </div>
-                                                    <span class="text-danger"></span></div>
+                                                    <span class="text-danger"></span>
+                                                </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_permanent_address) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_permanent_address) { ?>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="exampleInputFile"><?php echo $this->lang->line('permanent_address'); ?></label>
                                                     <div><textarea name="permanent_address" class="form-control"><?php echo set_value('permanent_address', $staff["permanent_address"]); ?></textarea>
                                                     </div>
-                                                    <span class="text-danger"></span></div>
-                                            </div>                          
-                                        <?php } if ($sch_setting->staff_qualification) { ?>
+                                                    <span class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        <?php }
+                                        if ($sch_setting->staff_qualification) { ?>
                                             <div class="col-md-3">
 
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('qualification'); ?></label>
-                                                    <textarea id="qualification" name="qualification" placeholder=""  class="form-control" ><?php echo set_value('qualification', $staff["qualification"]); ?></textarea>
+                                                    <textarea id="qualification" name="qualification" placeholder="" class="form-control"><?php echo set_value('qualification', $staff["qualification"]); ?></textarea>
                                                     <span class="text-danger"><?php echo form_error('qualification'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_work_experience) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_work_experience) { ?>
                                             <div class="col-md-3">
 
                                                 <div class="form-group">
@@ -269,14 +294,16 @@
                                                     <span class="text-danger"><?php echo form_error('work_exp'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_note) { ?>
+                                        <?php }
+                                        if ($sch_setting->staff_note) { ?>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="exampleInputFile"><?php echo $this->lang->line('note'); ?></label>
                                                     <div><textarea name="note" class="form-control"><?php echo set_value('note', $staff["note"]) ?></textarea>
                                                     </div>
-                                                    <span class="text-danger"></span></div>
-                                            </div>                          
+                                                    <span class="text-danger"></span>
+                                                </div>
+                                            </div>
                                         <?php } ?>
 
                                     </div>
@@ -289,7 +316,7 @@
                                 </div>
                             </div>
 
-                            <div class="box-group collapsed-box">                      
+                            <div class="box-group collapsed-box">
                                 <div class="panel box box-success collapsed-box">
                                     <div class="box-header with-border">
                                         <a data-widget="collapse" data-original-title="Collapse" aria-expanded="false" class="collapsed btn boxplus">
@@ -299,7 +326,7 @@
                                     <div class="box-body">
 
 
-                                        <div class="tshadow mb25 bozero">    
+                                        <div class="tshadow mb25 bozero">
                                             <h4 class="pagetitleh2"><?php echo $this->lang->line('payroll'); ?>
                                             </h4>
 
@@ -308,11 +335,12 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('epf_no'); ?></label>
-                                                            <input id="epf_no" name="epf_no" placeholder="" type="text" class="form-control"  value="<?php echo $staff["epf_no"] ?>"  />
+                                                            <input id="epf_no" name="epf_no" placeholder="" type="text" class="form-control" value="<?php echo $staff["epf_no"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('epf_no'); ?></span>
                                                         </div>
                                                     </div>
-                                                <?php } if ($sch_setting->staff_contract_type) { ?>
+                                                <?php }
+                                                if ($sch_setting->staff_contract_type) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('contract_type'); ?></label>
@@ -321,12 +349,12 @@
 
                                                                 <?php foreach ($contract_type as $key => $value) { ?>
                                                                     <option value="<?php echo $key ?>" <?php
-                                                                    if ($staff["contract_type"] == $key) {
-                                                                        echo "selected";
-                                                                    }
-                                                                    ?>><?php echo $value ?></option>
+                                                                                                        if ($staff["contract_type"] == $key) {
+                                                                                                            echo "selected";
+                                                                                                        }
+                                                                                                        ?>><?php echo $value ?></option>
 
-                                                                <?php } ?>     
+                                                                <?php } ?>
 
 
 
@@ -334,27 +362,30 @@
                                                             <span class="text-danger"><?php echo form_error('contract_type'); ?></span>
                                                         </div>
                                                     </div>
-                                                <?php } if ($sch_setting->staff_basic_salary) { ?>
+                                                <?php }
+                                                if ($sch_setting->staff_basic_salary) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('basic_salary'); ?></label>
-                                                            <input type="text" value="<?php echo $staff["basic_salary"] ?>" class="form-control" name="basic_salary" >
+                                                            <input type="text" value="<?php echo $staff["basic_salary"] ?>" class="form-control" name="basic_salary">
                                                         </div>
                                                     </div>
-                                                <?php } if ($sch_setting->staff_work_shift) { ?>
+                                                <?php }
+                                                if ($sch_setting->staff_work_shift) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('work_shift'); ?></label>
-                                                            <input id="shift" name="shift" placeholder="" type="text" class="form-control"  value="<?php echo $staff["shift"] ?>" />
+                                                            <input id="shift" name="shift" placeholder="" type="text" class="form-control" value="<?php echo $staff["shift"] ?>" />
 
                                                         </div>
                                                     </div>
-                                                <?php } if ($sch_setting->staff_work_location) { ?>
+                                                <?php }
+                                                if ($sch_setting->staff_work_location) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
 
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('work_location'); ?></label>
-                                                            <input id="location" name="location" placeholder="" type="text" class="form-control"  value="<?php echo $staff["location"] ?>" />
+                                                            <input id="location" name="location" placeholder="" type="text" class="form-control" value="<?php echo $staff["location"] ?>" />
 
                                                         </div>
                                                     </div>
@@ -362,11 +393,11 @@
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('date_of_leaving'); ?></label>
-                                                        <input id="date_of_leaving" name="date_of_leaving" placeholder="" type="text" class="form-control"  value="<?php
-                                                        if ($staff["date_of_leaving"] != '0000-00-00') {
-                                                            echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["date_of_leaving"]));
-                                                        }
-                                                        ?>" />
+                                                        <input id="date_of_leaving" name="date_of_leaving" placeholder="" type="text" class="form-control" value="<?php
+                                                                                                                                                                    if ($staff["date_of_leaving"] != '0000-00-00') {
+                                                                                                                                                                        echo date($this->customlib->getSchoolDateFormat(), strtotime($staff["date_of_leaving"]));
+                                                                                                                                                                    }
+                                                                                                                                                                    ?>" />
                                                         <span class="text-danger"><?php echo form_error('date_of_leaving'); ?></span>
                                                     </div>
                                                 </div>
@@ -375,92 +406,94 @@
 
                                         </div>
                                         <?php if ($sch_setting->staff_leaves) { ?>
-                                            <div class="tshadow mb25 bozero">    
+                                            <div class="tshadow mb25 bozero">
                                                 <h4 class="pagetitleh2"><?php echo $this->lang->line('leaves'); ?>
                                                 </h4>
 
-                                                <div class="row around10" >
+                                                <div class="row around10">
                                                     <?php
                                                     $j = 0;
                                                     foreach ($leavetypeList as $key => $leave) {
                                                         # code...
-                                                        ?>
+                                                    ?>
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="exampleInputEmail1"><?php echo $leave["type"]; ?></label>
 
 
-                                                                <input id="ifsc_code" name="alloted_leave[]" placeholder="Number of leaves" type="text" class="form-control"  value="<?php
-                                                                if (array_key_exists($j, $staffLeaveDetails)) {
-                                                                    echo $staffLeaveDetails[$j]["alloted_leave"];
-                                                                }
-                                                                ?>" />
+                                                                <input id="ifsc_code" name="alloted_leave[]" placeholder="Number of leaves" type="text" class="form-control" value="<?php
+                                                                                                                                                                                    if (array_key_exists($j, $staffLeaveDetails)) {
+                                                                                                                                                                                        echo $staffLeaveDetails[$j]["alloted_leave"];
+                                                                                                                                                                                    }
+                                                                                                                                                                                    ?>" />
 
-                                                                <input  name="leave_type[]" placeholder="" type="hidden" readonly class="form-control"  value="<?php echo $leave["type"] ?>" />
+                                                                <input name="leave_type[]" placeholder="" type="hidden" readonly class="form-control" value="<?php echo $leave["type"] ?>" />
 
-                                                                <input  name="altid[]" placeholder="" type="hidden" readonly class="form-control"  value="<?php
-                                                                if (array_key_exists($j, $staffLeaveDetails)) {
-                                                                    echo $staffLeaveDetails[$j]["altid"];
-                                                                }
-                                                                ?>" />
+                                                                <input name="altid[]" placeholder="" type="hidden" readonly class="form-control" value="<?php
+                                                                                                                                                        if (array_key_exists($j, $staffLeaveDetails)) {
+                                                                                                                                                            echo $staffLeaveDetails[$j]["altid"];
+                                                                                                                                                        }
+                                                                                                                                                        ?>" />
 
-                                                                <input  name="leave_type_id[]" placeholder="" type="hidden" class="form-control"  value="<?php echo $leave["id"]; ?>" />
+                                                                <input name="leave_type_id[]" placeholder="" type="hidden" class="form-control" value="<?php echo $leave["id"]; ?>" />
                                                                 <span class="text-danger"><?php echo form_error('ifsc_code'); ?></span>
                                                             </div>
                                                         </div>
-                                                        <?php
+                                                    <?php
                                                         $j++;
                                                     }
                                                     ?>
                                                 </div>
                                             </div>
-                                        <?php } if ($sch_setting->staff_account_details) { ?>
-                                            <div class="tshadow mb25 bozero">    
+                                        <?php }
+                                        if ($sch_setting->staff_account_details) { ?>
+                                            <div class="tshadow mb25 bozero">
                                                 <h4 class="pagetitleh2"><?php echo $this->lang->line('bank_account_details'); ?>
                                                 </h4>
                                                 <div class="row around10">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('account_title'); ?></label>
-                                                            <input id="account_title" name="account_title" placeholder="" type="text" class="form-control"  value="<?php echo $staff["account_title"] ?>" />
+                                                            <input id="account_title" name="account_title" placeholder="" type="text" class="form-control" value="<?php echo $staff["account_title"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('bank_account_no'); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('bank_account_no'); ?></label>
-                                                            <input id="bank_account_no" name="bank_account_no" placeholder="" type="text" class="form-control"  value="<?php echo $staff["bank_account_no"] ?>" />
+                                                            <input id="bank_account_no" name="bank_account_no" placeholder="" type="text" class="form-control" value="<?php echo $staff["bank_account_no"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('bank_account_no'); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('bank_name'); ?></label>
-                                                            <input id="bank_name" name="bank_name" placeholder="" type="text" class="form-control"  value="<?php echo $staff["bank_name"] ?>" />
+                                                            <input id="bank_name" name="bank_name" placeholder="" type="text" class="form-control" value="<?php echo $staff["bank_name"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('bank_name'); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('ifsc_code'); ?></label>
-                                                            <input id="ifsc_code" name="ifsc_code" placeholder="" type="text" class="form-control"  value="<?php echo $staff["ifsc_code"] ?>" />
+                                                            <input id="ifsc_code" name="ifsc_code" placeholder="" type="text" class="form-control" value="<?php echo $staff["ifsc_code"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('ifsc_code'); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('bank_branch_name'); ?></label>
-                                                            <input id="bank_branch" name="bank_branch" placeholder="" type="text" class="form-control"  value="<?php echo $staff["bank_branch"] ?>" />
+                                                            <input id="bank_branch" name="bank_branch" placeholder="" type="text" class="form-control" value="<?php echo $staff["bank_branch"] ?>" />
                                                             <span class="text-danger"><?php echo form_error('bank_branch'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
 
 
-                                            </div> 
-                                        <?php } if ($sch_setting->staff_social_media) { ?>
-                                            <div class="tshadow mb25 bozero">    
+                                            </div>
+                                        <?php }
+                                        if ($sch_setting->staff_social_media) { ?>
+                                            <div class="tshadow mb25 bozero">
                                                 <h4 class="pagetitleh2"><?php echo $this->lang->line('social_media'); ?>
                                                 </h4>
 
@@ -468,43 +501,45 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('facebook_url'); ?></label>
-                                                            <input id="bank_account_no" name="facebook" placeholder="" type="text" class="form-control"  value="<?php echo $staff["facebook"] ?>" />
+                                                            <input id="bank_account_no" name="facebook" placeholder="" type="text" class="form-control" value="<?php echo $staff["facebook"] ?>" />
 
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('twitter_url'); ?></label>
-                                                            <input id="bank_account_no" name="twitter" placeholder="" type="text" class="form-control"  value="<?php echo $staff["twitter"] ?>" />
+                                                            <input id="bank_account_no" name="twitter" placeholder="" type="text" class="form-control" value="<?php echo $staff["twitter"] ?>" />
 
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('linkedin_url'); ?></label>
-                                                            <input id="bank_name" name="linkedin" placeholder="" type="text" class="form-control"  value="<?php echo $staff["linkedin"] ?>" />
+                                                            <input id="bank_name" name="linkedin" placeholder="" type="text" class="form-control" value="<?php echo $staff["linkedin"] ?>" />
 
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('instagram_url'); ?></label>
-                                                            <input id="instagram" name="instagram" placeholder="" type="text" class="form-control"  value="<?php echo $staff["instagram"] ?>" />
+                                                            <input id="instagram" name="instagram" placeholder="" type="text" class="form-control" value="<?php echo $staff["instagram"] ?>" />
 
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div> 
-                                        <?php } if ($sch_setting->staff_upload_documents) { ?>										
+                                            </div>
+                                        <?php }
+                                        if ($sch_setting->staff_upload_documents) { ?>
                                             <div id='upload_documents_hide_show'>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="tshadow bozero">
                                                             <h4 class="pagetitleh2"><?php echo $this->lang->line('upload_documents'); ?></h4>
-                                                            <div class="row around10">   
+                                                            <div class="row around10">
                                                                 <div class="col-md-6">
                                                                     <table class="table">
-                                                                        <tbody><tr>
+                                                                        <tbody>
+                                                                            <tr>
                                                                                 <th style="width: 10px">#</th>
                                                                                 <th><?php echo $this->lang->line('title'); ?></th>
                                                                                 <th><?php echo $this->lang->line('documents'); ?></th>
@@ -513,8 +548,8 @@
                                                                                 <td>1.</td>
                                                                                 <td><?php echo $this->lang->line('resume'); ?></td>
                                                                                 <td>
-                                                                                    <input class="filestyle form-control" type='file' name='first_doc' id="doc1" >
-                                                                                    <input class=" form-control" type='hidden' name='resume' value="<?php echo $staff["resume"] ?>" >
+                                                                                    <input class="filestyle form-control" type='file' name='first_doc' id="doc1">
+                                                                                    <input class=" form-control" type='hidden' name='resume' value="<?php echo $staff["resume"] ?>">
                                                                                     <span class="text-danger"><?php echo form_error('first_doc'); ?></span>
                                                                                 </td>
                                                                             </tr>
@@ -523,16 +558,18 @@
                                                                                 <td>3.</td>
                                                                                 <td><?php echo $this->lang->line('resignation_letter'); ?></td>
                                                                                 <td>
-                                                                                    <input class="filestyle form-control" type='file' name='third_doc' id="doc3" >
-                                                                                    <input class=" form-control" type='hidden' name='resignation_letter' value="<?php echo $staff["resignation_letter"] ?>" >
+                                                                                    <input class="filestyle form-control" type='file' name='third_doc' id="doc3">
+                                                                                    <input class=" form-control" type='hidden' name='resignation_letter' value="<?php echo $staff["resignation_letter"] ?>">
                                                                                     <span class="text-danger"><?php echo form_error('resignation_letter'); ?></span>
                                                                                 </td>
                                                                             </tr>
-                                                                        </tbody></table>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                                 <div class="col-md-6">
                                                                     <table class="table">
-                                                                        <tbody><tr>
+                                                                        <tbody>
+                                                                            <tr>
                                                                                 <th style="width: 10px">#</th>
                                                                                 <th><?php echo $this->lang->line('title'); ?></th>
                                                                                 <th><?php echo $this->lang->line('documents'); ?></th>
@@ -541,8 +578,8 @@
                                                                                 <td>2.</td>
                                                                                 <td><?php echo $this->lang->line('joining_letter'); ?></td>
                                                                                 <td>
-                                                                                    <input class="filestyle form-control" type='file' name='second_doc' id="doc2" >
-                                                                                    <input class=" form-control" type='hidden' name='joining_letter' value="<?php echo $staff["joining_letter"] ?>" >
+                                                                                    <input class="filestyle form-control" type='file' name='second_doc' id="doc2">
+                                                                                    <input class=" form-control" type='hidden' name='joining_letter' value="<?php echo $staff["joining_letter"] ?>">
                                                                                     <span class="text-danger"><?php echo form_error('second_doc'); ?></span>
                                                                                 </td>
                                                                             </tr>
@@ -551,21 +588,22 @@
                                                                                 <td><?php echo $this->lang->line('other_documents'); ?><input type="hidden" name='fourth_title' value="<?php echo $staff["other_document_file"] ?>" class="form-control" placeholder="Other Documents">
                                                                                 </td>
                                                                                 <td>
-                                                                                    <input class="filestyle form-control" type='file' name='fourth_doc'  id="doc4" >
-                                                                                    <input class=" form-control" type='hidden' name='other_document_file' value="<?php echo $staff["other_document_file"] ?>" > 
+                                                                                    <input class="filestyle form-control" type='file' name='fourth_doc' id="doc4">
+                                                                                    <input class=" form-control" type='hidden' name='other_document_file' value="<?php echo $staff["other_document_file"] ?>">
                                                                                     <span class="text-danger"><?php echo form_error('other_document_file'); ?></span>
                                                                                 </td>
                                                                             </tr>
 
-                                                                        </tbody></table>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
-                                                        </div>    
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         <?php } ?>
-                                    </div>    
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -573,9 +611,9 @@
                             <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                         </div>
                     </form>
-                </div>               
+                </div>
             </div>
-        </div> 
+        </div>
 </div>
 </section>
 </div>
@@ -590,11 +628,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -607,13 +646,13 @@
         }
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy',]) ?>';
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
         getSectionByClass(class_id, section_id);
 
-        $(document).on('change', '#class_id', function (e) {
+        $(document).on('change', '#class_id', function(e) {
             $('#section_id').html("");
             var class_id = $(this).val();
             var base_url = '<?php echo base_url() ?>';
@@ -621,11 +660,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                     });
                     $('#section_id').append(div_data);
@@ -635,51 +675,49 @@
 
 
 
-        $("#btnreset").click(function () {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
 
     });
+
     function auto_fill_guardian_address() {
-        if ($("#autofill_current_address").is(':checked'))
-        {
+        if ($("#autofill_current_address").is(':checked')) {
             $('#current_address').val($('#guardian_address').val());
         }
     }
+
     function auto_fill_address() {
-        if ($("#autofill_address").is(':checked'))
-        {
+        if ($("#autofill_address").is(':checked')) {
             $('#permanent_address').val($('#current_address').val());
         }
     }
     $('input:radio[name="guardian_is"]').change(
-            function () {
-                if ($(this).is(':checked')) {
-                    var value = $(this).val();
-                    if (value == "father") {
-                        $('#guardian_name').val($('#father_name').val());
-                        $('#guardian_phone').val($('#father_phone').val());
-                        $('#guardian_occupation').val($('#father_occupation').val());
-                        $('#guardian_relation').val("Father")
-                    } else if (value == "mother") {
-                        $('#guardian_name').val($('#mother_name').val());
-                        $('#guardian_phone').val($('#mother_phone').val());
-                        $('#guardian_occupation').val($('#mother_occupation').val());
-                        $('#guardian_relation').val("Mother")
-                    } else {
-                        $('#guardian_name').val("");
-                        $('#guardian_phone').val("");
-                        $('#guardian_occupation').val("");
-                        $('#guardian_relation').val("")
-                    }
+        function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                if (value == "father") {
+                    $('#guardian_name').val($('#father_name').val());
+                    $('#guardian_phone').val($('#father_phone').val());
+                    $('#guardian_occupation').val($('#father_occupation').val());
+                    $('#guardian_relation').val("Father")
+                } else if (value == "mother") {
+                    $('#guardian_name').val($('#mother_name').val());
+                    $('#guardian_phone').val($('#mother_phone').val());
+                    $('#guardian_occupation').val($('#mother_occupation').val());
+                    $('#guardian_relation').val("Mother")
+                } else {
+                    $('#guardian_name').val("");
+                    $('#guardian_phone').val("");
+                    $('#guardian_occupation').val("");
+                    $('#guardian_relation').val("")
                 }
-            });
-
-
+            }
+        });
 </script>
 
 <script type="text/javascript">
-    $(".mysiblings").click(function () {
+    $(".mysiblings").click(function() {
         $('.sibling_msg').html("");
         $('.modal_title').html('<b>' + "<?php echo $this->lang->line('sibling'); ?>" + '</b>');
         $('#mySiblingModal').modal({
@@ -691,8 +729,7 @@
 </script>
 
 <script type="text/javascript">
-
-    $(document).on('change', '#sibiling_class_id', function (e) {
+    $(document).on('change', '#sibiling_class_id', function(e) {
         $('#sibiling_section_id').html("");
         var class_id = $(this).val();
         var base_url = '<?php echo base_url() ?>';
@@ -700,11 +737,12 @@
         $.ajax({
             type: "GET",
             url: base_url + "sections/getByClass",
-            data: {'class_id': class_id},
+            data: {
+                'class_id': class_id
+            },
             dataType: "json",
-            success: function (data) {
-                $.each(data, function (i, obj)
-                {
+            success: function(data) {
+                $.each(data, function(i, obj) {
                     div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
                 });
                 $('#sibiling_section_id').append(div_data);
@@ -712,7 +750,7 @@
         });
     });
 
-    $(document).on('change', '#sibiling_section_id', function (e) {
+    $(document).on('change', '#sibiling_section_id', function(e) {
         getStudentsByClassAndSection();
     });
 
@@ -726,11 +764,13 @@
         $.ajax({
             type: "GET",
             url: base_url + "student/getByClassAndSection",
-            data: {'class_id': class_id, 'section_id': section_id},
+            data: {
+                'class_id': class_id,
+                'section_id': section_id
+            },
             dataType: "json",
-            success: function (data) {
-                $.each(data, function (i, obj)
-                {
+            success: function(data) {
+                $.each(data, function(i, obj) {
                     var sel = "";
                     if (section_id == obj.section_id) {
                         sel = "selected=selected";
@@ -742,16 +782,18 @@
         });
     }
 
-    $(document).on('click', '.add_sibling', function () {
+    $(document).on('click', '.add_sibling', function() {
         var student_id = $('#sibiling_student_id').val();
         var base_url = '<?php echo base_url() ?>';
         if (student_id.length > 0) {
             $.ajax({
                 type: "GET",
                 url: base_url + "student/getStudentRecordByID",
-                data: {'student_id': student_id},
+                data: {
+                    'student_id': student_id
+                },
                 dataType: "json",
-                success: function (data) {
+                success: function(data) {
                     $('#sibling_name').text("Sibling: " + data.firstname + " " + data.lastname);
                     $('#sibling_name_next').val(data.firstname + " " + data.lastname);
                     $('#sibling_id').val(student_id);
@@ -781,4 +823,4 @@
 
     });
 </script>
-<script type="text/javascript" src="<?php echo base_url(); ?>backend/dist/js/savemode.js"></script>    
+<script type="text/javascript" src="<?php echo base_url(); ?>backend/dist/js/savemode.js"></script>

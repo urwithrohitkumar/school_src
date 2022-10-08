@@ -45,6 +45,8 @@ class Studentfee extends Admin_Controller
         $data['group_by']   = $this->customlib->get_groupby();
         $feetype = $this->feetype_model->get();
         $data['feetypeList'] = $feetype;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');
         $this->session->set_userdata('subsub_menu', 'Reports/finance/collection_report');

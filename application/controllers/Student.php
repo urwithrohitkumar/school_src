@@ -70,7 +70,7 @@ class Student extends Admin_Controller
         $this->load->view('layout/footer', $data);
     }
 
-    public function classsectionreport()
+    public function classsectionreport($branchid = 0)
     {
         if (!$this->rbac->hasPrivilege('student_report', 'can_view')) {
             access_denied();
@@ -80,7 +80,11 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/classsectionreport');
         $data['title']              = 'Class & Section Report';
-        $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount();
+        $data["branch"]  = $this->staff_model->getBranch();
+        $data['selected_branch'] = $branchid;
+        if ($branchid != 0) {
+            $data['class_section_list'] = $this->classsection_model->getClassSectionStudentCount($branchid);
+        }
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/classsectionreport', $data);

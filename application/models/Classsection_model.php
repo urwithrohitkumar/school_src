@@ -209,12 +209,12 @@ class Classsection_model extends MY_Model
     }
 
 
-    public function getClassSectionStudentCount()
+    public function getClassSectionStudentCount($branch_id)
     {
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id AND student_session.branch_id = " . $this->session->userdata['admin']['branch_id'] . " and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
+            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.branch_id=".$branch_id." AND student_session.class_id=classes.id AND student_session.branch_id = " . $this->session->userdata['admin']['branch_id'] . " and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
         } else {
-            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.class_id=classes.id and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
+            $query = "SELECT class_sections.*,classes.class,sections.section,(SELECT COUNT(*) FROM student_session INNER JOIN students on students.id=student_session.student_id WHERE student_session.branch_id=".$branch_id." AND student_session.class_id=classes.id and student_session.section_id=sections.id and students.is_active='yes' and student_session.session_id=" . $this->current_session . " )  as student_count FROM `class_sections` INNER JOIN classes on classes.id=class_sections.class_id INNER JOIN sections on sections.id=class_sections.section_id ORDER by classes.class ASC, sections.section asc";
         }
         $query = $this->db->query($query);
         return $query->result();

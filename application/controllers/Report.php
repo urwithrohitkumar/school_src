@@ -1579,6 +1579,8 @@ class Report extends Admin_Controller
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $searchterm              = '';
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
