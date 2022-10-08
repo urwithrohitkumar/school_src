@@ -670,4 +670,26 @@ class Homework extends Admin_Controller
         $data     = file_get_contents($filepath);
         force_download($name, $data);
     }
+
+
+
+
+    /**
+     * All option value
+     */
+    function allOptionValue()
+    {
+        $branch_id = $this->input->get('branch_id');
+        $class_id = $this->input->get('class_id');
+        $section_id = $this->input->get('section_id');
+        $subject_group_id = $this->input->get('subject_group_id');
+        $subject_group_details = $this->subjectgroup_model->getGroupByClassandSectionBranch($class_id, $section_id,$branch_id);
+        $subject = $this->subjectgroup_model->getGroupsubjects($subject_group_id);
+        $data = array(
+            'subject_group_details' => $subject_group_details,
+            'subject' => $subject,
+        );
+        echo json_encode($data);
+
+    }
 }

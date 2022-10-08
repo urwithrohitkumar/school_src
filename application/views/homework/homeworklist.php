@@ -31,8 +31,8 @@ $language_name = $language["short_code"];
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label>
 
-                                <select id="branch" name="branch" placeholder="" type="text" class="form-control">
-
+                                <select id="branch" name="branch" placeholder="" type="text" class="form-control branchOption">
+                                    <option value="" disabled selected>Select</option>
                                     <?php foreach ($branch as $key => $value) {
                                     ?>
                                         <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
@@ -45,8 +45,8 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
-                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control classOption">
+                                    <option value="" disabled selected>Select</option>
                                     <?php
                                     foreach ($classlist as $class) {
                                     ?>
@@ -65,8 +65,8 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label>
-                                <select id="secid" name="section_id" class="form-control">
-                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                <select id="secid" name="section_id" class="form-control sectionOption">
+                                    <option value="" disabled selected>Select</option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
                             </div>
@@ -75,8 +75,8 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label>
-                                <select id="subject_group_id" name="subject_group_id" class="form-control">
-                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                <select id="subject_group_id" name="subject_group_id" class="form-control subjectgroupOption">
+                                    <option value="" disabled selected>Select</option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
                             </div>
@@ -84,8 +84,8 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject'); ?></label>
-                                <select id="subid" name="subject_id" class="form-control">
-                                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                <select id="subid" name="subject_id" class="form-control subjectOption">
+                                    <option value="" disabled selected>Select</option>
                                 </select>
                                 <span class="section_id_error text-danger"></span>
                             </div>
@@ -153,8 +153,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select') ?></option>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control branchOption">
+                                        <option value="" disabled selected>Select</option>
                                             <?php foreach ($branch as $key => $value) {
                                             ?>
                                                 <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
@@ -167,8 +167,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class') ?></label><small class="req"> *</small>
-                                        <select class="form-control modal_class_id" name="modal_class_id" id="modal_class_id">
-                                            <option value=""><?php echo $this->lang->line('select') ?></option>
+                                        <select class="form-control modal_class_id classOption" name="modal_class_id" id="modal_class_id">
+                                             <option value="" disabled selected>Select</option>
                                             <?php foreach ($classlist as $key => $value) {
                                             ?>
                                                 <option value="<?php echo $value["id"] ?>"><?php echo $value["class"] ?></option>
@@ -183,8 +183,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('section') ?></label><small class="req"> *</small>
-                                        <select class="form-control modal_section_id" name="modal_section_id" id="modal_section_id">
-                                            <option value=""><?php echo $this->lang->line('select') ?></option>
+                                        <select class="form-control modal_section_id sectionOption" name="modal_section_id" id="modal_section_id">
+                                             <option value="" disabled selected>Select</option>
 
                                         </select>
                                         <span id="name_add_error" class="text-danger"></span>
@@ -193,8 +193,8 @@ $language_name = $language["short_code"];
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label><small class="req"> *</small>
-                                        <select id="modal_subject_group_id" name="modal_subject_group_id" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <select id="modal_subject_group_id" name="modal_subject_group_id" class="form-control subjectgroupOption">
+                                             <option value="" disabled selected>Select</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -205,8 +205,8 @@ $language_name = $language["short_code"];
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('subject') ?></label><small class="req"> *</small>
-                                        <select class="form-control" name="modal_subject_id" id="modal_subject_id">
-                                            <option value=""><?php echo $this->lang->line('select') ?></option>
+                                        <select class="form-control subjectOption" name="modal_subject_id" id="modal_subject_id">
+                                             <option value="" disabled selected>Select</option>
 
 
                                         </select>
@@ -514,35 +514,35 @@ $language_name = $language["short_code"];
         }
 
     });
-    $(document).on('change', '#modal_section_id', function() {
-        var class_id = $('.modal_class_id').val();
-        var section_id = $(this).val();
-        getSubjectGroup(class_id, section_id, 0, 'modal_subject_group_id');
-    });
+    // $(document).on('change', '#modal_section_id', function() {
+    //     var class_id = $('.modal_class_id').val();
+    //     var section_id = $(this).val();
+    //     getSubjectGroup(class_id, section_id, 0, 'modal_subject_group_id');
+    // });
 
-    $(document).on('change', '#secid', function() {
-        var class_id = $('#searchclassid').val();
-        var section_id = $(this).val();
-        getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
-    });
+    // $(document).on('change', '#secid', function() {
+    //     var class_id = $('#searchclassid').val();
+    //     var section_id = $(this).val();
+    //     getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
+    // });
 
 
-    $(document).on('change', '#modal_subject_group_id', function() {
-        var class_id = $('.modal_class_id').val();
-        var section_id = $('.modal_section_id').val();
-        var subject_group_id = $(this).val();
+    // $(document).on('change', '#modal_subject_group_id', function() {
+    //     var class_id = $('.modal_class_id').val();
+    //     var section_id = $('.modal_section_id').val();
+    //     var subject_group_id = $(this).val();
 
-        getsubjectBySubjectGroup(class_id, section_id, subject_group_id, 0, 'modal_subject_id');
+    //     getsubjectBySubjectGroup(class_id, section_id, subject_group_id, 0, 'modal_subject_id');
 
-    });
-    $(document).on('change', '#subject_group_id', function() {
-        var class_id = $('#searchclassid').val();
-        var section_id = $('#secid').val();
-        var subject_group_id = $(this).val();
+    // });
+    // $(document).on('change', '#subject_group_id', function() {
+    //     var class_id = $('#searchclassid').val();
+    //     var section_id = $('#secid').val();
+    //     var subject_group_id = $(this).val();
 
-        getsubjectBySubjectGroup(class_id, section_id, subject_group_id, 0, 'subid');
+    //     getsubjectBySubjectGroup(class_id, section_id, subject_group_id, 0, 'subid');
 
-    });
+    // });
 
     $("#formadd").on('submit', (function(e) {
         e.preventDefault();
@@ -804,4 +804,92 @@ $language_name = $language["short_code"];
             x--; //inout field decrement
         })
     });
+</script>
+
+
+
+
+<script>
+    /* On Change of Branch */
+    $(document).on('change', '.branchOption', function() {
+        let branch_id = $(this).val();
+        let class_id = $('.classOption').find(":selected").val();
+        let section_id = $('.sectionOption').find(":selected").val();
+        let subject_group_id = $('.subjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Class */
+    $(document).on('change', '.classOption', function() {
+        let class_id = $(this).val();
+        var branch_id = $('.branchOption').find(":selected").val();
+        let section_id = $('.sectionOption').find(":selected").val();
+        let subject_group_id = $('.subjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Section */
+    $(document).on('change', '.sectionOption', function() {
+        let section_id = $(this).val();
+        var branch_id = $('.branchOption').find(":selected").val();
+        let class_id = $('.classOption').find(":selected").val();
+        let subject_group_id = $('.subjectgroupOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* On Change of Subject Group */
+    $(document).on('change', '.subjectgroupOption', function() {
+        let subject_group_id = $(this).val();
+        var branch_id = $('.branchOption').find(":selected").val();
+        let class_id = $('.classOption').find(":selected").val();
+        let section_id = $('.sectionOption').find(":selected").val();
+        onchangefunction(branch_id, class_id, section_id, subject_group_id);
+
+    })
+
+    /* Final Result after change option */
+    function onchangefunction(branch_id, class_id, section_id, subject_group_id) {
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "homework/allOptionValue",
+            data: {
+                'branch_id': branch_id,
+                'class_id': class_id,
+                'section_id': section_id,
+                'subject_group_id': subject_group_id,
+            },
+            dataType: "json",
+            success: function(result) {
+                let subject_group_details = result.subject_group_details;
+                let subject = result.subject;
+                console.log(result);
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (subject_group_details) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < subject_group_details.length; count++) {
+                        html += '<option value="' + subject_group_details[count].id + '">' + subject_group_details[count].name + '</option>';
+                    }
+                    $('.subjectgroupOption').html(html);
+                }
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (subject) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < subject.length; count++) {
+                        html += '<option value="' + subject[count].id + '">' + subject[count].name + '</option>';
+                    }
+                    $('.subjectOption').html(html);
+                }
+               
+
+            }
+        });
+    }
 </script>

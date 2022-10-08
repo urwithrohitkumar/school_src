@@ -402,4 +402,55 @@ class Subjectgroup_model extends MY_Model
             return FALSE;
         }
     }
+
+
+
+
+    public function getGroupByClassandSectionBranch($class_id, $section_id ,$branch_id)
+    {
+        $return = true;
+        $userdata = $this->customlib->getUserData();
+        $role_id = $userdata["role_id"];
+        $subject_groupid_condition = "";
+
+        if (isset($role_id) && ($userdata["role_id"] == 2) && ($userdata["class_teacher"] == "yes")) {
+            if ($userdata["class_teacher"] == 'yes') {
+
+
+                $subject_groupid = $this->subjectgroup_model->getSubjectgroupbyTeacherid($userdata['id']);
+
+                $my_classes = $this->teacher_model->my_classes($userdata['id']);
+
+                if (in_array($class_id, $my_classes)) {
+
+                    $subject_groupid_condition = "";
+                } else {
+
+                    if (!empty($subject_groupid)) {
+
+                        $subject_groupid_condition = " and subject_groups.id in(" . $subject_groupid[0]['subject_group_ids'] . ")";
+                    } else {
+
+                        $return = false;
+                    }
+                }
+            }
+        }
+
+        if ($return) {
+            if($branch_id)
+            {
+                $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE subject_groups.branch_id= ".$branch_id." AND class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.session_id=" . $this->db->escape($this->current_session) . " " . $subject_groupid_condition . " ORDER by subject_groups.id DESC";
+            }
+            else{
+                $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.session_id=" . $this->db->escape($this->current_session) . " " . $subject_groupid_condition . " ORDER by subject_groups.id DESC";
+            }
+            $query = $this->db->query($sql);
+
+            return $query->result_array();
+        } else {
+            return array();
+        }
+    }
+
 }
