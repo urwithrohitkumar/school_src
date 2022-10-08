@@ -91,6 +91,8 @@ class Itemsupplier extends Admin_Controller
         $data['id'] = $id;
         $store = $this->itemsupplier_model->get($id);
         $data['itemsupplier'] = $store;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'trim|numeric|xss_clean');
@@ -111,6 +113,7 @@ class Itemsupplier extends Admin_Controller
                 'phone' => $this->input->post('phone'),
                 'contact_person_phone' => $this->input->post('contact_person_phone'),
                 'email' => $this->input->post('email'),
+                'branch_id' => $this->input->post('branch_id'),
                 'address' => $this->input->post('address'),
                 'contact_person_name' => $this->input->post('contact_person_name'),
                 'contact_person_email' => $this->input->post('contact_person_email'),

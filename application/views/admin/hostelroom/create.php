@@ -43,7 +43,6 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
                                     <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control branch_details">
-                                        <option value="">Select</option>
                                         <?php foreach ($branch as $key => $value) {  ?>
                                             <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
                                         <?php } ?>

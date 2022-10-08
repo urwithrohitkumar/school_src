@@ -146,6 +146,8 @@ class Item extends Admin_Controller
         $data['item'] = $item;
         $item_result = $this->item_model->get();
         $data['itemlist'] = $item_result;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $itemcategory = $this->itemcategory_model->get();
         $data['itemcatlist'] = $itemcategory;
@@ -172,6 +174,7 @@ class Item extends Admin_Controller
                 'name' => $this->input->post('name'),
                 'unit' => $this->input->post('unit'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $insert_id = $this->item_model->add($data);
             $insert_id = $this->item_model->add($data);

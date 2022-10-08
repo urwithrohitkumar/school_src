@@ -1,5 +1,4 @@
 <?php
-
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
 <style type="text/css">
@@ -167,7 +166,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <b><?php echo $this->lang->line('gender'); ?></b> <a class="pull-right text-aqua"><?php echo $this->lang->line(strtolower($student['gender'])); ?></a>
                             </li>
                             <li class="list-group-item listnoback">
-                                <b><?php echo $this->lang->line('branch'); ?></b> <a class="pull-right text-aqua"><?php echo (strtolower($student_branch_name['branch_name'])); ?></a>
+                                <b><?php echo $this->lang->line('branch'); ?></b> <a class="pull-right text-aqua"><?= (ucfirst($student['branch_name'])); ?></a>
                             </li>
                         </ul>
                     </div>

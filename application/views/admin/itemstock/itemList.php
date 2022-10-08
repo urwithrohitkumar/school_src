@@ -36,6 +36,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
                                     <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                        <option disabled selected>Select</option>
                                         <?php foreach ($branch as $key => $value) {
                                         ?>
                                             <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
@@ -50,7 +51,7 @@
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('item_category'); ?></label><small class="req"> *</small>
 
                                     <select autofocus="" id="item_category_id" name="item_category_id" class="form-control">
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <option disabled selected><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($itemcatlist as $item_category) {
                                         ?>
@@ -302,25 +303,19 @@
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function() {
-
         var item_id_post = '<?php echo set_value('item_id') ?>';
-     
         item_id_post = (item_id_post != "") ? item_id_post : 0;
         var item_category_id_post = '<?php echo set_value('item_category_id'); ?>';
         item_category_id_post = (item_category_id_post != "") ? item_category_id_post : 0;
         populateItem(item_id_post, item_category_id_post);
-
         function populateItem(item_id_post, item_category_id_post) {
-           
             if (item_category_id_post != "") {
                 $('#item_id').html("");
-
                 var base_url = '<?php echo base_url() ?>';
                 var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
                 var branch_id = $('#branch_id').find(":selected").val();
-
                 $.ajax({
                     type: "GET",
                     url: base_url + "admin/itemstock/getItemByCategory",
@@ -339,7 +334,6 @@
                         });
                         $('#item_id').append(div_data);
                     }
-
                 });
             }
         }
@@ -405,4 +399,74 @@
 
 
     });
+</script> -->
+<script>
+    // $(document).ready(function(){
+
+    // });
+    /**
+     * On change Branch id
+     */
+    $("#branch_id").on('change', function() {
+        var item_category_id = $('#item_category_id').find(":selected").val();
+        var branch_id = $('#branch_id').find(":selected").val();
+        onchangefunction(item_category_id, branch_id)
+    });
+    /**
+     * On change item Category ID
+     */
+    $("#item_category_id").on('change', function() {
+        var item_category_id = $('#item_category_id').find(":selected").val();
+        var branch_id = $('#branch_id').find(":selected").val();
+        onchangefunction(item_category_id, branch_id)
+    });
+
+    function onchangefunction(item_category_id, branch_id) {
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/itemstock/itemstockDetails",
+            data: {
+                'item_category_id': item_category_id,
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                let itemDetails = result.ItemDetails;
+                let itemSupplier = result.ItemSupplier;
+                let itemStore = result.ItemStore;
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (itemDetails) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < itemDetails.length; count++) {
+                        html += '<option value="' + itemDetails[count].id + '">' + itemDetails[count].name + '</option>';
+                    }
+                    $('#item_id').html(html);
+                }
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (itemSupplier) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < itemSupplier.length; count++) {
+                        html += '<option value="' + itemSupplier[count].id + '">' + itemSupplier[count].item_supplier + '</option>';
+                    }
+                    $('#supplier_id').html(html);
+                }
+                /**
+                 * Item Store Option data according to branch id
+                 */
+                if (itemStore) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < itemStore.length; count++) {
+                        html += '<option value="' + itemStore[count].id + '">' + itemStore[count].item_store + '</option>';
+                    }
+                    $('#store_id').html(html);
+                }
+
+            }
+        });
+    }
 </script>

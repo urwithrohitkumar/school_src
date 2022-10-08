@@ -83,7 +83,8 @@ class Itemstore extends Admin_Controller
         $data['id'] = $id;
         $store = $this->itemstore_model->get($id);
         $data['itemstore'] = $store;
-
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('name', $this->lang->line('item_store_name'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == FALSE) {
@@ -96,6 +97,7 @@ class Itemstore extends Admin_Controller
                 'item_store' => $this->input->post('name'),
                 'code' => $this->input->post('code'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->itemstore_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success">' . $this->lang->line('update_message') . '</div>');

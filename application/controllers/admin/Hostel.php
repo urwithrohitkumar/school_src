@@ -73,6 +73,8 @@ class Hostel extends Admin_Controller
         $data['id'] = $id;
         $edithostel = $this->hostel_model->get($id);
         $data['edithostel'] = $edithostel;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $ght = $this->customlib->getHostaltype();
         $data['ght'] = $ght;
         $this->form_validation->set_rules('hostel_name', $this->lang->line('hostel_name'), 'trim|required|xss_clean');
@@ -86,6 +88,7 @@ class Hostel extends Admin_Controller
         } else {
             $data = array(
                 'id' => $this->input->post('id'),
+                'branch_id' => $this->input->post('branch_id'),
                 'hostel_name' => $this->input->post('hostel_name'),
                 'type' => $this->input->post('type'),
                 'address' => $this->input->post('address'),

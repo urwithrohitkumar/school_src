@@ -113,4 +113,18 @@ class Itemcategory_model extends MY_Model
         }
     }
 
+
+
+
+    public function getItemCategoryNameId($name = null)
+    {
+        $this->db->select()->from('item_category');
+        if ($name != null) {
+            $this->db->where('item_category', $name);
+        } 
+        $query = $this->db->get();
+        return $query->row_array();
+        
+    }
+
 }

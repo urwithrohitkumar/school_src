@@ -20,16 +20,16 @@
     body {
         /* font-family: "Calibri"; */
         /* font-family: DejaVu Sans !important; */
-        font-size: small
+         font-size: 17px
     }
 </style>
 
 <body>
     <span>
-        <table class="table table-striped table-bordered table-hover example">
-            <caption class="text text-center h4"><?php echo $this->lang->line('category_report_title'); ?>
+        <table border class="table table-striped table-bordered table-hover example">
+            <th colspan="43"  class="text text-center h4"><?php echo $this->lang->line('category_report_title'); ?>
                 <span class="text text-center h4" style="color: red; display:inline;"> (B= Boys, G= Girls, T= Transgender)</span>
-            </caption>
+            </th>
 
             <thead>
                 <tr>
@@ -39,6 +39,7 @@
                     <?php for ($i = 1; $i <= 12; $i++) : ?>
                         <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_' . $i); ?></th>
                     <?php endfor; ?>
+                     <!--<th class="text text-center" colspan="3">PCM</th>-->
                 </tr>
                 <tr>
                     <th class="text text-center"><?php echo $this->lang->line('section'); ?></th>

@@ -97,6 +97,8 @@ class Book extends Admin_Controller
         $data['title_list'] = 'Book Details';
         $data['id']         = $id;
         $editbook           = $this->book_model->get($id);
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['editbook']   = $editbook;
         $this->form_validation->set_rules('book_title', $this->lang->line('book_title'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
@@ -114,6 +116,7 @@ class Book extends Admin_Controller
                 'subject'     => $this->input->post('subject'),
                 'rack_no'     => $this->input->post('rack_no'),
                 'publish'     => $this->input->post('publish'),
+                'branch_id'     => $this->input->post('branch_id'),
                 'author'      => $this->input->post('author'),
                 'qty'         => $this->input->post('qty'),
                 'perunitcost' => $this->input->post('perunitcost'),

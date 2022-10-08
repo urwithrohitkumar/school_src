@@ -32,7 +32,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
                                                     <?php } } ?>
                                                 </select>
-                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                                <span class="text-danger" id="error_branch_id"><?php echo form_error('branch_id'); ?></span>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">

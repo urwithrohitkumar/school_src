@@ -41,6 +41,8 @@ class Hostelroom extends Admin_Controller {
         $data['roomtypelist'] = $roomtypelist;
         $hostellist = $this->hostel_model->get();
         $data['hostellist'] = $hostellist;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['title'] = 'Add Library';
         $hostelroomlist = $this->hostelroom_model->lists();
         $data['hostelroomlist'] = $hostelroomlist;
@@ -91,6 +93,8 @@ class Hostelroom extends Admin_Controller {
         $data['roomtypelist'] = $roomtypelist;
         $hostelroom = $this->hostelroom_model->get($id);
         $data['hostelroom'] = $hostelroom;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $hostelroomlist = $this->hostelroom_model->lists();
         $data['hostelroomlist'] = $hostelroomlist;
         $this->form_validation->set_rules('hostel_id', $this->lang->line('hostel'), 'trim|required|xss_clean');
@@ -108,6 +112,7 @@ class Hostelroom extends Admin_Controller {
                 'hostel_id' => $this->input->post('hostel_id'),
                 'room_type_id' => $this->input->post('room_type_id'),
                 'room_no' => $this->input->post('room_no'),
+                'branch_id' => $this->input->post('branch_id'),
                 'no_of_bed' => $this->input->post('no_of_bed'),
                 'cost_per_bed' => $this->input->post('cost_per_bed'),
                 'description' => $this->input->post('description'),

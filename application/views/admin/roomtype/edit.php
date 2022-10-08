@@ -25,6 +25,16 @@
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
                                 <input type="hidden" name="id" value="<?php echo set_value('id', $roomtype['id']); ?>" >
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>' <?php if($roomtype['branch_id'] == $value['id']) { echo "selected"; } ?> ><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('room_type'); ?></label><small class="req"> *</small>
                                     <input autofocus="" id="amount" name="room_type" placeholder="" type="text" class="form-control"  value="<?php echo set_value('room_type', $roomtype['room_type']); ?>" />

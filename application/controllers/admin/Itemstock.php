@@ -85,7 +85,7 @@ class Itemstock extends Admin_Controller
     {
         $item_category_id = $this->input->get('item_category_id');
         $branch_id = $this->input->get('branch_id');
-        $data             = $this->item_model->getItemByCategory($item_category_id,$branch_id);
+        $data             = $this->item_model->getItemByCategory($item_category_id, $branch_id);
         echo json_encode($data);
     }
 
@@ -157,13 +157,33 @@ class Itemstock extends Admin_Controller
         $data['item']         = $item;
         $data['title_list']   = 'Fees Master List';
         $item_result          = $this->itemstock_model->get();
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
         $data['itemlist']     = $item_result;
         $itemcategory         = $this->itemcategory_model->get();
         $data['itemcatlist']  = $itemcategory;
-        $itemsupplier         = $this->itemsupplier_model->get();
-        $data['itemsupplier'] = $itemsupplier;
-        $itemstore            = $this->itemstore_model->get();
+       
+        // $itemstore            = $this->itemstore_model->get();
+        $result          = $this->itemstock_model->get($id);
+        $data['result']    = $result;
+        
+        $itemcategoryId         = $this->itemcategory_model->getItemCategoryNameId($result['item_category']);
+        $ItemDetails = $this->item_model->getItemByCategory($itemcategoryId['id'],$result['branch_id']);
+        $data['ItemDetails']    = $ItemDetails;
+
+
+       
+
+
+
+        $itemsupplier         = $this->itemsupplier_model->getsupplierWithBranch($result['branch_id']);
+        $itemstore         = $this->itemstore_model->getItemWithBranch($result['branch_id']);
         $data['itemstore']    = $itemstore;
+
+        $data['itemsupplier'] = $itemsupplier;
+        // echo "<pre>";
+        // print_r($ItemDetails);
+        // exit;
 
         $this->form_validation->set_rules('item_id', $this->lang->line('item'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('item_category_id', $this->lang->line('item_category'), 'trim|required|xss_clean');
@@ -202,5 +222,25 @@ class Itemstock extends Admin_Controller
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('update_message') . '</div>');
             redirect('admin/itemstock/index');
         }
+    }
+
+    /**
+     * Get Item Stock Option Details according to branch id
+     */
+
+    function itemstockDetails()
+    {
+        $item_category_id = $this->input->get('item_category_id');
+        $branch_id = $this->input->get('branch_id');
+        $ItemDetails = $this->item_model->getItemByCategory($item_category_id, $branch_id);
+        $ItemStore = $this->itemstore_model->getItemWithBranch($branch_id);
+        $ItemSupplier = $this->itemsupplier_model->getsupplierWithBranch($branch_id);
+        $data = array(
+            'ItemDetails' => $ItemDetails,
+            'ItemStore' => $ItemStore,
+            'ItemSupplier' => $ItemSupplier,
+
+        );
+        echo json_encode($data);
     }
 }

@@ -63,6 +63,8 @@ class Roomtype extends Admin_Controller {
         $data['roomtype'] = $this->roomtype_model->get($id);
         $roomtypelist = $this->roomtype_model->get();
         $data['roomtypelist'] = $roomtypelist;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('room_type', $this->lang->line('room_type'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('layout/header');
@@ -72,6 +74,7 @@ class Roomtype extends Admin_Controller {
             $data = array(
                 'id' => $this->input->post('id'),
                 'room_type' => $this->input->post('room_type'),
+                'branch_id' => $this->input->post('branch_id'),
                 'description' => $this->input->post('description')
             );
             $this->roomtype_model->add($data);

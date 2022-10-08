@@ -65,6 +65,8 @@ class Vehicle extends Admin_Controller
         $editvehicle = $this->vehicle_model->get($id);
 
         $data['editvehicle'] = $editvehicle;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $listVehicle = $this->vehicle_model->get();
         $data['listVehicle'] = $listVehicle;
         $this->form_validation->set_rules('vehicle_no', $this->lang->line('vehicle_no'), 'trim|required|xss_clean');
@@ -79,6 +81,7 @@ class Vehicle extends Admin_Controller
             $data = array(
                 'id' => $this->input->post('id'),
                 'vehicle_no' => $this->input->post('vehicle_no'),
+                'branch_id' => $this->input->post('branch_id'),
                 'vehicle_model' => $this->input->post('vehicle_model'),
                 'driver_name' => $this->input->post('driver_name'),
                 'driver_licence' => $this->input->post('driver_licence'),

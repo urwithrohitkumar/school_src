@@ -78,6 +78,16 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                             </div>
                                         </div>
+                                        
+                                       <?php if ($sch_setting->student_photo) { ?>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="exampleInputFile"><?php echo $this->lang->line('student') . "  " . $this->lang->line('photo'); ?></label>
+                                                    <input class="filestyle form-control" type='file' name='file' id="file" size='20' />
+                                                </div>
+                                                <span class="text-danger"><?php echo form_error('file'); ?></span>
+                                            </div>
+                                        <?php } ?>
 
                                     </div>
 
@@ -207,14 +217,27 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <?php } ?>
                                     </div>
                                     <div class="row">
-                                        <?php if ($sch_setting->admission_date) {
+                                        <?php
+                                        if ($sch_setting->national_identification_no) { ?>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">
+                                                        <?php echo $this->lang->line('national_identification_no'); ?>
+                                                    </label><small class="req"> *</small>
+                                                    <input id="adhar_no" name="adhar_no" onkeypress="return isNumberKey(event)" maxlength="12" placeholder="" type="text" class="form-control" value="<?php echo set_value('adhar_no', $student['adhar_no']); ?>" />
+                                                    <span class="text-danger"><?php echo form_error('adhar_no'); ?></span>
+                                                </div>
+                                            </div>
+                                        <?php }
+                                        
+                                        if ($sch_setting->admission_date) {
                                             $admission_date = "";
                                             if ($student['admission_date'] != '0000-00-00' && $student['admission_date'] != '') {
                                                 $admission_date = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student['admission_date']));
                                             }
 
                                         ?>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('admission_date'); ?></label>
                                                     <input id="admission_date" name="admission_date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('admission_date', $admission_date) ?>" readonly="readonly" />
@@ -222,18 +245,34 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 </div>
                                             </div>
                                         <?php }
-                                        if ($sch_setting->student_photo) { ?>
-                                            <div class="col-md-3">
+                                         if ($sch_setting->is_student_house) {
+                                        ?>
+                                            <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="exampleInputFile"><?php echo $this->lang->line('student') . "  " . $this->lang->line('photo'); ?></label>
-                                                    <input class="filestyle form-control" type='file' name='file' id="file" size='20' />
+                                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('house') ?></label>
+                                                    <select class="form-control" rows="3" placeholder="" name="house">
+                                                        <option value=""><?php echo $this->lang->line('select') ?></option>
+                                                        <?php foreach ($houses as $hkey => $hvalue) {
+                                                        ?>
+                                                            <option value="<?php echo $hvalue["id"] ?>" <?php
+                                                                                                        if ($hvalue["id"] == $student["school_house_id"]) {
+                                                                                                            echo "selected";
+                                                                                                        }
+                                                                                                        ?>><?php echo $hvalue["house_name"] ?></option>
+
+                                                        <?php } ?>
+                                                    </select>
+                                                    <span class="text-danger"><?php echo form_error('house'); ?></span>
                                                 </div>
-                                                <span class="text-danger"><?php echo form_error('file'); ?></span>
                                             </div>
+
                                         <?php }
+                                        
+                                        
+                                        
                                         if ($sch_setting->is_blood_group) {
                                         ?>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('blood_group'); ?></label>
                                                     <?php ?>
@@ -254,31 +293,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 </div>
                                             </div>
                                         <?php }
-                                        if ($sch_setting->is_student_house) {
-                                        ?>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('house') ?></label>
-                                                    <select class="form-control" rows="3" placeholder="" name="house">
-                                                        <option value=""><?php echo $this->lang->line('select') ?></option>
-                                                        <?php foreach ($houses as $hkey => $hvalue) {
-                                                        ?>
-                                                            <option value="<?php echo $hvalue["id"] ?>" <?php
-                                                                                                        if ($hvalue["id"] == $student["school_house_id"]) {
-                                                                                                            echo "selected";
-                                                                                                        }
-                                                                                                        ?>><?php echo $hvalue["house_name"] ?></option>
-
-                                                        <?php } ?>
-                                                    </select>
-                                                    <span class="text-danger"><?php echo form_error('house'); ?></span>
-                                                </div>
-                                            </div>
-
-                                        <?php }
+                                       
                                         if ($sch_setting->student_height) {
                                         ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('height'); ?></label>
                                                     <?php ?>
@@ -289,7 +307,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <?php }
                                         if ($sch_setting->student_weight) {
                                         ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('weight'); ?></label>
                                                     <?php ?>
@@ -304,7 +322,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 $measurement_date = $this->customlib->dateformat($student['measurement_date']);
                                             }
                                         ?>
-                                            <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-2 col-xs-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('measurement_date'); ?></label>
 
@@ -753,17 +771,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </div>
 
                                     <div class="row">
-                                        <?php if ($sch_setting->national_identification_no) { ?>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="exampleInputEmail1">
-                                                        <?php echo $this->lang->line('national_identification_no'); ?>
-                                                    </label>
-                                                    <input id="adhar_no" name="adhar_no" placeholder="" type="text" class="form-control" value="<?php echo set_value('adhar_no', $student['adhar_no']); ?>" />
-                                                    <span class="text-danger"><?php echo form_error('adhar_no'); ?></span>
-                                                </div>
-                                            </div>
-                                        <?php }
+                                        <?php 
                                         if ($sch_setting->local_identification_no) { ?>
                                             <div class="col-md-4">
                                                 <div class="form-group">
@@ -1226,6 +1234,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
 
     });
+</script>
+
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
 </script>
 
 

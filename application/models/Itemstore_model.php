@@ -116,4 +116,22 @@ class Itemstore_model extends MY_Model
             //return $return_value;
         }
     }
+
+    /**
+     * Get Item Details with branch data
+     */
+    public function getItemWithBranch($branch_id = null)
+    {
+        $this->db->select()->from('item_store');
+        if ($branch_id != null) {
+            $this->db->where('id', $branch_id);
+        } else {
+            $this->db->order_by('id');
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+       
+    }
+
+
 }

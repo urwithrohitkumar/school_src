@@ -92,7 +92,7 @@ class Student extends Admin_Controller
      *
      * @return html
      */
-    public function studentsagereport()
+    public function studentsagereport($branchid = 0)
     {
         if (!$this->rbac->hasPrivilege('student_age_report', 'can_view')) {
             access_denied();
@@ -102,8 +102,13 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentsagereport');
         $data['title'] = 'Students Age Report';
+        $data["branch"]  = $this->staff_model->getBranch();
+        $data['selected_branch'] = $branchid;
+        if ($branchid != 0) {
+      
+            $data['students_list'] = $this->classsection_model->getStudentAgeReports($branchid);
+        }
 
-        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentsagereports', $data);
         $this->load->view('layout/footer', $data);
@@ -115,7 +120,7 @@ class Student extends Admin_Controller
      *
      * @return html
      */
-    public function studentscategoriesreport()
+    public function studentscategoriesreport($branchid = 0)
     {
         if (!$this->rbac->hasPrivilege('student_categories_report', 'can_view')) {
             access_denied();
@@ -125,8 +130,15 @@ class Student extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/studentscategoriesreport');
         $data['title']              = 'Students Categories Report';
-        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
-        $data['section_list'] = $this->classsection_model->sectionList();
+        $data['selected_branch'] = $branchid;
+
+        if ($branchid) {
+     
+            $data['students_list'] = $this->classsection_model->StudentCategoryReport($branchid);
+            $data['section_list'] = $this->classsection_model->sectionList($branchid);
+        }
+
+        $data["branch"]  = $this->staff_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentcategoriesreports', $data);
         $this->load->view('layout/footer', $data);
@@ -197,8 +209,10 @@ class Student extends Admin_Controller
         $student_discount_fee         = $this->feediscount_model->getStudentFeesDiscount($student['student_session_id']);
         $data['student_discount_fee'] = $student_discount_fee;
         $data['student_due_fee']      = $student_due_fee;
-        $student_branch_name         = $this->branch_model->getBranchName($student['student_session_id']);
-        $data['student_branch_name']    = $student_branch_name;
+       
+        // $student_branch_name         = $this->branch_model->getBranchName();
+
+        // $data['student_branch_name']    = $student_branch_name;
         $siblings                     = $this->student_model->getMySiblings($student['parent_id'], $student['id']);
 
         $student_doc = $this->student_model->getstudentdoc($id);
@@ -213,9 +227,11 @@ class Student extends Admin_Controller
         $data['student']        = $student;
         $data['siblings']       = $siblings;
         $class_section          = $this->student_model->getClassSection($student["class_id"]);
+        
         $data["class_section"]  = $class_section;
         $session                = $this->setting_model->getCurrentSession();
 
+       
         $studentlistbysection         = $this->student_model->getStudentClassSection($student["class_id"], $session);
         $data["studentlistbysection"] = $studentlistbysection;
 
@@ -227,6 +243,7 @@ class Student extends Admin_Controller
         }
         $data['exam_result'] = $this->examgroupstudent_model->searchStudentExams($student['student_session_id'], true, true);
         $data['exam_grade']  = $this->grade_model->getGradeDetails();
+        
 
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentShow', $data);
@@ -308,6 +325,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('category_id', $this->lang->line('category_id'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('religion', $this->lang->line('religion'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
             $this->form_validation->set_rules('guardian_is', $this->lang->line('guardian'), 'trim|required|xss_clean');
@@ -1145,7 +1163,7 @@ class Student extends Admin_Controller
                                 );
 
                                 $this->user_model->add($data_student_login);
-                                // $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
+                                $parent_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
                                 $user_password = '123456';
 
                                 $temp              = $insert_id;
@@ -1315,6 +1333,7 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('gender', $this->lang->line('gender'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('adhar_no', $this->lang->line('adhar_no'), 'trim|required|xss_clean');
 
         if ($this->sch_setting_detail->guardian_name) {
             $this->form_validation->set_rules('guardian_name', $this->lang->line('guardian_name'), 'trim|required|xss_clean');
@@ -1832,7 +1851,7 @@ class Student extends Admin_Controller
             $data["resultlist"] = "";
         } else {
 
-            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id ,$branch_id);
+            $resultlist         = $this->student_model->searchGuardianDetails($class_id, $section_id, $branch_id);
             $data["resultlist"] = $resultlist;
         }
 
@@ -2437,7 +2456,6 @@ class Student extends Admin_Controller
 
     public function getStudentByClassSection()
     {
-
         $data                 = array();
         $cls_section_id       = $this->input->post('cls_section_id');
         $data['fields']       = $this->customfield_model->get_custom_fields('students', 1);
@@ -2462,6 +2480,7 @@ class Student extends Admin_Controller
         $data     = $this->student_model->getStudentsDetails($branch_id);
         echo json_encode($data);
     }
+
     /**
      * Get student details by Student id
      */
@@ -2477,23 +2496,26 @@ class Student extends Admin_Controller
         );
         echo json_encode($result);
     }
+
     /**
      * Downlod student age report pdf
      */
-    public function getStudentAgereportpdf()
+    public function getStudentAgereportpdf($branchid = 0)
     {
-        $data['students_list'] = $this->classsection_model->getStudentAgeReports();
+        $data['students_list'] = $this->classsection_model->getStudentAgeReports($branchid);
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentAgeReportPdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false, 'A4', 'landscape');
         // $this->pdf->createPDF($html, 'mypdf', false);
     }
+
     /**
      * Downlod student age report pdf
      */
-    public function getStudentCatreportpdf()
+    public function getStudentCatreportpdf($branch_id = 0)
     {
-        $data['students_list'] = $this->classsection_model->StudentCategoryReport();
+
+        $data['students_list'] = $this->classsection_model->StudentCategoryReport($branch_id);
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentcategoriesreportspdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false);

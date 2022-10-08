@@ -20,21 +20,36 @@
     body {
         /* font-family: "Calibri"; */
         /* font-family: DejaVu Sans !important; */
-        font-size: small
+        font-size: 15px
     }
 </style>
 
 <body>
+<<<<<<< HEAD
     <div class="content-wrapper" style="min-height: 946px;">
+    <div class="box-header ptbnull"></div>
+                   
         <section class="content-header">
             <h1>
+=======
+    <div class="content-wrapper" >
+         <section class="content-header">
+            <h3 style="text-align:center;">
+>>>>>>> c62053b0cb107a905128a5da01c2a2391bf04cc9
                 Students Age Reports
-            </h1>
+            </h3>
         </section>
+<<<<<<< HEAD
+
         <table class="table table-striped table-bordered table-hover example">
             <caption class="text text-center h4"><?php echo $this->lang->line('age_report_title'); ?>
+=======
+        
+        <table  width=100%  border class="table table-striped table-bordered table-hover example">
+            <th colspan="42" class="text text-center h4"><?php echo $this->lang->line('age_report_title'); ?>
+>>>>>>> c62053b0cb107a905128a5da01c2a2391bf04cc9
                 <span class="text text-center h4" style="color: red; display:inline;"> (B= Boys, G= Girls, T= Transgender)</span>
-            </caption>
+            </th>
             <thead>
                 <tr>
                     <th class="text text-center"><?php echo $this->lang->line('class'); ?></th>
@@ -43,6 +58,7 @@
                     <?php for ($i = 1; $i <= 12; $i++) : ?>
                         <th class="text text-center" colspan="3"><?php echo $this->lang->line('class_' . $i); ?></th>
                     <?php endfor; ?>
+                      <!--<th class="text text-center" colspan="3">PCM</th>-->
                 </tr>
                 <tr>
                     <th><?php echo $this->lang->line('age'); ?></th>

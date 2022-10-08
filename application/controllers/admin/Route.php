@@ -64,6 +64,8 @@ class Route extends Admin_Controller
         $data['id'] = $id;
         $editroute = $this->route_model->get($id);
         $data['editroute'] = $editroute;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('route_title', $this->lang->line('route_title'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {
             $listroute = $this->route_model->listroute();
@@ -76,7 +78,8 @@ class Route extends Admin_Controller
                 'id' => $this->input->post('id'),
                 'route_title' => $this->input->post('route_title'),
                 'no_of_vehicle' => $this->input->post('no_of_vehicle'),
-                'fare' => $this->input->post('fare')
+                'fare' => $this->input->post('fare'),
+                'branch_id' => $this->input->post('branch_id')
             );
             $this->route_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('update_message') . '</div>');
