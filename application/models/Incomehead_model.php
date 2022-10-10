@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Incomehead_model extends My_Model {
+class Incomehead_model extends My_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -15,11 +17,12 @@ class Incomehead_model extends My_Model {
      * @param int $id
      * @return mixed
      */
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $branch_id = $this->session->admin['branch_id'];
-        $arr=[];       
+        $arr = [];
         $this->db->select()->from('income_head');
-        if($branch_id>0){
+        if ($branch_id > 0) {
             $this->db->where('branch_id', $branch_id);
         }
         if ($id != null) {
@@ -39,7 +42,8 @@ class Incomehead_model extends My_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
 
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
@@ -75,7 +79,8 @@ class Incomehead_model extends My_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
 
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
@@ -111,4 +116,13 @@ class Incomehead_model extends My_Model {
         }
     }
 
+
+    public function getIncomeheadWithBranch($branch_id = null)
+    {
+        $this->db->select()->from('income_head');
+        $this->db->where('branch_id', $branch_id);
+        $this->db->order_by('id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

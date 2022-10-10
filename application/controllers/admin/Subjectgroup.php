@@ -216,7 +216,8 @@ class Subjectgroup extends Admin_Controller {
     public function getGroupByClassandSection() {
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
-        $data = $this->subjectgroup_model->getGroupByClassandSection($class_id, $section_id);
+        $branch_id = $this->input->post('branch_id');
+        $data = $this->subjectgroup_model->getGroupByClassandSection($class_id, $section_id,$branch_id);
 
         echo json_encode($data);
     }

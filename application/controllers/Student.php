@@ -109,7 +109,7 @@ class Student extends Admin_Controller
         $data["branch"]  = $this->staff_model->getBranch();
         $data['selected_branch'] = $branchid;
         if ($branchid != 0) {
-      
+
             $data['students_list'] = $this->classsection_model->getStudentAgeReports($branchid);
         }
 
@@ -137,7 +137,7 @@ class Student extends Admin_Controller
         $data['selected_branch'] = $branchid;
 
         if ($branchid) {
-     
+
             $data['students_list'] = $this->classsection_model->StudentCategoryReport($branchid);
             $data['section_list'] = $this->classsection_model->sectionList($branchid);
         }
@@ -213,7 +213,7 @@ class Student extends Admin_Controller
         $student_discount_fee         = $this->feediscount_model->getStudentFeesDiscount($student['student_session_id']);
         $data['student_discount_fee'] = $student_discount_fee;
         $data['student_due_fee']      = $student_due_fee;
-       
+
         // $student_branch_name         = $this->branch_model->getBranchName();
 
         // $data['student_branch_name']    = $student_branch_name;
@@ -231,11 +231,11 @@ class Student extends Admin_Controller
         $data['student']        = $student;
         $data['siblings']       = $siblings;
         $class_section          = $this->student_model->getClassSection($student["class_id"]);
-        
+
         $data["class_section"]  = $class_section;
         $session                = $this->setting_model->getCurrentSession();
 
-       
+
         $studentlistbysection         = $this->student_model->getStudentClassSection($student["class_id"], $session);
         $data["studentlistbysection"] = $studentlistbysection;
 
@@ -247,7 +247,7 @@ class Student extends Admin_Controller
         }
         $data['exam_result'] = $this->examgroupstudent_model->searchStudentExams($student['student_session_id'], true, true);
         $data['exam_grade']  = $this->grade_model->getGradeDetails();
-        
+
 
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentShow', $data);
@@ -1036,7 +1036,7 @@ class Student extends Admin_Controller
         $data['classlist']  = $class;
         $userdata           = $this->customlib->getUserData();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
 
         $category = $this->category_model->get();
 
@@ -1151,7 +1151,7 @@ class Student extends Admin_Controller
                                     'class_id'   => $class_id,
                                     'section_id' => $section_id,
                                     'session_id' => $session,
-                                    'branch_id'=>   $branch_id,
+                                    'branch_id' =>   $branch_id,
                                 );
 
                                 $this->student_model->add_student_session($data_new);
@@ -2163,7 +2163,7 @@ class Student extends Admin_Controller
         $data['bulkmailto']       = $this->customlib->bulkmailto();
         $data['notificationtype'] = $this->customlib->bulkmailnotificationtype();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $data['fields']           = $this->customfield_model->get_custom_fields('students', 1);
         if ($this->input->server('REQUEST_METHOD') == "GET") {
             $this->load->view('layout/header', $data);
@@ -2180,7 +2180,7 @@ class Student extends Admin_Controller
                 $data['class_id']   = $this->input->post('class_id');
                 $data['section_id'] = $this->input->post('section_id');
                 $data['branch_id'] = $this->input->post('branch_id');
-                $resultlist         = $this->student_model->searchByClassSection($branch_id , $class, $section );
+                $resultlist         = $this->student_model->searchByClassSection($branch_id, $class, $section);
                 $data['resultlist'] = $resultlist;
             }
 
@@ -2523,5 +2523,23 @@ class Student extends Admin_Controller
         $this->load->library('pdf');
         $html = $this->load->view('reports/studentcategoriesreportspdf', $data, true);
         $this->pdf->createPDF($html, 'mypdf', false);
+    }
+
+
+
+    /**
+     * Get Student Details with branch and class and section
+     */
+    public function getByClassAndSectionAndBranch()
+    {
+        $class      = $this->input->get('class_id');
+        $section    = $this->input->get('section_id');
+        $branch_id = $this->input->get('branch_id');
+        $resultlist = $this->student_model->searchByClassSection($branch_id , $class, $section);
+        foreach ($resultlist as $key => $value) {
+            $resultlist[$key]['full_name'] = $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $this->sch_setting_detail->middlename, $this->sch_setting_detail->lastname);
+            # code...
+        }
+        echo json_encode($resultlist);
     }
 }

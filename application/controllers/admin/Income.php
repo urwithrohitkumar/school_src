@@ -427,4 +427,19 @@ class Income extends Admin_Controller
 
     }
 
+     /**
+     * Get Item Stock Option Details according to branch id
+     */
+
+    function incomeheadDetails()
+    {
+        $item_category_id = $this->input->get('item_category_id');
+        $branch_id = $this->input->get('branch_id');
+        $incomeHead = $this->incomehead_model->getIncomeheadWithBranch($branch_id);
+        echo json_encode($incomeHead);
+    }
+
+
+
+
 }

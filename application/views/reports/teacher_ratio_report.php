@@ -91,6 +91,31 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-header ptbnull">
                             <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('students') . " " . $this->lang->line('teacher') . " " . $this->lang->line('ratio') . " " . $this->lang->line('report'); ?></h3>
                         </div>
+                        <form id="reportform" method="post">
+                            <div class="box-body row">
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                            <option selected disabled>Select</option>
+                                            <?php foreach ($branch as $key => $value) {
+
+                                                $selected =  ($selected_branch ==  $value['id']) ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $value['id'] ?>" <?= $selected; ?>><?php echo $value["branch_name"] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button type="submit" name="search" value="search_filter" class="btn btn-primary btn-sm  pull-right"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="box-body table-responsive">
                             <div class="download_label"> <?php echo $this->lang->line('students') . " " . $this->lang->line('teacher') . " " . $this->lang->line('ratio') . " " . $this->lang->line('report'); ?></div>
                             <table class="table table-striped table-bordered table-hover example">

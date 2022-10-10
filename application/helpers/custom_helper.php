@@ -28,6 +28,16 @@ if (!function_exists('is_subAttendence')) {
 
 }
 
+
+function app_date_diff($d1 = null, $d2 = null)
+{
+
+    $date1 = date_create($d1);
+    $date2 = date_create($d2);
+    $diff = date_diff($date1, $date2);
+    return $diff->format("%R%a");
+}
+
 if (!function_exists('get_subjects')) {
 
     function get_subjects($class_batch_id) {

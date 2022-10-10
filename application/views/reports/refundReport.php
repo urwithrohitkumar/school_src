@@ -22,7 +22,18 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-body">
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class='col-md-3'>
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+                                <div class='col-md-3'>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
                                         <select autofocus="" id="class_id" name="class_id" class="form-control">
@@ -42,7 +53,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class='col-md-3'>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
                                         <select id="section_id" name="section_id" class="form-control">
@@ -51,7 +62,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class='col-md-3'>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('student'); ?></label>
                                         <select id="student_id" name="student_id" class="form-control">
@@ -218,15 +229,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         $('#student_id').html("");
         var class_id = $('#class_id').val();
         var section_id = $('#section_id').val();
+        var branch_id = $('#branch_id').val();
         var student_id = '<?php echo set_value('student_id') ?>';
         var base_url = '<?php echo base_url() ?>';
         var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
         $.ajax({
             type: "GET",
-            url: base_url + "student/getByClassAndSection",
+            url: base_url + "student/getByClassAndSectionAndBranch",
             data: {
                 'class_id': class_id,
-                'section_id': section_id
+                'section_id': section_id,
+                'branch_id': branch_id,
             },
             dataType: "json",
             success: function(data) {

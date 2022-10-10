@@ -319,7 +319,7 @@ class Subjectgroup_model extends MY_Model
         return $this->db->select('GROUP_CONCAT(subject_group_id) as subject_group_ids')->from('subject_timetable')->where('staff_id', $staff_id)->group_by('staff_id')->get()->result_array();
     }
 
-    public function getGroupByClassandSection($class_id, $section_id)
+    public function getGroupByClassandSection($class_id, $section_id ,$branch_id)
     {
         $return = true;
         $userdata = $this->customlib->getUserData();
@@ -351,7 +351,14 @@ class Subjectgroup_model extends MY_Model
         }
 
         if ($return) {
-            $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.session_id=" . $this->db->escape($this->current_session) . " " . $subject_groupid_condition . " ORDER by subject_groups.id DESC";
+            if(!empty($branch_id))
+            {
+                $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE subject_groups.branch_id = ".$branch_id." AND class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.session_id=" . $this->db->escape($this->current_session) . " " . $subject_groupid_condition . " ORDER by subject_groups.id DESC";
+            }
+            else{
+
+                $sql = "SELECT subject_groups.name, subject_group_class_sections.* from subject_group_class_sections INNER JOIN class_sections on class_sections.id=subject_group_class_sections.class_section_id INNER JOIN subject_groups on subject_groups.id=subject_group_class_sections.subject_group_id WHERE class_sections.class_id=" . $this->db->escape($class_id) . " and class_sections.section_id=" . $this->db->escape($section_id) . " and subject_groups.session_id=" . $this->db->escape($this->current_session) . " " . $subject_groupid_condition . " ORDER by subject_groups.id DESC";
+            }
             $query = $this->db->query($sql);
 
             return $query->result_array();

@@ -244,7 +244,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     $this.button('loading');
                     // resetFields($this.attr('name'));
                 },
-                success: function(response) { // your success handler
+                success: function(response) { 
+                    // your success handler
 
                     if (!response.status) {
                         $.each(response.error, function(key, value) {

@@ -785,7 +785,7 @@ class Student_model extends MY_Model
         return $this->datatables->generate('json');
     }
 
-    public function student_ratio()
+    public function student_ratio($branch_id =  0)
     {
 
         $i               = 1;
@@ -799,6 +799,7 @@ class Student_model extends MY_Model
                 $i++;
             }
         }
+        
 
         $field_variable = implode(',', $field_var_array);
 
@@ -809,6 +810,9 @@ class Student_model extends MY_Model
         $this->db->join('categories', 'students.category_id = categories.id', 'left');
         $this->db->join('class_sections', 'class_sections.class_id = classes.id and class_sections.section_id=sections.id', 'inner');
         $this->db->where('student_session.session_id', $this->current_session);
+        // if($branch_id != 0){
+            $this->db->where('student_session.branch_id', $branch_id);
+        // }
         $this->db->where('students.is_active', 'yes');
         $this->db->group_by('class_sections.id');
         $this->db->order_by('students.id');

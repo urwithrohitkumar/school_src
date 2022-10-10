@@ -278,7 +278,7 @@ class Studentfee_model extends MY_Model
      * @param integer $student_id
      * @return mixed
      */
-    public function getRefund($class_id = 0, $section_id = 0, $student_id = 0)
+    public function getRefund($class_id = 0, $section_id = 0, $student_id = 0, $branch_id = 0)
     {
 
         $this->db->select("concat(students.firstname,' ',students.lastname) as student_name,student_fees_refund.*, DATE_FORMAT(student_fees_refund.created_at, '%d-%m-%Y') as created_at, student_fees_master.student_session_id,fee_groups_feetype.fee_session_group_id, fee_groups_feetype.fee_groups_id,fee_groups_feetype.feetype_id,fee_groups_feetype.session_id,feetype.type, concat(staff.name,' ',staff.surname) as refund_by,student_session.class_id,student_session.section_id");
@@ -289,11 +289,12 @@ class Studentfee_model extends MY_Model
         $this->db->join('staff', 'staff.id = student_fees_refund.refund_by');
         $this->db->join('students', 'students.id = student_fees_refund.student_id');
         $this->db->join('student_session', 'students.id = student_session.student_id');
-
+        
         if ($class_id && $section_id && $student_id) {
             $condition = array('student_session.class_id' => $class_id, 'student_session.section_id' => $section_id, 'student_session.student_id' => $student_id);
             $this->db->where($condition);
         }
+        $this->db->where('student_session.branch_id =', $branch_id);
 
         $this->db->order_by('student_fees_refund.id');
         $res = $this->db->get('student_fees_refund');

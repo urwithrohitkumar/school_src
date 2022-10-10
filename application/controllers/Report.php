@@ -470,7 +470,7 @@ class Report extends Admin_Controller
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/studentBookIssueReport', $data);
         $this->load->view('layout/footer', $data);
@@ -486,7 +486,7 @@ class Report extends Admin_Controller
         $data['sch_setting'] = $this->sch_setting_detail;
         $data['members']    = array('' => $this->lang->line('all'), 'student' => $this->lang->line('student'), 'teacher' => $this->lang->line('teacher'));
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/bookduereport', $data);
         $this->load->view('layout/footer', $data);
@@ -499,7 +499,7 @@ class Report extends Admin_Controller
         $this->session->set_userdata('subsub_menu', 'Reports/library/bookinventory');
         $data['searchlist'] = $this->customlib->get_searchtype();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/bookinventory', $data);
         $this->load->view('layout/footer', $data);
@@ -604,7 +604,7 @@ class Report extends Admin_Controller
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['date_type']  = $this->customlib->date_type();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
 
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexams', $data);
@@ -667,7 +667,7 @@ class Report extends Admin_Controller
         $data['searchlist'] = $this->customlib->get_searchtype();
         $data['date_type']  = $this->customlib->date_type();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('reports/onlineexamattend', $data);
         $this->load->view('layout/footer', $data);
@@ -687,7 +687,7 @@ class Report extends Admin_Controller
         $examList          = $this->onlineexam_model->get();
         $data['examList']  = $examList;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'required');
@@ -707,7 +707,7 @@ class Report extends Admin_Controller
             }
             $branch_id = $this->input->post('branch_id');
             $exam         = $this->onlineexam_model->get($exam_id);
-            $student_data = $this->onlineexam_model->searchAllOnlineExamStudents($exam_id, $class_id, $section_id,$branch_id);
+            $student_data = $this->onlineexam_model->searchAllOnlineExamStudents($exam_id, $class_id, $section_id, $branch_id);
 
             if (!empty($student_data)) {
                 foreach ($student_data as $student_key => $student_value) {
@@ -984,7 +984,6 @@ class Report extends Admin_Controller
         $data['date_typeid'] = '';
         $branch = $this->staff_model->getBranch();
         $data["branch"]         = $branch;
-
         $data['headlist']    = $this->incomehead_model->get();
         $this->load->view('layout/header', $data);
         $this->load->view('reports/incomegroup', $data);
@@ -1072,7 +1071,7 @@ class Report extends Admin_Controller
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $searchterm              = '';
         $condition               = "";
         if (isset($_POST['search_type']) && $_POST['search_type'] != '') {
@@ -1120,7 +1119,7 @@ class Report extends Admin_Controller
             $data['designation_val'] = $_POST['designation'];
         }
         $branch_id = $this->input->post('branch_id');
-        $data['resultlist'] = $this->staff_model->staff_report($condition , $branch_id);
+        $data['resultlist'] = $this->staff_model->staff_report($condition, $branch_id);
 
         $leave_type = $this->leavetypes_model->getLeaveType();
         foreach ($leave_type as $key => $leave_value) {
@@ -1169,7 +1168,7 @@ class Report extends Admin_Controller
             $between_date        = $this->customlib->get_betweendate('this_week');
             $data['search_type'] = $search_type = 'this_week';
         }
-       
+
         $from_date = date('Y-m-d', strtotime($between_date['from_date']));
         $to_date   = date('Y-m-d', strtotime($between_date['to_date']));
         $dates     = array();
@@ -1216,7 +1215,7 @@ class Report extends Admin_Controller
                 $condition .= ' and section_id=' . $data['section_id'];
             }
 
-            $data['student_attendences'] = $this->stuattendence_model->student_attendences($condition, $date_condition ,$branch_id);
+            $data['student_attendences'] = $this->stuattendence_model->student_attendences($condition, $date_condition, $branch_id);
 
             $attd = array();
 
@@ -1313,6 +1312,8 @@ class Report extends Admin_Controller
         $data['subject_id']       = "";
         $data['lessons']          = array();
         $lebel                    = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
@@ -1570,7 +1571,7 @@ class Report extends Admin_Controller
         }
     }
 
-    public function boys_girls_ratio()
+    public function boys_girls_ratio($branch_id = 0)
     {
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
@@ -1580,22 +1581,25 @@ class Report extends Admin_Controller
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $searchterm              = '';
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
         foreach ($data['classlist'] as $key => $value) {
             $carray[] = $value['id'];
         }
-
-        $data['resultlist'] = $this->student_model->student_ratio();
+        $data['resultlist'] = $this->student_model->student_ratio($branch_id);
         $total_boys         = $total_girls         = 0;
-        foreach ($data['resultlist'] as $key => $value) {
+        if (!empty($data['resultlist'])) {
+            foreach ($data['resultlist'] as $key => $value) {
 
-            $total_boys += $value['male'];
-            $total_girls += $value['female'];
+                $total_boys += $value['male'];
+                $total_girls += $value['female'];
 
-            $data['result'][] = array('total_student' => $value['total_student'], 'male' => $value['male'], 'female' => $value['female'], 'class' => $value['class'], 'section' => $value['section'], 'class_id' => $value['class_id'], 'section_id' => $value['section_id'], 'boys_girls_ratio' => $this->getRatio($value['male'], $value['female']));
+                $data['result'][] = array('total_student' => $value['total_student'], 'male' => $value['male'], 'female' => $value['female'], 'class' => $value['class'], 'section' => $value['section'], 'class_id' => $value['class_id'], 'section_id' => $value['section_id'], 'boys_girls_ratio' => $this->getRatio($value['male'], $value['female']));
+            }
+        } else {
+            $data['result'][] = array('total_student' => 0, 'male' => 0, 'female' => 0, 'class' => 0, 'section' => 0, 'class_id' => 0, 'section_id' => 0, 'boys_girls_ratio' => $this->getRatio(0, 0));
         }
 
         $data['all_boys_girls_ratio']      = $this->getRatio($total_boys, $total_girls);
@@ -1606,12 +1610,14 @@ class Report extends Admin_Controller
         $this->load->view('layout/footer', $data);
     }
 
-    public function student_teacher_ratio()
+    public function student_teacher_ratio($branch_id = 0)
     {
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/student_information');
         $this->session->set_userdata('subsub_menu', 'Reports/student_information/student_teacher_ratio');
         $data['title']           = 'Add Fees Type';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['searchlist']      = $this->search_type;
         $data['sch_setting']     = $this->sch_setting_detail;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
@@ -1622,23 +1628,29 @@ class Report extends Admin_Controller
             $carray[] = $value['id'];
         }
 
-        $data['resultlist'] = $this->student_model->student_ratio();
+        $data['resultlist'] = $this->student_model->student_ratio($branch_id);
         $total_boys         = $total_girls         = $all_teacher         = $all_student         = 0;
-        foreach ($data['resultlist'] as $key => $value) {
+        if (!empty($data['resultlist'])) {
+            foreach ($data['resultlist'] as $key => $value) {
 
-            $all_student += $value['total_student'];
-            $count_classteachers = array();
-            $count_classteachers = $this->student_model->count_classteachers($value['class_id'], $value['section_id']);
+                $all_student += $value['total_student'];
+                $count_classteachers = array();
+                $count_classteachers = $this->student_model->count_classteachers($value['class_id'], $value['section_id']);
 
-            if (!empty($count_classteachers)) {
-                $total_teacher = $count_classteachers;
-            } else {
-                $total_teacher = 0;
+                if (!empty($count_classteachers)) {
+                    $total_teacher = $count_classteachers;
+                } else {
+                    $total_teacher = 0;
+                }
+
+                $data['result'][] = array('total_student' => $value['total_student'], 'male' => $value['male'], 'female' => $value['female'], 'class' => $value['class'], 'section' => $value['section'], 'class_id' => $value['class_id'], 'section_id' => $value['section_id'], 'total_teacher' => $total_teacher, 'boys_girls_ratio' => $this->getRatio($value['male'], $value['female']), 'teacher_ratio' => $this->getRatio($value['total_student'], $total_teacher));
+                
+                $all_teacher += $total_teacher;
             }
-
-            $data['result'][] = array('total_student' => $value['total_student'], 'male' => $value['male'], 'female' => $value['female'], 'class' => $value['class'], 'section' => $value['section'], 'class_id' => $value['class_id'], 'section_id' => $value['section_id'], 'total_teacher' => $total_teacher, 'boys_girls_ratio' => $this->getRatio($value['male'], $value['female']), 'teacher_ratio' => $this->getRatio($value['total_student'], $total_teacher));
-
-            $all_teacher += $total_teacher;
+        }
+        else{
+            $total_teacher = 0;
+            $data['result'][] = array('total_student' => 0, 'male' => 0, 'female' => 0, 'class' => 0, 'section' => 0, 'class_id' => 0, 'section_id' => 0, 'total_teacher' => $total_teacher, 'boys_girls_ratio' => $this->getRatio(0, 0), 'teacher_ratio' => $this->getRatio(0, $total_teacher));
         }
 
         $data['all_student_teacher_ratio'] = $this->getRatio($all_student, $all_teacher);
@@ -1673,7 +1685,7 @@ class Report extends Admin_Controller
         $date         = "";
         $data['date'] = "";
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->form_validation->set_rules('date', $this->lang->line('date'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
@@ -1686,7 +1698,7 @@ class Report extends Admin_Controller
         $branch_id = $this->input->post('branch_id');
 
         $resultlist     = array();
-        $data['result'] = $this->stuattendence_model->get_attendancebydate($date,$branch_id);
+        $data['result'] = $this->stuattendence_model->get_attendancebydate($date, $branch_id);
         if (!empty($data['result'])) {
             $all_student = $all_present = $all_absent = 0;
             foreach ($data['result'] as $key => $value) {
@@ -1912,7 +1924,7 @@ class Report extends Admin_Controller
             $date_to   = $this->input->post('date_to');
         }
 
-        $params = array('search_type' => $search_type, 'date_type' => $date_type, 'date_from' => $date_from, 'date_to' => $date_to,'branch_id' => $branch_id);
+        $params = array('search_type' => $search_type, 'date_type' => $date_type, 'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
         $array  = array('status' => 1, 'error' => '', 'params' => $params);
         echo json_encode($array);
     }
@@ -1956,7 +1968,7 @@ class Report extends Admin_Controller
         }
 
         $sch_setting = $this->sch_setting_detail;
-        $results     = $this->onlineexam_model->onlineexamReport($condition ,$branch_id);
+        $results     = $this->onlineexam_model->onlineexamReport($condition, $branch_id);
 
         $resultlist = json_decode($results);
         $dt_data    = array();
@@ -2156,7 +2168,7 @@ class Report extends Admin_Controller
         $end_date        = date('Y-m-d', strtotime($dates['to_date']));
         $data['label']   = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
 
-        $result = $this->bookissue_model->studentBookIssue_report($start_date, $end_date ,$branch_id);
+        $result = $this->bookissue_model->studentBookIssue_report($start_date, $end_date, $branch_id);
 
         $sch_setting = $this->sch_setting_detail;
 
@@ -2229,7 +2241,7 @@ class Report extends Admin_Controller
         $start_date    = date('Y-m-d', strtotime($dates['from_date']));
         $end_date      = date('Y-m-d', strtotime($dates['to_date']));
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $issued_books  = $this->bookissue_model->bookduereport($start_date, $end_date ,$branch_id);
+        $issued_books  = $this->bookissue_model->bookduereport($start_date, $end_date, $branch_id);
         $sch_setting   = $this->sch_setting_detail;
 
         $resultlist = json_decode($issued_books);
@@ -2292,7 +2304,7 @@ class Report extends Admin_Controller
         $start_date    = date('Y-m-d', strtotime($dates['from_date']));
         $end_date      = date('Y-m-d', strtotime($dates['to_date']));
         $data['label'] = date($this->customlib->getSchoolDateFormat(), strtotime($start_date)) . " " . $this->lang->line('to') . " " . date($this->customlib->getSchoolDateFormat(), strtotime($end_date));
-        $listbook      = $this->book_model->bookinventory($start_date, $end_date ,$branch_id);
+        $listbook      = $this->book_model->bookinventory($start_date, $end_date, $branch_id);
 
         $resultlist = json_decode($listbook);
         $dt_data    = array();
@@ -2753,8 +2765,11 @@ class Report extends Admin_Controller
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
         $student_id = $this->input->post('student_id');
+        $branch_id = $this->input->post('branch_id');
 
-        $data['refund_list'] = $this->studentfee_model->getRefund($class_id, $section_id, $student_id);
+        $data['refund_list'] = $this->studentfee_model->getRefund($class_id, $section_id, $student_id,$branch_id);
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/finance');

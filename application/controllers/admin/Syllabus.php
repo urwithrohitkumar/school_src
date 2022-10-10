@@ -27,7 +27,7 @@ class Syllabus extends Admin_Controller
         $my_role                 = $this->customlib->getStaffRole();
         $role                    = json_decode($my_role);
         $data['role_id']         = $role->id;
-        $staff_list              = $this->staff_model->getEmployee('2');
+        $staff_list              = $this->staff_model->getEmployee('2' , NULL ,NULL);
         $data['staff_list']      = $staff_list;
         $monday                  = strtotime("last " . $this->start_weekday);
         $monday                  = date('w', $monday) == date('w') ? $monday + 7 * 86400 : $monday;
