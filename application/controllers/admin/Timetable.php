@@ -102,7 +102,7 @@ class Timetable extends Admin_Controller
         $is_admin = false;
 
         if ($role->id != "2") {
-            $staff_list         = $this->staff_model->getEmployee('2');
+            $staff_list         = $this->staff_model->getEmployee('2','','1');
             $data['staff_list'] = $staff_list;
             $is_admin           = true;
         }
@@ -158,6 +158,8 @@ class Timetable extends Admin_Controller
         $data['subject_id'] = "";
         $data['class_id']   = "";
         $data['section_id'] = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $exam               = $this->exam_model->get();
         $class              = $this->class_model->get('', $classteacher = 'yes');
         $data['examlist']   = $exam;

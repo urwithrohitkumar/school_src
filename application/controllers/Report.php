@@ -729,8 +729,10 @@ class Report extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Reports');
         $this->session->set_userdata('sub_menu', 'Reports/inventory');
         $this->session->set_userdata('subsub_menu', 'Reports/inventory/inventorystock');
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header');
-        $this->load->view('reports/inventorystock');
+        $this->load->view('reports/inventorystock', $data);
         $this->load->view('layout/footer');
     }
 
@@ -1414,6 +1416,8 @@ class Report extends Admin_Controller
         $data['section_id']       = "";
         $data['subject_group_id'] = "";
         $data['subject_id']       = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['lessons']          = array();
 
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
