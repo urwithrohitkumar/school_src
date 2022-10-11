@@ -3,20 +3,29 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feegroup_model extends MY_Model {
+class Feegroup_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function get($id = null) {
-        $this->db->select()->from('fee_groups');
+    public function get($id = null)
+    {
+        $this->db->select('tb_branch.branch_name,fee_groups.*')->from('fee_groups');
+        $this->db->join('tb_branch', 'tb_branch.id = fee_groups.branch_id', 'left');
         $this->db->where('is_system', 0);
+
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         if ($id != null) {
-            $this->db->where('id', $id);
+            $this->db->where('fee_groups.id', $id);
         } else {
-            $this->db->order_by('id');
+            $this->db->order_by('fee_groups.id');
         }
         $query = $this->db->get();
         if ($id != null) {
@@ -30,7 +39,8 @@ class Feegroup_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -59,7 +69,8 @@ class Feegroup_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -77,9 +88,8 @@ class Feegroup_model extends MY_Model {
             $action = "Insert";
             $record_id = $id;
             $this->log($message, $record_id, $action);
-
         }
-      
+
         //======================Code End==============================
 
         $this->db->trans_complete(); # Completing transaction
@@ -94,7 +104,8 @@ class Feegroup_model extends MY_Model {
         }
     }
 
-    public function check_exists($str) {
+    public function check_exists($str)
+    {
         $name = $this->security->xss_clean($str);
         $id = $this->input->post('id');
         if (!isset($id)) {
@@ -109,7 +120,8 @@ class Feegroup_model extends MY_Model {
         }
     }
 
-    function check_data_exists($name, $id) {
+    function check_data_exists($name, $id)
+    {
         $this->db->where('name', $name);
         $this->db->where('id !=', $id);
 
@@ -121,7 +133,8 @@ class Feegroup_model extends MY_Model {
         }
     }
 
-    function checkGroupExistsByName($name) {
+    function checkGroupExistsByName($name)
+    {
         $this->db->where('name', $name);
         $query = $this->db->get('fee_groups');
         if ($query->num_rows() > 0) {
@@ -131,4 +144,16 @@ class Feegroup_model extends MY_Model {
         }
     }
 
+    /**
+     * Branch Wise Fees Group data 
+     */
+
+    function branchWisedata($branch_id)
+    {
+        $this->db->select()->from('fee_groups');
+        $this->db->where('is_system', 0);
+        $this->db->where('branch_id', $branch_id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

@@ -39,6 +39,7 @@
                                         <div class='form-group'>
                                             <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                             <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                <option value="" selected disabled>Select</option>
                                                 <?php foreach ($branch as $key => $value) {  ?>
                                                     <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                                 <?php } ?>
@@ -51,19 +52,7 @@
 
                                             <select autofocus="" id="fee_groups_id" name="fee_groups_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                <?php
-                                                foreach ($feegroupList as $feegroup) {
-                                                ?>
-                                                    <option value="<?php echo $feegroup['id'] ?>" <?php
-                                                                                                    if (set_value('fee_groups_id') == $feegroup['id']) {
-                                                                                                        echo "selected =selected";
-                                                                                                    }
-                                                                                                    ?>><?php echo $feegroup['name'] ?></option>
 
-                                                <?php
-                                                    $count++;
-                                                }
-                                                ?>
                                             </select>
                                             <span class="text-danger"><?php echo form_error('fee_groups_id'); ?></span>
                                         </div>
@@ -73,19 +62,7 @@
 
                                             <select id="feetype_id" name="feetype_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                <?php
-                                                foreach ($feetypeList as $feetype) {
-                                                ?>
-                                                    <option value="<?php echo $feetype['id'] ?>" <?php
-                                                                                                    if (set_value('feetype_id') == $feetype['id']) {
-                                                                                                        echo "selected =selected";
-                                                                                                    }
-                                                                                                    ?>><?php echo $feetype['type'] ?></option>
-
-                                                <?php
-                                                    $count++;
-                                                }
-                                                ?>
+                                               
                                             </select>
                                             <span class="text-danger"><?php echo form_error('feetype_id'); ?></span>
                                         </div>
@@ -219,7 +196,7 @@
                                                 <td class="mailbox-name">
                                                     <a href="#" data-toggle="popover" class="detail_popover"><?php echo $feegroup->group_name; ?></a>
                                                 </td>
-                                                
+
 
 
                                                 <td class="mailbox-name">
@@ -228,7 +205,7 @@
                                                         foreach ($feegroup->feetypes as $feetype_key => $feetype_value) {
                                                         ?>
                                                             <li> <i class="fa fa-money"></i>
-                                                                <?php echo $feetype_value->code . " " . $currency_symbol . $feetype_value->amount ." ( " . $feetype_value->branch_name ." )"; ?> &nbsp;&nbsp;
+                                                                <?php echo $feetype_value->code . " " . $currency_symbol . $feetype_value->amount . " ( " . $feetype_value->branch_name . " )"; ?> &nbsp;&nbsp;
                                                                 <?php if ($this->rbac->hasPrivilege('fees_master', 'can_edit')) { ?>
                                                                     <a href="<?php echo base_url(); ?>admin/feemaster/edit/<?php echo $feetype_value->id ?>" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                                         <i class="fa fa-pencil"></i>
@@ -252,7 +229,7 @@
 
                                                 <td class="mailbox-date pull-right">
                                                     <?php if ($this->rbac->hasPrivilege('fees_group_assign', 'can_view')) { ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/feemaster/assign/<?php echo $feegroup->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/feemaster/assign/<?php echo $feegroup->id ?>/<?php echo $feegroup->branch_id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
                                                             <i class="fa fa-tag"></i>
                                                         </a>
                                                     <?php } ?>
@@ -365,4 +342,39 @@
 
 
     });
+
+
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/feemaster/onChangeOption",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                let feegroup = result.feegroup;
+                let feetype = result.feetype;
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (feegroup) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < feegroup.length; count++) {
+                        html += '<option value="' + feegroup[count].id + '">' + feegroup[count].name + '</option>';
+                    }
+                    $('#fee_groups_id').html(html);
+                }
+                if (feetype) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < feetype.length; count++) {
+                        html += '<option value="' + feetype[count].id + '">' + feetype[count].type + '</option>';
+                    }
+                    $('#feetype_id').html(html);
+                }
+            }
+        });
+    })
 </script>

@@ -5,7 +5,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?></h1>
+            <i class="fa fa-bus"></i> <?php echo $this->lang->line('transport'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -13,25 +14,36 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         <div class="row">
             <div class="col-md-12">
                 <div class="box removeboxmius">
-                    <form role="form" action="<?php echo site_url('report/getsearchtypeparam') ?>" method="post" class="" id="reportform" >
+                    <form role="form" action="<?php echo site_url('report/getsearchtypeparam') ?>" method="post" class="" id="reportform">
                         <div class="box-body">
 
                             <?php echo $this->customlib->getCSRF(); ?>
+                            <div class="col-sm-6 col-md-6">
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
 
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?></label>
                                     <select class="form-control" name="search_type" onchange="showdate(this.value)">
 
                                         <?php foreach ($searchlist as $key => $search) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $key ?>" <?php
-                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                if ((isset($search_type)) && ($search_type == $key)) {
 
-                                                echo "selected";
-                                            }
-                                            ?>><?php echo $search ?></option>
-                                                <?php } ?>
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?php echo $search ?></option>
+                                        <?php } ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                 </div>
@@ -56,10 +68,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-body">
                             <div class="download_label"> <?php echo $this->lang->line('add') . " " . $this->lang->line('item') . " " . $this->lang->line('report') . "<br>";
-                                                $this->customlib->get_postmessage();
-                                                ?></div>
-                            <div class="table-responsive">                 
-                                  <table class="table table-striped table-bordered table-hover item-list" data-export-title="<?php $this->lang->line('add') . " " . $this->lang->line('item') . " " . $this->lang->line('report') ?>">
+                                                            $this->customlib->get_postmessage();
+                                                            ?></div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover item-list" data-export-title="<?php $this->lang->line('add') . " " . $this->lang->line('item') . " " . $this->lang->line('report') ?>">
                                     <thead>
                                         <tr>
                                             <th><?php echo $this->lang->line('name'); ?></th>
@@ -76,81 +88,79 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <tbody>
                                     </tbody>
                                 </table>
-                            </div>    
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
-</div>  
+        </div>
+</div>
 </section>
 </div>
 <script>
-<?php
-if ($search_type == 'period') {
+    <?php
+    if ($search_type == 'period') {
     ?>
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             showdate('period');
         });
 
     <?php
-}
-?>
-
+    }
+    ?>
 </script>
 <script>
-$(document).ready(function() {
-     emptyDatatable('item-list','data');
-});
-</script>  
+    $(document).ready(function() {
+        emptyDatatable('item-list', 'data');
+    });
+</script>
 
 <script>
-    ( function ( $ ) {
-    'use strict';
-    $(document).ready(function () {
-        initDatatable('item-list','report/getadditemlistbydt',[],[],100);
-    });
-} ( jQuery ) )
+    (function($) {
+        'use strict';
+        $(document).ready(function() {
+            initDatatable('item-list', 'report/getadditemlistbydt', [], [], 100);
+        });
+    }(jQuery))
 </script>
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-$(document).on('submit','#reportform',function(e){
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-    var $this = $(this).find("button[type=submit]:focus");  
-    var form = $(this);
-    var url = form.attr('action');
-    var form_data = form.serializeArray();
-    $.ajax({
-           url: url,
-           type: "POST",
-           dataType:'JSON',
-           data: form_data, // serializes the form's elements.
-              beforeSend: function () {
-                $('[id^=error]').html("");
-                $this.button('loading');
-              
-               },
-              success: function(response) { // your success handler
-                if(!response.status){
-                    $.each(response.error, function(key, value) {
-                    $('#error_' + key).html(value);
-                });
-                }else{
-                    initDatatable('item-list','report/getadditemlistbydt',response.params);
+    $(document).ready(function() {
+        $(document).on('submit', '#reportform', function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var $this = $(this).find("button[type=submit]:focus");
+            var form = $(this);
+            var url = form.attr('action');
+            var form_data = form.serializeArray();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'JSON',
+                data: form_data, // serializes the form's elements.
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+
+                },
+                success: function(response) { // your success handler
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
+                            $('#error_' + key).html(value);
+                        });
+                    } else {
+                        initDatatable('item-list', 'report/getadditemlistbydt', response.params);
+                    }
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
                 }
-              },
-             error: function() { // your error handler
-                 $this.button('reset');
-             },
-             complete: function() {
-             $this.button('reset');
-             }
-         });
+            });
 
         });
 
     });
-   
 </script>

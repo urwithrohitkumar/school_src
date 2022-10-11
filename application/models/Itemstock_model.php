@@ -128,13 +128,24 @@ class Itemstock_model extends MY_Model
         // return 
     }
 
-    public function get_ItemByBetweenDate($start_date, $end_date)
+    public function get_ItemByBetweenDate($start_date, $end_date,$branch_id)
     {
         $condition = " and date_format(item_stock.date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $condition = " and item.branch_id = ".$this->session->userdata['admin']['branch_id']."";
+            if(!empty($branch_id))
+            {
+                $condition = " and item.branch_id = ".$branch_id."";
+            }
+            else{
+                $condition = " and item.branch_id = ".$this->session->userdata['admin']['branch_id']."";
+            }
         }
-
+        else{
+            if(!empty($branch_id))
+            {
+                $condition = " and item.branch_id = ".$branch_id."";
+            }
+        }
         $sql = "SELECT `item_stock`.*, `item`.`name`, `item`.`item_category_id`,tb_branch.branch_name, `item`.`description` as `des`, `item_category`.`item_category`, `item_supplier`.`item_supplier`, `item_store`.`item_store` FROM `item_stock` JOIN `item` ON `item`.`id` = `item_stock`.`item_id` JOIN `item_category` ON `item`.`item_category_id` = `item_category`.`id` 
         JOIN `item_supplier` ON `item_stock`.`supplier_id` = `item_supplier`.`id`
         LEFT JOIN `tb_branch` ON `item`.`branch_id` = `tb_branch`.`id`

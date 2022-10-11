@@ -63,9 +63,6 @@ class Alumni extends Admin_Controller {
             $search_text = $this->input->post('search_text');
             $data['session_id'] = $session_id = $this->input->post('session_id');
             if (isset($search)) {
-                echo "<pre>";
-                print_r($_POST);
-                exit;
                 if ($search == 'search_filter') {
                     $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'trim|required|xss_clean');
                     $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');

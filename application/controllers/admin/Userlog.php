@@ -38,7 +38,6 @@ class Userlog extends Admin_Controller
 
                 $row   = array();
                 $row[] = $value->user;
-                $row[] = $value->branch_name;
                 $row[] = $value->role;
                 $row[] = ($value->class_name != "") ? $value->class_name . "(" . $value->section_name . ")" : "";
                 $row[] = $value->ipaddress;
@@ -70,7 +69,6 @@ class Userlog extends Admin_Controller
 
                 $row   = array();
                 $row[] = $value->user;
-                $row[] = $value->branch_name;
                 $row[] = $value->role;
                 $row[] = ($value->class_name != "") ? $value->class_name . "(" . $value->section_name . ")" : "";
                 $row[] = $value->ipaddress;
@@ -101,7 +99,6 @@ class Userlog extends Admin_Controller
 
                 $row   = array();
                 $row[] = $value->user;
-                $row[] = $value->branch_name;
                 $row[] = $value->role;
                 $row[] = $value->ipaddress;
                 $row[] = $this->customlib->dateyyyymmddToDateTimeformat($value->login_datetime);
@@ -131,7 +128,7 @@ class Userlog extends Admin_Controller
 
                 $row   = array();
                 $row[] = $value->user;
-                $row[] = $value->branch_name;
+                $row[] = $value->role;
                 $row[] = $value->role;
                 $row[] = $value->ipaddress;
                 $row[] = $this->customlib->dateyyyymmddToDateTimeformat($value->login_datetime);

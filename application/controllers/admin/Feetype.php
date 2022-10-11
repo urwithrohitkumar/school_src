@@ -13,11 +13,13 @@ class Feetype extends Admin_Controller {
         if (!$this->rbac->hasPrivilege('fees_type', 'can_view')) {
             access_denied();
         }
+
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'feetype/index');
         $data['title'] = 'Add Feetype';
         $data['title_list'] = 'Recent FeeType';
-
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules(
                 'code', $this->lang->line('code'), array(
             'required',
@@ -31,6 +33,7 @@ class Feetype extends Admin_Controller {
             $data = array(
                 'type' => $this->input->post('name'),
                 'code' => $this->input->post('code'),
+                'branch_id' => $this->input->post('branch_id'),
                 'description' => $this->input->post('description'),
             );
             $this->feetype_model->add($data);
@@ -60,6 +63,8 @@ class Feetype extends Admin_Controller {
         }
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'feetype/index');
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['id'] = $id;
         $feetype = $this->feetype_model->get($id);
         $data['feetype'] = $feetype;
@@ -80,6 +85,7 @@ class Feetype extends Admin_Controller {
             $data = array(
                 'id' => $id,
                 'type' => $this->input->post('name'),
+                'branch_id' => $this->input->post('branch_id'),
                 'code' => $this->input->post('code'),
                 'description' => $this->input->post('description'),
             );

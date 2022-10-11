@@ -3,25 +3,29 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feesessiongroup_model extends MY_Model {
+class Feesessiongroup_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
-        $parentid = $this->group_exists($data['fee_groups_id']);
+        $parentid = $this->group_exists($data['fee_groups_id'], $data['branch_id']);
+        // $parentid = $this->group_exists($data['fee_groups_id']);
         $data['fee_session_group_id'] = $parentid;
         $this->db->insert('fee_groups_feetype', $data);
         $id = $this->db->insert_id();
         $message = INSERT_RECORD_CONSTANT . " On  fee groups feetype id " . $id;
         $action = "Insert";
         $record_id = $id;
-        $this->log($message, $record_id, $action);       
+        $this->log($message, $record_id, $action);
         //======================Code End==============================
 
         $this->db->trans_complete(); # Completing transaction
@@ -36,16 +40,22 @@ class Feesessiongroup_model extends MY_Model {
         }
     }
 
-    public function getFeesByGroup($id = null) {
+    public function getFeesByGroup($id = null)
+    {
         $this->db->select('fee_session_groups.*,fee_groups.name as `group_name`');
         $this->db->from('fee_session_groups');
         $this->db->join('fee_groups', 'fee_groups.id = fee_session_groups.fee_groups_id');
-       
+
         $this->db->where('fee_session_groups.session_id', $this->current_session);
         $this->db->where('fee_groups.is_system', 0);
         if ($id != null) {
             $this->db->where('fee_session_groups.id', $id);
         }
+
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('fee_session_groups.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
         $query = $this->db->get();
 
         $result = $query->result();
@@ -55,11 +65,12 @@ class Feesessiongroup_model extends MY_Model {
         return $result;
     }
 
-    public function getfeeTypeByGroup($fee_session_group_id, $id = null) {
+    public function getfeeTypeByGroup($fee_session_group_id, $id = null)
+    {
         $this->db->select('fee_groups_feetype.*,feetype.type,feetype.code, tb_branch.branch_name');
         $this->db->from('fee_groups_feetype');
         $this->db->join('feetype', 'feetype.id=fee_groups_feetype.feetype_id');
-        $this->db->join('tb_branch', 'tb_branch.id = fee_groups_feetype.branch_id' , 'Left');
+        $this->db->join('tb_branch', 'tb_branch.id = fee_groups_feetype.branch_id', 'Left');
         $this->db->where('fee_groups_feetype.fee_groups_id', $id);
         $this->db->where('fee_groups_feetype.fee_session_group_id', $fee_session_group_id);
         $this->db->order_by('fee_groups_feetype.id', 'asc');
@@ -67,20 +78,22 @@ class Feesessiongroup_model extends MY_Model {
         return $query->result();
     }
 
-    function group_exists($fee_groups_id) {
+    function group_exists($fee_groups_id, $branch_id)
+    {
         $this->db->where('fee_groups_id', $fee_groups_id);
         $this->db->where('session_id', $this->current_session);
         $query = $this->db->get('fee_session_groups');
         if ($query->num_rows() > 0) {
             return $query->row()->id;
         } else {
-            $data = array('fee_groups_id' => $fee_groups_id, 'session_id' => $this->current_session);
+            $data = array('fee_groups_id' => $fee_groups_id, 'session_id' => $this->current_session, 'branch_id' => $branch_id);
             $this->db->insert('fee_session_groups', $data);
             return $this->db->insert_id();
         }
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -105,7 +118,8 @@ class Feesessiongroup_model extends MY_Model {
         }
     }
 
-    function checkExists($data) {
+    function checkExists($data)
+    {
         $this->db->where('fee_session_group_id', $data['fee_session_group_id']);
         $this->db->where('fee_groups_id', $data['fee_groups_id']);
         $this->db->where('feetype_id', $data['feetype_id']);
@@ -119,7 +133,8 @@ class Feesessiongroup_model extends MY_Model {
         }
     }
 
-    public function valid_check_exists($str) {
+    public function valid_check_exists($str)
+    {
         $fee_groups_id = $this->input->post('fee_groups_id');
         $feetype_id = $this->input->post('feetype_id');
         $id = $this->input->post('id');
@@ -136,7 +151,8 @@ class Feesessiongroup_model extends MY_Model {
         }
     }
 
-    function check_data_exists($fee_groups_id, $feetype_id, $id) {
+    function check_data_exists($fee_groups_id, $feetype_id, $id)
+    {
         $this->db->where('fee_groups_id', $fee_groups_id);
         $this->db->where('session_id', $this->current_session);
         $query = $this->db->get('fee_session_groups');
@@ -157,5 +173,4 @@ class Feesessiongroup_model extends MY_Model {
             return FALSE;
         }
     }
-
 }

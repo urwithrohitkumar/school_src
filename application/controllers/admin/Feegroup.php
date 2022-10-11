@@ -17,6 +17,8 @@ class FeeGroup extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'admin/feegroup');
         $data['title'] = 'Add FeeGroup';
         $data['title_list'] = 'Recent FeeGroups';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->form_validation->set_rules(
                 'name', $this->lang->line('name'), array(
@@ -30,6 +32,7 @@ class FeeGroup extends Admin_Controller {
             $data = array(
                 'name' => $this->input->post('name'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->feegroup_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
@@ -61,6 +64,9 @@ class FeeGroup extends Admin_Controller {
         $data['id'] = $id;
         $feegroup = $this->feegroup_model->get($id);
         $data['feegroup'] = $feegroup;
+
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $feegroup_result = $this->feegroup_model->get();
         $data['feegroupList'] = $feegroup_result;
         $this->form_validation->set_rules(

@@ -36,7 +36,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('users'); ?></th>
-                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                       
                                         <th width="150"><?php echo $this->lang->line('role'); ?></th>
                                         <th><?php echo $this->lang->line('class'); ?></th>
                                         <th><?php echo $this->lang->line('ip_address'); ?></th>
@@ -57,7 +57,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('users'); ?></th>
-                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                       
                                         <th width="150"><?php echo $this->lang->line('role'); ?></th>
                                         <th><?php echo $this->lang->line('ip_address'); ?></th>
                                         <th width="200"><?php echo $this->lang->line('login_time'); ?></th>
@@ -75,7 +75,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('users'); ?></th>
-                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                       
                                         <th width="150"><?php echo $this->lang->line('role'); ?></th>
                                         <th><?php echo $this->lang->line('class'); ?></th>
                                         <th><?php echo $this->lang->line('ip_address'); ?></th>
@@ -95,7 +95,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('users'); ?></th>
-                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                       
                                         <th width="150"><?php echo $this->lang->line('role'); ?></th>
                                         <th><?php echo $this->lang->line('ip_address'); ?></th>
                                         <th width="200"><?php echo $this->lang->line('login_time'); ?></th>

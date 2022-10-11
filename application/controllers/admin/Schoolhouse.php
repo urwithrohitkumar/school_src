@@ -16,6 +16,8 @@ class Schoolhouse extends Admin_Controller {
         $data['title'] = 'Add School House';
         $data["house_name"] = "";
         $data["description"] = "";
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $houselist = $this->schoolhouse_model->get();
         $data["houselist"] = $houselist;
         $this->load->view('layout/header', $data);
@@ -40,6 +42,7 @@ class Schoolhouse extends Admin_Controller {
         } else {
             $data = array(
                 'house_name' => $this->input->post('house_name'),
+                'branch_id' => $this->input->post('branch_id'),
                 'is_active' => 'yes',
                 'description' => $this->input->post('description')
             );
@@ -55,12 +58,15 @@ class Schoolhouse extends Admin_Controller {
             access_denied();
         }
         $data['title'] = 'Edit School House';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $houselist = $this->schoolhouse_model->get();
         $data["houselist"] = $houselist;
         $data['id'] = $id;
         $house = $this->schoolhouse_model->get($id);
         $data["house"] = $house;
         $data["house_name"] = $house["house_name"];
+        $data["branch_id"] = $house["branch_id"];
         $data["description"] = $house["description"];
         $this->form_validation->set_rules('house_name', $this->lang->line('name'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {

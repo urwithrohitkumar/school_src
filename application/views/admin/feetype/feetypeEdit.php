@@ -36,6 +36,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 ?>   
                                 <?php echo $this->customlib->getCSRF(); ?>                       
                                 <input name="id" type="hidden" class="form-control"  value="<?php echo set_value('id', $feetype['id']); ?>" />
+                                <div class='form-group'>
+                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                <?php foreach ($branch as $key => $value) {  ?>
+                                <option value='<?php echo $value['id'] ?>' <?php if($feetype['branch_id'] == $value['id']) { echo "selected"; } ?>><?php echo $value['branch_name'] ?></option>
+                                <?php } ?>
+                                </select>
+                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
@@ -85,8 +94,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>
                                     <tr>
-                                        <th><?php echo $this->lang->line('name'); ?>
-                                        </th>
+                                        <th><?php echo $this->lang->line('name'); ?></th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('fees_code'); ?></th>
                                         <th class="text-right"><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
@@ -112,6 +121,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     }
                                                     ?>
                                                 </div>
+                                            </td>
+                                            <td class="mailbox-name">
+                                                <?php echo $feetype['branch_name']; ?>
                                             </td>
                                             <td class="mailbox-name">
                                                 <?php echo $feetype['code']; ?>

@@ -382,9 +382,12 @@ class Datatables
 
 
             $sqlRec .= $sql_query;
-
+            
             $search           = $this->ci->input->post('search');
-            $search           = $this->ci->db->escape_like_str(trim($search['value']));
+            if(!empty($search))
+            {
+                $search           = $this->ci->db->escape_like_str(trim($search['value']));
+            }
             $column           = explode(',', $this->searchable);
             $this->searchable = array();
             if (isset($search) && $search != "") {

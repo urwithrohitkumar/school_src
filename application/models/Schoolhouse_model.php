@@ -1,22 +1,28 @@
 <?php
 
-class Schoolhouse_model extends MY_model {
+class Schoolhouse_model extends MY_model
+{
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
 
+        
         if (!empty($id)) {
-
-            $query = $this->db->where("id", $id)->get("school_houses");
-
+            $query = $this->db->select('tb_branch.branch_name,school_houses.*')->join('tb_branch', 'tb_branch.id = school_houses.branch_id', 'left')->where("school_houses.id", $id)->get("school_houses");
             return $query->row_array();
         } else {
-
-            $query = $this->db->get("school_houses");
+            if ($this->session->userdata['admin']['branch_id'] != 0) {
+                $query=  $this->db->select('tb_branch.branch_name,school_houses.*')->join('tb_branch', 'tb_branch.id = school_houses.branch_id', 'left')->where('branch_id', $this->session->userdata['admin']['branch_id'])->get("school_houses");
+            }
+            else{
+                $query=  $this->db->select('tb_branch.branch_name,school_houses.*')->join('tb_branch', 'tb_branch.id = school_houses.branch_id', 'left')->get("school_houses");
+            }
             return $query->result_array();
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -56,7 +62,8 @@ class Schoolhouse_model extends MY_model {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -76,7 +83,4 @@ class Schoolhouse_model extends MY_model {
             //return $return_value;
         }
     }
-
 }
-
-?>

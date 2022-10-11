@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feediscount_model extends MY_Model {
+class Feediscount_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->current_session = $this->setting_model->getCurrentSession();
     }
@@ -16,13 +18,20 @@ class Feediscount_model extends MY_Model {
      * @param int $id
      * @return mixed
      */
-    public function get($id = null, $order = "desc") {
-        $this->db->select()->from('fees_discounts');
+    public function get($id = null, $order = "desc")
+    {
+        $this->db->select('tb_branch.branch_name,fees_discounts.*')->from('fees_discounts');
+        $this->db->join('tb_branch', 'tb_branch.id = fees_discounts.branch_id', 'left');
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $this->db->where('fees_discounts.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+
+
         if ($id != null) {
-            $this->db->where('id', $id);
+            $this->db->where('fees_discounts.id', $id);
         } else {
 
-            $this->db->order_by('id ' . $order);
+            $this->db->order_by('fees_discounts.id ' . $order);
         }
         $query = $this->db->get();
         if ($id != null) {
@@ -32,7 +41,8 @@ class Feediscount_model extends MY_Model {
         }
     }
 
-    public function getbyasc($id = null) {
+    public function getbyasc($id = null)
+    {
         $this->db->select()->from('fees_discounts');
         if ($id != null) {
             $this->db->where('id', $id);
@@ -51,7 +61,8 @@ class Feediscount_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -79,7 +90,8 @@ class Feediscount_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -109,7 +121,7 @@ class Feediscount_model extends MY_Model {
             $message = INSERT_RECORD_CONSTANT . " On  fees discounts id " . $id;
             $action = "Insert";
             $record_id = $id;
-            $this->log($message, $record_id, $action);           
+            $this->log($message, $record_id, $action);
             //======================Code End==============================
 
             $this->db->trans_complete(); # Completing transaction
@@ -126,14 +138,16 @@ class Feediscount_model extends MY_Model {
         }
     }
 
-    public function updateStudentDiscount($data) {
+    public function updateStudentDiscount($data)
+    {
         if (isset($data['id'])) {
             $this->db->where('id', $data['id']);
             $this->db->update('student_fees_discounts', $data);
         }
     }
 
-    public function allotdiscount($data) {
+    public function allotdiscount($data)
+    {
         $this->db->where('student_session_id', $data['student_session_id']);
         $this->db->where('fees_discount_id', $data['fees_discount_id']);
         $q = $this->db->get('student_fees_discounts');
@@ -144,31 +158,32 @@ class Feediscount_model extends MY_Model {
             $this->db->insert('student_fees_discounts', $data);
             return $this->db->insert_id();
         }
-    } 
+    }
 
-    public function searchAssignFeeByClassSection($class_id = null, $section_id = null, $fees_discount_id = null, $category = null, $gender = null, $rte = null) {
+    public function searchAssignFeeByClassSection($class_id = null, $section_id = null, $fees_discount_id = null, $category = null, $gender = null, $rte = null)
+    {
         $sql = "SELECT IFNULL(`student_fees_discounts`.`id`, '0') as `student_fees_discount_id`,"
-                . "`classes`.`id` AS `class_id`, `student_session`.`id` as `student_session_id`,"
-                . " `students`.`id`, `classes`.`class`, `sections`.`id` AS `section_id`,"
-                . " `sections`.`section`, `students`.`id`, `students`.`admission_no`,"
-                . " `students`.`roll_no`, `students`.`admission_date`, `students`.`firstname`,"
-                . " `students`.`lastname`,`students`.`middlename`, `students`.`image`, `students`.`mobileno`,"
-                . " `students`.`email`, `students`.`state`, `students`.`city`, `students`.`pincode`,"
-                . " `students`.`religion`, `students`.`dob`, `students`.`current_address`,"
-                . " `students`.`permanent_address`, IFNULL(students.category_id, 0) as `category_id`,"
-                . " IFNULL(categories.category, '') as `category`, `students`.`adhar_no`,"
-                . " `students`.`samagra_id`, `students`.`bank_account_no`, `students`.`bank_name`,"
-                . " `students`.`ifsc_code`, `students`.`guardian_name`, `students`.`guardian_relation`,"
-                . " `students`.`guardian_phone`, `students`.`guardian_address`, `students`.`is_active`,"
-                . " `students`.`created_at`, `students`.`updated_at`, `students`.`father_name`,"
-                . " `students`.`rte`, `students`.`gender` FROM `students` JOIN `student_session` ON"
-                . " `student_session`.`student_id` = `students`.`id` JOIN `classes` ON"
-                . " `student_session`.`class_id` = `classes`.`id` JOIN `sections` ON"
-                . " `sections`.`id` = `student_session`.`section_id` LEFT JOIN `categories` ON"
-                . " `students`.`category_id` = `categories`.`id` LEFT JOIN"
-                . " student_fees_discounts on student_fees_discounts.student_session_id=student_session.id"
-                . " AND student_fees_discounts.fees_discount_id=" . $this->db->escape($fees_discount_id) .
-                " WHERE `student_session`.`session_id` = " . $this->current_session;
+            . "`classes`.`id` AS `class_id`, `student_session`.`id` as `student_session_id`,"
+            . " `students`.`id`, `classes`.`class`, `sections`.`id` AS `section_id`,"
+            . " `sections`.`section`, `students`.`id`, `students`.`admission_no`,"
+            . " `students`.`roll_no`, `students`.`admission_date`, `students`.`firstname`,"
+            . " `students`.`lastname`,`students`.`middlename`, `students`.`image`, `students`.`mobileno`,"
+            . " `students`.`email`, `students`.`state`, `students`.`city`, `students`.`pincode`,"
+            . " `students`.`religion`, `students`.`dob`, `students`.`current_address`,"
+            . " `students`.`permanent_address`, IFNULL(students.category_id, 0) as `category_id`,"
+            . " IFNULL(categories.category, '') as `category`, `students`.`adhar_no`,"
+            . " `students`.`samagra_id`, `students`.`bank_account_no`, `students`.`bank_name`,"
+            . " `students`.`ifsc_code`, `students`.`guardian_name`, `students`.`guardian_relation`,"
+            . " `students`.`guardian_phone`, `students`.`guardian_address`, `students`.`is_active`,"
+            . " `students`.`created_at`, `students`.`updated_at`, `students`.`father_name`,"
+            . " `students`.`rte`, `students`.`gender` FROM `students` JOIN `student_session` ON"
+            . " `student_session`.`student_id` = `students`.`id` JOIN `classes` ON"
+            . " `student_session`.`class_id` = `classes`.`id` JOIN `sections` ON"
+            . " `sections`.`id` = `student_session`.`section_id` LEFT JOIN `categories` ON"
+            . " `students`.`category_id` = `categories`.`id` LEFT JOIN"
+            . " student_fees_discounts on student_fees_discounts.student_session_id=student_session.id"
+            . " AND student_fees_discounts.fees_discount_id=" . $this->db->escape($fees_discount_id) .
+            " WHERE `student_session`.`session_id` = " . $this->current_session;
 
 
         if ($class_id != null) {
@@ -193,13 +208,15 @@ class Feediscount_model extends MY_Model {
         return $query->result_array();
     }
 
-    public function deletedisstd($fees_discount_id, $array) {
+    public function deletedisstd($fees_discount_id, $array)
+    {
         $this->db->where('fees_discount_id', $fees_discount_id);
         $this->db->where_in('student_session_id', $array);
         $this->db->delete('student_fees_discounts');
     }
 
-    public function getStudentFeesDiscount($student_session_id = null) {
+    public function getStudentFeesDiscount($student_session_id = null)
+    {
         $this->db->select('student_fees_discounts.id ,student_fees_discounts.student_session_id,student_fees_discounts.status,student_fees_discounts.payment_id,student_fees_discounts.description as `student_fees_discount_description`, student_fees_discounts.fees_discount_id, fees_discounts.name,fees_discounts.code,fees_discounts.amount,fees_discounts.description,fees_discounts.session_id')->from('student_fees_discounts');
         $this->db->join('fees_discounts', 'fees_discounts.id = student_fees_discounts.fees_discount_id');
 
@@ -210,10 +227,10 @@ class Feediscount_model extends MY_Model {
         return $query->result_array();
     }
 
-    public function getDiscountNotApplied($student_session_id = null) {
+    public function getDiscountNotApplied($student_session_id = null)
+    {
         $query = "SELECT fees_discounts.*,student_fees_discounts.id as `student_fees_discount_id`,student_fees_discounts.status,student_fees_discounts.student_session_id,student_fees_discounts.payment_id FROM `student_fees_discounts` INNER JOIN fees_discounts on fees_discounts.id=student_fees_discounts.fees_discount_id WHERE student_session_id=$student_session_id and (student_fees_discounts.payment_id IS NULL OR student_fees_discounts.payment_id = '')";
         $query = $this->db->query($query);
         return $query->result();
     }
-
 }

@@ -24,6 +24,8 @@ class Feediscount extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'admin/feediscount');
         $feesdiscount_result = $this->feediscount_model->get();
         $data['feediscountList'] = $feesdiscount_result;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('code', $this->lang->line('discount_code'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
@@ -37,6 +39,7 @@ class Feediscount extends Admin_Controller {
                 'code' => $this->input->post('code'),
                 'amount' => $this->input->post('amount'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->feediscount_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success">' . $this->lang->line('success_message') . '</div>');
@@ -54,6 +57,8 @@ class Feediscount extends Admin_Controller {
         $data['feediscountList'] = $feesdiscount_result;
         $data['title'] = 'Edit feecategory';
         $data['id'] = $id;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $feediscount = $this->feediscount_model->get($id);
         $data['feediscount'] = $feediscount;
@@ -68,6 +73,7 @@ class Feediscount extends Admin_Controller {
                 'name' => $this->input->post('name'),
                 'code' => $this->input->post('code'),
                 'amount' => $this->input->post('amount'),
+                'branch_id' => $this->input->post('branch_id'),
                 'description' => $this->input->post('description'),
             );
             $this->feediscount_model->add($data);

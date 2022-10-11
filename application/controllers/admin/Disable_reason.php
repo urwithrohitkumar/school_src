@@ -12,7 +12,7 @@ class Disable_reason extends Admin_Controller
         parent::__construct();
     }
 
-    public function index()
+    public function index($id = null)
     {
         if (!$this->rbac->hasPrivilege('disable_reason', 'can_view')) {
             access_denied();
@@ -20,6 +20,8 @@ class Disable_reason extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Student Information');
         $this->session->set_userdata('sub_menu', 'student/disable_reason');
         $data['results'] = $this->disable_reason_model->get();
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
@@ -31,6 +33,7 @@ class Disable_reason extends Admin_Controller
 
             $data = array(
                 'reason' => $this->input->post('name'),
+                'branch_id' => $this->input->post('branch_id'),
             );
 
             if ($id == '') {
@@ -57,6 +60,9 @@ class Disable_reason extends Admin_Controller
         $data['data']    = $this->disable_reason_model->get($id);
         $data['results'] = $this->disable_reason_model->get();
         $data['name']    = $data['data']['reason'];
+        $data['branch_id']    = $data['data']['branch_id'];
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
@@ -68,6 +74,7 @@ class Disable_reason extends Admin_Controller
 
             $data = array(
                 'reason' => $this->input->post('name'),
+                'branch_id' => $this->input->post('branch_id'),
             );
 
             $data['id'] = $id;

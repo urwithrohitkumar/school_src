@@ -117,11 +117,23 @@ class Itemissue_model extends MY_Model {
         }
     }
 
-    public function get_IssueInventoryReport($start_date, $end_date) {
+    public function get_IssueInventoryReport($start_date, $end_date,$branch_id) {
 
         $condition = " and date_format(item_issue.issue_date,'%Y-%m-%d') between '" . $start_date . "' and '" . $end_date . "'";
         if ($this->session->userdata['admin']['branch_id'] != 0) {
-            $condition = " and item.branch_id = ".$this->session->userdata['admin']['branch_id']."";
+            if(!empty($branch_id))
+            {
+                $condition = " and item.branch_id = ".$branch_id."";
+            }
+            else{
+                $condition = " and item.branch_id = ".$this->session->userdata['admin']['branch_id']."";
+            }
+        }
+        else{
+            if(!empty($branch_id))
+            {
+                $condition = " and item.branch_id = ".$branch_id."";
+            }
         }
 
         $sql = "SELECT item_issue.*,item.name as `item_name`,item.item_category_id,tb_branch.branch_name, item_category.item_category ,staff.employee_id,staff.name as staff_name,staff.surname,roles.name FROM `item_issue` INNER JOIN item on item.id=item_issue.item_id INNER JOIN item_category on item_category.id=item.item_category_id INNER JOIN staff on staff.id=item_issue.issue_to  LEFT JOIN `tb_branch` ON `item`.`branch_id` = `tb_branch`.`id` INNER JOIN staff_roles on staff_roles.staff_id =staff.id INNER JOIN roles on roles.id= staff_roles.role_id where 1 " . $condition;

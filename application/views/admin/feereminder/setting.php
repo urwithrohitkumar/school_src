@@ -1,39 +1,103 @@
+<?php $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+
     <section class="content-header">
         <h1>
-            <i class="fa fa-gears"></i> <?php echo $this->lang->line('fees') . " " . $this->lang->line('reminder'); ?>
+            <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?>
         </h1>
     </section>
+
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-md-12">
-                <!-- left column -->
-                <form id="form1" action="<?php echo site_url('admin/feereminder/setting') ?>"  id="feereminder" name="feereminder" method="post" accept-charset="utf-8">
+            <?php
+            if ($this->rbac->hasPrivilege('fees_type', 'can_add')) {
+            ?>
+                <div class="col-md-4">
+                    <!-- Horizontal Form -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"> <?php echo $this->lang->line('fees') . " " . $this->lang->line('reminder'); ?></h3>
-                        </div>
-                        <div class="box-body">
-                            <?php if ($this->session->flashdata('msg')) { ?>
-                                <?php echo $this->session->flashdata('msg') ?>
-                            <?php } ?>
+                            <h3 class="box-title"><?php echo $this->lang->line('add_fees_type'); ?></h3>
+                        </div><!-- /.box-header -->
+                        <form id="form1" action="<?php echo base_url() ?>admin/feetype" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                            <div class="box-body">
+                                <?php if ($this->session->flashdata('msg')) { ?>
+                                    <?php echo $this->session->flashdata('msg') ?>
+                                <?php } ?>
+                                <?php
+                                if (isset($error_message)) {
+                                    echo "<div class='alert alert-danger'>" . $error_message . "</div>";
+                                }
+                                ?>
+                                <?php echo $this->customlib->getCSRF(); ?>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
 
-                            <!-- /.box-header -->
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
+                                    <input autofocus="" id="name" name="name" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
+                                    <span class="text-danger"><?php echo form_error('name'); ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('fees_code'); ?></label> <small class="req">*</small>
+                                    <input id="code" name="code" type="text" class="form-control" value="<?php echo set_value('code'); ?>" />
+                                    <span class="text-danger"><?php echo form_error('code'); ?></span>
+                                </div>
 
-                            <!-- Button HTML (to Trigger Modal) -->
 
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('description'); ?></label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"><?php echo set_value('description'); ?></textarea>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div><!-- /.box-body -->
 
-                            <table class="table table-hover ">
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!--/.col (right) -->
+                <!-- left column -->
+            <?php } ?>
+            <div class="col-md-<?php
+                                if ($this->rbac->hasPrivilege('fees_type', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header ptbnull">
+                        <h3 class="box-title titlefix"><?php echo $this->lang->line('fees_type_list'); ?></h3>
+                        <div class="box-tools pull-right">
+                        </div><!-- /.box-tools -->
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="download_label"><?php echo $this->lang->line('fees_type_list'); ?></div>
+                        <div class="mailbox-messages table-responsive">
+                            <table class="table table-striped table-bordered table-hover example">
                                 <thead>
-                                <th><?php echo $this->lang->line('action'); ?></th>
-                                <th><?php echo $this->lang->line('reminder') . " " . $this->lang->line('type') ?></th>
-                                <th><?php echo $this->lang->line('days'); ?></th>
+                                    <tr>
+                                        <th><?php echo $this->lang->line('name'); ?>
+                                        </th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                        <th><?php echo $this->lang->line('days'); ?></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-
-                                    <?php
+                                <?php
                                     $i = 1;
                                     $last_key = count($feereminderlist);
                                     foreach ($feereminderlist as $note_key => $note_value) {
@@ -67,22 +131,40 @@
                                     }
                                     ?>
                                 </tbody>
-                            </table>
-                        </div>
-                        <div class="box-footer">
-                            <?php if ($this->rbac->hasPrivilege('fees_reminder', 'can_edit')) {
-                                ?>
-                                <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
-                            <?php }
-                            ?>
+                            </table><!-- /.table -->
 
-                            <?php ?>
-                        </div>
-                </form>
+
+
+                        </div><!-- /.mail-box-messages -->
+                    </div><!-- /.box-body -->
+                </div>
             </div>
+            <!--/.col (left) -->
+            <!-- right column -->
 
         </div>
-</div><!--./wrapper-->
+        <div class="row">
+            <!-- left column -->
 
-</section><!-- /.content -->
-</div>
+            <!-- right column -->
+            <div class="col-md-12">
+
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+<script>
+    $(document).ready(function() {
+        $('.detail_popover').popover({
+            placement: 'right',
+            trigger: 'hover',
+            container: 'body',
+            html: true,
+            content: function() {
+                return $(this).closest('td').find('.fee_detail_popover').html();
+            }
+        });
+    });
+</script>

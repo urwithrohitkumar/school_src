@@ -19,7 +19,7 @@ class Studentfeemaster_model extends MY_Model
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function searchAssignFeeByClassSection($class_id = null, $section_id = null, $fee_session_group_id = null, $category = null, $gender = null, $rte = null)
+    public function searchAssignFeeByClassSection($class_id = null, $section_id = null, $fee_session_group_id = null, $category = null, $gender = null, $rte = null, $branch_id = null)
     {
         $sql = "SELECT IFNULL(`student_fees_master`.`id`, '0') as `student_fees_master_id`,`classes`.`id` AS `class_id`,"
             . " `student_session`.`id` as `student_session_id`, `students`.`id`, "
@@ -48,6 +48,9 @@ class Studentfeemaster_model extends MY_Model
 
         if ($class_id != null) {
             $sql .= " AND `student_session`.`class_id` = " . $this->db->escape($class_id);
+        }
+        if ($branch_id != null) {
+            $sql .= " AND `student_session`.`branch_id` = " . $branch_id;
         }
         if ($section_id != null) {
             $sql .= " AND `student_session`.`section_id` =" . $this->db->escape($section_id);

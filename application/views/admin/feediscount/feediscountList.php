@@ -4,7 +4,8 @@
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?></h1>
+            <i class="fa fa-money"></i> <?php echo $this->lang->line('fees_collection'); ?>
+        </h1>
     </section>
 
     <!-- Main content -->
@@ -12,36 +13,45 @@
         <div class="row">
             <?php
             if ($this->rbac->hasPrivilege('fees_discount', 'can_add')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add_fees_discount'); ?></h3>
                         </div><!-- /.box-header -->
-                        <form id="form1" action="<?php echo site_url('admin/feediscount') ?>"  id="feediscountform" name="feediscountform" method="post" accept-charset="utf-8">
+                        <form id="form1" action="<?php echo site_url('admin/feediscount') ?>" id="feediscountform" name="feediscountform" method="post" accept-charset="utf-8">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
                                 <?php } ?>
 
-                                <?php echo $this->customlib->getCSRF(); ?>                              
+                                <?php echo $this->customlib->getCSRF(); ?>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
-                                    <input autofocus="" id="name" name="name" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
+                                    <input autofocus="" id="name" name="name" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('name'); ?></span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('discount_code'); ?></label> <small class="req">*</small>
-                                    <input id="code" name="code" type="text" class="form-control"  value="<?php echo set_value('code'); ?>" />
+                                    <input id="code" name="code" type="text" class="form-control" value="<?php echo set_value('code'); ?>" />
                                     <span class="text-danger"><?php echo form_error('code'); ?></span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('amount'); ?></label> <small class="req">*</small>
-                                    <input id="amount" name="amount" type="text" class="form-control"  value="<?php echo set_value('amount'); ?>" />
+                                    <input id="amount" name="amount" type="text" class="form-control" value="<?php echo set_value('amount'); ?>" />
                                     <span class="text-danger"><?php echo form_error('amount'); ?></span>
                                 </div>
 
@@ -59,16 +69,17 @@
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('fees_discount', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('fees_discount', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -84,6 +95,7 @@
                                     <tr>
 
                                         <th><?php echo $this->lang->line('name'); ?>
+                                        <th><?php echo $this->lang->line('branch'); ?>
                                         <th><?php echo $this->lang->line('discount_code'); ?>
 
                                         <th><?php echo $this->lang->line('amount'); ?>
@@ -95,7 +107,7 @@
                                 <tbody>
                                     <?php
                                     foreach ($feediscountList as $feediscount) {
-                                        ?>
+                                    ?>
                                         <tr>
                                             <!-- <td class="mailbox-name">
                                             <?php echo $feediscount['name'] ?>
@@ -106,16 +118,20 @@
                                                 <div class="fee_detail_popover" style="display: none">
                                                     <?php
                                                     if ($feediscount['description'] == "") {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                        <?php
+                                                    <?php
                                                     } else {
-                                                        ?>
+                                                    ?>
                                                         <p class="text text-info"><?php echo $feediscount['description']; ?></p>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     ?>
                                                 </div>
+                                            </td>
+                                            <td class="mailbox-name">
+                                                <?php echo $feediscount['branch_name'] ?>
+
                                             </td>
                                             <td class="mailbox-name">
                                                 <?php echo $feediscount['code'] ?>
@@ -130,30 +146,29 @@
                                             <td class="mailbox-date pull-right white-space-nowrap">
                                                 <?php
                                                 if ($this->rbac->hasPrivilege('fees_discount_assign', 'can_view')) {
-                                                    ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/assign/<?php echo $feediscount['id'] ?>" 
-                                                       class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
+                                                ?>
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/assign/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
                                                         <i class="fa fa-tag"></i>
                                                     </a>
-                                                    <?php
+                                                <?php
                                                 }
                                                 if ($this->rbac->hasPrivilege('fees_discount', 'can_edit')) {
-                                                    ?>
+                                                ?>
 
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/edit/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/edit/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <?php
+                                                <?php
                                                 }
                                                 if ($this->rbac->hasPrivilege('fees_discount', 'can_delete')) {
-                                                    ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/delete/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                ?>
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/delete/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
                                                 <?php } ?>
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
 
@@ -166,7 +181,8 @@
                     </div><!-- /.box-body -->
 
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
             <!-- right column -->
 
         </div>
@@ -176,29 +192,30 @@
             <!-- right column -->
             <div class="col-md-12">
 
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
 
-        $("#btnreset").click(function () {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
 
     });
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });

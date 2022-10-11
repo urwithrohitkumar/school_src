@@ -22,6 +22,8 @@ class Feereminder extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'feereminder/setting');
         $data          = array();
         $data['title'] = 'Email Config List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $feereminderlist         = $this->feereminder_model->get();
         $data['feereminderlist'] = $feereminderlist;

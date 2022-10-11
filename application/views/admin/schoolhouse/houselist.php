@@ -3,18 +3,18 @@
         <h1>
             <i class="fa fa-user-plus"></i> <?php echo $this->lang->line('student_information'); ?>
         </h1>
-    </section> 
+    </section>
     <!-- Main content -->
     <section class="content">
         <div class="row">
             <?php
             if (($this->rbac->hasPrivilege('student_houses', 'can_add')) || ($this->rbac->hasPrivilege('student_houses', 'can_edit'))) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add') . " " . $this->lang->line('school') . " " . $this->lang->line('house') ?></h3>
-                        </div> 
+                        </div>
                         <?php
                         $url = "";
                         if (!empty($house_name)) {
@@ -22,29 +22,43 @@
                         } else {
                             $url = base_url() . "admin/schoolhouse/create";
                         }
+                        if (!empty($branch_id)) {
+                            $branch_id = $branch_id;
+                        } else {
+                            $branch_id = 0;
+                        }
                         ?>
-                        <form id="form1" action="<?php echo $url ?>"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                        <form id="form1" action="<?php echo $url ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
                             <div class="box-body">
                                 <?php
                                 if ($this->session->flashdata('msg')) {
                                     $msg = $this->session->flashdata('msg');
-                                    ?>
+                                ?>
                                     <script>
-                                        $(document).ready(function () {
+                                        $(document).ready(function() {
 
                                         });
                                     </script>
                                     <?php echo $this->session->flashdata('msg') ?>
-                                <?php } ?>    
+                                <?php } ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>' <?php if($branch_id == $value['id']) { echo "selected"; } ?>><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req"> *</small>
-                                    <input autofocus="" id="house_name" name="house_name" placeholder="" type="text" class="form-control"  value="<?php echo $house_name; ?>" />
+                                    <input autofocus="" id="house_name" name="house_name" placeholder="" type="text" class="form-control" value="<?php echo $house_name; ?>" />
                                     <span class="text-danger"><?php echo form_error('house_name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('description'); ?></label>
-                                    <input autofocus="" id="description" name="description" placeholder="" type="text" class="form-control"  value="<?php echo $description; ?>" />
+                                    <input autofocus="" id="description" name="description" placeholder="" type="text" class="form-control" value="<?php echo $description; ?>" />
                                     <span class="text-danger"><?php echo form_error('description'); ?></span>
                                 </div>
                             </div>
@@ -52,19 +66,19 @@
                                 <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                             </div>
                         </form>
-                    </div>  
-                </div> 
+                    </div>
+                </div>
             <?php } ?>
             <div class="col-md-<?php
-            if (($this->rbac->hasPrivilege('student_houses', 'can_add') ) || ($this->rbac->hasPrivilege('student_houses', 'can_edit'))) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">             
+                                if (($this->rbac->hasPrivilege('student_houses', 'can_add')) || ($this->rbac->hasPrivilege('student_houses', 'can_edit'))) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
-                        <h3 class="box-title titlefix"><?php echo $this->lang->line('house_list'); ?></h3>                   
+                        <h3 class="box-title titlefix"><?php echo $this->lang->line('house_list'); ?></h3>
                     </div>
                     <div class="box-body">
                         <div class="download_label"><?php echo $this->lang->line('house_list'); ?></div>
@@ -76,6 +90,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('name'); ?></th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('description'); ?></th>
                                         <th><?php echo $this->lang->line('house') . " " . $this->lang->line('id'); ?></th>
                                         <th class="text-right"><?php echo $this->lang->line('action'); ?></th>
@@ -85,25 +100,26 @@
                                     <?php
                                     $count = 1;
                                     foreach ($houselist as $house) {
-                                        ?>
+                                    ?>
                                         <tr>
                                             <td class="mailbox-name"><?php echo $house['house_name'] ?></td>
+                                            <td class="mailbox-name"><?php echo $house['branch_name'] ?></td>
                                             <td class="mailbox-name"><?php echo $house['description'] ?></td>
                                             <td class="mailbox-name"><?php echo $house['id'] ?></td>
-                                            <td  class="mailbox-date pull-right">
+                                            <td class="mailbox-date pull-right">
                                                 <?php if ($this->rbac->hasPrivilege('student_houses', 'can_edit')) { ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/schoolhouse/edit/<?php echo $house['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/schoolhouse/edit/<?php echo $house['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
                                                 <?php } ?>
                                                 <?php if ($this->rbac->hasPrivilege('student_houses', 'can_delete')) { ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/schoolhouse/delete/<?php echo $house['id'] ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/schoolhouse/delete/<?php echo $house['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
                                                 <?php } ?>
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                     }
                                     $count++;
                                     ?>
@@ -112,14 +128,14 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
-        </div> 
+        </div>
     </section>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnreset").click(function () {
+    $(document).ready(function() {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
     });

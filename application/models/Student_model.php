@@ -1795,7 +1795,7 @@ class Student_model extends MY_Model
         }
     }
 
-    public function search_alumniStudentReport($class_id = null, $section_id = null, $session_id = null)
+    public function search_alumniStudentReport($class_id = null, $section_id = null, $session_id = null, $branch_id = null)
     {
 
         $this->db->select('classes.id AS `class_id`,students.id,student_session.id as student_session_id,GROUP_CONCAT(classes.class,"(",sections.section,")") as class,sections.id AS `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,IFNULL(students.category_id, 0) as `category_id`,IFNULL(categories.category, "") as `category`,      students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code ,students.father_name , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.gender,students.rte,student_session.session_id')->from('alumni_students');
@@ -1809,6 +1809,9 @@ class Student_model extends MY_Model
         $this->db->where('students.is_active', "yes");
         if ($class_id != null) {
             $this->db->where('student_session.class_id', $class_id);
+        }
+        if ($branch_id != null) {
+            $this->db->where('student_session.branch_id', $branch_id);
         }
         if ($section_id != null) {
             $this->db->where('student_session.section_id', $section_id);

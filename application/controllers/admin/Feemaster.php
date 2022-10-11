@@ -19,7 +19,7 @@ class Feemaster extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
         $data['title'] = 'Feemaster List';
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $feegroup = $this->feegroup_model->get();
         $data['feegroupList'] = $feegroup;
         $feetype = $this->feetype_model->get();
@@ -67,7 +67,6 @@ class Feemaster extends Admin_Controller
                 'fine_percentage' => $this->input->post('fine_percentage'),
                 'fine_amount' => $this->input->post('fine_amount'),
             );
-
             $feegroup_result = $this->feesessiongroup_model->add($insert_array);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
             redirect('admin/feemaster/index');
@@ -160,7 +159,7 @@ class Feemaster extends Admin_Controller
         }
     }
 
-    function assign($id)
+    function assign($id, $branch_id)
     {
         if (!$this->rbac->hasPrivilege('fees_group_assign', 'can_view')) {
             access_denied();
@@ -168,6 +167,7 @@ class Feemaster extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
         $data['id'] = $id;
+        $data['branch_id'] = $branch_id;
         $data['title'] = 'student fees';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
@@ -193,12 +193,27 @@ class Feemaster extends Admin_Controller
             $data['class_id'] = $this->input->post('class_id');
             $data['section_id'] = $this->input->post('section_id');
 
-            $resultlist = $this->studentfeemaster_model->searchAssignFeeByClassSection($data['class_id'], $data['section_id'], $id, $data['category_id'], $data['gender'], $data['rte_status']);
+            $resultlist = $this->studentfeemaster_model->searchAssignFeeByClassSection($data['class_id'], $data['section_id'], $id, $data['category_id'], $data['gender'], $data['rte_status'], $branch_id);
             $data['resultlist'] = $resultlist;
         }
 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/feemaster/assign', $data);
         $this->load->view('layout/footer', $data);
+    }
+
+
+    function onChangeOption()
+    {
+        
+        $branch_id = $this->input->get('branch_id');
+        $feegroup = $this->feegroup_model->branchWisedata($branch_id);
+        $feetype = $this->feetype_model->branchWisedata($branch_id);
+        $data = array(
+            'feegroup' => $feegroup,
+            'feetype' => $feetype,
+
+        );
+        echo json_encode($data);
     }
 }
