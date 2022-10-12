@@ -14,7 +14,7 @@
                 <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
 
             </div>
-            <form  class="assign_teacher_form" action="<?php echo base_url(); ?>admin/approve_leave" method="post" enctype="multipart/form-data">
+            <form class="assign_teacher_form" action="<?php echo base_url(); ?>admin/approve_leave" method="post" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -26,15 +26,17 @@
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                    <select  id="branch_id" name="branch_id" class="form-control">
-                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                <select id="branch_id" name="branch_id" class="form-control">
+                                    <?php $ids = $this->customlib->getLoggedInBranchId();
+                                    if ($ids > 0) {  ?>
+                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
                                     <?php  } else { ?>
-                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                    <?php foreach ($all_branch as  $value) { ?>                                                        
-                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                    <?php } } ?>
+                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>
+                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                    <?php }
+                                    } ?>
                                 </select>
                                 <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
                             </div>
@@ -42,19 +44,19 @@
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value)"  class="form-control" >
+                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value)" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                     <?php
                                     foreach ($classlist as $class) {
-                                        ?>
+                                    ?>
                                         <option <?php
-                                        if ($class_id == $class["id"]) {
-                                            echo "selected";
-                                        }
-                                        ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                            <?php
-                                        }
-                                        ?>
+                                                if ($class_id == $class["id"]) {
+                                                    echo "selected";
+                                                }
+                                                ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
@@ -62,7 +64,7 @@
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                <select  id="secid" name="section_id" class="form-control" >
+                                <select id="secid" name="section_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('section_id'); ?></span>
@@ -80,15 +82,15 @@
                         <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('approve') . " " . $this->lang->line('leave') . " " . $this->lang->line('list'); ?></h3>
 
                         <div class="box-tools pull-right">
-                            <button type="button" onclick="add_leave()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="left" ><i class="fa fa-plus"></i> <?php echo $this->lang->line('add'); ?></button>
+                            <button type="button" onclick="add_leave()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="left"><i class="fa fa-plus"></i> <?php echo $this->lang->line('add'); ?></button>
                         </div>
 
                     </div>
- 
+
 
                     <div class="box-body table-responsive">
                         <div class="download_label"> <?php echo $this->lang->line('approve') . " " . $this->lang->line('leave') . " " . $this->lang->line('list'); ?> </div>
-                        <div >
+                        <div>
                             <table class="table table-hover table-striped table-bordered example">
                                 <thead>
                                     <tr>
@@ -107,9 +109,9 @@
                                 <tbody>
                                     <?php
                                     foreach ($results as $value) {
-                                        ?>
+                                    ?>
                                         <tr>
-                                            <td><?php echo $this->customlib->getFullName($value['firstname'],$value['middlename'],$value['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?></td>
+                                            <td><?php echo $this->customlib->getFullName($value['firstname'], $value['middlename'], $value['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?></td>
                                             <td><?php echo $value['class']; ?></td>
                                             <td><?php echo $value['section']; ?></td>
                                             <td><?php echo date($this->customlib->getSchoolDateFormat(), strtotime($value['apply_date'])); ?></td>
@@ -117,7 +119,7 @@
                                             <td><?php echo date($this->customlib->getSchoolDateFormat(), strtotime($value['to_date'])); ?></td>
 
 
-                                            <td ><?php
+                                            <td><?php
                                                 if ($value['status'] == 0) {
                                                     echo $this->lang->line('pending');
                                                 } else {
@@ -129,34 +131,34 @@
                                             <td class="text-right white-space-nowrap">
                                                 <?php
                                                 if ($value['status'] == 1) {
-                                                    ?>
-                                                    <a data-placement="left"  onclick="approve_leave('<?php echo $value['id']; ?>', '0', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>')"  class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('disapprove') ?>"> <i class="fa fa-times"  aria-hidden="true"></i></a>
-                                                    <?php
+                                                ?>
+                                                    <a data-placement="left" onclick="approve_leave('<?php echo $value['id']; ?>', '0', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>')" class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('disapprove') ?>"> <i class="fa fa-times" aria-hidden="true"></i></a>
+                                                <?php
                                                 } else {
-                                                    ?>
-                                                    <a data-placement="left"  onclick="approve_leave('<?php echo $value['id']; ?>', '1', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>')" class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('approve') ?>"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                                    <?php
+                                                ?>
+                                                    <a data-placement="left" onclick="approve_leave('<?php echo $value['id']; ?>', '1', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>')" class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('approve') ?>"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                                <?php
                                                 }
                                                 ?>
                                                 <?php
                                                 if ($value['docs'] != '') {
-                                                    ?>
+                                                ?>
                                                     <a data-placement="left" href="<?php echo base_url(); ?>admin/approve_leave/download/<?php echo $value['docs'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="" data-original-title="<?php echo $this->lang->line('download'); ?>">
                                                         <i class="fa fa-download"></i>
                                                     </a>
-                                                    <?php
+                                                <?php
                                                 }
                                                 ?>
 
                                                 <a data-placement="left" onclick="get('<?php echo $value['id']; ?>', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>')" class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('edit') ?>"><i class="fa fa-pencil"></i> </a>
 
-                                                <a data-placement="left" onclick="delete_leave('<?php echo $value['id']; ?>', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>');"  data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('delete') ?>" class="btn btn-default btn-xs"><i class="fa fa-trash" ></i> </a>
+                                                <a data-placement="left" onclick="delete_leave('<?php echo $value['id']; ?>', '<?php echo $value['class_id']; ?>', '<?php echo $value['section_id']; ?>');" data-toggle="tooltip" data-original-title="<?php echo $this->lang->line('delete') ?>" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> </a>
 
 
 
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
 
@@ -167,7 +169,8 @@
                     </div>
                 </div>
             </div>
-        </div></section>
+        </div>
+    </section>
 </div>
 
 
@@ -184,19 +187,21 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="row">
-                             <!--    <input type="hidden" id="leave_id"  name="leave_id"> -->
+                                <!--    <input type="hidden" id="leave_id"  name="leave_id"> -->
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                            <select  id="branch_id2" name="branch_id" class="form-control">
-                                            <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                            <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <select id="branch_id2" name="branch_id" class="form-control">
+                                            <?php $ids = $this->customlib->getLoggedInBranchId();
+                                            if ($ids > 0) {  ?>
+                                                <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                                <option value="<?php echo $ids; ?>" selected readonly><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
                                             <?php  } else { ?>
-                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                            <?php foreach ($all_branch as  $value) { ?>                                                        
-                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                            <?php } } ?>
+                                                <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                                <?php foreach ($all_branch as  $value) { ?>
+                                                    <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
+                                            <?php }
+                                            } ?>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
                                     </div>
@@ -205,7 +210,7 @@
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select type="text" onchange="get_section(this.value)" name="class" id="class" class="form-control ">
-                                            <option value="" ><?php echo $this->lang->line('select'); ?></option>
+                                            <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($classlist as $value) { ?>
                                                 <option value="<?php echo $value['id']; ?>"><?php echo $value['class']; ?></option>
                                             <?php } ?>
@@ -243,7 +248,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('to') . " " . $this->lang->line('date'); ?></label><small class="req"> *</small>
-                                        <input type="text" name="to_date" id="to_date"  class="form-control date">
+                                        <input type="text" name="to_date" id="to_date" class="form-control date">
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -267,7 +272,7 @@
                 <div class="box-footer">
 
                     <div class="pull-right paddA10">
-                        <button class="btn btn-info pull-right"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please wait" value=""><?php echo $this->lang->line('save'); ?></button>
+                        <button class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please wait" value=""><?php echo $this->lang->line('save'); ?></button>
 
                     </div>
             </form>
@@ -277,19 +282,19 @@
 </div>
 <!-- -->
 <script type="text/javascript">
-    $('#homework_docs').on('hidden.bs.modal', function () {
+    $('#homework_docs').on('hidden.bs.modal', function() {
 
         $(this).find("input,textarea,select")
-                .val('')
-                .end()
-                .find("input[type=checkbox], input[type=radio]")
-                .prop("checked", "")
-                .end();
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
         $('#section_id').find('option').not(':first').remove();
         $('#student').find('option').not(':first').remove();
     });
 
-    $(document).ready(function (e) {
+    $(document).ready(function(e) {
 
         getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id; ?>");
 
@@ -301,11 +306,15 @@
         $.ajax({
             url: "<?php echo site_url("admin/approve_leave/status") ?>",
             type: "POST",
-            data: {'class_id': class_id, 'section_id': section_id, 'id': id, 'status': status},
+            data: {
+                'class_id': class_id,
+                'section_id': section_id,
+                'id': id,
+                'status': status
+            },
             dataType: "json",
 
-            success: function (res)
-            {
+            success: function(res) {
                 if (res.status == 0) {
                     errorMsg(res.error);
                 } else {
@@ -327,14 +336,15 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#secid').addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -343,7 +353,7 @@
                     });
                     $('#secid').append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#secid').removeClass('dropdownloading');
                 }
             });
@@ -354,6 +364,7 @@
 
         }
     }
+
     function get_section(class_id, section_id = null) {
         if (class_id != "") {
             $('#section_id').html("");
@@ -362,11 +373,12 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -383,7 +395,7 @@
                 }
 
             });
-    }
+        }
     }
 
 
@@ -396,10 +408,13 @@
             $.ajax({
                 url: "<?php echo site_url("admin/approve_leave/remove_leave") ?>",
                 type: "POST",
-                data: {'class_id': class_id, 'section_id': section_id, 'id': leave_id},
+                data: {
+                    'class_id': class_id,
+                    'section_id': section_id,
+                    'id': leave_id
+                },
                 dataType: "json",
-                success: function (res)
-                {
+                success: function(res) {
                     if (res.status == 0) {
                         errorMsg(res.error);
                     } else {
@@ -418,11 +433,15 @@
         $.ajax({
             url: "<?php echo site_url("admin/approve_leave/get_details") ?>",
             type: "POST",
-            data: {'class_id': class_id, 'section_id': section_id, 'id': id},
+            data: {
+                'class_id': class_id,
+                'section_id': section_id,
+                'id': id
+            },
             dataType: 'json',
 
-            success: function (res)
-            {
+            success: function(res) {
+                console.log(res);
                 if (res.status == 0) {
                     errorMsg(res.error)
                 } else {
@@ -432,6 +451,8 @@
                     $('#message').html(res.reason);
                     $('#leave_id').val(res.id);
                     $('#class').val(res.class_id);
+                    $('#student').val(res.student_id);
+                    $('#branch_id2').val(res.branch_id);
                     $('#title').html('<?php echo $this->lang->line('edit') . " " . $this->lang->line('leave'); ?>');
                     get_section(res.class_id, res.section_id);
                     get_student(res.section_id, res.stud_id);
@@ -452,18 +473,44 @@
         $('#student').html("");
         var class_id = $('#class').val();
         var branch_id2 = $('#branch_id2').val();
-        
+
         $.ajax({
             url: "<?php echo site_url("admin/approve_leave/searchByClassSection") ?>/" + branch_id2 + "/" + class_id + "/" + student_id,
             type: "POST",
-            data: {section_id: id},
-            success: function (res)
-            {
+            data: {
+                section_id: id
+            },
+            success: function(res) {
 
                 $('#student').html(res);
             }
         });
     }
+
+    /**
+     * Student Value Fetch According to Branch 
+     */
+    $(document).on('change', '#branch_id2', function() {
+        var class_id = $('#class').val();
+        var id = $('#section_id').val();
+        get_student(id, student_id = null, section_id = null)
+    })
+    /**
+     * Student Value Fetch According to Section 
+     */
+    $(document).on('change', '#section_id', function() {
+        var class_id = $('#class').val();
+        var id = $('#section_id').val();
+        get_student(id, student_id = null, section_id = null)
+    })
+    /**
+     * Student Value Fetch According to Class 
+     */
+    $(document).on('change', '#class', function() {
+        var class_id = $('#class').val();
+        var id = $('#section_id').val();
+        get_student(id, student_id = null, section_id = null)
+    })
 
     function add_leave() {
         $('#title').html('<?php echo $this->lang->line('add') . " " . $this->lang->line('leave'); ?>');
@@ -475,7 +522,7 @@
 
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#myModal').modal({
             backdrop: 'static',
             keyboard: false,
@@ -483,7 +530,7 @@
         });
     });
 
-    $("#addleave_form").on('submit', (function (e) {
+    $("#addleave_form").on('submit', (function(e) {
         e.preventDefault();
 
         var $this = $(this).find("button[type=submit]:focus");
@@ -496,17 +543,16 @@
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (res)
-            {
+            success: function(res) {
 
                 if (res.status == "fail") {
 
                     var message = "";
-                    $.each(res.error, function (index, value) {
+                    $.each(res.error, function(index, value) {
 
                         message += value;
                     });
@@ -519,15 +565,14 @@
                     window.location.reload(true);
                 }
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
                 alert("Error occured.please try again");
                 $this.button('reset');
             },
-            complete: function () {
+            complete: function() {
                 $this.button('reset');
             }
 
         });
     }));
-
 </script>

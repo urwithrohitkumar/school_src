@@ -4,7 +4,8 @@
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-credit-card"></i> <?php echo $this->lang->line('expenses'); ?> <small><?php echo $this->lang->line('student_fee'); ?></small></h1>
+            <i class="fa fa-credit-card"></i> <?php echo $this->lang->line('expenses'); ?> <small><?php echo $this->lang->line('student_fee'); ?></small>
+        </h1>
     </section>
 
     <!-- Main content -->
@@ -18,7 +19,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add_expense'); ?></h3>
                         </div><!-- /.box-header -->
-                        <form id="form1" action="<?php echo base_url() ?>admin/expense"  id="employeeform" name="employeeform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                        <form id="form1" action="<?php echo base_url() ?>admin/expense" id="employeeform" name="employeeform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
@@ -29,64 +30,48 @@
                                 }
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('expense_head'); ?></label> <small class="req">*</small>
 
-                                    <select autofocus="" id="exp_head_id" name="exp_head_id" class="form-control" >
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($expheadlist as $exphead) {
-                                            ?>
-                                            <option value="<?php echo $exphead['id'] ?>"<?php
-                                            if (set_value('exp_head_id') == $exphead['id']) {
-                                                echo "selected =selected";
-                                            }
-                                            ?>><?php echo $exphead['exp_category'] ?></option>
-
-                                            <?php
-                                            $count++;
-                                        }
-                                        ?>
+                                    <select autofocus="" id="exp_head_id" name="exp_head_id" class="form-control">
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('exp_head_id'); ?></span>
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select  id="branch_id" name="branch_id" class="form-control">
-                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                        <?php  } else { ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($all_branch as  $value) { ?>                                                        
-                                        <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                        <?php } } ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
-                                </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
-                                    <input id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
+                                    <input id="name" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('name'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('invoice_no'); ?></label>
-                                    <input id="invoice_no" name="invoice_no" placeholder="" type="text" class="form-control"  value="<?php echo set_value('invoice_no'); ?>" />
+                                    <input id="invoice_no" name="invoice_no" placeholder="" type="text" class="form-control" value="<?php echo set_value('invoice_no'); ?>" />
                                     <span class="text-danger"><?php echo form_error('invoice_no'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('date'); ?></label> <small class="req">*</small>
-                                    <input id="date" name="date" placeholder="" type="text" class="form-control date"  value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="readonly" />
+                                    <input id="date" name="date" placeholder="" type="text" class="form-control date" value="<?php echo set_value('date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="readonly" />
                                     <span class="text-danger"><?php echo form_error('date'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('amount'); ?></label> <small class="req">*</small>
-                                    <input id="amount" name="amount" placeholder="" type="text" class="form-control"  value="<?php echo set_value('amount'); ?>" />
+                                    <input id="amount" name="amount" placeholder="" type="text" class="form-control" value="<?php echo set_value('amount'); ?>" />
                                     <span class="text-danger"><?php echo form_error('amount'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('attach_document'); ?></label>
-                                    <input id="documents" name="documents" placeholder="" type="file" class="filestyle form-control"  value="<?php echo set_value('documents'); ?>" />
+                                    <input id="documents" name="documents" placeholder="" type="file" class="filestyle form-control" value="<?php echo set_value('documents'); ?>" />
                                     <span class="text-danger"><?php echo form_error('documents'); ?></span>
                                 </div>
                                 <div class="form-group">
@@ -101,16 +86,17 @@
                             </div>
                         </form>
                     </div>
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('expense', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('expense', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -121,13 +107,13 @@
                     <div class="box-body">
                         <div class="mailbox-messages table-responsive">
                             <div class="download_label"><?php echo $this->lang->line('expense_list'); ?></div>
-                            <div class="table-responsive"> 
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover expense-list" data-export-title="<?php echo $this->lang->line('expense_list'); ?>">
                                     <thead>
                                         <tr>
                                             <th><?php echo $this->lang->line('name'); ?>
                                             </th>
-                                             <th><?php echo $this->lang->line('description'); ?>
+                                            <th><?php echo $this->lang->line('description'); ?>
                                             </th>
                                             <th><?php echo $this->lang->line('invoice_no'); ?>
                                             </th>
@@ -144,12 +130,13 @@
                                     </tbody>
                                 </table><!-- /.table -->
 
-                            </div>  
+                            </div>
 
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
 
         </div>
         <div class="row">
@@ -158,16 +145,44 @@
             <!-- right column -->
             <div class="col-md-12">
 
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
 <script>
-    ( function ( $ ) {
-    'use strict';
-    $(document).ready(function () {
-        initDatatable('expense-list','admin/expense/getexpenselist',[],[],100);
-    });
-} ( jQuery ) )
+    (function($) {
+        'use strict';
+        $(document).ready(function() {
+            initDatatable('expense-list', 'admin/expense/getexpenselist', [], [], 100);
+        });
+    }(jQuery))
+</script>
+
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/expense/onchangeValue",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].exp_category + '</option>';
+                    }
+                    $('#exp_head_id').html(html);
+                }
+            }
+        });
+    })
 </script>

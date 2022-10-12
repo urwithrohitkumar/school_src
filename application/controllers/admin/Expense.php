@@ -62,7 +62,8 @@ class Expense extends Admin_Controller
         $data['expenselist'] = $expense_result;
         $expnseHead          = $this->expensehead_model->get();
         $data['expheadlist'] = $expnseHead;
-        $data['all_branch']  = $this->branch_model->getBranch();       
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('admin/expense/expenseList', $data);
         $this->load->view('layout/footer', $data);
@@ -192,7 +193,8 @@ class Expense extends Admin_Controller
         $data['title_list']  = 'Fees Master List';
         $expense_result      = $this->expense_model->get();
         $data['expenselist'] = $expense_result;
-        $expnseHead          = $this->expensehead_model->get();
+        $expense_branch_id = $expense_result[0]['branch_id'];
+        $expnseHead          = $this->expensehead_model->getByBranch($expense_branch_id);
         $data['expheadlist'] = $expnseHead;
         $data['all_branch']  = $this->branch_model->getBranch(); 
         $this->form_validation->set_rules('exp_head_id', $this->lang->line('expense_head'), 'trim|required|xss_clean');
@@ -234,6 +236,8 @@ class Expense extends Admin_Controller
         if (!$this->rbac->hasPrivilege('search_expense', 'can_view')) {
             access_denied();
         }
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['searchlist']  = $this->customlib->get_searchtype();
         $data['search_type'] = '';
         $this->session->set_userdata('top_menu', 'Expenses');
@@ -301,6 +305,7 @@ class Expense extends Admin_Controller
    public function search()
     {
         $button_type = $this->input->post('button_type');
+        $branch_id = $this->input->post('branch_id');
 
         if ($button_type == "search_filter") {
            
@@ -331,7 +336,7 @@ class Expense extends Admin_Controller
               $date_to= $this->input->post('date_to');  
             }
             
-            $params      = array('button_type' => $button_type, 'search_type'=>$search_type, 'search_text' => $search_text,'date_from' => $date_from, 'date_to' => $date_to);
+            $params      = array('button_type' => $button_type, 'search_type'=>$search_type, 'search_text' => $search_text,'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
             $array       = array('status' => 1, 'error' => '', 'params' => $params);
             echo json_encode($array);
         }
@@ -342,6 +347,7 @@ class Expense extends Admin_Controller
         $search_type = $this->input->post('search_type');
         $button_type = $this->input->post('button_type');
         $search_text = $this->input->post('search_text');
+        $branch_id = $this->input->post('branch_id');
 
         if($button_type=='search_filter'){
             if ($search_type!="") {
@@ -363,12 +369,12 @@ class Expense extends Admin_Controller
             $data['exp_title'] = 'Expense Result From ' . date($dateformat, strtotime($date_from)) . " To " . date($dateformat, strtotime($date_to));
             $date_from         = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_from));
             $date_to           = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_to));
-            $resultList         = $this->expense_model->search("", $date_from, $date_to);
+            $resultList         = $this->expense_model->search("", $date_from, $date_to,$branch_id);
 
         }else{
 
             $search_text        = $this->input->post('search_text');
-            $resultList         = $this->expense_model->search($search_text, "", "");
+            $resultList         = $this->expense_model->search($search_text, "", "",$branch_id);
             $resultList= $resultList;
         }
         
@@ -403,4 +409,18 @@ class Expense extends Admin_Controller
         );
         echo json_encode($json_data);
     }
+
+
+    public function onchangeValue()
+    {
+
+        $branch_id = $this->input->get('branch_id');
+        $expnseHead          = $this->expensehead_model->getByBranch($branch_id);
+        echo json_encode($expnseHead);
+
+    }
+
 }
+
+
+

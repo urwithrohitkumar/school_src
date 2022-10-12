@@ -33,6 +33,7 @@ class approve_leave extends Admin_Controller {
         $data['sch_setting']     = $this->setting_model->getSetting();
         $data['results'] = array();
         $listaudit = $this->apply_leave_model->get(null, null, null);
+        $branch_id = $this->input->post('branch_id');
         if (isset($_POST['branch_id']) && $_POST['branch_id'] != '') {
             $data['branch_id'] = $branch_id = $_POST['branch_id'];
         }
@@ -48,7 +49,7 @@ class approve_leave extends Admin_Controller {
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == FALSE) {            
         } else {
-            $listaudit = $this->apply_leave_model->get(null, $class_id, $section_id);
+            $listaudit = $this->apply_leave_model->get(null, $class_id, $section_id,$branch_id);
         }
 
         $data['results'] = $listaudit;       

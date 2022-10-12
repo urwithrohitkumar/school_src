@@ -33,7 +33,6 @@ class Income extends Admin_Controller
         $this->form_validation->set_rules('date', $this->lang->line('date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('documents', $this->lang->line('documents'), 'callback_handle_upload');
         if ($this->form_validation->run() == false) {
-
         } else {
             $data = array(
                 'inc_head_id' => $this->input->post('inc_head_id'),
@@ -61,7 +60,7 @@ class Income extends Admin_Controller
         $data['incomelist']  = $income_result;
         $incomeHead          = $this->incomehead_model->get();
         $data['incheadlist'] = $incomeHead;
-        $data['all_branch']  = $this->branch_model->getBranch();        
+        $data['all_branch']  = $this->branch_model->getBranch();
         $this->load->view('layout/header', $data);
         $this->load->view('admin/income/incomeList', $data);
         $this->load->view('layout/footer', $data);
@@ -186,11 +185,13 @@ class Income extends Admin_Controller
         $data['title']       = 'Edit Fees Master';
         $data['id']          = $id;
         $income              = $this->income_model->get($id);
+        $incomeBranch_id = $income['branch_id'];
+
         $data['income']      = $income;
         $data['title_list']  = 'Fees Master List';
-        $expnseHead          = $this->incomehead_model->get();
+        $expnseHead          = $this->incomehead_model->getIncomeheadWithBranch($incomeBranch_id);
         $data['incheadlist'] = $expnseHead;
-        $data['all_branch']  = $this->branch_model->getBranch(); 
+        $data['all_branch']  = $this->branch_model->getBranch();
         $this->form_validation->set_rules('inc_head_id', $this->lang->line('income_head'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
@@ -230,6 +231,8 @@ class Income extends Admin_Controller
         if (!$this->rbac->hasPrivilege('search_due_fees', 'can_view')) {
             access_denied();
         }
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
         $data['searchlist'] = $this->customlib->get_searchtype();
         $this->session->set_userdata('top_menu', 'Income');
         $this->session->set_userdata('sub_menu', 'income/incomesearch');
@@ -238,7 +241,6 @@ class Income extends Admin_Controller
         $this->load->view('layout/header', $data);
         $this->load->view('admin/income/incomeSearch', $data);
         $this->load->view('layout/footer', $data);
-
     }
 
     public function getincomelist()
@@ -304,14 +306,14 @@ class Income extends Admin_Controller
     public function checkvalidation()
     {
         $search    = $this->input->post('search');
+        $branch_id = $this->input->post('branch_id');
         $date_from = "";
         $date_to   = "";
         if ($search == "search_filter") {
             $this->form_validation->set_rules('search_type', $this->lang->line('search') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == false) {
                 $msg        = array('search_type' => form_error('search_type'));
-                $json_array = array('status' => 'fail', 'error' => $msg, 'message' => '');
-
+                $json_array = array('status' => 'fail', 'error' => $msg, 'message' => '', 'branch_id' => $branch_id);
             } else {
                 $search_type = $this->input->post('search_type');
                 $date_from   = $this->input->post('date_from');
@@ -322,19 +324,18 @@ class Income extends Admin_Controller
                     $date_to   = strtotime($date_to);
                 }
 
-                $json_array = array('status' => 'success', 'error' => '', 'search_type' => $search_type, 'message' => $this->lang->line('success_message'), 'date_from' => $date_from, 'date_to' => $date_to);
+                $json_array = array('status' => 'success', 'error' => '', 'search_type' => $search_type, 'message' => $this->lang->line('success_message'), 'date_from' => $date_from, 'date_to' => $date_to, 'branch_id' => $branch_id);
             }
         } else {
 
             $this->form_validation->set_rules('search_text', $this->lang->line('search_text'), 'trim|required|xss_clean');
             if ($this->form_validation->run() == false) {
                 $msg        = array('search_text' => form_error('search_text'));
-                $json_array = array('status' => 'fail', 'error' => $msg, 'message' => '');
-
+                $json_array = array('status' => 'fail', 'error' => $msg, 'message' => '', 'branch_id' => $branch_id);
             } else {
                 $search_type = $this->input->post('search_text');
 
-                $json_array = array('status' => 'success', 'error' => '', 'search_type' => $search_type, 'message' => $this->lang->line('success_message'));
+                $json_array = array('status' => 'success', 'error' => '', 'search_type' => $search_type, 'message' => $this->lang->line('success_message'), 'branch_id' => $branch_id);
             }
         }
         echo json_encode($json_array);
@@ -342,13 +343,22 @@ class Income extends Admin_Controller
 
     public function getincomesearchlist($str)
     {
+
         $res         = explode("-", $str);
         $search_type = $res[0];
         $search      = $res[1];
-        $branch_id      = $this->session->admin['branch_id'];
-        if (count($res) == 4) {
+        if ($search == "search_filter") {
+            $branch_id      = $res[2];
+        } else {
+            $branch_id   = $res[4];
+        }
+
+
+        // $branch_id      = $this->session->admin['branch_id'];
+        if (count($res) == 5) {
             $date_from = $res[2];
             $date_to   = $res[3];
+
             $date_from = date('Y-m-d', $date_from);
             $date_to   = date('Y-m-d', $date_to);
         }
@@ -358,6 +368,7 @@ class Income extends Admin_Controller
             if (isset($search_type) && $search_type != '') {
 
                 if ($search_type == 'all') {
+
                     $dates = $this->customlib->get_betweendate('this_year');
                 }
                 if ($search_type == 'period') {
@@ -366,7 +377,6 @@ class Income extends Admin_Controller
                 } else {
 
                     $dates = $this->customlib->get_betweendate($search_type);
-
                 }
 
                 $data['search_type'] = $search_type;
@@ -385,12 +395,12 @@ class Income extends Admin_Controller
 
             $date_from  = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_from));
             $date_to    = date('Y-m-d', $this->customlib->dateYYYYMMDDtoStrtotime($date_to));
-            $resultList = $this->income_model->search("", $date_from, $date_to,$branch_id);
+            $resultList = $this->income_model->search("", $date_from, $date_to, $branch_id);
             $resultList = $resultList;
         } else {
 
             $search_text = $search_type;
-            $resultList  = $this->income_model->search($search_text, "", "",$branch_id);
+            $resultList  = $this->income_model->search($search_text, "", "");
             $resultList  = $resultList;
         }
         $m               = json_decode($resultList);
@@ -402,6 +412,7 @@ class Income extends Admin_Controller
                 $total_amount += $value->amount;
                 $row       = array();
                 $row[]     = $value->name;
+                $row[]     = $value->branch_name;
                 $row[]     = $value->invoice_no;
                 $row[]     = $value->income_category;
                 $row[]     = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($value->date));
@@ -409,6 +420,7 @@ class Income extends Admin_Controller
                 $dt_data[] = $row;
             }
             $footer_row   = array();
+            $footer_row[] = "";
             $footer_row[] = "";
             $footer_row[] = "";
             $footer_row[] = "";
@@ -424,10 +436,9 @@ class Income extends Admin_Controller
             "data"            => $dt_data,
         );
         echo json_encode($json_data);
-
     }
 
-     /**
+    /**
      * Get Item Stock Option Details according to branch id
      */
 
@@ -438,8 +449,4 @@ class Income extends Admin_Controller
         $incomeHead = $this->incomehead_model->getIncomeheadWithBranch($branch_id);
         echo json_encode($incomeHead);
     }
-
-
-
-
 }

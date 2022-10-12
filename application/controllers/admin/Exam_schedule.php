@@ -21,6 +21,8 @@ class Exam_schedule extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'Examinations/Examschedule');
         $examgroup_result = $this->examgroup_model->get();
         $data['examgrouplist'] = $examgroup_result;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->form_validation->set_rules('exam_group_id', $this->lang->line('exam') . " " . $this->lang->line('group'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'trim|required|xss_clean');
@@ -43,6 +45,12 @@ class Exam_schedule extends Admin_Controller {
         $this->load->view('layout/header', $data);
         $this->load->view('admin/exam_schedule/exam_schedule', $data);
         $this->load->view('layout/footer', $data);
+    }
+
+    public function branchOptiondata(){
+        $branch_id = $this->input->get('branch_id');
+        $examgroup_result = $this->examgroup_model->getWithBranch($branch_id);
+        echo json_encode($examgroup_result);
     }
 
 }

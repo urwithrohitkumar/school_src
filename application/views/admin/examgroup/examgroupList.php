@@ -1,20 +1,20 @@
 <?php $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">  
+<div class="content-wrapper">
 
     <!-- Main content -->
     <section class="content">
         <div class="row">
             <?php
             if ($this->rbac->hasPrivilege('exam_group', 'can_add')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"> <?php echo $this->lang->line('add') . " " . $this->lang->line('exam') . " " . $this->lang->line('group'); ?></h3>
                         </div><!-- /.box-header -->
-                        <form id="form1" action="<?php echo site_url('admin/examgroup') ?>"  id="examgroupform" name="examgroupform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                        <form id="form1" action="<?php echo site_url('admin/examgroup') ?>" id="examgroupform" name="examgroupform" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                             <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
@@ -26,35 +26,32 @@
                                 ?>
                                 <?php echo $this->customlib->getCSRF(); ?>
 
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?> <small class="req">*</small></label> 
-                                    <input id="name" autofocus="" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name'); ?>" />
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?> <small class="req">*</small></label>
+                                    <input id="name" autofocus="" name="name" placeholder="" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
                                     <span class="text-danger"><?php echo form_error('name'); ?></span>
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select  id="branch_id" name="branch_id" class="form-control">
-                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                        <?php  } else { ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($all_branch as  $value) { ?>                                                        
-                                        <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                        <?php } } ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
-                                </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"> <?php echo $this->lang->line('exam') . " " . $this->lang->line('type') ?></label> <small class="req">*</small>
                                     <select id="name" name="exam_type" placeholder="" type="text" class="form-control">
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($examType as $examType_key => $examType_value) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $examType_key; ?>"><?php echo $examType_value; ?></option>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </select>
@@ -73,16 +70,17 @@
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('exam_group', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('exam_group', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
@@ -105,12 +103,12 @@
                                 <tbody>
                                     <?php
                                     if (empty($examgrouplist)) {
-                                        ?>
+                                    ?>
 
                                         <?php
                                     } else {
                                         foreach ($examgrouplist as $examgroup) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td class="mailbox-name">
                                                     <a href="#" data-toggle="popover" class="detail_popover"><?php echo $examgroup->name; ?></a>
@@ -118,13 +116,13 @@
                                                     <div class="fee_detail_popover" style="display: none">
                                                         <?php
                                                         if ($examgroup->description == "") {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-danger"><?php echo $this->lang->line('no_description'); ?></p>
-                                                            <?php
+                                                        <?php
                                                         } else {
-                                                            ?>
+                                                        ?>
                                                             <p class="text text-info"><?php echo $examgroup->description; ?></p>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         ?>
                                                     </div>
@@ -142,30 +140,29 @@
 
                                                 <td class="mailbox-date pull-right white-space-nowrap">
                                                     <?php if ($this->rbac->hasPrivilege('exam', 'can_view')) { ?>
-                                                        <a href="<?php echo base_url(); ?>admin/examgroup/addexam/<?php echo $examgroup->id ?>"
-                                                           class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('add') . " " . $this->lang->line('exam') ?>">
+                                                        <a href="<?php echo base_url(); ?>admin/examgroup/addexam/<?php echo $examgroup->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('add') . " " . $this->lang->line('exam') ?>">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <?php
+                                                    <?php
                                                     }
 
 
                                                     if ($this->rbac->hasPrivilege('exam_group', 'can_edit')) {
-                                                        ?>
-                                                        <a data-placement="left" href="<?php echo site_url('admin/examgroup/edit/' . $examgroup->id); ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                    ?>
+                                                        <a data-placement="left" href="<?php echo site_url('admin/examgroup/edit/' . $examgroup->id); ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     if ($this->rbac->hasPrivilege('exam_group', 'can_delete')) {
-                                                        ?>
-                                                        <a data-placement="left" href="<?php echo site_url('admin/examgroup/delete/' . $examgroup->id); ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    ?>
+                                                        <a data-placement="left" href="<?php echo site_url('admin/examgroup/delete/' . $examgroup->id); ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                             <i class="fa fa-remove"></i>
                                                         </a>
                                                     <?php } ?>
                                                 </td>
                                             </tr>
-                                            <?php
+                                    <?php
                                         }
                                     }
                                     ?>
@@ -178,7 +175,8 @@
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
 
         </div>
 
@@ -186,7 +184,7 @@
 </div><!-- /.content-wrapper -->
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy',]) ?>';
 
 
@@ -195,7 +193,7 @@
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });

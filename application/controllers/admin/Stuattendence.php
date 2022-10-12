@@ -136,7 +136,7 @@ class Stuattendence extends Admin_Controller
             }
             $attendencetypes = $this->attendencetype_model->get();
             $data['attendencetypeslist'] = $attendencetypes;
-            $resultlist = $this->stuattendence_model->searchAttendenceClassSection($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)));
+        $resultlist = $this->stuattendence_model->searchAttendenceClassSection($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)),$branch_id);
             $data['resultlist'] = $resultlist;
 
             $this->load->view('layout/header', $data);
@@ -218,7 +218,8 @@ class Stuattendence extends Admin_Controller
             }
             $attendencetypes = $this->attendencetype_model->get();
             $data['attendencetypeslist'] = $attendencetypes;
-            $resultlist = $this->stuattendence_model->searchAttendenceClassSectionPrepare($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)));
+            $branch_id = $this->input->post('branch_id');
+            $resultlist = $this->stuattendence_model->searchAttendenceClassSectionPrepare($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)),$branch_id);
 
             $data['resultlist'] = $resultlist;
             $data['sch_setting'] = $this->sch_setting_detail;

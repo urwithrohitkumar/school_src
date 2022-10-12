@@ -11,40 +11,43 @@
                     </div>
                     <div class="box-body">
 
-                        <form role="form" action="<?php echo site_url('admin/exam_schedule') ?>" method="post" >
+                        <form role="form" action="<?php echo site_url('admin/exam_schedule') ?>" method="post">
 
                             <?php echo $this->customlib->getCSRF(); ?>
 
-                            <div class="row"> 
-                                <div class="col-sm-6 col-lg-3 col-md-3 col20">
+                            <div class="row">
+                            <div class="col-sm-6 col-lg-4 col-md-4 ">
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4 col-md-4 ">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
-                                        <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($examgrouplist as $ex_group_key => $ex_group_value) {
-                                                ?>
-                                                <option value="<?php echo $ex_group_value->id ?>" <?php
-                                                if (set_value('exam_group_id') == $ex_group_value->id) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?php echo $ex_group_value->name; ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                        <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control">
+                                            <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_group_id'); ?></span>
                                     </div>
-                                </div><!--./col-md-3-->    
-                                <div class="col-sm-6 col-lg-3 col-md-3 col20">
-                                    <div class="form-group">  
+                                </div>
+                                <!--./col-md-3-->
+                                <div class="col-sm-6 col-lg-4 col-md-4 ">
+                                    <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') ?></label><small class="req"> *</small>
-                                        <select  id="exam_id" name="exam_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <select id="exam_id" name="exam_id" class="form-control">
+                                            <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
-                                    </div>  
-                                </div><!--./col-md-3-->
+                                    </div>
+                                </div>
+                                <!--./col-md-3-->
 
 
                                 <div class="col-sm-12">
@@ -52,7 +55,7 @@
                                         <button type="submit" name="search" value="search_filter" class="btn btn-primary pull-right btn-sm checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
                                     </div>
                                 </div>
-                            </div>  
+                            </div>
                         </form>
 
                     </div>
@@ -85,7 +88,7 @@
                                     <?php
                                     if (!empty($exam_subjects)) {
                                         foreach ($exam_subjects as $exam_subject_key => $exam_subject_value) {
-                                            ?>
+                                    ?>
                                             <tr>
 
                                                 <td><?php echo $exam_subject_value->subject_name; ?></td>
@@ -98,13 +101,13 @@
                                                 <td><?php echo $exam_subject_value->min_marks; ?></td>
 
                                             </tr>
-                                            <?php
+                                    <?php
                                         }
                                     }
                                     ?>
                                 </tbody>
                             </table>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,11 +123,11 @@
 
 
 <script type="text/javascript">
-     $(document).ready(function () {
+    $(document).ready(function() {
         $('.select2').select2();
 
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $.extend($.fn.dataTable.defaults, {
             searching: true,
             ordering: true,
@@ -145,13 +148,13 @@
 
 
     getExamByExamgroup(exam_group_id, exam_id);
-    $(document).on('change', '#exam_group_id', function (e) {
+    $(document).on('change', '#exam_group_id', function(e) {
         $('#exam_id').html("");
         var exam_group_id = $(this).val();
         getExamByExamgroup(exam_group_id, 0);
     });
 
-    $(document).on('change', '#class_id', function (e) {
+    $(document).on('change', '#class_id', function(e) {
         $('#section_id').html("");
         var class_id = $(this).val();
         getSectionByClass(class_id, 0);
@@ -168,14 +171,15 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#section_id').addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id === obj.section_id) {
                             sel = "selected";
@@ -184,7 +188,7 @@
                     });
                     $('#section_id').append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#section_id').removeClass('dropdownloading');
                 }
             });
@@ -203,14 +207,15 @@
             $.ajax({
                 type: "POST",
                 url: base_url + "admin/examgroup/getExamByExamgroup",
-                data: {'exam_group_id': exam_group_id},
+                data: {
+                    'exam_group_id': exam_group_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#exam_id').addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (exam_id === obj.id) {
                             sel = "selected";
@@ -219,11 +224,40 @@
                     });
                     $('#exam_id').append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#exam_id').removeClass('dropdownloading');
                 }
             });
         }
     }
-</script>
 
+
+
+</script>
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/exam_schedule/branchOptiondata",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].name + '</option>';
+                    }
+                    $('#exam_group_id').html(html);
+                }
+            }
+        });
+    })
+</script>

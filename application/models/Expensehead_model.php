@@ -3,32 +3,35 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Expensehead_model extends MY_Model {
+class Expensehead_model extends MY_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
 
-     public function getDatatableExpenseHead()
+    public function getDatatableExpenseHead()
     {
-        $branch_id = $this->session->admin['branch_id'];   
-        $where = '';   
-        if($branch_id>0){
-            $where= "where branch_id=".$branch_id;
-        }    
-        $sql="SELECT * FROM `expense_head` $where";
+        $branch_id = $this->session->admin['branch_id'];
+        $where = '';
+        if ($branch_id > 0) {
+            $where = "where branch_id=" . $branch_id;
+        }
+        $sql = "SELECT * FROM `expense_head` $where";
         $this->datatables->query($sql)
-        ->searchable('expense_head.exp_category')
-        ->orderable('`expense_head`.`id`,`expense_head`.`exp_category`')
-        ->sort('expense_head.id','asc') ;
-        return $this->datatables->generate('json');   
+            ->searchable('expense_head.exp_category')
+            ->orderable('`expense_head`.`id`,`expense_head`.`exp_category`')
+            ->sort('expense_head.id', 'asc');
+        return $this->datatables->generate('json');
     }
 
-    public function get($id = null) {
+    public function get($id = null)
+    {
         $branch_id = $this->session->admin['branch_id'];
         $this->db->select()->from('expense_head');
-        if($branch_id>0){
+        if ($branch_id > 0) {
             $this->db->where('branch_id', $branch_id);
         }
         if ($id != null) {
@@ -48,7 +51,8 @@ class Expensehead_model extends MY_Model {
      * This function will delete the record based on the id
      * @param $id
      */
-    public function remove($id) {
+    public function remove($id)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -76,7 +80,8 @@ class Expensehead_model extends MY_Model {
      * else an insert. One function doing both add and edit.
      * @param $data
      */
-    public function add($data) {
+    public function add($data)
+    {
         $this->db->trans_start(); # Starting Transaction
         $this->db->trans_strict(false); # See Note 01. If you wish can remove as well
         //=======================Code Start===========================
@@ -121,8 +126,9 @@ class Expensehead_model extends MY_Model {
         }
     }
 
-    public function searchexpensegroup($start_date, $end_date, $head_id = null,$branch_id) {
-        
+    public function searchexpensegroup($start_date, $end_date, $head_id = null, $branch_id)
+    {
+
         $this->datatables
             ->select('GROUP_CONCAT(expenses.id,"@",expenses.date,"@",expenses.name,"@",expenses.invoice_no,"@",expenses.amount) as expense, expense_head.exp_category,expenses.exp_head_id,sum(expenses.amount) as total_amount')
             ->searchable('expense_head.exp_category,expenses.id,expenses.name,expenses.date,expenses.invoice_no,expenses.amount')
@@ -139,4 +145,16 @@ class Expensehead_model extends MY_Model {
         return $this->datatables->generate('json');
     }
 
+    /**
+     * Fetch Data According to Branch
+     */
+
+    public function getByBranch($branch_id = null)
+    {
+        $this->db->select()->from('expense_head');
+        $this->db->where('branch_id', $branch_id);
+        $this->db->order_by('id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

@@ -123,7 +123,8 @@ class Examgroup extends Admin_Controller
         $data['title']      = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
         $data['examType']   = $this->exam_type;
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_type', $this->lang->line('exam') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
@@ -268,6 +269,8 @@ class Examgroup extends Admin_Controller
         $data['examType']      = $this->exam_type;
         $examgroup_result      = $this->examgroup_model->get();
         $data['examgrouplist'] = $examgroup_result;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
 
@@ -280,6 +283,7 @@ class Examgroup extends Admin_Controller
 
             $data = array(
                 'id'          => $this->input->post('id'),
+                'branch_id'          => $this->input->post('branch_id'),
                 'name'        => $this->input->post('name'),
                 'exam_type'   => $this->input->post('exam_type'),
                 'is_active'   => $is_active,
@@ -309,7 +313,8 @@ class Examgroup extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Examinations/examgroup');
         $data['title']      = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
-
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $class               = $this->class_model->get();
         $data['classlist']   = $class;
         $data['examType']    = $this->exam_type;
@@ -320,6 +325,7 @@ class Examgroup extends Admin_Controller
 
         $data['current_session'] = $this->sch_current_session;
         $data['examgroup']       = $this->examgroup_model->get($id);
+        
 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/examgroup/addexam', $data);
@@ -402,11 +408,11 @@ class Examgroup extends Admin_Controller
 
             $class_id   = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
-
+            $branch_id = $this->input->post('branch_id');
             $data['class_id']   = $this->input->post('class_id');
             $data['section_id'] = $this->input->post('section_id');
             $data['exam_id']    = $this->input->post('exam_id');
-            $resultlist         = $this->examstudent_model->searchExamStudents($data['class_id'], $data['section_id'], $data['exam_id']);
+            $resultlist         = $this->examstudent_model->searchExamStudents($data['class_id'], $data['section_id'], $data['exam_id'],$branch_id);
 
             $data['resultlist'] = $resultlist;
             $student_exam_page  = $this->load->view('admin/examgroup/_partialexamstudent', $data, true);

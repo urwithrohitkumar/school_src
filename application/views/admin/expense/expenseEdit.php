@@ -34,11 +34,24 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     echo "<div class='alert alert-danger'>" . $error_message . "</div>";
                                 }
                                 ?>   
-                                <?php echo $this->customlib->getCSRF(); ?>                       
+                                <?php echo $this->customlib->getCSRF(); ?>    
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select  id="branch_id" name="branch_id" class="form-control">
+                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>                                       
+                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <?php  } else { ?>
+                                        <option value="" selected disabled ><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>                                                        
+                                        <option value="<?php echo $value["id"] ?>" <?php if ($expense['branch_id'] == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                </div>                  
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('expense_head'); ?></label><small class="req"> *</small>
                                     <select autofocus="" id="exp_head_id" name="exp_head_id" class="form-control" >
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($expheadlist as $exphead) {
                                             ?>
@@ -54,19 +67,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </select>
                                     <span class="text-danger"><?php echo form_error('exp_head_id'); ?></span>
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select  id="branch_id" name="branch_id" class="form-control">
-                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>                                       
-                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                        <?php  } else { ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($all_branch as  $value) { ?>                                                        
-                                        <option value="<?php echo $value["id"] ?>" <?php if ($expense['branch_id'] == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
-                                        <?php } } ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
-                                </div>
+                                
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label><small class="req"> *</small>
                                     <input id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name', $expense['name']); ?>" />
@@ -173,4 +174,30 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         initDatatable('expense-list','admin/expense/getexpenselist',[],[],100);
     });
 } ( jQuery ) )
-</script>n
+</script>
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/expense/onchangeValue",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].exp_category + '</option>';
+                    }
+                    $('#exp_head_id').html(html);
+                }
+            }
+        });
+    })
+</script>

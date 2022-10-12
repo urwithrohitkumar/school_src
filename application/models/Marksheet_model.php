@@ -11,11 +11,11 @@ class Marksheet_model extends MY_model {
     }
 
     public function get($id = null) {
-        $branch_id= $this->session->admin['branch_id'];     
+        // $branch_id= $this->session->admin['branch_id'];     
         $this->db->select()->from('template_marksheets');
-        if($branch_id>0){   
-            $this->db->where('branch_id', $branch_id);
-        }
+        // if($branch_id>0){   
+        //     $this->db->where('branch_id', $branch_id);
+        // }
         if ($id != null) {
             $this->db->where('id', $id);
         } else {

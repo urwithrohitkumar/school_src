@@ -1,8 +1,8 @@
 <style type="text/css">
-    @media print
-    {
-        .no-print, .no-print *
-        {
+    @media print {
+
+        .no-print,
+        .no-print * {
             display: none !important;
         }
     }
@@ -15,7 +15,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
     <section class="content-header">
         <h1>
-            <i class="fa fa-usd"></i> <?php echo $this->lang->line('income'); ?></h1>
+            <i class="fa fa-usd"></i> <?php echo $this->lang->line('income'); ?>
+        </h1>
     </section>
 
     <!-- Main content -->
@@ -26,25 +27,36 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('select_criteria'); ?></h3>
                     </div>
-                <div class="box-body">
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <form role="form" id="form1" action="<?php echo site_url('admin/income/incomeSearch') ?>" method="post" class="">
                                         <?php echo $this->customlib->getCSRF(); ?>
                                         <div class="col-sm-6 col-md-6">
+                                            <div class='form-group'>
+                                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                    <?php foreach ($branch as $key => $value) {  ?>
+                                                        <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
                                             <div class="form-group">
                                                 <label><?php echo $this->lang->line('search') . " " . $this->lang->line('type'); ?></label><small class="req"> *</small>
                                                 <select class="form-control" name="search_type" id="search_type" onchange="showdate(this.value)">
 
                                                     <?php foreach ($searchlist as $key => $search) {
-                                                        ?>
+                                                    ?>
                                                         <option value="<?php echo $key ?>" <?php
-                                                        if ((isset($search_type)) && ($search_type == $key)) {
-                                                            echo "selected";
-                                                        }
-                                                        ?>><?php echo $search ?></option>
-                                                            <?php } ?>
+                                                                                            if ((isset($search_type)) && ($search_type == $key)) {
+                                                                                                echo "selected";
+                                                                                            }
+                                                                                            ?>><?php echo $search ?></option>
+                                                    <?php } ?>
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('search_type'); ?></span>
                                             </div>
@@ -84,49 +96,51 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
 
                     </div>
-                <div class="" id="exp">
-                            <div class="box-header ptbnull"></div>
-                            <div class="box-header ptbnull">
-                                <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('income_result'); ?></h3>
-                            </div>
-                            <div class="box-body table-responsive">
-                                <div class="download_label"><?php echo $this->lang->line('income_result'); ?></div>
-                                 <table class="table table-striped table-bordered table-hover income-list" data-export-title="<?php echo $this->lang->line('income_list'); ?>">
-                                    <thead>
-                                        <tr>
-                                            <th><?php echo $this->lang->line('name'); ?></th>
-                                            <th><?php echo $this->lang->line('invoice_no'); ?></th>
-                                            <th><?php echo $this->lang->line('income_head'); ?></th>
-                                            <th><?php echo $this->lang->line('date'); ?></th>
-                                            <th class="text-right"><?php echo $this->lang->line('amount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody> </tbody>
-                                </table>
-
-                            </div>
+                    <div class="" id="exp">
+                        <div class="box-header ptbnull"></div>
+                        <div class="box-header ptbnull">
+                            <h3 class="box-title titlefix"><i class="fa fa-money"></i> <?php echo $this->lang->line('income_result'); ?></h3>
+                        </div>
+                        <div class="box-body table-responsive">
+                            <div class="download_label"><?php echo $this->lang->line('income_result'); ?></div>
+                            <table class="table table-striped table-bordered table-hover income-list" data-export-title="<?php echo $this->lang->line('income_list'); ?>">
+                                <thead>
+                                    <tr>
+                                        <th><?php echo $this->lang->line('name'); ?></th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
+                                        <th><?php echo $this->lang->line('invoice_no'); ?></th>
+                                        <th><?php echo $this->lang->line('income_head'); ?></th>
+                                        <th><?php echo $this->lang->line('date'); ?></th>
+                                        <th class="text-right"><?php echo $this->lang->line('amount'); ?> <span><?php echo "(" . $currency_symbol . ")"; ?></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody> </tbody>
+                            </table>
 
                         </div>
-                  </div>      
+
+                    </div>
+                </div>
             </div>
-        </div>    
+        </div>
 
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <script type="text/javascript">
-
     var base_url = '<?php echo base_url() ?>';
 
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
 
-    function Popup(data)
-    {
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -150,7 +164,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
@@ -162,104 +176,107 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 </script>
 
 <script>
-$(document).ready(function() {
-     emptyDatatable('income-list','data');
+    $(document).ready(function() {
+        emptyDatatable('income-list', 'data');
 
-});
+    });
 </script>
-  
-<script>
-   ( function ( $ ) {
-   'use strict';
-    $(document).ready(function () {
-       $('#form1').on('submit', (function (e) {
-        e.preventDefault();
-         var search= 'search_filter';
-         var formData = new FormData(this);
-         formData.append('search', 'search_filter');
-         var date_from=""; var date_to=""; var str="";
-         $("#search_text").val("");
-        $.ajax({
-            url: '<?php echo base_url(); ?>admin/income/checkvalidation',
-            type: "POST",
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-               
-                if (data.status == "fail") {
-                        var message = "";
-                        $.each(data.error, function (index, value) {
-                            message += value;
-                        });
-                        toastr.error(message);
-                    } else {
-                        var search_type = data.search_type ;
-                        if(search_type=='period'){
-                            date_from=data.date_from; 
-                            date_to=data.date_to;
 
-                             if(date_from!="" && date_to!="" ){
-                                 str=search_type+"-"+search+"-"+date_from+"-"+date_to ;
-                             }
-                            
-                        }else{
-                            str=search_type+"-"+search ;
+<script>
+    (function($) {
+        'use strict';
+        $(document).ready(function() {
+            $('#form1').on('submit', (function(e) {
+                    e.preventDefault();
+                    var search = 'search_filter';
+                    var formData = new FormData(this);
+                    formData.append('search', 'search_filter');
+                    var date_from = "";
+                    var date_to = "";
+                    var str = "";
+                    $("#search_text").val("");
+                    $.ajax({
+                        url: '<?php echo base_url(); ?>admin/income/checkvalidation',
+                        type: "POST",
+                        data: formData,
+                        dataType: 'json',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data) {
+                            let branch_id = data.branch_id;
+                            if (data.status == "fail") {
+                                var message = "";
+                                $.each(data.error, function(index, value) {
+                                    message += value;
+                                });
+                                toastr.error(message);
+                            } else {
+                                var search_type = data.search_type;
+                                if (search_type == 'period') {
+                                    date_from = data.date_from;
+                                    date_to = data.date_to;
+
+                                    if (date_from != "" && date_to != "") {
+                                        str = search_type + "-" + search + "-" + date_from + "-" + date_to + "-" + branch_id;
+                                    }
+
+                                } else {
+                                    str = search_type + "-" + search + "-" + branch_id;
+                                }
+
+                                initDatatable('income-list', 'admin/income/getincomesearchlist/' + str, [], [], 100);
+
+                            }
                         }
-                       
-                         initDatatable('income-list','admin/income/getincomesearchlist/'+str,[],[],100);
-                       
-                    }
-            }
-        });
-      
-        }
+                    });
 
-       ));
-   });
-} ( jQuery ) );
+                }
+
+            ));
+        });
+    }(jQuery));
 </script>
 <script>
-   ( function ( $ ) {
-   'use strict';
-    $(document).ready(function () {
-       $('#form2').on('submit', (function (e) {
-        e.preventDefault();
-         var search= 'search_full';var search_type="";
-         var formData = new FormData(this);
-         formData.append('search', 'search_full');
-         $("#search_type").val("");
-         var str="";
-        $.ajax({
-            url: '<?php echo base_url(); ?>admin/income/checkvalidation',
-            type: "POST",
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-               
-                if (data.status == "fail") {
-                        var message = "";
-                        $.each(data.error, function (index, value) {
-                            message += value;
-                        });
-                        toastr.error(message);
-                    } else {
-                        search_type=data.search_type;
-                        str=search_type+"-"+search ;
-                         initDatatable('income-list','admin/income/getincomesearchlist/'+str,[],[],100);
-                       
-                    }
-            }
-        });
-      
-        }
+    (function($) {
+        'use strict';
+        $(document).ready(function() {
+            $('#form2').on('submit', (function(e) {
+                    e.preventDefault();
+                    var search = 'search_full';
+                    var search_type = "";
+                    var formData = new FormData(this);
+                    formData.append('search', 'search_full');
+                    $("#search_type").val("");
+                    var str = "";
+                    $.ajax({
+                        url: '<?php echo base_url(); ?>admin/income/checkvalidation',
+                        type: "POST",
+                        data: formData,
+                        dataType: 'json',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data) {
 
-       ));
-   });
-} ( jQuery ) );
+                            if (data.status == "fail") {
+                                var message = "";
+                                $.each(data.error, function(index, value) {
+                                    message += value;
+                                });
+                                toastr.error(message);
+                            } else {
+                                search_type = data.search_type;
+                                str = search_type + "-" + search;
+                                initDatatable('income-list', 'admin/income/getincomesearchlist/' + str, [], [], 100);
+
+                            }
+                        }
+                    });
+
+                }
+
+            ));
+        });
+    }(jQuery));
 </script>

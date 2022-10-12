@@ -34,7 +34,21 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     echo "<div class='alert alert-danger'>" . $error_message . "</div>";
                                 }
                                 ?>   
-                                <?php echo $this->customlib->getCSRF(); ?>                       
+                                <?php echo $this->customlib->getCSRF(); ?>   
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
+                                        <select  id="branch_id" name="branch_id" class="form-control">
+                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                        <?php  } else { ?>
+                                        <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>                                                        
+                                        <option value="<?php echo $value["id"] ?>" <?php if ($income['branch_id'] == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                </div>                    
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('income_head'); ?></label>
                                     <select autofocus="" id="inc_head_id" name="inc_head_id" class="form-control" >
@@ -54,20 +68,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </select>
                                     <span class="text-danger"><?php echo form_error('inc_head_id'); ?></span>
                                 </div>                              
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select  id="branch_id" name="branch_id" class="form-control">
-                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                        <?php  } else { ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($all_branch as  $value) { ?>                                                        
-                                        <option value="<?php echo $value["id"] ?>" <?php if ($income['branch_id'] == $value['id']) echo "selected" ?>><?php echo $value["branch_name"] ?></option>
-                                        <?php } } ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
-                                </div>
+                                
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?><small class="req"> *</small></label>
                                     <input id="name" name="name" placeholder="" type="text" class="form-control"  value="<?php echo set_value('name', $income['name']); ?>" />
@@ -171,4 +172,31 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         initDatatable('income-list','admin/income/getincomelist',[],[],100);
     });
 } ( jQuery ) )
+</script>
+
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "admin/income/incomeheadDetails",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].income_category + '</option>';
+                    }
+                    $('#inc_head_id').html(html);
+                }
+            }
+        });
+    })
 </script>

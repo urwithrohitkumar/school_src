@@ -19,7 +19,8 @@ class Incomehead extends Admin_Controller {
         $data['title'] = 'Income Head List';
         $category_result = $this->incomehead_model->get();
         $data['categorylist'] = $category_result;
-        $data['all_branch']  = $this->branch_model->getBranch(); 
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $this->load->view('layout/header', $data);
         $this->load->view('admin/incomehead/incomeheadList', $data);
         $this->load->view('layout/footer', $data);

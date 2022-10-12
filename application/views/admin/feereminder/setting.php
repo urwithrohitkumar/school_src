@@ -1,4 +1,7 @@
-<?php $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
+<?php
+
+
+$currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 
@@ -20,50 +23,62 @@
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add_fees_type'); ?></h3>
                         </div><!-- /.box-header -->
-                        <form id="form1" action="<?php echo base_url() ?>admin/feetype" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
-                            <div class="box-body">
-                                <?php if ($this->session->flashdata('msg')) { ?>
-                                    <?php echo $this->session->flashdata('msg') ?>
-                                <?php } ?>
-                                <?php
-                                if (isset($error_message)) {
-                                    echo "<div class='alert alert-danger'>" . $error_message . "</div>";
-                                }
+                        <?php
+                        if (!empty($feereminder)) {  ?>
+                            <form id="form1" action="<?php echo base_url() ?>admin/feereminder/edit" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+
+                            <?php  } else { ?>
+
+                                <form id="form1" action="<?php echo base_url() ?>admin/feereminder" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
+                                <?php }
                                 ?>
-                                <?php echo $this->customlib->getCSRF(); ?>
-                                <div class='form-group'>
-                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
-                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
-                                        <?php foreach ($branch as $key => $value) {  ?>
-                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
-                                </div>
+                                <div class="box-body">
+                                    <?php if ($this->session->flashdata('msg')) { ?>
+                                        <?php echo $this->session->flashdata('msg') ?>
+                                    <?php } ?>
+                                    <?php
+                                    if (isset($error_message)) {
+                                        echo "<div class='alert alert-danger'>" . $error_message . "</div>";
+                                    }
+                                    ?>
+                                    <?php echo $this->customlib->getCSRF(); ?>
+                                    <input type="hidden" name="feereminderid" value="<?php if (!empty($feereminder)) {
+                                                                                            echo $feereminder->id;
+                                                                                        } ?>" />
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>' <?php if (!empty($feereminder)) {
+                                                                                                if ($feereminder->branch_id == $value['id']) {
+                                                                                                    echo "selected";
+                                                                                                }
+                                                                                            } ?>><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
-                                    <input autofocus="" id="name" name="name" type="text" class="form-control" value="<?php echo set_value('name'); ?>" />
-                                    <span class="text-danger"><?php echo form_error('name'); ?></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('fees_code'); ?></label> <small class="req">*</small>
-                                    <input id="code" name="code" type="text" class="form-control" value="<?php echo set_value('code'); ?>" />
-                                    <span class="text-danger"><?php echo form_error('code'); ?></span>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('name'); ?></label> <small class="req">*</small>
+                                        <input autofocus="" id="name" name="name" type="text" class="form-control" value="<?php if (!empty($feereminder)) {
+                                                                                                                                echo $feereminder->reminder_type;
+                                                                                                                            } ?>" />
+                                        <span class="text-danger"><?php echo form_error('name'); ?></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('days'); ?></label> <small class="req">*</small>
+                                        <input id="days" name="days" type="text" class="form-control" value="<?php if (!empty($feereminder)) {
+                                                                                                                    echo $feereminder->day;
+                                                                                                                } ?>" />
+                                        <span class="text-danger"><?php echo form_error('days'); ?></span>
+                                    </div>
+                                </div><!-- /.box-body -->
 
-
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('description'); ?></label>
-                                    <textarea class="form-control" id="description" name="description" rows="3"><?php echo set_value('description'); ?></textarea>
-                                    <span class="text-danger"></span>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                                 </div>
-                            </div><!-- /.box-body -->
-
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
-                            </div>
-                        </form>
+                                </form>
                     </div>
 
                 </div>
@@ -94,10 +109,11 @@
                                         </th>
                                         <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('days'); ?></th>
+                                        <th><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
+                                    <?php
                                     $i = 1;
                                     $last_key = count($feereminderlist);
                                     foreach ($feereminderlist as $note_key => $note_value) {
@@ -107,26 +123,39 @@
                                         if ($i != $last_key) {
                                             $hr = "<hr>";
                                         }
-                                        ?>
+                                    ?>
 
                                         <tr>
-                                            <td width="15%">
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" name="isactive_<?php echo $note_value->id; ?>" value="1" <?php echo set_checkbox('isactive_' . $note_value->id, 1, set_value('isactive_' . $note_value->id, $note_value->is_active) ? true : false); ?>> <?php echo $this->lang->line('active'); ?>
-                                                </label>
-
-                                            </td>
-                                            <td width="15%">
+                                            <td>
                                                 <input type="hidden" name="ids[]" value="<?php echo $note_value->id; ?>">
-                                                <?php echo $this->lang->line($note_value->reminder_type); ?>
+                                                <?php echo $note_value->reminder_type; ?>
                                             </td>
-                                            <td width="20%">
-                                                <input type="number" name="days<?php echo $note_value->id; ?>" value="<?php echo set_value('days' . $note_value->id, $note_value->day) ?>" class="form-control">
+                                            <td>
+                                                <?php echo $note_value->branch_name; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $note_value->day; ?>
+                                            </td>
+                                            <td class="mailbox-date pull-right">
+                                                <?php
+                                                if ($this->rbac->hasPrivilege('fees_type', 'can_edit')) {
+                                                ?>
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feereminder/edit/<?php echo $note_value->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                <?php } ?>
+                                                <?php
+                                                if ($this->rbac->hasPrivilege('fees_type', 'can_delete')) {
+                                                ?>
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feereminder/delete/<?php echo $note_value->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                        <i class="fa fa-remove"></i>
+                                                    </a>
+                                                <?php } ?>
                                             </td>
                                         </tr>
 
 
-                                        <?php
+                                    <?php
                                         $i++;
                                     }
                                     ?>
