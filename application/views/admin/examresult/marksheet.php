@@ -1,8 +1,8 @@
-
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-map-o"></i> <?php echo $this->lang->line('examinations'); ?> <small><?php echo $this->lang->line('student_fee1'); ?></small>  </h1>
+            <i class="fa fa-map-o"></i> <?php echo $this->lang->line('examinations'); ?> <small><?php echo $this->lang->line('student_fee1'); ?></small>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -17,103 +17,102 @@
                         <form role="form" action="<?php echo site_url('admin/examresult/marksheet') ?>" method="post" class="row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
-                            <div class="col-sm-6 col-lg-4 col-md-4">
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <option selected disabled>Select</option>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
-                                    <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control select2" >
+                                    <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control ">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($examgrouplist as $ex_group_key => $ex_group_value) {
-                                            ?>
-                                            <option value="<?php echo $ex_group_value->id ?>" <?php
-                                            if (set_value('exam_group_id') == $ex_group_value->id) {
-                                                echo "selected=selected";
-                                            }
-                                            ?>><?php echo $ex_group_value->name; ?></option>
-                                                    <?php
-                                                }
-                                                ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('exam_group_id'); ?></span>
-                                </div>  
-                            </div><!--./col-md-3-->
-                            <div class="col-sm-6 col-lg-4 col-md-4">
-                                <div class="form-group">   
+                                </div>
+                            </div>
+                            <!--./col-md-3-->
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
+                                <div class="form-group">
                                     <label><?php echo $this->lang->line('exam'); ?></label><small class="req"> *</small>
-                                    <select  id="exam_id" name="exam_id" class="form-control select2" >
+                                    <select id="exam_id" name="exam_id" class="form-control ">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
-                                </div>  
-                            </div><!--./col-md-3-->
-                            <div class="col-sm-6 col-lg-4 col-md-4">
-                                <div class="form-group">  
+                                </div>
+                            </div>
+                            <!--./col-md-3-->
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
+                                <div class="form-group">
                                     <label><?php echo $this->lang->line('session'); ?></label><small class="req"> *</small>
-                                    <select  id="session_id" name="session_id" class="form-control" >
+                                    <select id="session_id" name="session_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($sessionlist as $session) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $session['id'] ?>" <?php
-                                            if (set_value('session_id') == $session['id']) {
-                                                echo "selected=selected";
-                                            }
-                                            ?>><?php echo $session['session'] ?></option>
-                                                    <?php
-                                                }
-                                                ?>
+                                                                                            if (set_value('session_id') == $session['id']) {
+                                                                                                echo "selected=selected";
+                                                                                            }
+                                                                                            ?>><?php echo $session['session'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('session_id'); ?></span>
-                                </div>  
+                                </div>
                             </div>
-                            <div class="col-sm-6 col-lg-4 col-md-4">
-                                <div class="form-group">   
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
+                                <div class="form-group">
                                     <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                    <select id="class_id" name="class_id" class="form-control" >
+                                    <select id="class_id" name="class_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($classlist as $class) {
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $class['id'] ?>" <?php
-                                            if (set_value('class_id') == $class['id']) {
-                                                echo "selected=selected";
-                                            }
-                                            ?>><?php echo $class['class'] ?></option>
-                                                    <?php
-                                                }
-                                                ?>
+                                                                                        if (set_value('class_id') == $class['id']) {
+                                                                                            echo "selected=selected";
+                                                                                        }
+                                                                                        ?>><?php echo $class['class'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                </div>  
+                                </div>
                             </div>
 
-                            <div class="col-sm-6 col-lg-4 col-md-4">
-                                <div class="form-group"> 
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
+                                <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                    <select  id="section_id" name="section_id" class="form-control" >
+                                    <select id="section_id" name="section_id" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                 </div>
                             </div>
 
-                            <div class="col-sm-6 col-lg-4 col-md-4">
+                            <div class="col-sm-6 col-lg-3 col-md-3">
+
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('marksheet') . " " . $this->lang->line('template') ?></label><small class="req"> *</small>
-                                    <select  id="marksheet" name="marksheet" class="form-control" >
+                                    <select id="marksheet" name="marksheet" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($marksheetlist as $marksheet) {
-                                            ?>
-                                            <option value="<?php echo $marksheet->id ?>" <?php
-                                            if (set_value('marksheet') == $marksheet->id) {
-                                                echo "selected=selected";
-                                            }
-                                            ?>><?php echo $marksheet->template; ?></option>
-                                                    <?php
-                                                }
-                                                ?>
+                                       
                                     </select>
                                     <span class="text-danger"><?php echo form_error('marksheet'); ?></span>
                                 </div>
@@ -129,15 +128,15 @@
 
                     <?php
                     if (isset($studentList)) {
-                        ?>
+                    ?>
                         <form method="post" action="<?php echo base_url('admin/examresult/printmarksheet') ?>" id="printMarksheet">
                             <input type="hidden" name="marksheet_template" value="<?php echo $marksheet_template; ?>">
 
 
-                            <div class="box-header ptbnull"></div>  
+                            <div class="box-header ptbnull"></div>
                             <div class="box-header ptbnull">
                                 <h3 class="box-title titlefix"><i class="fa fa-users"></i> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('list'); ?></h3>
-                                <button  class="btn btn-info btn-sm printSelected pull-right" type="submit" name="generate" title="generate multiple certificate"><?php echo $this->lang->line('generate'); ?></button>
+                                <button class="btn btn-info btn-sm printSelected pull-right" type="submit" name="generate" title="generate multiple certificate"><?php echo $this->lang->line('generate'); ?></button>
                             </div>
                             <div class="box-body">
                                 <input type="hidden" name="post_exam_id" value="<?php echo $exam_id; ?>">
@@ -159,56 +158,56 @@
                                         <tbody>
                                             <?php
                                             if (empty($studentList)) {
-                                                ?>
+                                            ?>
 
                                                 <?php
                                             } else {
                                                 $count = 1;
                                                 foreach ($studentList as $student_key => $student_value) {
-                                                  
-                                                    ?>
+
+                                                ?>
                                                     <tr>
-                                                        <td class="text-center"><input type="checkbox" class="checkbox center-block"  name="exam_group_class_batch_exam_student_id[]" data-student_id="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>" value="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>">
+                                                        <td class="text-center"><input type="checkbox" class="checkbox center-block" name="exam_group_class_batch_exam_student_id[]" data-student_id="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>" value="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>">
 
                                                         </td>
                                                         <td><?php echo $student_value->admission_no; ?></td>
                                                         <td>
-            <a href="<?php echo base_url(); ?>student/view/<?php echo $student_value->student_id; ?>"><?php echo $this->customlib->getFullName($student_value->firstname,$student_value->middlename,$student_value->lastname,$sch_setting->middlename,$sch_setting->lastname); ?>
+                                                            <a href="<?php echo base_url(); ?>student/view/<?php echo $student_value->student_id; ?>"><?php echo $this->customlib->getFullName($student_value->firstname, $student_value->middlename, $student_value->lastname, $sch_setting->middlename, $sch_setting->lastname); ?>
                                                             </a>
                                                         </td>
 
-                                                        <td><?php echo $student_value->father_name;
-                                        ;
-                                                    ?></td>
-                                                        <td><?php 
-															if (!empty($student_value->dob) && $student_value->dob != '0000-00-00') {
-															echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student_value->dob)); }?></td>
+                                                        <td><?php echo $student_value->father_name;;
+                                                            ?></td>
+                                                        <td><?php
+                                                            if (!empty($student_value->dob) && $student_value->dob != '0000-00-00') {
+                                                                echo date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($student_value->dob));
+                                                            } ?></td>
                                                         <td><?php echo $student_value->gender; ?></td>
                                                         <td><?php echo $student_value->category; ?></td>
                                                         <td><?php echo $student_value->mobileno; ?></td>
                                                     </tr>
-                                                    <?php
+                                            <?php
                                                     $count++;
                                                 }
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                </div>                                                                           
-                            </div>                                           
+                                </div>
+                            </div>
 
                         </form>
-                    </div>
-                    <?php
-                }
-                ?>
+                </div>
+            <?php
+                    }
+            ?>
             </div>
         </div>
     </section>
 </div>
 
 <script type="text/javascript">
- $(document).ready(function () {
+    $(document).ready(function() {
         $('.select2').select2();
 
     });
@@ -220,13 +219,13 @@
     var exam_id = '<?php echo set_value('exam_id') ?>';
     getSectionByClass(class_id, section_id);
     getExamByExamgroup(exam_group_id, exam_id);
-    $(document).on('change', '#exam_group_id', function (e) {
+    $(document).on('change', '#exam_group_id', function(e) {
         $('#exam_id').html("");
         var exam_group_id = $(this).val();
         getExamByExamgroup(exam_group_id, 0);
     });
 
-    $(document).on('change', '#class_id', function (e) {
+    $(document).on('change', '#class_id', function(e) {
         $('#section_id').html("");
         var class_id = $(this).val();
         getSectionByClass(class_id, 0);
@@ -241,14 +240,15 @@
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
+                data: {
+                    'class_id': class_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#section_id').addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (section_id == obj.section_id) {
                             sel = "selected";
@@ -257,7 +257,7 @@
                     });
                     $('#section_id').append(div_data);
                 },
-                complete: function () {
+                complete: function() {
                     $('#section_id').removeClass('dropdownloading');
                 }
             });
@@ -275,14 +275,15 @@
             $.ajax({
                 type: "POST",
                 url: base_url + "admin/examgroup/getExamByExamgroup",
-                data: {'exam_group_id': exam_group_id},
+                data: {
+                    'exam_group_id': exam_group_id
+                },
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#exam_id').addClass('dropdownloading');
                 },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
+                success: function(data) {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (exam_id === obj.id) {
                             sel = "selected";
@@ -293,7 +294,7 @@
                     $('#exam_id').append(div_data);
                     $('#exam_id').trigger('change');
                 },
-                complete: function () {
+                complete: function() {
                     $('#exam_id').removeClass('dropdownloading');
                 }
             });
@@ -301,60 +302,56 @@
     }
 </script>
 <script>
-
-    $(document).on('submit', 'form#printMarksheet', function (e) {
+    $(document).on('submit', 'form#printMarksheet', function(e) {
 
         e.preventDefault();
         var form = $(this);
         var subsubmit_button = $(this).find(':submit');
         var formdata = form.serializeArray();
 
-        var list_selected =  $('form#printMarksheet input[name="exam_group_class_batch_exam_student_id[]"]:checked').length;
-      if(list_selected > 0){
-        $.ajax({
-            type: "POST",
-            url: form.attr('action'),
-            data: formdata, // serializes the form's elements.
-            dataType: "JSON", // serializes the form's elements.
-            beforeSend: function () {
-                subsubmit_button.button('loading');
-            },
-            success: function (response)
-            {
-                Popup(response.page);
-            },
-            error: function (xhr) { // if error occured
+        var list_selected = $('form#printMarksheet input[name="exam_group_class_batch_exam_student_id[]"]:checked').length;
+        if (list_selected > 0) {
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: formdata, // serializes the form's elements.
+                dataType: "JSON", // serializes the form's elements.
+                beforeSend: function() {
+                    subsubmit_button.button('loading');
+                },
+                success: function(response) {
+                    Popup(response.page);
+                },
+                error: function(xhr) { // if error occured
 
-                alert("Error occured.please try again");
-                subsubmit_button.button('reset');
-            },
-            complete: function () {
-                subsubmit_button.button('reset');
-            }
-        });
-      }else{
-         confirm("<?php echo $this->lang->line('please_select_student'); ?>");
-      }
+                    alert("Error occured.please try again");
+                    subsubmit_button.button('reset');
+                },
+                complete: function() {
+                    subsubmit_button.button('reset');
+                }
+            });
+        } else {
+            confirm("<?php echo $this->lang->line('please_select_student'); ?>");
+        }
     });
 
 
-    $(document).on('click', '#select_all', function () {
+    $(document).on('click', '#select_all', function() {
         $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
     });
-
 </script>
 <script type="text/javascript">
-
     var base_url = '<?php echo base_url() ?>';
-    function Popup(data)
-    {
+
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
-//Create a new HTML document.
+        //Create a new HTML document.
         frameDoc.document.write('<html>');
         frameDoc.document.write('<head>');
         frameDoc.document.write('<title></title>');
@@ -364,11 +361,47 @@
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
         }, 500);
         return true;
     }
+</script>
+<script>
+    $("#branch_id").on('change', function() {
+        $('#exam_id').html("<option>Select</option>");
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "POST",
+            url: base_url + "admin/examresult/optionDatamarksheet",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                var examgroup_result = result.examgroup_result;
+                var marksheet_result = result.marksheet_result;
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (examgroup_result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < examgroup_result.length; count++) {
+                        html += '<option value="' + examgroup_result[count].id + '">' + examgroup_result[count].name + '</option>';
+                    }
+                    $('#exam_group_id').html(html);
+                }
+                if (marksheet_result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < marksheet_result.length; count++) {
+                        html += '<option value="' + marksheet_result[count].id + '">' + marksheet_result[count].template + '</option>';
+                    }
+                    $('#marksheet').html(html);
+                }
+            }
+        });
+    })
 </script>

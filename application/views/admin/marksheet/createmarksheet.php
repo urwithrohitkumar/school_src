@@ -1,6 +1,6 @@
 <?php
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
-?>     
+?>
 <div class="content-wrapper">
 
     <section class="content-header">
@@ -13,32 +13,27 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
             <?php
             if ($this->rbac->hasPrivilege('design_marksheet', 'can_add')) {
-                ?>
+            ?>
                 <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title"><?php echo $this->lang->line('add'); ?> <?php echo $this->lang->line('marksheet'); ?></h3>
                         </div><!-- /.box-header -->
 
-                        <form id="form1" enctype="multipart/form-data" action="<?php echo site_url('admin/marksheet') ?>"  id="certificateform" name="certificateform" method="post" accept-charset="utf-8">
-                            <div class="box-body">                               
+                        <form id="form1" enctype="multipart/form-data" action="<?php echo site_url('admin/marksheet') ?>" id="certificateform" name="certificateform" method="post" accept-charset="utf-8">
+                            <div class="box-body">
                                 <?php if ($this->session->flashdata('msg')) { ?>
                                     <?php echo $this->session->flashdata('msg') ?>
-                                <?php } ?>       
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                        <select  id="branch_id" name="branch_id" class="form-control">
-                                        <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                        <?php  } else { ?>
-                                        <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($all_branch as  $value) { ?>                                                        
-                                        <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                        <?php } } ?>
+                                <?php } ?>
+                                <div class='form-group'>
+                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <?php foreach ($branch as $key => $value) {  ?>
+                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                        <?php } ?>
                                     </select>
-                                    <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
-                                </div>                                                  
+                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('template'); ?></label><small class="req"> *</small>
                                     <input autofocus="" id="template" value="<?php echo set_value('template'); ?>" name="template" placeholder="" type="text" class="form-control" />
@@ -88,32 +83,32 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('left') . " " . $this->lang->line('logo'); ?></label>
-                                    <input id="documents" name="left_logo" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="background_image">
+                                    <input id="documents" name="left_logo" placeholder="" type="file" class="filestyle form-control" data-height="40" name="background_image">
                                     <span class="text-danger"><?php echo form_error('left_logo'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('right') . " " . $this->lang->line('logo'); ?></label>
-                                    <input id="documents" name="right_logo" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="background_image">
+                                    <input id="documents" name="right_logo" placeholder="" type="file" class="filestyle form-control" data-height="40" name="background_image">
                                     <span class="text-danger"><?php echo form_error('right_logo'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('left') . " " . $this->lang->line('sign'); ?></label>
-                                    <input id="documents" name="left_sign" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="left_sign">
+                                    <input id="documents" name="left_sign" placeholder="" type="file" class="filestyle form-control" data-height="40" name="left_sign">
                                     <span class="text-danger"><?php echo form_error('left_sign'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('middle') . " " . $this->lang->line('sign') ?></label>
-                                    <input id="documents" name="middle_sign" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="middle_sign">
+                                    <input id="documents" name="middle_sign" placeholder="" type="file" class="filestyle form-control" data-height="40" name="middle_sign">
                                     <span class="text-danger"><?php echo form_error('middle_sign'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('right') . " " . $this->lang->line('sign'); ?></label>
-                                    <input id="documents" name="right_sign" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="right_sign">
+                                    <input id="documents" name="right_sign" placeholder="" type="file" class="filestyle form-control" data-height="40" name="right_sign">
                                     <span class="text-danger"><?php echo form_error('right_sign'); ?></span>
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('background') . " " . $this->lang->line('image') ?></label>
-                                    <input id="documents" name="background_img" placeholder="" type="file" class="filestyle form-control" data-height="40"  name="background_image">
+                                    <input id="documents" name="background_img" placeholder="" type="file" class="filestyle form-control" data-height="40" name="background_image">
                                     <span class="text-danger"><?php echo form_error('background_img'); ?></span>
                                 </div>
 
@@ -146,7 +141,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <input id="exam_session" name="exam_session" type="checkbox" class="chk" value="1">
                                         <label for="exam_session" class="label-success"></label>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="form-group switch-inline">
                                     <label><?php echo $this->lang->line('admission') . " " . $this->lang->line('no') ?></label>
                                     <div class="material-switch switchcheck">
@@ -217,16 +212,17 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </form>
                     </div>
 
-                </div><!--/.col (right) -->
+                </div>
+                <!--/.col (right) -->
                 <!-- left column -->
             <?php } ?>
             <div class="col-md-<?php
-            if ($this->rbac->hasPrivilege('design_marksheet', 'can_add')) {
-                echo "8";
-            } else {
-                echo "12";
-            }
-            ?>">
+                                if ($this->rbac->hasPrivilege('design_marksheet', 'can_add')) {
+                                    echo "8";
+                                } else {
+                                    echo "12";
+                                }
+                                ?>">
                 <!-- general form elements -->
                 <div class="box box-primary" id="hroom">
                     <div class="box-header ptbnull">
@@ -239,23 +235,26 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('name'); ?></th>
-
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('background_image'); ?></th>
                                         <th class="text-right"><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (empty($certificateList)) {
-                                        ?>
+                                    ?>
 
                                         <?php
                                     } else {
                                         $count = 1;
                                         foreach ($certificateList as $certificate) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td class="mailbox-name">
-                                                    <a style="cursor: pointer;" class="view_data" id="<?php echo $certificate->id ?>" data-toggle="popover" class="detail_popover" ><?php echo $certificate->template; ?></a>
+                                                    <a style="cursor: pointer;" class="view_data" id="<?php echo $certificate->id ?>" data-toggle="popover" class="detail_popover"><?php echo $certificate->template; ?></a>
+                                                </td>
+                                                <td class="mailbox-name">
+                                                    <?php echo $certificate->branch_name ?>
                                                 </td>
                                                 <td class="mailbox-name">
                                                     <?php if ($certificate->background_img != '' && !is_null($certificate->background_img)) { ?>
@@ -266,26 +265,26 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                                                 </td>
                                                 <td class="mailbox-date text-right no-print white-space-nowrap">
-                                                    <a  id="<?php echo $certificate->id ?>" class="btn btn-default btn-xs view_data" title="<?php echo $this->lang->line('view'); ?>">
+                                                    <a id="<?php echo $certificate->id ?>" class="btn btn-default btn-xs view_data" title="<?php echo $this->lang->line('view'); ?>">
                                                         <i class="fa fa-reorder"></i>
                                                     </a>
                                                     <?php
                                                     if ($this->rbac->hasPrivilege('design_marksheet', 'can_edit')) {
-                                                        ?>
-                                                        <a data-placement="left" href="<?php echo site_url('admin/marksheet/edit/' . $certificate->id); ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
+                                                    ?>
+                                                        <a data-placement="left" href="<?php echo site_url('admin/marksheet/edit/' . $certificate->id); ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('edit'); ?>">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                        <?php
+                                                    <?php
                                                     }
                                                     if ($this->rbac->hasPrivilege('design_marksheet', 'can_delete')) {
-                                                        ?>
-                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/marksheet/delete/<?php echo $certificate->id ?>" class="btn btn-default btn-xs"  data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
+                                                    ?>
+                                                        <a data-placement="left" href="<?php echo base_url(); ?>admin/marksheet/delete/<?php echo $certificate->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('delete'); ?>" onclick="return confirm('<?php echo $this->lang->line('delete_confirm') ?>');">
                                                             <i class="fa fa-remove"></i>
                                                         </a>
                                                     <?php } ?>
                                                 </td>
                                             </tr>
-                                            <?php
+                                    <?php
                                         }
                                         $count++;
                                     }
@@ -295,13 +294,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div><!-- /.mail-box-messages -->
                     </div><!-- /.box-body -->
                 </div>
-            </div><!--/.col (left) -->
+            </div>
+            <!--/.col (left) -->
             <!-- right column -->
         </div>
         <div class="row">
             <div class="col-md-12">
-            </div><!--/.col (right) -->
-        </div>   <!-- /.row -->
+            </div>
+            <!--/.col (right) -->
+        </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <!-- Modal -->
@@ -319,25 +320,28 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        $("#btnreset").click(function () {
+        $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
     });
 </script>
 <script type="text/javascript">
     var base_url = '<?php echo base_url() ?>';
+
     function printDiv(elem) {
         Popup(jQuery(elem).html());
     }
 
-    function Popup(data)
-    {
+    function Popup(data) {
 
         var frame1 = $('<iframe />');
         frame1[0].name = "frame1";
-        frame1.css({"position": "absolute", "top": "-1000000px"});
+        frame1.css({
+            "position": "absolute",
+            "top": "-1000000px"
+        });
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -363,7 +367,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         frameDoc.document.write('</body>');
         frameDoc.document.write('</html>');
         frameDoc.document.close();
-        setTimeout(function () {
+        setTimeout(function() {
             window.frames["frame1"].focus();
             window.frames["frame1"].print();
             frame1.remove();
@@ -374,28 +378,30 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     }
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.detail_popover').popover({
             placement: 'right',
             trigger: 'hover',
             container: 'body',
             html: true,
-            content: function () {
+            content: function() {
                 return $(this).closest('td').find('.fee_detail_popover').html();
             }
         });
     });
 </script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.view_data').click(function () {
+    $(document).ready(function() {
+        $('.view_data').click(function() {
             var certificateid = $(this).attr("id");
             $.ajax({
                 url: "<?php echo base_url('admin/marksheet/view') ?>",
                 method: "post",
-                data: {certificateid: certificateid},
+                data: {
+                    certificateid: certificateid
+                },
                 dataType: 'JSON',
-                success: function (data) {
+                success: function(data) {
                     $('#certificate_detail').html(data.page);
                     $('#myModal').modal("show");
                 }
@@ -404,8 +410,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     });
 </script>
 <script type="text/javascript">
-    function valueChanged()
-    {
+    function valueChanged() {
         if ($('#enable_student_img').is(":checked"))
             $("#enableImageDiv").show();
         else

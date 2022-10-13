@@ -80,10 +80,11 @@ class Expense_model extends MY_Model
             $arr['expenses.branch_id'] = $branch_id;
         }
         $this->datatables
-            ->select('expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
+            ->select('tb_branch.branch_name,expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
             ->searchable('expenses.id,expenses.date,expenses.name,expenses.invoice_no,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id')
             ->orderable('expenses.name,expenses.note,expenses.invoice_no,expenses.date,expense_head.exp_category,expenses.amount')
             ->join("expense_head", "expenses.exp_head_id = expense_head.id", 'left')
+            ->join("tb_branch", "expenses.branch_id = tb_branch.id", 'left')
             ->where($arr)
             ->sort('expenses.id', 'desc')
             ->from('expenses');

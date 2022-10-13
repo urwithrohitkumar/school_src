@@ -3,7 +3,8 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-calendar-times-o"></i> <?php echo $this->lang->line('class_timetable'); ?> </h1>
+            <i class="fa fa-calendar-times-o"></i> <?php echo $this->lang->line('class_timetable'); ?>
+        </h1>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -20,20 +21,23 @@
                         <?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
 
                             <form action="<?php echo site_url('admin/syllabus/getteachertimetable'); ?>" id="getTimetable" class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option selected disabled>Select</option>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label for="teacher"><?php echo $this->lang->line('teachers'); ?><small class="req"> *</small></label>
                                         <select class="form-control" name="teacher" id="teacher">
                                             <option value=""><?php echo $this->lang->line('select') ?></option>
-                                            <?php
-                                            if (!empty($staff_list)) {
-                                                foreach ($staff_list as $staff_key => $staff_value) {
-                                                    ?>
-                                                    <option value="<?php echo $staff_value['id']; ?>"><?php echo $staff_value["name"] . " " . $staff_value["surname"] . " (" . $staff_value['employee_id'] . ")"; ?></option>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
                                         </select>
 
                                     </div>
@@ -56,12 +60,12 @@
 
 </div>
 
-<div class="modal fade syllbus" id="assignsyllabus"  role="dialog" aria-labelledby="evaluation" style="padding-left: 0 !important">
+<div class="modal fade syllbus" id="assignsyllabus" role="dialog" aria-labelledby="evaluation" style="padding-left: 0 !important">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-media-content">
             <div class="modal-header modal-media-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="box-title" ><?php echo $this->lang->line('lesson_plan'); ?> </h4>
+                <h4 class="box-title"><?php echo $this->lang->line('lesson_plan'); ?> </h4>
 
             </div>
             <div class="modal-body pt0 pb0">
@@ -69,16 +73,19 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="row">
                             <div id="syllabus_result"></div>
-                        </div><!--./row-->
-                    </div><!--./col-md-12-->
-                </div><!--./row-->
+                        </div>
+                        <!--./row-->
+                    </div>
+                    <!--./col-md-12-->
+                </div>
+                <!--./row-->
             </div>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="add_assignsyllabus"  role="dialog" aria-labelledby="evaluation" style="padding-left: 0 !important">
+<div class="modal fade" id="add_assignsyllabus" role="dialog" aria-labelledby="evaluation" style="padding-left: 0 !important">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-media-content">
             <div class="modal-header modal-media-header">
@@ -94,23 +101,23 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label><?php echo $this->lang->line('lesson'); ?></label><small class="req"> *</small>
-                                            <select  id="lessonid" name="lesson_id" class="form-control" >
+                                            <select id="lessonid" name="lesson_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             </select>
-                                            <input type="hidden" id="class_id" name="class_id" class="form-control" >
-                                            <input type="hidden" id="section_id" name="section_id" class="form-control" >
-                                            <input type="hidden" id="subject_group_id" name="subject_group_id" class="form-control" >
-                                            <input type="hidden" id="subject_id" name="subject_id" class="form-control" >
-                                            <input type="hidden" id="subject_group_subject_id" name="subject_group_subject_id" class="form-control" >
-                                            <input type="hidden" id="created_for" name="created_for" >
-                                            <input id="subject_syllabusid" type="hidden" name="subject_syllabusid" >
+                                            <input type="hidden" id="class_id" name="class_id" class="form-control">
+                                            <input type="hidden" id="section_id" name="section_id" class="form-control">
+                                            <input type="hidden" id="subject_group_id" name="subject_group_id" class="form-control">
+                                            <input type="hidden" id="subject_id" name="subject_id" class="form-control">
+                                            <input type="hidden" id="subject_group_subject_id" name="subject_group_subject_id" class="form-control">
+                                            <input type="hidden" id="created_for" name="created_for">
+                                            <input id="subject_syllabusid" type="hidden" name="subject_syllabusid">
                                             <span class="section_id_error text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="form-group">
                                             <label><?php echo $this->lang->line('topic'); ?></label><small class="req"> *</small>
-                                            <select  id="topicid" name="topic_id" class="form-control" >
+                                            <select id="topicid" name="topic_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             </select>
                                             <span class="section_id_error text-danger"></span>
@@ -125,7 +132,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="form-group">
                                             <label for="pwd"><?php echo $this->lang->line('date'); ?></label><small class="req"> *</small>
-                                            <input type="text" id="date" readonly name="date" class="form-control " >
+                                            <input type="text" id="date" readonly name="date" class="form-control ">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
@@ -143,7 +150,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="form-group">
                                             <label for="pwd"><?php echo $this->lang->line('time') . " " . $this->lang->line('to'); ?></label><small class="req"> *</small>
-                                            <div class="input-group "><input type="text" readonly id="time_to" name="time_to" class="form-control " >
+                                            <div class="input-group "><input type="text" readonly id="time_to" name="time_to" class="form-control ">
                                                 <span class="input-group-addon" id="basic-addon2">
                                                     <i class="fa fa-clock-o"></i>
                                                 </span>
@@ -156,7 +163,7 @@
                                             <label for="pwd"><?php echo $this->lang->line('lecture_youtube_url'); ?></label>
                                             <input type="text" id="lacture_youtube_url" name="lacture_youtube_url" class="form-control">
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label for="pwd"><?php echo $this->lang->line('lecture_video'); ?></label>
@@ -166,7 +173,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label for="pwd"><?php echo $this->lang->line('attachment'); ?></label>
-                                            <input type="file" id="file"  name="file" class="form-control filestyle">
+                                            <input type="file" id="file" name="file" class="form-control filestyle">
                                         </div>
                                     </div>
 
@@ -190,7 +197,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
-                                            <label for="pwd"><?php echo $this->lang->line('comprehensive_questions'); ?>  </label>
+                                            <label for="pwd"><?php echo $this->lang->line('comprehensive_questions'); ?> </label>
                                             <textarea type="text" id="comprehensive_questions" name="comprehensive_questions" class="form-control"></textarea>
                                         </div>
                                     </div>
@@ -199,16 +206,19 @@
                                         <div class="form-group" id="get_ckeditor">
                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('presentation'); ?></label>
                                             <button class="btn btn-primary pull-right btn-xs" type="button" id="question" data-toggle="modal" data-location="question" data-target="#myimgModal"><i class="fa fa-plus"></i> <?php echo $this->lang->line('add') . " " . $this->lang->line('image') ?></button>
-                                            <textarea name="presentation" id="question_textbox"  class="form-control ckeditor" >
+                                            <textarea name="presentation" id="question_textbox" class="form-control ckeditor">
                                             </textarea>
                                         </div>
                                     </div>
 
 
 
-                                </div><!--./row-->
-                            </div><!--./col-md-12-->
-                        </div><!--./row-->
+                                </div>
+                                <!--./row-->
+                            </div>
+                            <!--./col-md-12-->
+                        </div>
+                        <!--./row-->
                         <div class="box-footer row">
                             <div class="pull-right">
                                 <button type="submit" class="btn btn-info pull-right" id="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Please wait"><?php echo $this->lang->line('save') ?></button>
@@ -255,8 +265,8 @@
 </div>
 
 <div class="modal fade syllbus" id="lacture_youtube_modal" role="dialog" aria-labelledby="evaluation">
-    <div class="modal-dialog video-lg" role="document">          
-        <button type="button" class="close" data-dismiss="modal" style="" onclick="videoUrlBlank()">&times;</button>          
+    <div class="modal-dialog video-lg" role="document">
+        <button type="button" class="close" data-dismiss="modal" style="" onclick="videoUrlBlank()">&times;</button>
         <div class="modal-body" style="padding: 0;">
             <div id="video_url"></div>
         </div>
@@ -274,21 +284,24 @@
         var res = str.split("=");
         $('#video_url').html('<iframe width="100%" class="videoradius" src="//www.youtube.com/embed/' + res[1] + '?rel=0&version=3&modestbranding=1&autoplay=1&controls=1&showinfo=0&loop=1" frameborder="0" allowfullscreen></iframe>');
     }
-</script>   
+</script>
 <script>
     function get_subject_syllabus(id) {
-<?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
+        <?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
             var staff_id = $('#teacher').val();
-<?php } else { ?>
+        <?php } else { ?>
             var staff_id = '<?php echo $staff_id; ?>';
-<?php } ?>
+        <?php } ?>
         $('#assignsyllabus').modal('show');
         $('#syllabus_result').html('');
         $.ajax({
             type: "POST",
             url: base_url + "admin/syllabus/get_subject_syllabus",
-            data: {'id': id, 'staff_id': staff_id},
-            success: function (data) {
+            data: {
+                'id': id,
+                'staff_id': staff_id
+            },
+            success: function(data) {
                 $('#syllabus_result').html(data);
             },
         });
@@ -303,10 +316,8 @@
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend: function () {
-            },
-            success: function (res)
-            {
+            beforeSend: function() {},
+            success: function(res) {
 
                 $('#time_from').val(res.time_from);
                 $('#time_to').val(res.time_to);
@@ -328,7 +339,7 @@
 
 
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
                 alert("Error occured.please try again");
 
             }
@@ -343,15 +354,16 @@
         $.ajax({
             type: "POST",
             url: base_url + "admin/lessonplan/gettopicBylessonid/" + lessonid,
-            data: {'lessonid': lessonid},
+            data: {
+                'lessonid': lessonid
+            },
             dataType: "json",
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#topicid').addClass('dropdownloading');
             },
-            success: function (data) {
+            success: function(data) {
 
-                $.each(data, function (i, obj)
-                {
+                $.each(data, function(i, obj) {
                     var sel = "";
                     if (topic_id == obj.id) {
                         sel = "selected";
@@ -360,12 +372,11 @@
                 });
                 $('#topicid').html(div_data);
             },
-            complete: function () {
+            complete: function() {
                 $('#topicid').removeClass('dropdownloading');
             }
         });
     }
-
 </script>
 
 <script>
@@ -385,11 +396,11 @@
         $('#lacture_youtube_url').val('');
         $('#created_for').val(staff_id);
 
-        $(document).on('focus', '.time', function () {
+        $(document).on('focus', '.time', function() {
             var $this = $(this);
             $this.datetimepicker({
                 format: 'LT',
-                 lang:'en'
+                lang: 'en'
             });
         });
 
@@ -404,15 +415,16 @@
         $.ajax({
             type: "POST",
             url: base_url + "admin/lessonplan/getlessonBysubjectidedit/" + subject_group_subject_id,
-            data: {'subject_group_class_sections_id': subject_group_class_section_id},
+            data: {
+                'subject_group_class_sections_id': subject_group_class_section_id
+            },
             dataType: "json",
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#lessonid').addClass('dropdownloading');
             },
-            success: function (data) {
+            success: function(data) {
 
-                $.each(data, function (i, obj)
-                {
+                $.each(data, function(i, obj) {
                     var sel = "";
                     if (lesson_id == obj.id) {
                         sel = "selected";
@@ -421,34 +433,35 @@
                 });
                 $('#lessonid').append(div_data);
             },
-            complete: function () {
+            complete: function() {
                 $('#lessonid').removeClass('dropdownloading');
             }
         });
     }
 
-    $(document).on('change', '#lessonid', function () {
+    $(document).on('change', '#lessonid', function() {
         var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
         var lessonid = $('#lessonid').val();
         $.ajax({
             type: "POST",
             url: base_url + "admin/lessonplan/gettopicBylessonid/" + lessonid,
-            data: {'lessonid': lessonid},
+            data: {
+                'lessonid': lessonid
+            },
             dataType: "json",
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#topicid').addClass('dropdownloading');
             },
-            success: function (data) {
+            success: function(data) {
 
-                $.each(data, function (i, obj)
-                {
+                $.each(data, function(i, obj) {
                     var sel = "";
 
                     div_data += "<option value=" + obj.id + " " + sel + ">" + obj.name + "</option>";
                 });
                 $('#topicid').html(div_data);
             },
-            complete: function () {
+            complete: function() {
                 $('#topicid').removeClass('dropdownloading');
             }
         });
@@ -456,7 +469,7 @@
     });
 
 
-    $("#syllabus_form").on('submit', (function (e) {
+    $("#syllabus_form").on('submit', (function(e) {
         e.preventDefault();
         for (instance in CKEDITOR.instances) {
             CKEDITOR.instances[instance].updateElement();
@@ -471,17 +484,16 @@
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (res)
-            {
+            success: function(res) {
 
                 if (res.status == "fail") {
 
                     var message = "";
-                    $.each(res.error, function (index, value) {
+                    $.each(res.error, function(index, value) {
 
                         message += value;
                     });
@@ -493,19 +505,19 @@
                     var this_week_start = $('#this_week_start').val();
                     $('#topicid').html('');
                     $('#add_assignsyllabus').modal('hide');
-<?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
+                    <?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
                         var staff_id = $('#teacher').val();
-<?php } else { ?>
+                    <?php } else { ?>
                         var staff_id = '<?php echo $staff_id; ?>';
-<?php } ?>
+                    <?php } ?>
                     get_weekdates('pre_week', this_week_start, staff_id);
                 }
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
                 alert("Error occured.please try again");
                 $this.button('reset');
             },
-            complete: function () {
+            complete: function() {
                 $this.button('reset');
             }
 
@@ -513,7 +525,7 @@
     }));
 
 
-    $(".ckeditor").each(function (_, ckeditor) {
+    $(".ckeditor").each(function(_, ckeditor) {
 
         CKEDITOR.replace(ckeditor, {
             toolbar: 'Ques',
@@ -522,9 +534,9 @@
     });
 
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         var target_textbox = "";
-        $(document).on('click', '#question', function () {
+        $(document).on('click', '#question', function() {
             getImages(1);
         });
     });
@@ -533,38 +545,40 @@
         $.ajax({
             type: "POST",
             url: baseurl + 'admin/question/getimages',
-            data: {page: page, query: query},
+            data: {
+                page: page,
+                query: query
+            },
             dataType: "JSON", // serializes the form's elements.
-            beforeSend: function () {
+            beforeSend: function() {
                 $('.loading-overlay').css("display", "block");
             },
-            success: function (data)
-            {
+            success: function(data) {
 
                 $('label.total').html("").html("<?php echo $this->lang->line('total_record'); ?> :" + data.count).css("display", "block");
                 $('.imgModal-body #media_div').html("").html(data.page);
                 $('.imgModal-body #pagination').html("").html(data.pagination);
                 $('.loading-overlay').css("display", "none");
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
 
                 alert("Error occured.please try again");
                 $('.loading-overlay').css("display", "none");
             },
-            complete: function () {
+            complete: function() {
                 $('.loading-overlay').css("display", "none");
             }
         });
     }
 
 
-    $(document).on('click', '.img_div_modal', function (event) {
+    $(document).on('click', '.img_div_modal', function(event) {
         $('.img_div_modal div.fadeoverlay').removeClass('active');
         $(this).closest('.img_div_modal').find('.fadeoverlay').addClass('active');
 
     });
 
-    $(document).on('click', '.add_media', function (event) {
+    $(document).on('click', '.add_media', function(event) {
 
         var content_html = $('div#media_div').find('.fadeoverlay.active').find('img').data('img');
         var is_image = $('div#media_div').find('.fadeoverlay.active').find('img').data('is_image');
@@ -590,20 +604,19 @@
 
 
         // Check the active editing mode.
-        if (editor.mode == 'wysiwyg')
-        {
+        if (editor.mode == 'wysiwyg') {
             editor.insertHtml(content_html);
         } else
             alert('You must be in WYSIWYG mode!');
     }
 
-    $('#myimgModal').on('shown.bs.modal', function (event) {
+    $('#myimgModal').on('shown.bs.modal', function(event) {
         button = $(event.relatedTarget);
         target_textbox = button.data('location');
         console.log(target_textbox);
     })
 
-    $('.modal').on("hidden.bs.modal", function (e) { //fire on closing modal box
+    $('.modal').on("hidden.bs.modal", function(e) { //fire on closing modal box
 
         if ($('.modal:visible').length) { // check whether parent modal is opend after child modal close
             $('body').addClass('modal-open'); // if open mean length is 1 then add a bootstrap css class to body of the page
@@ -617,28 +630,26 @@
         }
     }
 
-    $(document).on('keyup', '#search_box', function (event) {
+    $(document).on('keyup', '#search_box', function(event) {
         var query = $('#search_box').val();
         getImages(1, query);
 
     });
 
-    $(document).on('click', '.page-link', function () {
+    $(document).on('click', '.page-link', function() {
         var page = $(this).data('page_number');
         var query = $('#search_box').val();
         getImages(page, query);
     });
-
-
 </script>
 <script>
     var base_url = "<?php echo base_url(); ?>";
-<?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
+    <?php if ($this->rbac->hasPrivilege('manage_lesson_plan', 'can_view') && $role_id != 2) { ?>
 
-        $("form#getTimetable").submit(function (e) {
+        $("form#getTimetable").submit(function(e) {
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
-            var staff_id = $('#teacher').val();			
+            var staff_id = $('#teacher').val();
             $('#created_for').val(staff_id);
             if (staff_id !== '') {
                 get_weekdates('current_week', '<?php echo $this_week_start; ?>', staff_id);
@@ -651,27 +662,31 @@
 
 
         });
-<?php } else {
+    <?php } else {
     ?>
         var staff_id = '<?php echo $staff_id; ?>';
         $('#created_for').val(staff_id);
         get_weekdates('current_week', '<?php echo $this_week_start; ?>', staff_id);
-<?php } ?>
+    <?php } ?>
 
 
     function get_weekdates(status, date, staff_id) {
         $.ajax({
             type: "POST",
             url: base_url + "admin/syllabus/get_weekdates",
-            data: {'status': status, 'date': date, 'staff_id': staff_id},
+            data: {
+                'status': status,
+                'date': date,
+                'staff_id': staff_id
+            },
             //dataType: "json",
-            beforeSend: function () {
+            beforeSend: function() {
                 //  $('#weekdates_result').addClass('dropdownloading');
             },
-            success: function (data) {
+            success: function(data) {
                 $('#weekdates_result').html(data);
             },
-            complete: function () {
+            complete: function() {
                 //  $('#weekdates_result').removeClass('dropdownloading');
             }
         });
@@ -679,17 +694,17 @@
 </script>
 
 <script type="text/javascript">
-    $('#add_assignsyllabus').on('hidden.bs.modal', function () {
+    $('#add_assignsyllabus').on('hidden.bs.modal', function() {
         CKupdate();
         $(".dropify-clear").trigger("click");
         add_assignsyllabus
         $(this)
-                .find("input,textarea")
-                .val('')
-                .end()
-                .find("input[type=checkbox], input[type=radio]")
-                .prop("checked", "")
-                .end();
+            .find("input,textarea")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
         $('#lessonid').find('option').not(':first').remove();
     });
 
@@ -699,11 +714,9 @@
             CKEDITOR.instances[instance].setData('');
         }
     }
-
 </script>
 
 <script>
-
     document.getElementById("printModal").style.display = "block";
     document.getElementById("btnExportModal").style.display = "block";
 
@@ -718,45 +731,72 @@
         var divElements = document.getElementById('transfeeModal').innerHTML;
         var oldPage = document.body.innerHTML;
         document.body.innerHTML =
-                "<html><head><title></title></head><body>" +
-                divElements + "</body>";
+            "<html><head><title></title></head><body>" +
+            divElements + "</body>";
         window.print();
         document.body.innerHTML = oldPage;
 
         location.reload(true);
     }
 
-    function fnExcelReportModal()
-    {
+    function fnExcelReportModal() {
         var tab_text = "<table border='2px'><tr >";
         var textRange;
         var j = 0;
         tab = document.getElementById('headerTableModal'); // id of table
 
-        for (j = 0; j < tab.rows.length; j++)
-        {
+        for (j = 0; j < tab.rows.length; j++) {
             tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
             //tab_text=tab_text+"</tr>";
         }
         $("#visibleModal").removeClass("hide");
         tab_text = tab_text + "</table>";
-        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
         tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
         tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
         $("#visibleModal").addClass("hide");
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
         {
             txtArea1.document.open("txt/html", "replace");
             txtArea1.document.write(tab_text);
             txtArea1.document.close();
             txtArea1.focus();
             sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-        } else                 //other browser not tested on IE 11
+        } else //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
         return (sa);
     }
+</script>
+
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "POST",
+            url: base_url + "admin/syllabus/optiondata",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].name + ' ' + result[count].surname + '  </option>';
+                    }
+                    $('#teacher').html(html);
+                }
+            }
+        });
+    })
 </script>

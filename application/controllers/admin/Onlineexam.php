@@ -116,6 +116,7 @@ class Onlineexam extends Admin_Controller
                     }
 
                 $row       = array();
+                $row[]     = $subject_value->branch_name ;
                 $row[]     = $title.$description;
                 $row[]     = $is_quiz ; 
                 $row[]     = $descriptive_ques;

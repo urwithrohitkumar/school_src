@@ -113,6 +113,8 @@
                                         <tr>
                                             <th><?php echo $this->lang->line('name'); ?>
                                             </th>
+                                            <th><?php echo $this->lang->line('branch'); ?>
+                                            </th>
                                             <th><?php echo $this->lang->line('description'); ?>
                                             </th>
                                             <th><?php echo $this->lang->line('invoice_no'); ?>

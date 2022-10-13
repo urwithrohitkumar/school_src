@@ -20,6 +20,11 @@ class disable_reason_model extends MY_Model {
         $this->db->select('disable_reason.*,tb_branch.branch_name');
         $this->db->join('tb_branch', 'tb_branch.id = disable_reason.branch_id', 'left');
         $this->db->from('disable_reason');
+        if($this->session->userdata['admin']['branch_id'] != 0)
+        {
+        $this->db->where('disable_reason.branch_id', $this->session->userdata['admin']['branch_id']);
+        }
+       
         if ($id != null) {
             $this->db->where('disable_reason.id', $id);
         } else {

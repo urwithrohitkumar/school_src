@@ -18,7 +18,8 @@ class Marksheet extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Examinations');
         $this->session->set_userdata('sub_menu', 'Examinations/marksheet');
         $data['title'] = 'Add Library';
-        $data['all_branch']      = $this->branch_model->getBranch();
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
         $this->data['certificateList'] = $this->marksheet_model->get();
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
@@ -241,6 +242,8 @@ class Marksheet extends Admin_Controller {
         $marksheet = $this->marksheet_model->get($id);
 
         $this->data['marksheet'] = $marksheet;
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
 
         $this->form_validation->set_rules('template', 'template', 'trim|required|xss_clean');
 
@@ -330,8 +333,10 @@ class Marksheet extends Admin_Controller {
                 $is_teacher_remark = 0;
             }
 
+
             $insert_data = array(
                 'id' => $this->input->post('id'),
+                'branch_id' => $this->input->post('branch_id'),
                 'template' => $this->input->post('template'),
                 'heading' => $this->input->post('heading'),
                 'title' => $this->input->post('title'),
@@ -354,6 +359,7 @@ class Marksheet extends Admin_Controller {
                 'is_division' => $is_division,
                 'exam_session' => $exam_session,
             );
+
 
             if (isset($_FILES["left_logo"]) && !empty($_FILES["left_logo"]['name'])) {
                 $time = md5($_FILES["left_logo"]['name'] . microtime());

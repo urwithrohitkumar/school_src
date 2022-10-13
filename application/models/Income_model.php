@@ -131,10 +131,11 @@ class Income_model extends My_Model
             $arr['income.branch_id'] = $branch_id;
         }
         $this->datatables
-            ->select('income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')
+            ->select('tb_branch.branch_name,income.id,income.date,income.name,income.invoice_no,income.amount,income.documents,income.note,income_head.income_category,income.inc_head_id')
             ->searchable('income.name,income.invoice_no,income.date,income_head.income_category,income.amount,income.note')
             ->orderable('income.name,income.note,income.invoice_no,income.date,income_head.income_category,income.amount')
             ->join("income_head", "income.inc_head_id = income_head.id")
+            ->join("tb_branch", "income.branch_id = tb_branch.id", 'left')
             ->where($arr)
             ->sort('income.id', 'desc')
             ->from('income');

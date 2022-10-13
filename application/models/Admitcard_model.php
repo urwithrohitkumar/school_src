@@ -23,14 +23,15 @@ class Admitcard_model extends MY_model
     public function get($id = null)
     {       
         $branch_id= $this->session->admin['branch_id'];        
-        $this->db->select()->from('template_admitcards');
+        $this->db->select('template_admitcards.*,tb_branch.branch_name')->from('template_admitcards');
+        $this->db->join("tb_branch", "template_admitcards.branch_id = tb_branch.id", 'left');
         if($branch_id>0){   
-            $this->db->where('branch_id', $branch_id);
+            $this->db->where('template_admitcards.branch_id', $branch_id);
         }
         if ($id != null) {
-            $this->db->where('id', $id);
+            $this->db->where('template_admitcards.id', $id);
         } else {
-            $this->db->order_by('id');
+            $this->db->order_by('template_admitcards.id');
         }
         $query = $this->db->get();
         if ($id != null) {
@@ -101,6 +102,18 @@ class Admitcard_model extends MY_model
         } else {
             return true;
         }
+    }
+
+
+    /**
+     * 
+     */
+    public function getBranchData($branch_id = null)
+    {       
+        $this->db->select()->from('template_admitcards');
+        $this->db->where('branch_id', $branch_id);
+        $query = $this->db->get();
+        return $query->result();
     }
 
 }

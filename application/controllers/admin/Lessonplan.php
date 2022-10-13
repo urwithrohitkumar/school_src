@@ -163,6 +163,7 @@ class Lessonplan extends Admin_Controller
                     'name'                            => $value,
                     'subject_group_class_sections_id' => $subject_group_class_sectionsId['id'],
                     'session_id'                      => $this->sch_current_session,
+                    'branch_id'                      => $_POST['branch_id']
                 );
 
                 $this->lessonplan_model->add_lesson($data);

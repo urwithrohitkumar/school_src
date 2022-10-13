@@ -136,6 +136,8 @@ $language_name = $language["short_code"];
                                         </th>
                                         <th><?php echo $this->lang->line('description'); ?>
                                         </th>
+                                        <th><?php echo $this->lang->line('branch'); ?>
+                                        </th>
                                         <th><?php echo $this->lang->line('invoice_no'); ?>
                                         </th>
                                         <th><?php echo $this->lang->line('date'); ?>

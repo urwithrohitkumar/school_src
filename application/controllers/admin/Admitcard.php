@@ -22,7 +22,8 @@ class Admitcard extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Examinations');
         $this->session->set_userdata('sub_menu', 'Examinations/admitcard');
         $this->data['admitcardList'] = $this->admitcard_model->get();
-        $data['all_branch']      = $this->branch_model->getBranch(); 
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch; 
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('left_logo', $this->lang->line('left') . " " . $this->lang->line('logo'), 'callback_handle_upload[left_logo]');
@@ -124,28 +125,32 @@ class Admitcard extends Admin_Controller
                 'background_img'  => "",
             );
 
-            if (isset($_FILES["left_logo"]) && !empty($_FILES["left_logo"]['name'])) {
+            if (isset($_FILES["left_logo"]) && !empty($_FILES["left_logo"]['name']) && $_FILES['left_logo']['error'] == 0) {
+
                 $time     = md5($_FILES["left_logo"]['name'] . microtime());
                 $fileInfo = pathinfo($_FILES["left_logo"]["name"]);
                 $img_name = $time . '.' . $fileInfo['extension'];
                 move_uploaded_file($_FILES["left_logo"]["tmp_name"], "./uploads/admit_card/" . $img_name);
                 $insert_data['left_logo'] = $img_name;
             }
-            if (isset($_FILES["right_logo"]) && !empty($_FILES["right_logo"]['name'])) {
+            if (isset($_FILES["right_logo"]) && !empty($_FILES["right_logo"]['name']) && $_FILES['right_logo']['error'] == 0) {
+
                 $time     = md5($_FILES["right_logo"]['name'] . microtime());
                 $fileInfo = pathinfo($_FILES["right_logo"]["name"]);
                 $img_name = $time . '.' . $fileInfo['extension'];
                 move_uploaded_file($_FILES["right_logo"]["tmp_name"], "./uploads/admit_card/" . $img_name);
                 $insert_data['right_logo'] = $img_name;
             }
-            if (isset($_FILES["sign"]) && !empty($_FILES["sign"]['name'])) {
+            if (isset($_FILES["sign"]) && !empty($_FILES["sign"]['name']) && $_FILES['sign']['error'] == 0) {
+
                 $time     = md5($_FILES["sign"]['name'] . microtime());
                 $fileInfo = pathinfo($_FILES["sign"]["name"]);
                 $img_name = $time . '.' . $fileInfo['extension'];
                 move_uploaded_file($_FILES["sign"]["tmp_name"], "./uploads/admit_card/" . $img_name);
                 $insert_data['sign'] = $img_name;
             }
-            if (isset($_FILES["background_img"]) && !empty($_FILES["background_img"]['name'])) {
+            if (isset($_FILES["background_img"]) && !empty($_FILES["background_img"]['name']) && $_FILES['background_img']['error'] == 0) {
+
                 $time     = md5($_FILES["background_img"]['name'] . microtime());
                 $fileInfo = pathinfo($_FILES["background_img"]["name"]);
                 $img_name = $time . '.' . $fileInfo['extension'];
@@ -154,6 +159,7 @@ class Admitcard extends Admin_Controller
             }
 
             $this->admitcard_model->add($insert_data);
+
 
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
             redirect('admin/admitcard/index');
@@ -216,7 +222,8 @@ class Admitcard extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'Examinations/admitcard');
         $this->data['admitcardList'] = $this->admitcard_model->get();
         $this->data['admitcard']     = $this->admitcard_model->get($id);
-        $data['all_branch']      = $this->branch_model->getBranch();
+        $branch = $this->staff_model->getBranch();
+        $this->data['branch']= $branch;
         $this->form_validation->set_rules('template', $this->lang->line('template'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('left_logo', $this->lang->line('left') . " " . $this->lang->line('logo'), 'callback_handle_upload[left_logo]');

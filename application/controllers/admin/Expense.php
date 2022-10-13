@@ -275,6 +275,7 @@ class Expense extends Admin_Controller
                 }
                 $row       = array();
                 $row[]     = $value->name;
+                $row[]     = $value->branch_name;
 
                 if ($value->note == "") {
                      $row[]     = $this->lang->line('no_description');

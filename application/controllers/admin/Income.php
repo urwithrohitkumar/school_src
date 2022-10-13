@@ -285,6 +285,7 @@ class Income extends Admin_Controller
                     $row[] = $value->note;
                 }
 
+                $row[]     = $value->branch_name;
                 $row[]     = $value->invoice_no;
                 $row[]     = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($value->date));
                 $row[]     = $value->income_category;

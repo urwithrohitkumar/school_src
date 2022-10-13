@@ -414,7 +414,13 @@ $language_name = $language["short_code"];
         var section_id = $(this).val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
     });
+    $(document).on('change', '#branch_id', function () {
+        var class_id = $('#searchclassid').val();
+        var section_id = $('#secid').val();
+        getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
+    });
     function getSubjectGroup(class_id, section_id, subjectgroup_id, subject_group_target) {
+        var branch_id = $('#branch_id').val();
         if (class_id != "" && section_id != "") {
 
             var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
@@ -422,7 +428,11 @@ $language_name = $language["short_code"];
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupByClassandSection',
-                data: {'class_id': class_id, 'section_id': section_id},
+                data: {
+                    'class_id': class_id, 
+                    'section_id': section_id,
+                    'branch_id': branch_id,
+                },
                 dataType: 'JSON',
                 beforeSend: function () {
                     // setting a timeout

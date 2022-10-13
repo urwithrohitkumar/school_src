@@ -15,7 +15,7 @@
                 <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('edit') . " " . $this->lang->line('disable') . " " . $this->lang->line('reason'); ?></h3>
+                            <h3 class="box-title"><i class="fa fa-users"></i><?php echo $this->lang->line('disable_reason1') . " " . $this->lang->line('list'); ?></h3>
                         </div>
 
                         <form id="form1" action="<?php echo base_url(); ?>admin/disable_reason/edit/<?php echo $id; ?>" id="employeeform" name="employeeform" method="post" accept-charset="utf-8">
@@ -68,10 +68,10 @@
                                 ?>">
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
-                        <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('disable') . " " . $this->lang->line('reason') . " " . $this->lang->line('list'); ?></h3>
+                        <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('disable_reason1') . " " . $this->lang->line('list'); ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="download_label"><?php echo $this->lang->line('disable') . " " . $this->lang->line('reason') . " " . $this->lang->line('list'); ?></div>
+                        <div class="download_label"><?php echo $this->lang->line('disable_reason1') . " " . $this->lang->line('list'); ?></div>
                         <div class="mailbox-messages table-responsive">
                             <table class="table table-hover table-striped table-bordered example">
                                 <thead>

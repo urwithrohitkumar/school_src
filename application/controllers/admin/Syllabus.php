@@ -26,6 +26,8 @@ class Syllabus extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'admin/syllabus');
         $my_role                 = $this->customlib->getStaffRole();
         $role                    = json_decode($my_role);
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $data['role_id']         = $role->id;
         $staff_list              = $this->staff_model->getEmployee('2' , NULL ,NULL);
         $data['staff_list']      = $staff_list;
@@ -359,6 +361,13 @@ class Syllabus extends Admin_Controller
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/index', $data);
         $this->load->view('layout/footer');
+    }
+
+
+    public function optiondata(){
+        $branch_id = $this->input->post('branch_id');
+        $staff_list = $this->staff_model->getEmployee('2' , NULL ,$branch_id);
+        echo json_encode($staff_list);
     }
 
 }
