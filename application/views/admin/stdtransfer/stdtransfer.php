@@ -60,7 +60,7 @@
                             </div>
                             <h4> <?php echo $this->lang->line('promote_students_in_next_session'); ?></h4>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('promote_in_session'); ?> </label><small class="req"> *</small>
                                         <select id="session_id" name="session_id" class="form-control">
@@ -78,7 +78,18 @@
                                         <span class="text-danger"><?php echo form_error('session_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class='form-group'>
+                                        <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                        <select id='promote_branch_id' name='promote_branch_id' placeholder='' type='text' class='form-control'>
+                                            <?php foreach ($branch as $key => $value) {  ?>
+                                                <option value='<?php echo $value['id'] ?>' <?php if (set_value('promote_branch_id') == $value['id']) echo "selected=selected"; ?>><?php echo $value['branch_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <span class='text-danger'><?php echo form_error('branch'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select id="class_promote_id" name="class_promote_id" class="form-control">
@@ -95,7 +106,7 @@
                                         <span class="text-danger"><?php echo form_error('class_promote_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                         <select id="section_promote_id" name="section_promote_id" class="form-control">
@@ -127,6 +138,7 @@
                                 <input type="hidden" class="class_promoted_post" name="class_promote_id" value="<?php echo $class_promoted_post; ?>">
                                 <input type="hidden" class="section_promoted_post" name="section_promote_id" value="<?php echo $section_promoted_post; ?>">
                                 <input type="hidden" class="session_promoted_post" name="session_id" value="<?php echo $session_promoted_post; ?>">
+                                <input type="hidden" class="promote_branch_id" name="promote_branch_id" value="<?php echo $promote_branch_id; ?>">
 
 
                                 <div class="table-responsive">
@@ -135,6 +147,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th><?php echo $this->lang->line('admission_no'); ?></th>
+                                                <th><?php echo $this->lang->line('branch'); ?></th>
                                                 <th><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('name'); ?></th>
                                                 <th><?php echo $this->lang->line('father_name'); ?></th>
                                                 <th><?php echo $this->lang->line('date_of_birth'); ?></th>
@@ -155,6 +168,7 @@
                                                     <tr>
                                                         <td><input class="checkbox" name="student_list[]" type="checkbox" autocomplete="off" value="<?php echo $student['id']; ?>"></td>
                                                         <td><?php echo $student['admission_no']; ?></td>
+                                                        <td><?php echo $student['branch_name']; ?></td>
                                                         <td><?php echo $this->customlib->getFullName($student['firstname'], $student['middlename'], $student['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?></td>
                                                         <td><?php echo $student['father_name']; ?></td>
                                                         <td><?php

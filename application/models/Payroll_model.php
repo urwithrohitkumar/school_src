@@ -21,16 +21,37 @@ class Payroll_model extends MY_Model
         $date_month = date("m", strtotime($year));
         if (!empty($role) && !empty($emp_name)) {
 
-            $query = $this->db->query("select staff_payslip.status,
-        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.* ,roles.name as user_type ,staff_designation.designation as designation,department.department_name as department from staff left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " left join department on department.id = staff.department left join staff_designation on staff_designation.id = staff.designation left join staff_roles on staff_roles.staff_id = staff.id left join roles on staff_roles.role_id = roles.id where roles.name = " . $this->db->escape($role) . " and name = " . $this->db->escape($emp_name) . " and staff.is_active = 1 " . $where . "");
+            $query = $this->db->query("select tb_branch.branch_name, staff_payslip.status,
+        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.* ,roles.name as user_type ,staff_designation.designation as designation,department.department_name as department from staff
+        left join tb_branch on tb_branch.id = staff.branch_id 
+
+        left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " 
+        left join department on department.id = staff.department 
+        left join staff_designation on staff_designation.id = staff.designation 
+        left join staff_roles on staff_roles.staff_id = staff.id 
+        left join roles on staff_roles.role_id = roles.id 
+        where roles.name = " . $this->db->escape($role) . " and name = " . $this->db->escape($emp_name) . " and staff.is_active = 1 " . $where . "");
         } else if (!empty($role)) {
 
-            $query = $this->db->query("select staff_payslip.status,
-        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.*,staff_designation.designation as designation,department.department_name as department ,roles.name as user_type from staff left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " left join department on department.id = staff.department left join staff_roles on staff_roles.staff_id = staff.id left join roles on staff_roles.role_id = roles.id left join staff_designation on staff_designation.id = staff.designation where roles.name = " . $this->db->escape($role) . " and staff.is_active = 1 " . $where . "");
+            $query = $this->db->query("select tb_branch.branch_name, staff_payslip.status,
+        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.*,staff_designation.designation as designation,department.department_name as department ,roles.name as user_type from staff
+        left join tb_branch on tb_branch.id = staff.branch_id 
+
+        left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " 
+        left join department on department.id = staff.department left join staff_roles on staff_roles.staff_id = staff.id left join roles on staff_roles.role_id = roles.id left join staff_designation on staff_designation.id = staff.designation 
+        where roles.name = " . $this->db->escape($role) . " and staff.is_active = 1 " . $where . "");
         } else {
 
-            $query = $this->db->query("select staff_payslip.status,
-        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.* ,roles.name as user_type ,staff_designation.designation as designation,department.department_name as department  from staff left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " left join department on department.id = staff.department left join staff_roles on staff_roles.staff_id = staff.id left join roles on staff_roles.role_id = roles.id left join staff_designation on staff_designation.id = staff.designation where staff.is_active = 1 " . $where . "");
+            $query = $this->db->query("select tb_branch.branch_name, staff_payslip.status,
+        IFNULL(staff_payslip.id, 0) as payslip_id ,staff.* ,roles.name as user_type ,staff_designation.designation as designation,department.department_name as department  from staff
+        left join tb_branch on tb_branch.id = staff.branch_id 
+
+        left join staff_payslip on staff.id = staff_payslip.staff_id and month = " . $this->db->escape($month) . " and year = " . $this->db->escape($year) . " 
+        left join department on department.id = staff.department 
+        left join staff_roles on staff_roles.staff_id = staff.id 
+        left join roles on staff_roles.role_id = roles.id 
+        left join staff_designation on staff_designation.id = staff.designation 
+        where staff.is_active = 1 " . $where . "");
         }
         return $query->result_array();
     }

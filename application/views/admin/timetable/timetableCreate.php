@@ -99,7 +99,11 @@
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
                                             <?php foreach ($branch as $key => $value) {  ?>
-                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                <option value='<?php echo $value['id'] ?>' <?php
+                                                                                            if (set_value('branch_id') == $value['id']) {
+                                                                                                echo "selected=selected";
+                                                                                            }
+                                                                                            ?>><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
                                         </select>
                                         <span class='text-danger'><?php echo form_error('branch'); ?></span>
@@ -292,7 +296,7 @@
             $('#section_id').html("");
             var base_url = '<?php echo base_url() ?>';
             var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            
+
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
@@ -313,16 +317,16 @@
             });
         }
     }
-    
-    
+
+
 
     function getGroupByClassandSection(class_id, section_id, subject_group_id) {
         var branch_id = $('#branch_id').find(":selected").val();
-       
+
 
         if (class_id != "" && section_id != "" && subject_group_id != "") {
             $('#subject_group_id').html("");
-            
+
             var base_url = '<?php echo base_url() ?>';
             var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
             $.ajax({
@@ -360,7 +364,7 @@
     })
 
     function getGroupdata(target, target_id, ajax_data) {
-
+        var branch_id = $('#branch_id').val();
         $.ajax({
             type: 'POST',
             url: base_url + "admin/timetable/getBydategroupclasssection",
@@ -368,7 +372,8 @@
                 'day': ajax_data.day,
                 'class_id': ajax_data.c,
                 'section_id': ajax_data.s,
-                'subject_group_id': ajax_data.group
+                'subject_group_id': ajax_data.group,
+                'branch_id': branch_id,
             },
             dataType: 'json',
             beforeSend: function() {
@@ -453,29 +458,3 @@
         });
     });
 </script>
-<script type="text/template" id="staff_dropdown">
-    <option value=""><?php echo $this->lang->line('select') ?></option>
-                <?php
-                foreach ($staff as $staff_key => $staff_value) {
-                ?>
-                    <option value="<?php echo $staff_value['id']; ?>"><?php echo $staff_value['name'] . " " . $staff_value['surname'] . " (" . $staff_value['employee_id'] . ")"; ?></option>
-                    <?php
-                }
-                    ?>
-            </script>
-
-<script type="text/template" id="subject_dropdown">
-    <option value=""><?php echo $this->lang->line('select') ?></option>
-                <?php
-                foreach ($subject as $subject_key => $subject_value) {
-                    if ($subject_value->code !== '') {
-                        $sub_name = $subject_value->name . " (" . $subject_value->code . ")";
-                    } else {
-                        $sub_name = $subject_value->name;
-                    }
-                ?>
-                    <option value="<?php echo $subject_value->id; ?>" ><?php echo $sub_name; ?></option>
-                    <?php
-                }
-                    ?>
-            </script>

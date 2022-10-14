@@ -80,6 +80,7 @@ if ($this->rbac->hasPrivilege('question_bank', 'can_add')) {
                                     <tr>
                                         <th><input type="checkbox" id="masterCheck" value="checkUncheckAll"></th>
                                         <th><?php echo $this->lang->line('q_id'); ?></th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('subject') ?></th>
                                         <th><?php echo $this->lang->line('question_type')?></th>
                                         <th><?php echo $this->lang->line('level');?></th>

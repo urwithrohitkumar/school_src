@@ -137,10 +137,11 @@ class Question_model extends MY_model
         if($branch_id>0){
             $arr = ['questions.branch_id'=>$branch_id];
         }
-        $this->datatables->select('questions.*,subjects.name,classes.class as `class_name`,sections.section as `section_name`');
+        $this->datatables->select('questions.*,tb_branch.branch_name,subjects.name,classes.class as `class_name`,sections.section as `section_name`');
         $this->datatables->join('subjects', 'subjects.id = questions.subject_id');
         $this->datatables->join('classes', 'classes.id = questions.class_id', 'left');
         $this->datatables->join('sections', 'sections.id = questions.section_id', 'left');
+        $this->datatables->join('tb_branch', 'tb_branch.id = questions.branch_id', 'left');
 
         $this->datatables->searchable('questions.id,subjects.name,questions.question_type,questions.level,questions.question,classes.class');
         $this->datatables->orderable('questions.id,subjects.name,questions.question_type,questions.level,questions.question,classes.class');

@@ -1410,8 +1410,15 @@ class Staff extends Admin_Controller
     {
 
         $role = $this->input->post("role");
-
-        $data = $this->staff_model->getEmployee($role);
+        if(!empty($this->input->post("branch_id")))
+        {
+            $branch_id = $this->input->post('branch_id');
+        }
+        else{
+            
+            $branch_id = '';
+        }
+        $data = $this->staff_model->getEmployee($role, $class_id = null, $branch_id);
 
         echo json_encode($data);
     }

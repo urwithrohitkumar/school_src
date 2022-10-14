@@ -26,6 +26,8 @@ class Leaverequest extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'admin/leaverequest/leaverequest');
         $leave_request = $this->leaverequest_model->staff_leave_request();
         $data["leave_request"] = $leave_request;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $LeaveTypes = $this->staff_model->getLeaveType();
         $userdata = $this->customlib->getUserData();
         $data["leavetype"] = $LeaveTypes;

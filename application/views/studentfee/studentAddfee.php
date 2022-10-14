@@ -1315,7 +1315,6 @@ $language_name   = $language["short_code"];
             success: function(response) {
 
                 if (response.status === 1) {
-
                     location.reload(true);
                 } else if (response.status === 0) {
                     $.each(response.error, function(index, value) {
@@ -1325,9 +1324,7 @@ $language_name   = $language["short_code"];
                 }
             },
             error: function(xhr) { // if error occured
-
                 alert("Error occured.please try again");
-
             },
             complete: function() {
                 smt_btn.button('reset');

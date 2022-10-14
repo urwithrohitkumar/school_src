@@ -197,7 +197,16 @@
     }
     $(document).on('change', '#secid', function() {
         var class_id = $('#searchclassid').val();
+        $('#subid').html('<option selected disabled><?php echo $this->lang->line('select'); ?></option>');
+        $('#lessonid').html('<option selected disabled><?php echo $this->lang->line('select'); ?></option>');
         var section_id = $(this).val();
+        getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
+    });
+    $(document).on('change', '#branch_id', function() {
+        $('#subid').html('<option selected disabled><?php echo $this->lang->line('select'); ?></option>');
+        $('#lessonid').html('<option selected disabled><?php echo $this->lang->line('select'); ?></option>');
+        var class_id = $('#searchclassid').val();
+        var section_id = $('#secid').val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
     });
 
@@ -205,13 +214,14 @@
         if (class_id != "" && section_id != "") {
 
             var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-
+            var branch_id = $('#branch_id').val();
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupByClassandSection',
                 data: {
                     'class_id': class_id,
-                    'section_id': section_id
+                    'section_id': section_id,
+                    'branch_id': branch_id,
                 },
                 dataType: 'JSON',
                 beforeSend: function() {

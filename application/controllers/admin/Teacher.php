@@ -4,9 +4,11 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Teacher extends Admin_Controller {
+class Teacher extends Admin_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->library('mailsmsconf');
         $this->load->model("classteacher_model");
@@ -14,7 +16,8 @@ class Teacher extends Admin_Controller {
         $this->current_session = $this->setting_model->getCurrentSession();
     }
 
-    public function index() {
+    public function index()
+    {
         $this->session->set_userdata('top_menu', 'Academics');
         $this->session->set_userdata('sub_menu', 'teacher/index');
         $data['title'] = 'Add Teacher';
@@ -28,14 +31,16 @@ class Teacher extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function getSubjctByClassandSection() {
+    public function getSubjctByClassandSection()
+    {
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
         $data = $this->teachersubject_model->getSubjectByClsandSection($class_id, $section_id);
         echo json_encode($data);
     }
 
-    public function assignteacher() {
+    public function assignteacher()
+    {
         $this->session->set_userdata('top_menu', 'Academics');
         $this->session->set_userdata('sub_menu', 'admin/teacher/viewassignteacher');
         $data['title'] = 'Assign Teacher with Class and Subject wise';
@@ -85,7 +90,8 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function viewassignteacher() {
+    public function viewassignteacher()
+    {
         $this->session->set_userdata('top_menu', 'Academics');
         $this->session->set_userdata('sub_menu', 'admin/teacher/viewassignteacher');
         $data['title'] = 'Assign Teacher with Class and Subject wise';
@@ -133,7 +139,8 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function getSubjectTeachers() {
+    public function getSubjectTeachers()
+    {
         if (!$this->rbac->hasPrivilege('assign_subject', 'can_view')) {
             access_denied();
         }
@@ -155,7 +162,8 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         if (!$this->rbac->hasPrivilege('assign_subject', 'can_view')) {
             access_denied();
         }
@@ -169,7 +177,8 @@ class Teacher extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         if (!$this->rbac->hasPrivilege('assign_subject', 'can_delete')) {
             access_denied();
         }
@@ -178,7 +187,8 @@ class Teacher extends Admin_Controller {
         redirect('admin/teacher/index');
     }
 
-    public function create() {
+    public function create()
+    {
         if (!$this->rbac->hasPrivilege('assign_subject', 'can_add')) {
             access_denied();
         }
@@ -235,7 +245,8 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function handle_upload() {
+    public function handle_upload()
+    {
         if (isset($_FILES["file"]) && !empty($_FILES['file']['name'])) {
             $allowedExts = array('jpg', 'jpeg', 'png');
             $temp = explode(".", $_FILES["file"]["name"]);
@@ -243,9 +254,11 @@ class Teacher extends Admin_Controller {
             if ($_FILES["file"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }
-            if ($_FILES["file"]["type"] != 'image/gif' &&
-                    $_FILES["file"]["type"] != 'image/jpeg' &&
-                    $_FILES["file"]["type"] != 'image/png') {
+            if (
+                $_FILES["file"]["type"] != 'image/gif' &&
+                $_FILES["file"]["type"] != 'image/jpeg' &&
+                $_FILES["file"]["type"] != 'image/png'
+            ) {
 
                 $this->form_validation->set_message('handle_upload', $this->lang->line('file_type_not_allowed'));
                 return false;
@@ -268,7 +281,8 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
 
         if (!$this->rbac->hasPrivilege('assign_subject', 'can_edit')) {
             access_denied();
@@ -319,13 +333,15 @@ class Teacher extends Admin_Controller {
         }
     }
 
-    public function getlogindetail() {
+    public function getlogindetail()
+    {
         $teacher_id = $this->input->post('teacher_id');
         $examSchedule = $this->user_model->getTeacherLoginDetails($teacher_id);
         echo json_encode($examSchedule);
     }
 
-    public function assign_class_teacher() {
+    public function assign_class_teacher()
+    {
         if (!$this->rbac->hasPrivilege('assign_class_teacher', 'can_view')) {
             access_denied();
         }
@@ -333,18 +349,21 @@ class Teacher extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'admin/teacher/assign_class_teacher');
         $data['title'] = 'Add Class Teacher';
         $data['title_list'] = 'Class List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
 
         $this->form_validation->set_rules(
-                'class', $this->lang->line('class'), array(
-            'required',
-            array('class_exists', array($this->class_model, 'class_teacher_exists')),
-                )
+            'class',
+            $this->lang->line('class'),
+            array(
+                'required',
+                array('class_exists', array($this->class_model, 'class_teacher_exists')),
+            )
         );
         $this->form_validation->set_rules('section', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('teachers[]', $this->lang->line('teacher'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
 
             $class = $this->input->post("class");
@@ -357,14 +376,18 @@ class Teacher extends Admin_Controller {
                 $classteacherid = $this->input->post("classteacherid");
                 if (isset($classteacherid)) {
 
-                    $data = array('id' => $classteacherid[$i],
+                    $data = array(
+                        'id' => $classteacherid[$i],
                         'class_id' => $class,
+                        'branch_id' => $this->input->post("branch_id"),
                         'section_id' => $section,
                         'staff_id' => $teachers[$i],
                         'session_id' => $this->current_session,
                     );
                 } else {
-                    $data = array('class_id' => $class,
+                    $data = array(
+                        'class_id' => $class,
+                        'branch_id' => $this->input->post("branch_id"),
                         'section_id' => $section,
                         'staff_id' => $teachers[$i],
                         'session_id' => $this->current_session,
@@ -394,7 +417,14 @@ class Teacher extends Admin_Controller {
         if (!empty($tlist)) {
             $data["tlist"] = $tlist;
         }
-        $teacherlist = $this->staff_model->getEmployee('2','','1');
+
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
+            $teacherlist = $this->staff_model->getEmployee('2', '', $this->session->userdata['admin']['branch_id']);
+        } else {
+            $teacherlist = $this->staff_model->getEmployee('2', '', '1');
+        }
+
+
 
         $data['teacherlist'] = $teacherlist;
 
@@ -403,7 +433,8 @@ class Teacher extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function classteacheredit1111($class_id, $section_id) {
+    public function classteacheredit1111($class_id, $section_id)
+    {
         if (!$this->rbac->hasPrivilege('assign_class_teacher', 'can_edit')) {
             access_denied();
         }
@@ -437,7 +468,8 @@ class Teacher extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function update_class_teacher($class_id, $section_id) {
+    public function update_class_teacher($class_id, $section_id)
+    {
 
         $this->session->set_userdata('top_menu', 'Academics');
         $this->session->set_userdata('sub_menu', 'classes/index');
@@ -445,10 +477,12 @@ class Teacher extends Admin_Controller {
         $data['title_list'] = 'Class List';
 
         $this->form_validation->set_rules(
-                'class', $this->lang->line('class'), array(
-            'required',
-            array('class_exists', array($this->class_model, 'class_teacher_exists')),
-                )
+            'class',
+            $this->lang->line('class'),
+            array(
+                'required',
+                array('class_exists', array($this->class_model, 'class_teacher_exists')),
+            )
         );
         $this->form_validation->set_rules('section', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('teachers[]', $this->lang->line('teacher'), 'trim|required|xss_clean');
@@ -546,7 +580,8 @@ class Teacher extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function classteacherdelete($class_id, $section_id) {
+    public function classteacherdelete($class_id, $section_id)
+    {
 
         if ((!empty($class_id)) && (!empty($section_id))) {
 
@@ -556,4 +591,14 @@ class Teacher extends Admin_Controller {
         }
     }
 
+    /**
+     * Class teacher according to bracnh
+     *
+     */
+    public function classTeacherAccordingBranch()
+    {
+        $branch_id = $this->input->post('branch_id');
+        $teacherlist = $this->staff_model->getStaffbyroleBranch('2', $branch_id);
+        echo json_encode($teacherlist);
+    }
 }

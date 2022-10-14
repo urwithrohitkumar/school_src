@@ -25,7 +25,7 @@ class Stdtransfer extends Admin_Controller
         $class                   = $this->class_model->get('', $classteacher = 'yes');
         $data['classlist']       = $class;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $userdata                = $this->customlib->getUserData();
         $data['sch_setting']     = $this->sch_setting_detail;
         $feecategory             = $this->feecategory_model->get();
@@ -38,23 +38,24 @@ class Stdtransfer extends Admin_Controller
         $this->form_validation->set_rules('section_promote_id', $this->lang->line('session'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == true) {
+          
             $class                         = $this->input->post('class_id');
             $section                       = $this->input->post('section_id');
             $session                       = $this->input->post('session_id');
             $class_promote                 = $this->input->post('class_promote_id');
             $section_promote               = $this->input->post('section_promote_id');
             $branch_id                        = $this->input->post('branch_id');
+            $promote_branch_id                        = $this->input->post('promote_branch_id');
             $data['class_post']            = $class;
             $data['section_post']          = $section;
             $data['class_promoted_post']   = $class_promote;
             $data['section_promoted_post'] = $section_promote;
             $data['session_promoted_post'] = $session;
-            $data['branch_id'] = $branch_id;
+            $data['promote_branch_id'] = $promote_branch_id;
 
-            $resultlist = $this->student_model->searchNonPromotedStudents($class, $section, $session, $class_promote, $section_promote,$branch_id);
+            $resultlist = $this->student_model->searchNonPromotedStudents($class, $section, $session, $class_promote, $section_promote, $promote_branch_id);
 
             $data['resultlist'] = $resultlist;
-
         }
 
         $this->load->view('layout/header', $data);
@@ -64,7 +65,6 @@ class Stdtransfer extends Admin_Controller
 
     public function promote()
     {
-
         $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('class_promote_id', $this->lang->line('class'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('section_promote_id', $this->lang->line('section'), 'required|trim|xss_clean');
@@ -90,11 +90,13 @@ class Stdtransfer extends Admin_Controller
                         $promoted_class   = $this->input->post('class_promote_id');
                         $promoted_section = $this->input->post('section_promote_id');
                         $promoted_session = $this->input->post('session_id');
+                        $promoted_branch_id = $this->input->post('promote_branch_id');
                         $data_new         = array(
                             'student_id'     => $student_id,
                             'class_id'       => $promoted_class,
                             'section_id'     => $promoted_section,
                             'session_id'     => $promoted_session,
+                            'branch_id'     => $promoted_branch_id,
                             'transport_fees' => 0,
                             'fees_discount'  => 0,
                         );
@@ -103,11 +105,13 @@ class Stdtransfer extends Admin_Controller
                         $promoted_session = $this->input->post('session_id');
                         $class_post       = $this->input->post('class_post');
                         $section_post     = $this->input->post('section_post');
+                        $promoted_branch_id = $this->input->post('promote_branch_id');
                         $data_new         = array(
                             'student_id'     => $student_id,
                             'class_id'       => $class_post,
                             'section_id'     => $section_post,
                             'session_id'     => $promoted_session,
+                            'branch_id'     => $promoted_branch_id,
                             'transport_fees' => 0,
                             'fees_discount'  => 0,
                         );
@@ -125,5 +129,4 @@ class Stdtransfer extends Admin_Controller
             echo json_encode(array('status' => 'success', 'msg' => ""));
         }
     }
-
 }

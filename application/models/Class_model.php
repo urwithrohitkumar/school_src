@@ -196,10 +196,11 @@ class Class_model extends MY_Model
         if ($this->session->userdata['admin']['branch_id'] != 0) {
             $where =' AND staff.branch_id ='. $this->session->userdata['admin']['branch_id'].'';
         }
-        $query = $this->db->query('SELECT class_teacher.*,classes.class,sections.section FROM `class_teacher` 
+        $query = $this->db->query('SELECT class_teacher.*,tb_branch.branch_name,classes.class,sections.section FROM `class_teacher` 
         INNER JOIN classes on classes.id=class_teacher.class_id 
         INNER JOIN sections on sections.id=class_teacher.section_id 
         LEFT JOIN staff on staff.id=class_teacher.staff_id 
+        LEFT JOIN tb_branch on tb_branch.id=class_teacher.branch_id 
         WHERE class_teacher.session_id="' . $this->current_session . '" '. $where.' GROUP BY class_teacher.class_id , class_teacher.section_id ORDER by length(classes.class), classes.class');
         //     $query = $this->db->query('SELECT distinct class_id AS class_id ,section_id,
         //  (SELECT C.class FROM classes C WHERE C.ID = CT.CLASS_ID) class,

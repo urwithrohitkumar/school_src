@@ -32,15 +32,12 @@ class Staff_model extends MY_Model
         $this->db->select('staff.id,staff.employee_id,CONCAT_WS(" ",staff.name,staff.surname,"(",staff.employee_id,")") as name,roles.name as user_type,roles.id as role_id,staff_rating.rate,staff_rating.status,staff_rating.comment,staff_rating.id as rate_id,CONCAT_WS(" ",students.firstname,students.middlename,students.lastname,"(",students.admission_no,")") as student_name')->from('staff')->join("staff_roles", "staff_roles.staff_id = staff.id", "left")->join("roles", "staff_roles.role_id = roles.id", "left")->join("staff_rating", "staff_rating.staff_id = staff.id", "inner")->join("users", "users.id=staff_rating.user_id", "left")->join("students", "students.id=users.user_id", "left");
         $this->db->where('staff.is_active', 1);
         $this->db->where_not_in('roles.id', 7);
-        if($this->session->userdata['admin']['branch_id'] != 0)
-        {
+        if ($this->session->userdata['admin']['branch_id'] != 0) {
             $this->db->where('staff.branch_id', $this->session->userdata['admin']['branch_id']);
-
         }
         $this->db->order_by('staff.id');
         $query = $this->db->get();
         return $query->result_array();
-
     }
 
     public function getTodayDayAttendance()
@@ -174,7 +171,6 @@ class Staff_model extends MY_Model
             $action    = "Update";
             $record_id = $id = $data['id'];
             $this->log($message, $record_id, $action);
-
         } else {
             $this->db->insert('staff', $data);
             $id        = $this->db->insert_id();
@@ -182,7 +178,6 @@ class Staff_model extends MY_Model
             $action    = "Insert";
             $record_id = $id;
             $this->log($message, $record_id, $action);
-
         }
         //======================Code End==============================
 
@@ -193,7 +188,6 @@ class Staff_model extends MY_Model
             # Something went wrong.
             $this->db->trans_rollback();
             return false;
-
         } else {
             return $id;
         }
@@ -219,7 +213,6 @@ class Staff_model extends MY_Model
             # Something went wrong.
             $this->db->trans_rollback();
             return false;
-
         } else {
             //return $return_value;
         }
@@ -318,7 +311,6 @@ class Staff_model extends MY_Model
             $this->db->trans_commit();
             return $staff_id;
         }
-
     }
 
     public function add_staff_leave_details($data2)
@@ -384,12 +376,10 @@ class Staff_model extends MY_Model
         if ($this->check_data_exists($name, $id, $staff_id)) {
             $this->form_validation->set_message('username_check', 'Record already exists');
             return false;
-
         } else {
 
             return true;
         }
-
     }
 
     public function check_data_exists($name, $id, $staff_id)
@@ -519,7 +509,7 @@ class Staff_model extends MY_Model
 
     public function allotedLeaveType($id)
     {
-        $query = "SELECT `staff_leave_details`.*, `leave_types`.`type` FROM `staff_leave_details` JOIN `leave_types` ON `staff_leave_details`.`leave_type_id` = `leave_types`.`id` WHERE `staff_id` = ".$id."";
+        $query = "SELECT `staff_leave_details`.*, `leave_types`.`type` FROM `staff_leave_details` JOIN `leave_types` ON `staff_leave_details`.`leave_type_id` = `leave_types`.`id` WHERE `staff_id` = " . $id . "";
         $query = $this->db->query($query);
         return $query->result_array();
     }
@@ -531,10 +521,10 @@ class Staff_model extends MY_Model
     }
 
     public function getEmployee($role, $class_id = null, $branch_id)
-    {   
+    {
         $active = 1;
         // $branch_id = $this->session->admin['branch_id'];
-      
+
         $i = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
 
@@ -550,29 +540,33 @@ class Staff_model extends MY_Model
             }
         }
 
-       
+
         $field_var = count($field_k_array) > 0 ? "," . implode(',', $field_k_array) : "";
-       
+
         $this->db->select("staff.*,staff_designation.designation,tb_branch.branch_name,department.department_name as department,roles.name as user_type" . $field_var)->from('staff');
         $this->db->join('staff_designation', "staff_designation.id = staff.designation", "left");
         $this->db->join('staff_roles', "staff_roles.staff_id = staff.id", "left");
         $this->db->join('roles', "roles.id = staff_roles.role_id", "left");
-        $this->db->join('department', "department.id = staff.department", "left");       
-        $this->db->join('tb_branch', "tb_branch.id = staff.branch_id", "left");       
+        $this->db->join('department', "department.id = staff.department", "left");
+        $this->db->join('tb_branch', "tb_branch.id = staff.branch_id", "left");
 
         // if ($class_id != "") {
         //     $this->db->join('class_teacher', 'staff.id=class_teacher.staff_id', 'left');
         //     $this->db->or_where('class_teacher.class_id', $student_current_class->class_id);
         // }
-        if($branch_id)
-        {
-            $this->db->where("staff.branch_id", $branch_id);  
+        if (($branch_id)) {
+            $this->db->where("staff.branch_id", $branch_id);
+        } 
+        else {
+            if ($this->session->userdata['admin']['branch_id'] != 0) {
+                $this->db->where('staff.branch_id', $this->session->userdata['admin']['branch_id']);
+            }
         }
-        $this->db->where("staff.is_active", $active);  
-        if($role != ""){
+        $this->db->where("staff.is_active", $active);
+        if ($role != "") {
             $this->db->where("roles.id", $role);
-        }  
-        
+        }
+
         // if($branch_id>0){
         //     $this->db->where("staff.branch_id", $branch_id);
         // }
@@ -580,10 +574,10 @@ class Staff_model extends MY_Model
 
         return $query->result_array();
     }
-    
+
     public function getEmployeeByRoleID($role, $branch_id = 1)
     {
-      
+
         $active = 1;
 
         $query = $this->db->select("staff.*,staff_designation.designation,department.department_name as department, roles.id as role_id, roles.name as role")->join('staff_designation', "staff_designation.id = staff.designation", "left")->join('staff_roles', "staff_roles.staff_id = staff.id", "left")->join('roles', "roles.id = staff_roles.role_id", "left")->join('department', "department.id = staff.department", "left")->where("staff.branch_id", $branch_id)->where("staff.is_active", $active)->where("roles.id", $role)->get("staff");
@@ -636,12 +630,11 @@ class Staff_model extends MY_Model
 
     public function get_stafflang($id)
     {
-
     }
 
     public function searchFullText($searchterm, $active)
     {
-        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id'] ,'staff');
+        $branchWhere = check_branch_id_data($this->session->userdata['admin']['branch_id'], 'staff');
         $i             = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
 
@@ -650,16 +643,16 @@ class Staff_model extends MY_Model
         if (!empty($custom_fields)) {
             foreach ($custom_fields as $custom_fields_key => $custom_fields_value) {
                 $tb_counter = "table_custom_" . $i;
-                array_push($field_k_array, '`table_custom_' . $i . '`.`field_value` as `' . $custom_fields_value->name . '`');               
+                array_push($field_k_array, '`table_custom_' . $i . '`.`field_value` as `' . $custom_fields_value->name . '`');
                 $join_array .= " LEFT JOIN `custom_field_values` as `" . $tb_counter . "` ON `staff`.`id` = `" . $tb_counter . "`.`belong_table_id` AND `" . $tb_counter . "`.`custom_field_id` = " . $custom_fields_value->id;
 
                 $i++;
             }
         }
-       
+
         $field_var = count($field_k_array) > 0 ? "," . implode(',', $field_k_array) : "";
 
-        $query = "SELECT `staff`.*, `staff_designation`.`designation` as `designation`, `department`.`department_name` as `department`,`roles`.`name` as user_type " . $field_var . "  FROM `staff` " . $join_array . " LEFT JOIN `staff_designation` ON `staff_designation`.`id` = `staff`.`designation` LEFT JOIN `staff_roles` ON `staff_roles`.`staff_id` = `staff`.`id` LEFT JOIN `roles` ON `staff_roles`.`role_id` = `roles`.`id` LEFT JOIN `department` ON `department`.`id` = `staff`.`department` WHERE  `staff`.`is_active` = '$active' ".$branchWhere." and (CONCAT(`staff`.`name`,' ',`staff`.`surname`) LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!' OR `staff`.`surname` LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!' OR `staff`.`employee_id` LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!' OR `staff`.`local_address` LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!'  OR `staff`.`contact_no` LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!' OR `staff`.`email` LIKE '%".$this->db->escape_like_str($searchterm)."%' ESCAPE '!' OR `roles`.`name` LIKE '%".$this->db->escape_like_str($searchterm)."' ESCAPE '!')";
+        $query = "SELECT `staff`.*, `staff_designation`.`designation` as `designation`, `department`.`department_name` as `department`,`roles`.`name` as user_type " . $field_var . "  FROM `staff` " . $join_array . " LEFT JOIN `staff_designation` ON `staff_designation`.`id` = `staff`.`designation` LEFT JOIN `staff_roles` ON `staff_roles`.`staff_id` = `staff`.`id` LEFT JOIN `roles` ON `staff_roles`.`role_id` = `roles`.`id` LEFT JOIN `department` ON `department`.`id` = `staff`.`department` WHERE  `staff`.`is_active` = '$active' " . $branchWhere . " and (CONCAT(`staff`.`name`,' ',`staff`.`surname`) LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!' OR `staff`.`surname` LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!' OR `staff`.`employee_id` LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!' OR `staff`.`local_address` LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!'  OR `staff`.`contact_no` LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!' OR `staff`.`email` LIKE '%" . $this->db->escape_like_str($searchterm) . "%' ESCAPE '!' OR `roles`.`name` LIKE '%" . $this->db->escape_like_str($searchterm) . "' ESCAPE '!')";
 
         $query = $this->db->query($query);
         return $query->result_array();
@@ -747,7 +740,6 @@ class Staff_model extends MY_Model
         } else {
             $this->db->trans_commit();
         }
-
     }
 
     public function enablestaff($id)
@@ -785,7 +777,7 @@ class Staff_model extends MY_Model
     {
 
         $record = $this->getByEmail($data['email']);
-        
+
         if ($record) {
             $pass_verify = $this->enc_lib->passHashDyc($data['password'], $record->password);
             if ($pass_verify) {
@@ -808,14 +800,14 @@ class Staff_model extends MY_Model
         $this->db->where("staff.is_active", "1");
         $this->db->from('staff');
         $query = $this->db->get();
-       
+
         return $query->result_array();
     }
 
-    public function searchNameLike($searchterm,$branch_id)
+    public function searchNameLike($searchterm, $branch_id)
     {
         $category = $this->input->post('category');
-        
+
         $this->db->select('staff.*')->from('staff');
         $this->db->join("staff_roles", "staff_roles.staff_id = staff.id", "left");
         $this->db->group_start();
@@ -823,8 +815,7 @@ class Staff_model extends MY_Model
         $this->db->group_end();
         $this->db->where("staff.is_active", "1");
         $this->db->where("staff_roles.role_id ", $category);
-        if(!empty($branch_id))
-        {
+        if (!empty($branch_id)) {
             $this->db->where('staff.branch_id', $branch_id);
         }
         $this->db->order_by('staff.id');
@@ -846,7 +837,6 @@ class Staff_model extends MY_Model
         } else {
             return false;
         }
-
     }
 
     public function lastRecord()
@@ -874,7 +864,6 @@ class Staff_model extends MY_Model
             # Something went wrong.
             $this->db->trans_rollback();
             return false;
-
         } else {
             //return $return_value;
         }
@@ -943,7 +932,7 @@ class Staff_model extends MY_Model
         return $this->db->select("CONCAT_WS(' ',name,surname) as name,employee_id,id")->from('staff')->where('id', $id)->get()->row_array();
     }
 
-    public function staff_report($condition ,$branch_id)
+    public function staff_report($condition, $branch_id)
     {
         $i             = 1;
         $custom_fields = $this->customfield_model->get_custom_fields('staff', 1);
@@ -959,7 +948,7 @@ class Staff_model extends MY_Model
                 $i++;
             }
         }
-      
+
         $field_var = count($field_k_array) > 0 ? "," . implode(',', $field_k_array) : "";
 
         $query = "SELECT `staff`.*, `staff_designation`.`designation` as `designation`, `department`.`department_name` as `department`,`roles`.`name` as user_type " . $field_var . ",GROUP_CONCAT(leave_type_id,'@',alloted_leave) as leaves  FROM `staff` " . $join_array . " LEFT JOIN `staff_designation` ON `staff_designation`.`id` = `staff`.`designation` LEFT JOIN `staff_roles` ON `staff_roles`.`staff_id` = `staff`.`id` LEFT JOIN `roles` ON `staff_roles`.`role_id` = `roles`.`id` LEFT JOIN `department` ON `department`.`id` = `staff`.`department` left join staff_leave_details ON staff_leave_details.staff_id=staff.id WHERE 1  " . $condition . " ";
@@ -976,7 +965,6 @@ class Staff_model extends MY_Model
     public function inventry_staff()
     {
         return $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id")->from('staff')->where('staff.is_active', 1)->get()->result_array();
-
     }
 
     public function getBranch()
@@ -984,8 +972,7 @@ class Staff_model extends MY_Model
         $sessionId = $this->session->userdata['admin']['id'];
         if (!empty(($this->session->userdata['admin']['roles']['Super Admin']))) {
             $query = $this->db->select('*')->where("branch_status", "1")->get('tb_branch');
-        }
-        else{
+        } else {
             $staffDet =  $this->db->select('*')->where("id ", $sessionId)->get('staff')->result();
             $staffBranchId = $staffDet[0]->branch_id;
             $query = $this->db->select('*')->where("id", $staffBranchId)->get('tb_branch');
@@ -993,7 +980,8 @@ class Staff_model extends MY_Model
         return $query->result_array();
     }
 
-    public function roleid($id){
+    public function roleid($id)
+    {
         $this->db->select('*');
         $this->db->from('staff_roles');
         $this->db->where('staff_id', $id);
@@ -1011,24 +999,41 @@ class Staff_model extends MY_Model
      */
     public function issueItemby()
     {
-        if($this->session->userdata['admin']['role_id'] != 7)
-        {
+        if ($this->session->userdata['admin']['role_id'] != 7) {
             $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id,tb_branch.branch_name")
-            ->from('staff')
-            ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
-            ->where('staff.is_active', 1)
-            ->where('staff.id', $this->session->userdata['admin']['id'])
-            ->get()->result_array();
-        }
-        else{
+                ->from('staff')
+                ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
+                ->where('staff.is_active', 1)
+                ->where('staff.id', $this->session->userdata['admin']['id'])
+                ->get()->result_array();
+        } else {
             $staffList = $this->db->select("CONCAT_WS(' ',staff.name,staff.surname) as name,staff.employee_id,tb_branch.branch_name")
-            ->from('staff')
-            ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
-            ->where('staff.is_active', 1)
-            ->get()->result_array();
+                ->from('staff')
+                ->join("tb_branch", "tb_branch.id = staff.branch_id", "left")
+                ->where('staff.is_active', 1)
+                ->get()->result_array();
         }
         return $staffList;
-
     }
 
+    /**
+     * Get Staff Role according to branch id
+     */
+
+
+    public function getStaffbyroleBranch($id, $branch_id)
+    {
+        $this->db->select('staff.*,staff_designation.designation as designation,staff_roles.role_id, department.department_name as department,roles.name as user_type');
+        $this->db->join("staff_designation", "staff_designation.id = staff.designation", "left");
+        $this->db->join("department", "department.id = staff.department", "left");
+        $this->db->join("staff_roles", "staff_roles.staff_id = staff.id", "left");
+        $this->db->join("roles", "staff_roles.role_id = roles.id", "left");
+        $this->db->where("staff_roles.role_id", $id);
+        $this->db->where("staff.branch_id", $branch_id);
+        $this->db->where("staff.is_active", "1");
+        $this->db->from('staff');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 }

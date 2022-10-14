@@ -102,7 +102,7 @@ class Timetable extends Admin_Controller
         $is_admin = false;
 
         if ($role->id != "2") {
-            $staff_list         = $this->staff_model->getEmployee('2','','1');
+            $staff_list         = $this->staff_model->getEmployee('2','',$branch_id = null);
             $data['staff_list'] = $staff_list;
             $is_admin           = true;
         }
@@ -165,8 +165,9 @@ class Timetable extends Admin_Controller
         $data['examlist']   = $exam;
         $data['classlist']  = $class;
         $userdata           = $this->customlib->getUserData();
+        $branch_id = $this->input->post('branch_id');
 
-        $staff                   = $this->staff_model->getStaffbyrole(2);
+        $staff                   = $this->staff_model->getStaffbyroleBranch(2,$branch_id);
         $data['staff']           = $staff;
         $data['subject']         = array();
         $feecategory             = $this->feecategory_model->get();
@@ -284,11 +285,14 @@ class Timetable extends Admin_Controller
         $class_id            = $this->input->post('class_id');
         $section_id          = $this->input->post('section_id');
         $subject_group_id    = $this->input->post('subject_group_id');
+        $branch_id = $this->input->post('branch_id');
+
         $subject             = $this->subjectgroup_model->getGroupsubjects($subject_group_id);
 
         $prev_record = $this->subjecttimetable_model->getBySubjectGroupDayClassSection($subject_group_id, $day, $class_id, $section_id);
 
-        $staff         = $this->staff_model->getStaffbyrole(2);
+        // $staff         = $this->staff_model->getStaffbyrole(2);
+        $staff                   = $this->staff_model->getStaffbyroleBranch(2,$branch_id);
         $data['staff'] = $staff;
         if (empty($prev_record)) {
             $data['prev_record'] = array();
@@ -299,6 +303,7 @@ class Timetable extends Admin_Controller
         $data['subject']          = $subject;
         $data['day']              = $day;
         $data['class_id']         = $class_id;
+        $data['branch_id']         = $branch_id;
         $data['section_id']       = $section_id;
         $data['subject_group_id'] = $subject_group_id;
 
