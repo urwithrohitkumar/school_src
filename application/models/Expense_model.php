@@ -25,17 +25,19 @@ class Expense_model extends MY_Model
 
         if (!empty($text)) {
 
-            $this->datatables->select('expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id');
+            $this->datatables->select('tb_branch.branch_name,expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id');
             $this->datatables->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount');
             $this->datatables->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount');
             $this->datatables->join('expense_head', 'expenses.exp_head_id = expense_head.id', 'left');
+            $this->datatables->join('tb_branch', 'expenses.branch_id = tb_branch.id', 'left');
             $this->datatables->like('expenses.name', $text);
             $this->datatables->from('expenses');
         } else {
-            $this->datatables->select('expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id');
+            $this->datatables->select('tb_branch.branch_name,expenses.id,expenses.branch_id,expenses.date,expenses.invoice_no,expenses.name,expenses.amount,expenses.documents,expenses.note,expense_head.exp_category,expenses.exp_head_id');
             $this->datatables->searchable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount');
             $this->datatables->orderable('expenses.name,expenses.invoice_no,exp_category,date,expenses.amount');
             $this->datatables->join('expense_head', 'expenses.exp_head_id = expense_head.id', 'left');
+            $this->datatables->join('tb_branch', 'expenses.branch_id = tb_branch.id', 'left');
             $this->datatables->where('expenses.date <=', $end_date);
             $this->datatables->where('expenses.date >=', $start_date);
             $this->datatables->from('expenses');

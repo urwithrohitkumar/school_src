@@ -98,6 +98,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <thead>
 
                                         <tr>
+                                            <th><?php echo $this->lang->line('branch'); ?></th>
                                             <th><?php echo $this->lang->line('class'); ?></th>
                                             <th><?php echo $this->lang->line('section'); ?></th>
 

@@ -21,7 +21,9 @@ class Incomehead_model extends My_Model
     {
         $branch_id = $this->session->admin['branch_id'];
         $arr = [];
-        $this->db->select()->from('income_head');
+        $this->db->select('income_head.*,tb_branch.branch_name');
+        $this->db->join('tb_branch', 'income_head.branch_id = tb_branch.id', 'left');
+        $this->db->from('income_head');
         if ($branch_id > 0) {
             $this->db->where('branch_id', $branch_id);
         }

@@ -109,6 +109,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <thead>
                                     <tr>
                                         <th><?php echo $this->lang->line('name'); ?></th>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('invoice_no'); ?></th>
                                         <th><?php echo $this->lang->line('income_head'); ?></th>
                                         <th><?php echo $this->lang->line('date'); ?></th>

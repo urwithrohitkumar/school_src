@@ -77,12 +77,13 @@ class Onlineexam_model extends MY_model
             $arr = ['onlineexam.branch_id' => $branch_id];
         }
         $this->datatables
-            ->select('onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')
+            ->select('tb_branch.branch_name , onlineexam.*,(select count(*) from onlineexam_questions where onlineexam_questions.onlineexam_id=onlineexam.id ) as `total_ques`, (select count(*) from onlineexam_questions INNER JOIN questions on questions.id=onlineexam_questions.question_id where onlineexam_questions.onlineexam_id=onlineexam.id and questions.question_type="descriptive" ) as `total_descriptive_ques`')
             ->searchable('onlineexam.exam,onlineexam.attempt,exam_from,exam_to,duration')
             ->orderable('onlineexam.exam," ",total_ques,attempt,exam_from,exam_to,duration," "," " ')
             ->sort('onlineexam.exam_from', 'desc')
             ->where($arr)
-            ->from('onlineexam');
+            ->from('onlineexam')
+            ->join('tb_branch', 'onlineexam.branch_id = tb_branch.id', 'left');
 
         return $this->datatables->generate('json');
     }

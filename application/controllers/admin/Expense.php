@@ -388,6 +388,7 @@ class Expense extends Admin_Controller
                 $grand_total+= $value->amount ;
                 $row       = array();
                 $row[]     = $value->name;
+                $row[]     = $value->branch_name;
                 $row[]     = $value->invoice_no;
                 $row[]     = $value->exp_category; 
                 $row[]     = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateyyyymmddTodateformat($value->date));
@@ -397,6 +398,7 @@ class Expense extends Admin_Controller
             }
          
             $footer_row[]="" ; $footer_row[]="" ; $footer_row[]="" ;
+            $footer_row[]= "" ;
             $footer_row[]= "" ;
             $footer_row[]=  "<b style='font-weight:normal'>".$this->lang->line('grand_total')." :  ".($currency_symbol . number_format($grand_total, 2, '.', ''))."</b>";;
             $dt_data[] = $footer_row;

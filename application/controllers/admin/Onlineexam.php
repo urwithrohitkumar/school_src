@@ -41,7 +41,7 @@ class Onlineexam extends Admin_Controller
 
     public function getexamlist()
     {
-        $questionList           = $this->onlineexam_model->getexamlist();
+    $questionList           = $this->onlineexam_model->getexamlist();
         
 		$subject_result         = $this->subject_model->get();
         $subjectlist   	= $subject_result;

@@ -112,6 +112,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <tr>
 
                                                 <th><?php echo $this->lang->line('admission_no'); ?></th>
+                                                <th><?php echo $this->lang->line('branch'); ?></th>
 
                                                 <th><?php echo $this->lang->line('student_name'); ?></th>
                                                 <th><?php echo $this->lang->line('class'); ?></th>
@@ -141,6 +142,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     <tr>
 
                                                         <td><?php echo $student['admission_no']; ?></td>
+                                                        <td><?php echo $student['branch_name']; ?></td>
 
                                                         <td>
                                                             <a href="<?php echo base_url(); ?>student/view/<?php echo $student['id']; ?>"><?php echo $this->customlib->getFullName($student['firstname'],$student['middlename'],$student['lastname'],$sch_setting->middlename,$sch_setting->lastname); ?>

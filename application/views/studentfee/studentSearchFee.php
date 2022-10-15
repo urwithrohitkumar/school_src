@@ -133,6 +133,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <tr>
 
                                             <th><?php echo $this->lang->line('admission_no'); ?></th>
+                                            <th><?php echo $this->lang->line('branch'); ?></th>
                                             <th><?php echo $this->lang->line('roll_no'); ?></th>
                                             <th><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('name'); ?> </th>
                                             <th><?php echo $this->lang->line('date_of_birth'); ?></th>
@@ -160,6 +161,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <tr>
 
                                                     <td><?php echo $student['admission_no']; ?></td>
+                                                    <td><?php echo $student['branch_name']; ?></td>
                                                     <td><?php echo $student['roll_no']; ?></td>
                                                     <td><?php echo $this->customlib->getFullName($student['firstname'],$student['middlename'],$student['lastname'],$sch_setting->middlename,$sch_setting->lastname);?></td>										
 													<td>

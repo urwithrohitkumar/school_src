@@ -186,6 +186,7 @@ class Studentfee extends Admin_Controller
         if (!empty($students->data)) {
             foreach ($students->data as $student_key => $student) {
                 $row   = array();
+                $row[] = $student->branch_name;
                 $row[] = $student->class;
                 $row[] = $student->section;
                 $row[] = $student->admission_no;

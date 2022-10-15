@@ -115,6 +115,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <table class="table table-striped example">
                                                     <thead>
                                                         <tr>
+                                                            <th class="text text-left"><?php echo $this->lang->line('branch'); ?></th> 
                                                             <th class="text text-left"><?php echo $this->lang->line('student_name'); ?></th> 
 
                                                             <th class="text text-left"><?php echo $this->lang->line('admission_no'); ?></th>

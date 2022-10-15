@@ -80,6 +80,7 @@
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>
                                     <tr>
+                                        <th><?php echo $this->lang->line('branch'); ?></th>
                                         <th><?php echo $this->lang->line('income_head'); ?></th>
                                         <th class="text-right "><?php echo $this->lang->line('action'); ?></th>
                                     </tr>
@@ -89,6 +90,9 @@
                                         $count = 1;
                                         foreach ($categorylist as $category) { ?>
                                             <tr>
+                                                <td>
+                                                    <?= $category['branch_name'] ?>
+                                                </td>
                                                 <td class="mailbox-name">
                                                     <a href="#" data-toggle="popover" class="detail_popover">
                                                         <?php echo $category['income_category'] ?>

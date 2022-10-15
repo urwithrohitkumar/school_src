@@ -184,6 +184,7 @@
                                         <tr>
                                             <th><?php echo $this->lang->line('fees_group'); ?></th>
                                             <th><?php echo $this->lang->line('fees_code'); ?></th>
+                                            <th><?php echo $this->lang->line('branch'); ?></th>
 
                                             <th class="text-right"><?php echo $this->lang->line('action'); ?></th>
                                         </tr>
@@ -225,6 +226,9 @@
                                                         }
                                                         ?>
                                                     </ul>
+                                                </td>
+                                                <td>
+                                                    <?php echo $feegroup->branch_name;    ?>
                                                 </td>
 
                                                 <td class="mailbox-date pull-right">

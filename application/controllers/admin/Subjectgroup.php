@@ -40,12 +40,12 @@ class Subjectgroup extends Admin_Controller {
 
 
 
-        $this->form_validation->set_rules(
-                'sections[]', $this->lang->line('section'), array(
-            'required',
-            array('check_section_exists', array($this->subjectgroup_model, 'check_section_exists'))
-                )
-        );
+        // $this->form_validation->set_rules(
+        //         'sections[]', $this->lang->line('section'), array(
+        //     'required',
+        //     array('check_section_exists', array($this->subjectgroup_model, 'check_section_exists'))
+        //         )
+        // );
 
 
         if ($this->form_validation->run() == false) {
