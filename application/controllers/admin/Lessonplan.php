@@ -571,6 +571,7 @@ class Lessonplan extends Admin_Controller
                 if (isset($_POST['topic_' . $topicvalue['id']])) {
                     $data = array(
                         'lesson_id'  => $_POST['lesson_id'],
+                        'branch_id'  => $_POST['branch_id'],
                         'name'       => $_POST['topic_' . $topicvalue['id']],
                         'session_id' => $this->sch_current_session,
                         'id'         => $topicvalue['id'],
@@ -583,6 +584,7 @@ class Lessonplan extends Admin_Controller
                 foreach ($_POST['topic'] as $key => $value) {
                     $data = array(
                         'lesson_id'  => $_POST['lesson_id'],
+                        'branch_id'  => $_POST['branch_id'],
                         'name'       => $value,
                         'session_id' => $this->sch_current_session,
                     );
@@ -673,6 +675,7 @@ class Lessonplan extends Admin_Controller
                 $topic     = "";
                 $lesson_id = $key;
                 $topic     = $this->lessonplan_model->gettopicBylessonid($value->lesson_id, $this->sch_current_session);
+              
                 if ($this->rbac->hasPrivilege('topic', 'can_edit')) {
                     $editbtn = "<a href='" . base_url() . "admin/lessonplan/edittopic/" . $value->lesson_id . "'   class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='left' title='" . $this->lang->line('edit') . "'><i class='fa fa-pencil'></i></a>";
                 }
@@ -680,12 +683,12 @@ class Lessonplan extends Admin_Controller
                     $deletebtn = '';
                     $deletebtn = "<a onclick='deletetopicbulk(" . $this->lang->line('delete_confirm') . ")'  class='btn btn-default btn-xs' data-placement='left' title='" . $this->lang->line('delete') . "' data-toggle='tooltip'><i class='fa fa-trash'></i></a>";
                 }
-
+                $topic_name = "";
                 foreach ($topic as $rl_value) {
-                    $topic = $rl_value['name'] . '<br>';
+                    $topic_name .= $rl_value['name'] . '<br>';
 
                 }
-                $topic .= $topic;
+               
                 if (in_array($value->classid, $class_array)) {
                     $lesson_id = $key;
                     $row       = array();
@@ -694,7 +697,7 @@ class Lessonplan extends Admin_Controller
                     $row[]     = $value->sgname;
                     $row[]     = $value->subname;
                     $row[]     = $value->lessonname;
-                    $row[]     = $topic;
+                    $row[]     = $topic_name;
                     $row[]     = $editbtn . ' ' . $deletebtn;
                     $dt_data[] = $row;
                 }

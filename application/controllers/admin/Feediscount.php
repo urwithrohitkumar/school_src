@@ -92,6 +92,8 @@ class Feediscount extends Admin_Controller {
         $data['title'] = 'student fees';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $feediscount_result = $this->feediscount_model->get($id);
         $data['feediscountList'] = $feediscount_result;
 
@@ -104,12 +106,13 @@ class Feediscount extends Admin_Controller {
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-            $data['category_id'] = $this->input->post('category_id');
+            $data['category_id'] = $this->input->post('category_id'); 
+            $data['branch_id'] = $this->input->post('branch_id'); 
             $data['gender'] = $this->input->post('gender');
             $data['rte_status'] = $this->input->post('rte');
             $data['class_id'] = $this->input->post('class_id');
             $data['section_id'] = $this->input->post('section_id');
-            $resultlist = $this->feediscount_model->searchAssignFeeByClassSection($data['class_id'], $data['section_id'], $id, $data['category_id'], $data['gender'], $data['rte_status']);
+            $resultlist = $this->feediscount_model->searchAssignFeeByClassSectionBranch($data['class_id'], $data['section_id'], $id, $data['category_id'], $data['gender'], $data['rte_status'], $data['branch_id']);
             $data['resultlist'] = $resultlist;
         }
         $data['sch_setting'] = $this->sch_setting_detail;

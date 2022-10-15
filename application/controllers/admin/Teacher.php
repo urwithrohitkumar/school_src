@@ -352,14 +352,14 @@ class Teacher extends Admin_Controller
         $branch = $this->staff_model->getBranch();
         $data['branch'] = $branch;
 
-        $this->form_validation->set_rules(
-            'class',
-            $this->lang->line('class'),
-            array(
-                'required',
-                array('class_exists', array($this->class_model, 'class_teacher_exists')),
-            )
-        );
+        // $this->form_validation->set_rules(
+        //     'class',
+        //     $this->lang->line('class'),
+        //     array(
+        //         'required',
+        //         array('class_exists', array($this->class_model, 'class_teacher_exists')),
+        //     )
+        // );
         $this->form_validation->set_rules('section', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('teachers[]', $this->lang->line('teacher'), 'trim|required|xss_clean');
 

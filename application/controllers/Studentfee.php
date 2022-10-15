@@ -648,18 +648,19 @@ class Studentfee extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'studentfee/searchpayment');
         $data['title'] = 'Edit studentfees';
+        $paymentid = $this->input->post('paymentid');
+        
 
         $this->form_validation->set_rules('paymentid', $this->lang->line('payment_id'), 'trim|required|xss_clean');
         if ($this->form_validation->run() == false) {
-
+            
         } else {
-            $paymentid = $this->input->post('paymentid');
             $invoice   = explode("/", $paymentid);
-            if (array_key_exists(0, $invoice) && array_key_exists(1, $invoice)) {
+            if (array_key_exists(0, $invoice) || array_key_exists(1, $invoice)) {
                 $invoice_id             = $invoice[0];
                 $sub_invoice_id         = $invoice[1];
                 $branch_id              = $this->session->admin['branch_id'];
-                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($branch_id, $invoice_id, $sub_invoice_id);
+                $feeList                = $this->studentfeemaster_model->getFeeByInvoice($invoice_id, $sub_invoice_id);
                 $data['feeList']        = $feeList;
                 $data['sub_invoice_id'] = $sub_invoice_id;
             } else {
