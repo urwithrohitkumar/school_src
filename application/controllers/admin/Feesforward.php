@@ -3,13 +3,15 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feesforward extends Admin_Controller {
+class Feesforward extends Admin_Controller
+{
 
     protected $balance_group;
     protected $balance_type;
     protected $setting_result;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->config('ci-blog');
         $this->balance_group = $this->config->item('ci_balance_group');
@@ -18,7 +20,8 @@ class Feesforward extends Admin_Controller {
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('fees_carry_forward', 'can_view')) {
             access_denied();
         }
@@ -27,16 +30,22 @@ class Feesforward extends Admin_Controller {
         $this->session->set_userdata('sub_menu', 'feesforward/index');
         $data['title'] = 'Add Feesforward';
         $data['title_list'] = 'Recent FeeType';
-        $class = $this->class_model->get();
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
         $data['sch_setting'] = $this->sch_setting_detail;
-        $data['classlist'] = $class;
-        $data['all_branch']      = $this->branch_model->getBranch();
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
         $action = $this->input->post('action');
         $branch_id = $this->input->post('branch_id');
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
         if ($this->input->server('REQUEST_METHOD') == "POST") {
+            $branch_id = $this->input->post('branch_id');
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
+
             $setting_result = $this->setting_model->get();
             $current_session = $setting_result[0]['session_id'];
             $data['current_session'] = $current_session;
@@ -51,8 +60,7 @@ class Feesforward extends Admin_Controller {
             } else {
 
                 $due_date = date('Y-m-d');
-                $data['due_date_formated'] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($due_date));
-                ;
+                $data['due_date_formated'] = date($this->customlib->getSchoolDateFormat(), $this->customlib->dateYYYYMMDDtoStrtotime($due_date));;
             }
 
             //========================
@@ -70,7 +78,7 @@ class Feesforward extends Admin_Controller {
                     }
                 }
             } else if ($action == 'fee_submit') {
-                $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id,$branch_id, $class_id, $section_id, $current_session));
+                $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $branch_id, $class_id, $section_id, $current_session));
 
                 $data['student_due_fee'] = $student_Array->student_Array;
                 $data['is_update'] = $student_Array->is_update;
@@ -103,9 +111,10 @@ class Feesforward extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function findPreviousBalanceFees($session_id,$branch_id, $class_id, $section_id, $current_session) {
+    public function findPreviousBalanceFees($session_id, $branch_id, $class_id, $section_id, $current_session)
+    {
 
-        $studentlist = $this->student_model->getPreviousSessionStudent($session_id,$branch_id, $class_id, $section_id);
+        $studentlist = $this->student_model->getPreviousSessionStudent($session_id, $branch_id, $class_id, $section_id);
 
         $is_update = false;
         $student_Array = array();
@@ -113,9 +122,9 @@ class Feesforward extends Admin_Controller {
             $student_comma_seprate = array();
 
             foreach ($studentlist as $student_list_key => $student_list_value) {
-               
+
                 $obj = new stdClass();
-                $obj->name = $this->customlib->getFullName($student_list_value->firstname,$student_list_value->middlename,$student_list_value->lastname,$this->sch_setting_detail->middlename,$this->sch_setting_detail->lastname);
+                $obj->name = $this->customlib->getFullName($student_list_value->firstname, $student_list_value->middlename, $student_list_value->lastname, $this->sch_setting_detail->middlename, $this->sch_setting_detail->lastname);
                 $obj->admission_no = $student_list_value->admission_no;
                 $obj->roll_no = $student_list_value->roll_no;
                 $obj->father_name = $student_list_value->father_name;
@@ -175,7 +184,8 @@ class Feesforward extends Admin_Controller {
         return json_encode(array('student_Array' => $student_Array, 'is_update' => $is_update));
     }
 
-    function findValueExists($array, $find) {
+    function findValueExists($array, $find)
+    {
         $amount = 0;
         foreach ($array as $x => $x_value) {
             if ($x_value->student_session_id == $find)
@@ -183,5 +193,4 @@ class Feesforward extends Admin_Controller {
         }
         return $amount;
     }
-
 }

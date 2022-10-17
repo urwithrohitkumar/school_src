@@ -22,22 +22,16 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <div class="col-md-6">
                                     <div class="row">
                                         <?php echo $this->customlib->getCSRF(); ?>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                                <select id="branch_id" name="branch_id" class="form-control">
-                                                    <?php $ids = $this->customlib->getLoggedInBranchId();
-                                                    if ($ids > 0) {  ?>
-                                                        <!-- <option value="" ><?php echo $this->lang->line('select'); ?></option> -->
-                                                        <option value="<?php echo $ids; ?>" selected readonly><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                                    <?php  } else { ?>
-                                                        <!-- <option value="" ><?php echo $this->lang->line('select'); ?></option> -->
-                                                        <?php foreach ($all_branch as  $value) { ?>
-                                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                                    <?php }
-                                                    } ?>
+                                        <div class='col-sm-4'>
+                                            <div class='form-group'>
+                                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                    <option selected disabled>Select</option>
+                                                    <?php foreach ($branch as $key => $value) {  ?>
+                                                        <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                    <?php } ?>
                                                 </select>
-                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
@@ -45,13 +39,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <label><?php echo $this->lang->line('class'); ?></label> <small class="req"> *</small>
                                                 <select autofocus="" id="class_id" name="class_id" class="form-control">
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                    <?php $count = 0;
-                                                    foreach ($classlist as $class) { ?>
-                                                        <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
-                                                                                                        echo "selected=selected";
-                                                                                                    } ?>><?php echo $class['class'] ?></option>
-                                                    <?php $count++;
-                                                    } ?>
+
                                                 </select>
                                                 <span class="text-danger" id="error_class_id"></span>
                                             </div>
@@ -241,65 +229,16 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 </div>
 </section>
 </div>
-
 <script type="text/javascript">
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "" && section_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        }
-    }
-    $(document).ready(function() {
-        var class_id = $('#class_id').val();
-        var section_id = '<?php echo set_value('section_id') ?>';
-        getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        });
-    });
-</script>
-<script>
+    /**
+     * Empty Student List Data On Load
+     */
     $(document).ready(function() {
         emptyDatatable('student-list', 'data');
     });
-</script>
-<script type="text/javascript">
+    /**
+     * Classes Search Form Submit 
+     */
     $(document).ready(function() {
         $(document).on('submit', '.class_search_form', function(e) {
             e.preventDefault(); // avoid to execute the actual submit of the form.
@@ -439,9 +378,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         });
 
     });
-
+    /**
+     * Classes Serach Type Full
+     */
     function resetFields(search_type) {
-
         if (search_type == "search_full") {
             $('#class_id').prop('selectedIndex', 0);
             $('#section_id').find('option').not(':first').remove();

@@ -18,20 +18,10 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="box-body">
 
 
-                        <form role="form" action="<?php echo site_url('admin/feediscount/assign/' . $id) ?>" method="post" class="row">
+                        <form role="form" action="<?php echo site_url('admin/feediscount/assign/' . $id.'/' . $givenBranch_id) ?>" method="post" class="row">
                             <?php echo $this->customlib->getCSRF(); ?>
-                            <div class='col-sm-2'>
-                                <div class='form-group'>
-                                    <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
-                                    <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
-                                        <?php foreach ($branch as $key => $value) {  ?>
-                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <span class='text-danger'><?php echo form_error('branch'); ?></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
+                            <input type="hidden" id="branch_id" value="<?= $givenBranch_id ?>">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('class'); ?></label>
                                     <select autofocus="" id="class_id" name="class_id" class="form-control">
@@ -49,7 +39,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </div>
                             </div>
                             <!--./col-sm-3-->
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('section'); ?></label>
                                     <select id="section_id" name="section_id" class="form-control">
@@ -266,57 +256,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         }
     });
 
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "" && section_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        }
-    }
 
-    $(document).ready(function() {
-        var class_id = $('#class_id').val();
-        var section_id = '<?php echo set_value('section_id') ?>';
-        getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        });
-    });
 </script>
 
 

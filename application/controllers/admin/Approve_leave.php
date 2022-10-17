@@ -3,30 +3,33 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class approve_leave extends Admin_Controller {
+class approve_leave extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function unauthorized() {
+    function unauthorized()
+    {
         $data = array();
         $this->load->view('layout/header', $data);
         $this->load->view('unauthorized', $data);
         $this->load->view('layout/footer', $data);
     }
- 
-    function index() {
+
+    function index()
+    {
 
         if (!$this->rbac->hasPrivilege('approve_leave', 'can_view')) {
             access_denied();
         }
         $this->session->set_userdata('top_menu', 'Attendance');
         $this->session->set_userdata('sub_menu', 'Attendance/approve_leave');
-        $class = $this->class_model->get();
-        $data['all_branch']      = $this->branch_model->getBranch(); 
-        $data['classlist'] = $class;
+
+        $data['all_branch']      = $this->branch_model->getBranch();
         $data['branch_id'] = $branch_id = '';
         $data['class_id'] = $class_id = '';
         $data['section_id'] = $section_id = '';
@@ -47,18 +50,24 @@ class approve_leave extends Admin_Controller {
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
-        if ($this->form_validation->run() == FALSE) {            
+        if ($this->form_validation->run() == FALSE) {
         } else {
-            $listaudit = $this->apply_leave_model->get(null, $class_id, $section_id,$branch_id);
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
+            $listaudit = $this->apply_leave_model->get(null, $class_id, $section_id, $branch_id);
         }
 
-        $data['results'] = $listaudit;       
+        $data['results'] = $listaudit;
         $this->load->view('layout/header');
         $this->load->view('admin/approve_leave/index', $data);
         $this->load->view('layout/footer');
     }
 
-    public function get_details() {
+    public function get_details()
+    {
         $userdata = $this->customlib->getUserData();
         $role_id = $userdata["role_id"];
         $can_edit = 1;
@@ -81,13 +90,14 @@ class approve_leave extends Admin_Controller {
         echo json_encode($data);
     }
 
-    public function add() {
+    public function add()
+    {
 
         $student_id = '';
         $this->form_validation->set_rules('class', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('apply_date', $this->lang->line('apply') . " " . $this->lang->line('date'), 'trim|required|xss_clean');
-		
+
         $this->form_validation->set_rules('from_date', $this->lang->line('from') . " " . $this->lang->line('date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('to_date', $this->lang->line('to') . " " . $this->lang->line('date'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('student', $this->lang->line('student'), 'trim|required|xss_clean');
@@ -95,14 +105,14 @@ class approve_leave extends Admin_Controller {
         if ($this->form_validation->run() == FALSE) {
 
             $msg = array(
-				'class' => form_error('class'),
-				'section' => form_error('section'),
+                'class' => form_error('class'),
+                'section' => form_error('section'),
                 'apply_date' => form_error('apply_date'),
                 'from_date' => form_error('from_date'),
                 'to_date' => form_error('to_date'),
                 'student' => form_error('student'),
                 'userfile' => form_error('userfile')
-                
+
             );
 
             $array = array('status' => 'fail', 'error' => $msg, 'message' => '');
@@ -141,10 +151,11 @@ class approve_leave extends Admin_Controller {
         echo json_encode($array);
     }
 
-    public function searchByClassSection($branch_id,$class_id, $student_id) {
+    public function searchByClassSection($branch_id, $class_id, $student_id)
+    {
 
         $section_id = $_REQUEST['section_id'];
-        $resultlist = $this->student_model->searchByClassSection($branch_id,$class_id, $section_id);
+        $resultlist = $this->student_model->searchByClassSection($branch_id, $class_id, $section_id);
 
         $data['resultlist'] = $resultlist;
         $data['select_id'] = $student_id;
@@ -153,7 +164,8 @@ class approve_leave extends Admin_Controller {
         $this->load->view('admin/approve_leave/_student_list', $data);
     }
 
-    public function status() {
+    public function status()
+    {
         $userdata = $this->customlib->getUserData();
         $role_id = $userdata["role_id"];
         $can_edit = 1;
@@ -182,7 +194,8 @@ class approve_leave extends Admin_Controller {
         echo json_encode($array);
     }
 
-    public function remove_leave() {
+    public function remove_leave()
+    {
         $userdata = $this->customlib->getUserData();
         $role_id = $userdata["role_id"];
         $can_edit = 1;
@@ -202,7 +215,8 @@ class approve_leave extends Admin_Controller {
         echo json_encode($array);
     }
 
-    public function download($doc) {
+    public function download($doc)
+    {
 
         $this->load->helper('download');
         $filepath = "./uploads/student_leavedocuments/" . $doc;
@@ -212,7 +226,7 @@ class approve_leave extends Admin_Controller {
         force_download($name, $data);
     }
 
-    public function handle_upload($str,$var)
+    public function handle_upload($str, $var)
     {
 
         $image_validate = $this->config->item('file_validate');
@@ -238,12 +252,11 @@ class approve_leave extends Admin_Controller {
                     $this->form_validation->set_message('handle_upload', 'Extension Not Allowed');
                     return false;
                 }
-                
+
                 if ($file_size > $result->file_size) {
                     $this->form_validation->set_message('handle_upload', $this->lang->line('file_size_shoud_be_less_than') . number_format($image_validate['upload_size'] / 1048576, 2) . " MB");
                     return false;
                 }
-
             } else {
                 $this->form_validation->set_message('handle_upload', "File Type / Extension Error Uploading ");
                 return false;
@@ -252,7 +265,5 @@ class approve_leave extends Admin_Controller {
             return true;
         }
         return true;
-
     }
-
 }

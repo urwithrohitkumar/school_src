@@ -21,21 +21,26 @@ class Classes extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'classes/index');
         $data['title']      = 'Add Class';
         $data['title_list'] = 'Class List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
 
-        $this->form_validation->set_rules(
-            'class', $this->lang->line('class'), array(
-                'required',
-                array('class_exists', array($this->class_model, 'class_exists')),
-            )
-        );
+        // $this->form_validation->set_rules(
+        //     'class', $this->lang->line('class'), array(
+        //         'required',
+        //         array('class_exists', array($this->class_model, 'class_exists')),
+        //     )
+        // );
+
+        $this->form_validation->set_rules('class', $this->lang->line('class'), 'trim|required|xss_clean');
+
         $this->form_validation->set_rules('sections[]', $this->lang->line('section'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             $class       = $this->input->post('class');
             $class_array = array(
                 'class' => $this->input->post('class'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $sections = $this->input->post('sections');
             $this->classsection_model->add($class_array, $sections);
@@ -59,22 +64,26 @@ class Classes extends Admin_Controller
         $data['title'] = 'Fees Master List';
         $this->class_model->remove($id);
 
-        $student_delete=$this->student_model->getUndefinedStudent();
-        if(!empty($student_delete)){
-            $delte_student_array=array();
+        $student_delete = $this->student_model->getUndefinedStudent();
+        if (!empty($student_delete)) {
+            $delte_student_array = array();
             foreach ($student_delete as $student_key => $student_value) {
 
-                $delte_student_array[]=$student_value->id;
+                $delte_student_array[] = $student_value->id;
             }
             $this->student_model->bulkdelete($delte_student_array);
         }
 
-     
+
         redirect('classes');
     }
 
     public function edit($id)
     {
+        $class_details           = $this->classsection_model->getid_details($id);
+        $section_branch_id =  $class_details[0]['branch_id'];
+
+
         if (!$this->rbac->hasPrivilege('class', 'can_edit')) {
             access_denied();
         }
@@ -84,18 +93,21 @@ class Classes extends Admin_Controller
         $data['id']         = $id;
         $vehroute           = $this->classsection_model->getByID($id);
         $data['vehroute']   = $vehroute;
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
         $data['title_list'] = 'Fees Master List';
 
-        $this->form_validation->set_rules(
-            'class', $this->lang->line('class'), array(
-                'required',
-                array('class_exists', array($this->class_model, 'class_exists')),
-            )
-        );
+        // $this->form_validation->set_rules(
+        //     'class', $this->lang->line('class'), array(
+        //         'required',
+        //         array('class_exists', array($this->class_model, 'class_exists')),
+        //     )
+        // );
+        $this->form_validation->set_rules('class', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('sections[]', $this->lang->line('sections'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            $vehicle_result       = $this->section_model->get();
+            $vehicle_result       = $this->section_model->getBranchData($section_branch_id);
             $data['vehiclelist']  = $vehicle_result;
             $routeList            = $this->route_model->get();
             $data['routelist']    = $routeList;
@@ -119,6 +131,7 @@ class Classes extends Admin_Controller
                 $class_array         = array(
                     'id'    => $class_id,
                     'class' => $this->input->post('class'),
+                    'branch_id' => $this->input->post('branch_id'),
                 );
                 foreach ($add_result as $vec_add_key => $vec_add_value) {
                     $vehicle_batch_array[] = $vec_add_value;
@@ -128,6 +141,7 @@ class Classes extends Admin_Controller
                 $class_array = array(
                     'id'    => $class_id,
                     'class' => $this->input->post('class'),
+                    'branch_id' => $this->input->post('branch_id'),
                 );
                 $this->classsection_model->update($class_array);
             }
@@ -152,4 +166,33 @@ class Classes extends Admin_Controller
         $this->load->view('class/_section_list', $data);
     }
 
+    public function optionData()
+    {
+        $branch_id = $this->input->get('branch_id');
+        $class_details = $this->section_model->getBranchData($branch_id);
+        echo json_encode($class_details);
+    }
+
+    /**
+     * On Change of branch Found Classes according to branch function
+     */
+    public function branchClasss()
+    {
+        $branch_id = $this->input->get('branch_id');
+       
+        $class_details = $this->class_model->getBranchData($branch_id);
+        echo json_encode($class_details);
+    }
+    /**
+     * On Change of Classes Found Section according to branch And Classes function
+     */
+    public function branchClasssSection()
+    {
+        $branch_id = $this->input->get('branch_id');
+        $class_id = $this->input->get('class_id');
+        $section_details = $this->section_model->getBranchData($branch_id, $class_id);
+        echo json_encode($section_details);
+    }
+
+  
 }

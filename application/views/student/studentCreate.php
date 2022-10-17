@@ -52,33 +52,25 @@
                                                     <span class="text-danger"><?php echo form_error('roll_no'); ?></span>
                                                 </div>
                                             </div>
-                                        <?php } ?>                                        
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                                 <select  id="branch_id" name="branch_id" class="form-control">
-                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids >0){  ?>
-                                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                                    <?php  } else { foreach ($all_branch as  $value) { ?>
-                                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                                    <?php } } ?>
+                                        <?php } ?>
+                                        <div class='col-sm-3'>
+                                            <div class='form-group'>
+                                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                    <option selected disabled>Select</option>
+                                                    <?php foreach ($branch as $key => $value) {  ?>
+                                                        <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                    <?php } ?>
                                                 </select>
-                                                <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
+                                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                                 <select id="class_id" name="class_id" class="form-control">
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                    <?php foreach ($classlist as $class) { ?>
-                                                    <option value="<?php echo $class['id'] ?>" <?php
-                                                        if (set_value('class_id') == $class['id']) {
-                                                            echo "selected=selected";
-                                                        }
-                                                        ?>><?php echo $class['class'] ?></option>
-                                                    <?php } ?>
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                             </div>
@@ -92,9 +84,9 @@
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                             </div>
-                                        </div> 
-                                        
-                                        
+                                        </div>
+
+
 
                                     </div>
                                     <div class="row">
@@ -218,14 +210,14 @@
                                         <?php } ?>
                                     </div>
                                     <div class="row">
-                                        <?php 
+                                        <?php
                                         if ($sch_setting->national_identification_no) { ?>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">
                                                         <?php echo $this->lang->line('national_identification_no'); ?>
                                                     </label><small class="req"> *</small>
-                                                    <input id="adhar_no" name="adhar_no" placeholder=""  maxlength="12" type="text" class="form-control" value="<?php echo set_value('adhar_no'); ?>" onkeypress="return isNumberKey(event)" />
+                                                    <input id="adhar_no" name="adhar_no" placeholder="" maxlength="12" type="text" class="form-control" value="<?php echo set_value('adhar_no'); ?>" onkeypress="return isNumberKey(event)" />
                                                     <span class="text-danger"><?php echo form_error('adhar_no'); ?></span>
                                                 </div>
                                             </div>
@@ -239,7 +231,7 @@
                                                 </div>
                                             </div>
                                         <?php }
-                                         if ($sch_setting->is_student_house) {
+                                        if ($sch_setting->is_student_house) {
                                         ?>
                                             <div class="col-md-4 col-xs-12">
                                                 <div class="form-group">
@@ -279,7 +271,7 @@
                                             </div>
                                         <?php
                                         }
-                                       
+
                                         ?>
 
 
@@ -702,7 +694,7 @@
                                             </div>
 
                                             <div class="row around10">
-                                                <?php 
+                                                <?php
                                                 if ($sch_setting->local_identification_no) { ?>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
@@ -916,74 +908,18 @@
         var hostel_id = $('#hostel_id').val();
         var hostel_room_id = '<?php echo set_value('hostel_room_id', 0) ?>';
         getHostel(hostel_id, hostel_room_id);
-        getSectionByClass(class_id, section_id);
-
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            getSectionByClass(class_id, 0);
-        });
-
-
-
-        // $('.datetime').datetimepicker({
-
-        // });
         $(".color").colorpicker();
-
         $("#btnreset").click(function() {
             $("#form1")[0].reset();
         });
-
-
+        /**
+         * Function Use To Get Hostel
+         */
         $(document).on('change', '#hostel_id', function(e) {
             var hostel_id = $(this).val();
             getHostel(hostel_id, 0);
 
         });
-
-        function getSectionByClass(class_id, section_id) {
-
-            if (class_id != "") {
-                $('#section_id').html("");
-                var base_url = '<?php echo base_url() ?>';
-                var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-                var url = "<?php
-                            $userdata = $this->customlib->getUserData();
-                            if (($userdata["role_id"] == 2)) {
-                                echo "getClassTeacherSection";
-                            } else {
-                                echo "getByClass";
-                            }
-                            ?>";
-
-                $.ajax({
-                    type: "GET",
-                    url: base_url + "sections/getByClass",
-                    data: {
-                        'class_id': class_id
-                    },
-                    dataType: "json",
-                    beforeSend: function() {
-                        $('#section_id').addClass('dropdownloading');
-                    },
-                    success: function(data) {
-                        $.each(data, function(i, obj) {
-                            var sel = "";
-                            if (section_id == obj.section_id) {
-                                sel = "selected";
-                            }
-                            div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                        });
-                        $('#section_id').append(div_data);
-                    },
-                    complete: function() {
-                        $('#section_id').removeClass('dropdownloading');
-                    }
-                });
-            }
-        }
-
 
         function getHostel(hostel_id, hostel_room_id) {
             if (hostel_room_id == "") {
@@ -1024,20 +960,26 @@
                 });
             }
         }
-
     });
-
+    /**
+     * Function To Auto Fill Guardian Address
+     */
     function auto_fill_guardian_address() {
         if ($("#autofill_current_address").is(':checked')) {
             $('#current_address').val($('#guardian_address').val());
         }
     }
-
+    /**
+     * Function To Auto Fill Address
+     */
     function auto_fill_address() {
         if ($("#autofill_address").is(':checked')) {
             $('#permanent_address').val($('#current_address').val());
         }
     }
+    /**
+     * Function Use TO Change Guardia Is option
+     */
     $('input:radio[name="guardian_is"]').change(
         function() {
             if ($(this).is(':checked')) {
@@ -1059,10 +1001,11 @@
                     $('#guardian_relation').val("")
                 }
             }
-        });
-</script>
-
-<script type="text/javascript">
+        }
+    );
+    /**
+     * My Sibling Click Function
+     */
     $(".mysiblings").click(function() {
         $('.sibling_msg').html("");
         $('.modal_title').html('<b>' + "<?php echo $this->lang->line('sibling'); ?>" + '</b>');
@@ -1072,9 +1015,9 @@
             show: true
         });
     });
-</script>
-
-<script type="text/javascript">
+    /**
+     *  Function Use to after Change of Siblings Class ID
+     */
     $(document).on('change', '#sibiling_class_id', function(e) {
         $('#sibiling_section_id').html("");
         var class_id = $(this).val();
@@ -1095,13 +1038,14 @@
             }
         });
     });
-
+    /**
+     *  Function Use to after Change of Siblings Section ID
+     */
     $(document).on('change', '#sibiling_section_id', function(e) {
         getStudentsByClassAndSection();
     });
 
     function getStudentsByClassAndSection() {
-
         $('#sibiling_student_id').html("");
         var class_id = $('#sibiling_class_id').val();
         var section_id = $('#sibiling_section_id').val();
@@ -1138,7 +1082,9 @@
             }
         });
     }
-
+    /**
+     * On Click To Add Siblings function
+     */
     $(document).on('click', '.add_sibling', function() {
         var student_id = $('#sibiling_student_id').val();
         var base_url = '<?php echo base_url() ?>';
@@ -1179,8 +1125,10 @@
         }
 
     });
-</script>
-<script>
+
+    /**
+     * Function To Use Only Input Number 
+     */
     function isNumberKey(evt) {
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode > 31 && (charCode < 48 || charCode > 57))

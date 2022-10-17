@@ -1,22 +1,26 @@
 <?php
- 
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Feediscount extends Admin_Controller {
+class Feediscount extends Admin_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    function delete($id) {
+    function delete($id)
+    {
         $data['title'] = 'feecategory List';
         $this->feediscount_model->remove($id);
         redirect('admin/feediscount/index');
     }
 
-    function index() {
+    function index()
+    {
         if (!$this->rbac->hasPrivilege('fees_discount', 'can_view')) {
             access_denied();
         }
@@ -25,7 +29,7 @@ class Feediscount extends Admin_Controller {
         $feesdiscount_result = $this->feediscount_model->get();
         $data['feediscountList'] = $feesdiscount_result;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->form_validation->set_rules('code', $this->lang->line('discount_code'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('amount', $this->lang->line('amount'), 'trim|required|xss_clean');
@@ -47,7 +51,8 @@ class Feediscount extends Admin_Controller {
         }
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         if (!$this->rbac->hasPrivilege('fees_discount', 'can_edit')) {
             access_denied();
         }
@@ -58,7 +63,7 @@ class Feediscount extends Admin_Controller {
         $data['title'] = 'Edit feecategory';
         $data['id'] = $id;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
 
         $feediscount = $this->feediscount_model->get($id);
         $data['feediscount'] = $feediscount;
@@ -82,7 +87,8 @@ class Feediscount extends Admin_Controller {
         }
     }
 
-    function assign($id) {
+    function assign($id, $branch_id = null)
+    {
         if (!$this->rbac->hasPrivilege('fees_discount_assign', 'can_view')) {
             access_denied();
         }
@@ -92,8 +98,13 @@ class Feediscount extends Admin_Controller {
         $data['title'] = 'student fees';
         $class = $this->class_model->get();
         $data['classlist'] = $class;
-        $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['givenBranch_id'] = $branch_id;
+
+
+        $classlist = $this->class_model->getBranchData($branch_id);
+        $data['classlist']       = $classlist;
+
+
         $feediscount_result = $this->feediscount_model->get($id);
         $data['feediscountList'] = $feediscount_result;
 
@@ -106,8 +117,8 @@ class Feediscount extends Admin_Controller {
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-            $data['category_id'] = $this->input->post('category_id'); 
-            $data['branch_id'] = $this->input->post('branch_id'); 
+            $data['category_id'] = $this->input->post('category_id');
+            $data['branch_id'] = $this->input->post('branch_id');
             $data['gender'] = $this->input->post('gender');
             $data['rte_status'] = $this->input->post('rte');
             $data['class_id'] = $this->input->post('class_id');
@@ -121,7 +132,8 @@ class Feediscount extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    function studentdiscount() {
+    function studentdiscount()
+    {
         if (!$this->rbac->hasPrivilege('fees_discount_assign', 'can_view')) {
             access_denied();
         }
@@ -165,7 +177,8 @@ class Feediscount extends Admin_Controller {
         }
     }
 
-    function applydiscount() {
+    function applydiscount()
+    {
         if (!$this->rbac->hasPrivilege('fees_discount_assign', 'can_view')) {
             access_denied();
         }
@@ -193,7 +206,4 @@ class Feediscount extends Admin_Controller {
             echo json_encode($array);
         }
     }
-
 }
-
-?>

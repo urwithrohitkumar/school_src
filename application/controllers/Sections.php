@@ -20,6 +20,8 @@ class Sections extends Admin_Controller
         $this->session->set_userdata('top_menu', 'Academics');
         $this->session->set_userdata('sub_menu', 'sections/index');
         $data['title'] = 'Section List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
 
         $section_result      = $this->section_model->get();
         $data['sectionlist'] = $section_result;
@@ -31,6 +33,7 @@ class Sections extends Admin_Controller
         } else {
             $data = array(
                 'section' => $this->input->post('section'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->section_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');

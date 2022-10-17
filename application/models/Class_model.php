@@ -216,4 +216,14 @@ class Class_model extends MY_Model
 
         return $this->db->select('sections.id,sections.section')->from('class_sections')->join('sections', 'class_sections.section_id=sections.id')->where('class_id', $id)->get()->result_array();
     }
+
+
+    public function getBranchData($branch_id){
+
+        $this->db->select()->from('classes');
+        $this->db->where('branch_id', $branch_id);
+        $query = $this->db->get();
+        $classlist = $query->result_array();
+        return $classlist;
+    }
 }

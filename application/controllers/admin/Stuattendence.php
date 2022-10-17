@@ -30,29 +30,29 @@ class Stuattendence extends Admin_Controller
         $data['title_list'] = 'Fees Type List';
         $sch_setting = $this->setting_model->getSchoolDetail();
         $data['sch_setting'] = $this->sch_setting_detail;
-        $class = $this->class_model->get('', $classteacher = 'yes');
-        $userdata = $this->customlib->getUserData();
-        $carray = array();
+        // $class = $this->class_model->get('', $classteacher = 'yes');
+        // $userdata = $this->customlib->getUserData();
+        // $carray = array();
 
-        if (!empty($data["classlist"])) {
-            foreach ($data["classlist"] as $ckey => $cvalue) {
-                $carray[] = $cvalue["id"];
-            }
-        }
+        // if (!empty($data["classlist"])) {
+        //     foreach ($data["classlist"] as $ckey => $cvalue) {
+        //         $carray[] = $cvalue["id"];
+        //     }
+        // }
 
-        $userdata = $this->customlib->getUserData();
-        $role_id = $userdata["role_id"];
-        if (isset($role_id) && ($userdata["role_id"] == 2) && ($userdata["class_teacher"] == "yes")) {
-            if ($userdata["class_teacher"] == 'yes') {
-                $carray = array();
-                $class = array();
-                $class = $this->teacher_model->get_daywiseattendanceclass($userdata["id"]);
-            }
-        }
+        // $userdata = $this->customlib->getUserData();
+        // $role_id = $userdata["role_id"];
+        // if (isset($role_id) && ($userdata["role_id"] == 2) && ($userdata["class_teacher"] == "yes")) {
+        //     if ($userdata["class_teacher"] == 'yes') {
+        //         $carray = array();
+        //         $class = array();
+        //         $class = $this->teacher_model->get_daywiseattendanceclass($userdata["id"]);
+        //     }
+        // }
 
-        $data['classlist'] = $class;
-        $data['class_id'] = "";
-        $data['section_id'] = "";
+        // $data['classlist'] = $class;
+        // $data['class_id'] = "";
+        // $data['section_id'] = "";
         $data['date'] = "";
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -63,6 +63,13 @@ class Stuattendence extends Admin_Controller
             $this->load->view('layout/footer', $data);
         } else {
             $branch_id = $this->input->post('branch_id');
+
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $class_id = $this->input->post('class_id');
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
             $class = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $date = $this->input->post('date');
@@ -136,7 +143,7 @@ class Stuattendence extends Admin_Controller
             }
             $attendencetypes = $this->attendencetype_model->get();
             $data['attendencetypeslist'] = $attendencetypes;
-        $resultlist = $this->stuattendence_model->searchAttendenceClassSection($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)),$branch_id);
+            $resultlist = $this->stuattendence_model->searchAttendenceClassSection($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)), $branch_id);
             $data['resultlist'] = $resultlist;
 
             $this->load->view('layout/header', $data);
@@ -157,19 +164,19 @@ class Stuattendence extends Admin_Controller
         $data['all_branch']      = $this->branch_model->getBranch();
         $data['title'] = 'Add Fees Type';
         $data['title_list'] = 'Fees Type List';
-        $class = $this->class_model->get();
-        $userdata = $this->customlib->getUserData();
-        $role_id = $userdata["role_id"];
-        if (isset($role_id) && ($userdata["role_id"] == 2) && ($userdata["class_teacher"] == "yes")) {
-            if ($userdata["class_teacher"] == 'yes') {
-                $carray = array();
-                $class = array();
-                $class = $this->teacher_model->get_daywiseattendanceclass($userdata["id"]);
-            }
-        }
-        $data['classlist'] = $class;
-        $data['class_id'] = "";
-        $data['section_id'] = "";
+        // $class = $this->class_model->get();
+        // $userdata = $this->customlib->getUserData();
+        // $role_id = $userdata["role_id"];
+        // if (isset($role_id) && ($userdata["role_id"] == 2) && ($userdata["class_teacher"] == "yes")) {
+        //     if ($userdata["class_teacher"] == 'yes') {
+        //         $carray = array();
+        //         $class = array();
+        //         $class = $this->teacher_model->get_daywiseattendanceclass($userdata["id"]);
+        //     }
+        // }
+        // $data['classlist'] = $class;
+        // $data['class_id'] = "";
+        // $data['section_id'] = "";
         $data['date'] = "";
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -185,6 +192,13 @@ class Stuattendence extends Admin_Controller
             $class = $this->input->post('class_id');
             $section = $this->input->post('section_id');
             $date = $this->input->post('date');
+            
+            $class_id = $this->input->post('class_id');
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
             $student_list = $this->stuattendence_model->get();
             $data['studentlist'] = $student_list;
             $data['branch_id'] = $branch_id;
@@ -219,7 +233,7 @@ class Stuattendence extends Admin_Controller
             $attendencetypes = $this->attendencetype_model->get();
             $data['attendencetypeslist'] = $attendencetypes;
             $branch_id = $this->input->post('branch_id');
-            $resultlist = $this->stuattendence_model->searchAttendenceClassSectionPrepare($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)),$branch_id);
+            $resultlist = $this->stuattendence_model->searchAttendenceClassSectionPrepare($class, $section, date('Y-m-d', $this->customlib->datetostrtotime($date)), $branch_id);
 
             $data['resultlist'] = $resultlist;
             $data['sch_setting'] = $this->sch_setting_detail;
@@ -289,7 +303,7 @@ class Stuattendence extends Admin_Controller
             $data['class_id'] = $class;
             $data['section_id'] = $section;
             $data['month_selected'] = $month;
-            $studentlist = $this->student_model->searchByClassSection($class, $section , $branch_id);
+            $studentlist = $this->student_model->searchByClassSection($class, $section, $branch_id);
             $session_current = $this->setting_model->getCurrentSessionName();
             $startMonth = $this->setting_model->getStartMonth();
             $centenary = substr($session_current, 0, 2); //2017-18 to 2017

@@ -135,7 +135,8 @@ class Classsection_model extends MY_Model
 
     public function getByID($id = null)
     {
-        $this->db->select('classes.*')->from('classes');
+        $this->db->select('tb_branch.branch_name,classes.*')->from('classes');
+        $this->db->join('tb_branch', 'classes.branch_id = tb_branch.id', 'left');
 
         if ($id != null) {
             $this->db->where('classes.id', $id);
@@ -152,8 +153,8 @@ class Classsection_model extends MY_Model
                 foreach ($vehicle_routes as $vehicle_key => $vehicle_value) {
                     $vec_route = new stdClass();
                     $vec_route->id = $vehicle_value['id'];
-
                     $vec_route->route_id = $vehicle_value['class'];
+                    $vec_route->branch_name = $vehicle_value['branch_name'];
                     $vec_route->vehicles = $this->getVechileByRoute($vehicle_value['id']);
                     $array[] = $vec_route;
                 }
@@ -168,6 +169,7 @@ class Classsection_model extends MY_Model
                     $vec_route = new stdClass();
                     $vec_route->id = $vehicle_value['id'];
                     $vec_route->class = $vehicle_value['class'];
+                    $vec_route->branch_name = $vehicle_value['branch_name'];
 
                     $vec_route->vehicles = $this->getVechileByRoute($vehicle_value['id']);
                     $array[] = $vec_route;
@@ -2313,5 +2315,15 @@ class Classsection_model extends MY_Model
         GROUP BY class_id";
         $sectionData = $this->db->query($sectionData)->result();
         return $sectionData;
+    }
+
+
+    public function getid_details($id)
+    {
+        $this->db->select('*');
+        $this->db->from('classes');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

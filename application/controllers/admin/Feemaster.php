@@ -166,11 +166,13 @@ class Feemaster extends Admin_Controller
         }
         $this->session->set_userdata('top_menu', 'Fees Collection');
         $this->session->set_userdata('sub_menu', 'admin/feemaster');
+
+        $classlist = $this->class_model->getBranchData($branch_id);
+        $data['classlist']       = $classlist;
+
         $data['id'] = $id;
         $data['branch_id'] = $branch_id;
         $data['title'] = 'student fees';
-        $class = $this->class_model->get();
-        $data['classlist'] = $class;
         $feegroup_result = $this->feesessiongroup_model->getFeesByGroup($id);
         $data['feegroupList'] = $feegroup_result;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
@@ -186,6 +188,12 @@ class Feemaster extends Admin_Controller
 
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $class_id = $this->input->post('class_id');
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
 
             $data['category_id'] = $this->input->post('category_id');
             $data['gender'] = $this->input->post('gender');
@@ -205,7 +213,7 @@ class Feemaster extends Admin_Controller
 
     function onChangeOption()
     {
-        
+
         $branch_id = $this->input->get('branch_id');
         $feegroup = $this->feegroup_model->branchWisedata($branch_id);
         $feetype = $this->feetype_model->branchWisedata($branch_id);

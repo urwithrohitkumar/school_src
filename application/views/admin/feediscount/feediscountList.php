@@ -147,7 +147,7 @@
                                                 <?php
                                                 if ($this->rbac->hasPrivilege('fees_discount_assign', 'can_view')) {
                                                 ?>
-                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/assign/<?php echo $feediscount['id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
+                                                    <a data-placement="left" href="<?php echo base_url(); ?>admin/feediscount/assign/<?php echo $feediscount['id'] ?>/<?php echo $feediscount['branch_id'] ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('assign / view'); ?>">
                                                         <i class="fa fa-tag"></i>
                                                     </a>
                                                 <?php

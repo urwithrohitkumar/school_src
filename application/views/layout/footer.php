@@ -26,6 +26,7 @@ $language_name = $language["short_code"];
 <script src="<?php echo base_url(); ?>backend/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>backend/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo base_url(); ?>backend/dist/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="<?php echo base_url(); ?>backend/js/My_custom.js" data-base="<?php echo base_url(); ?>"></script>
 <script type="text/javascript">
     $('body').tooltip({
         selector: '[data-toggle]',

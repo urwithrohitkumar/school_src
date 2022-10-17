@@ -19,32 +19,29 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                                    <select  id="branch_id" name="branch_id" class="form-control">
-                                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
-                                                    <?php  } else { ?>
-                                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                                    <?php foreach ($all_branch as  $value) { ?>                                                        
-                                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                                    <?php } } ?>
+                                        <div class='col-sm-4'>
+                                            <div class='form-group'>
+                                                <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
+                                                <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                                    <option selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                                    <?php foreach ($branch as $key => $value) {  ?>
+                                                        <option value='<?php echo $value['id'] ?>' <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value['branch_name'] ?></option>
+                                                    <?php } ?>
                                                 </select>
-                                                <span class="text-danger" id="error_branch_id"><?php echo form_error('branch_id'); ?></span>
+                                                <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label><?php echo $this->lang->line('class'); ?></label><small class="req">  *</small>
-                                                <select autofocus="" id="class_id" name="class_id" class="form-control" >
+                                                <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
+                                                <select autofocus="" id="class_id" name="class_id" class="form-control">
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                     <?php foreach ($classlist as $class) {  ?>
-                                                <option value="<?php echo $class['id'] ?>"
-                                                <?php if (set_value('class_id') == $class['id']) {
-                                                    echo "selected=selected"; } ?>>
-                                                    <?php echo $class['class'] ?></option> 
+                                                        <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
+                                                                                                        echo "selected=selected";
+                                                                                                    } ?>>
+                                                            <?php echo $class['class'] ?></option>
                                                     <?php }  ?>
                                                 </select>
                                                 <span class="text-danger" id="error_class_id"></span>
@@ -53,7 +50,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label><?php echo $this->lang->line('section'); ?></label>
-                                                <select  id="section_id" name="section_id" class="form-control" >
+                                                <select id="section_id" name="section_id" class="form-control">
                                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                                 </select>
                                                 <span class="text-danger"><?php echo form_error('section_id'); ?></span>
@@ -94,7 +91,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         </div>
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover student-list" data-export-title="<?php echo $this->lang->line('student')." ".$this->lang->line('list'); ?>">
+                                <table class="table table-striped table-bordered table-hover student-list" data-export-title="<?php echo $this->lang->line('student') . " " . $this->lang->line('list'); ?>">
                                     <thead>
 
                                         <tr>
@@ -105,9 +102,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             <th><?php echo $this->lang->line('admission_no'); ?></th>
 
                                             <th><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('name'); ?></th>
-                                            <?php if ($sch_setting->father_name) {?>
+                                            <?php if ($sch_setting->father_name) { ?>
                                                 <th><?php echo $this->lang->line('father_name'); ?></th>
-                                            <?php }?>
+                                            <?php } ?>
                                             <th><?php echo $this->lang->line('date_of_birth'); ?></th>
                                             <th><?php echo $this->lang->line('phone'); ?></th>
                                             <th class="text-right noExport"><?php echo $this->lang->line('action'); ?></th>
@@ -119,7 +116,8 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </tbody>
                                 </table>
                             </div>
-                        </div><!--./box-body-->
+                        </div>
+                        <!--./box-body-->
                     </div>
                 </div>
             </div>
@@ -128,101 +126,59 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 </div>
 <script>
     $(document).ready(function() {
-        emptyDatatable('student-list','fees_data');
+        emptyDatatable('student-list', 'fees_data');
     });
-    </script>
-    <script type="text/javascript">
+</script>
 
-
-        $(document).ready(function () {
-            var class_id = $('#class_id').val();
-            var section_id = '<?php echo set_value('section_id', 0) ?>';
-            getSectionByClass(class_id, section_id);
-        });
-
-        $(document).on('change', '#class_id', function (e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            getSectionByClass(class_id, 0);
-        });
-
-        function getSectionByClass(class_id, section_id) {
-
-            if (class_id != "") {
-                $('#section_id').html("");
-                var base_url = '<?php echo base_url() ?>';
-                var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-                $.ajax({
-                    type: "GET",
-                    url: base_url + "sections/getByClass",
-                    data: {'class_id': class_id},
-                    dataType: "json",
-                    beforeSend: function () {
-                        $('#section_id').addClass('dropdownloading');
-                    },
-                    success: function (data) {
-                        $.each(data, function (i, obj)
-                        {
-                            var sel = "";
-                            if (section_id == obj.section_id) {
-                                sel = "selected";
-                            }
-                            div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                        });
-                        $('#section_id').append(div_data);
-                    },
-                    complete: function () {
-                        $('#section_id').removeClass('dropdownloading');
-                    }
-                });
-            }
-        }
-    </script>
-    <script type="text/javascript">
-    $(document).ready(function(){ 
-        $(document).on('submit','.class_search_form',function(e){
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on('submit', '.class_search_form', function(e) {
             e.preventDefault(); // avoid to execute the actual submit of the form.
-            var $this = $(this).find("button[type=submit]:focus");  
+            var $this = $(this).find("button[type=submit]:focus");
             var form = $(this);
             var url = form.attr('action');
             var form_data = form.serializeArray();
-            form_data.push({name: 'search_type', value: $this.attr('name')});
+            form_data.push({
+                name: 'search_type',
+                value: $this.attr('name')
+            });
             $.ajax({
                 url: url,
                 type: "POST",
-                dataType:'JSON',
+                dataType: 'JSON',
                 data: form_data, // serializes the form's elements.
-                    beforeSend: function () {
-                        $('[id^=error]').html("");
-                        $this.button('loading');
-                        resetFields($this.attr('name'));
-                    },
-                    success: function(response) { // your success handler
-                        if(!response.status){
-                            $.each(response.error, function(key, value) {
+                beforeSend: function() {
+                    $('[id^=error]').html("");
+                    $this.button('loading');
+                    resetFields($this.attr('name'));
+                },
+                success: function(response) { // your success handler
+                    if (!response.status) {
+                        $.each(response.error, function(key, value) {
                             $('#error_' + key).html(value);
                         });
-                        }else{
-                            initDatatable('student-list','studentfee/ajaxSearch',response.params,[],100);
-                        }
-                    },
-                    error: function() { // your error handler
-                        $this.button('reset');
-                    },
-                    complete: function() {
-                    $this.button('reset');
+                    } else {
+                        initDatatable('student-list', 'studentfee/ajaxSearch', response.params, [], 100);
                     }
-                });
+                },
+                error: function() { // your error handler
+                    $this.button('reset');
+                },
+                complete: function() {
+                    $this.button('reset');
+                }
+            });
 
         });
     });
-    function resetFields(search_type){
-        if(search_type == "keyword_search"){
-            $('#class_id').prop('selectedIndex',0);
+
+    function resetFields(search_type) {
+        if (search_type == "keyword_search") {
+            $('#class_id').prop('selectedIndex', 0);
             $('#section_id').find('option').not(':first').remove();
-        }else if (search_type == "class_search") {
-            
-                $('#search_text').val("");
+        } else if (search_type == "class_search") {
+
+            $('#search_text').val("");
         }
     }
 </script>

@@ -44,19 +44,15 @@
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value)" class="form-control">
+                                <select autofocus="" id="class_id" name="class_id" onchange="getSectionByClass(this.value)" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                    <?php
-                                    foreach ($classlist as $class) {
-                                    ?>
-                                        <option <?php
-                                                if ($class_id == $class["id"]) {
-                                                    echo "selected";
-                                                }
-                                                ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
+                                    <?php foreach ($classlist as $class) { ?>
+                                        <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
+                                                                                        echo "selected=selected";
+                                                                                    } ?>><?php echo $class['class'] ?></option>
+                                    <?php $count++;
+                                    } ?>
+
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
@@ -64,8 +60,15 @@
                         <div class="col-md-3 col-lg-3 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                <select id="secid" name="section_id" class="form-control">
+                                <select id="section_id" name="section_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                    <?php foreach ($sectionlist as $section) { ?>
+                                        <option value="<?php echo $section['id'] ?>" <?php if (set_value('section_id') == $section['id']) {
+                                                                                            echo "selected=selected";
+                                                                                        } ?>><?php echo $section['section'] ?></option>
+                                    <?php $count++;
+                                    } ?>
+
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('section_id'); ?></span>
                             </div>
@@ -209,7 +212,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                        <select type="text" onchange="get_section(this.value)" name="class" id="class" class="form-control ">
+                                        <select type="text" name="class" id="class" class="form-control ">
                                             <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($classlist as $value) { ?>
                                                 <option value="<?php echo $value['id']; ?>"><?php echo $value['class']; ?></option>
@@ -220,7 +223,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="pwd"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                        <select type="text" name="section" id="section_id" onchange="get_student(this.value)" class="form-control ">
+                                        <select type="text" name="section" id="section_id2" onchange="get_student(this.value)" class="form-control ">
 
                                         </select>
                                     </div>
@@ -294,13 +297,7 @@
         $('#student').find('option').not(':first').remove();
     });
 
-    $(document).ready(function(e) {
 
-        getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id; ?>");
-
-
-
-    });
 
     function approve_leave(id, status, class_id, section_id) {
         $.ajax({
@@ -328,75 +325,6 @@
 
     }
 
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "") {
-            $('#secid').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#secid').addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#secid').append(div_data);
-                },
-                complete: function() {
-                    $('#secid').removeClass('dropdownloading');
-                }
-            });
-        }
-        if (section_id != "") {
-
-            $('#secid').val(section_id);
-
-        }
-    }
-
-    function get_section(class_id, section_id = null) {
-        if (class_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-
-                    });
-
-
-
-
-                    $('#section_id').append(div_data);
-
-                }
-
-            });
-        }
-    }
 
 
 
@@ -492,13 +420,13 @@
      */
     $(document).on('change', '#branch_id2', function() {
         var class_id = $('#class').val();
-        var id = $('#section_id').val();
+        var id = $('#section_id2').val();
         get_student(id, student_id = null, section_id = null)
     })
     /**
      * Student Value Fetch According to Section 
      */
-    $(document).on('change', '#section_id', function() {
+    $(document).on('change', '#section_id2', function() {
         var class_id = $('#class').val();
         var id = $('#section_id').val();
         get_student(id, student_id = null, section_id = null)
@@ -508,9 +436,77 @@
      */
     $(document).on('change', '#class', function() {
         var class_id = $('#class').val();
-        var id = $('#section_id').val();
+        var id = $('#section_id2').val();
         get_student(id, student_id = null, section_id = null)
     })
+
+
+    /**
+     * On Change of branch Found Classes according to branch function
+     */
+    $("#branch_id2").on('change', function() {
+        $('#section_id2').html('<option selected disabled >Select</option>');
+        let branch_id = $("#branch_id2").val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasss",
+            data: {
+                'branch_id': branch_id,
+            },
+            dataType: "json",
+            success: function(class_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (class_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < class_details.length; count++) {
+                        html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
+                    }
+                    $('#class').html(html);
+                }
+            }
+        });
+    })
+    /**
+     * On Chanege of Classes Found Section according to branch And Classes function
+     */
+    $("#class").on('change', function() {
+        let branch_id = $("#branch_id2").val();
+        let class_id = $("#class").val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasssSection",
+            data: {
+                'branch_id': branch_id,
+                'class_id': class_id,
+            },
+            dataType: "json",
+            success: function(section_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (section_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < section_details.length; count++) {
+                        html += '<option value="' + section_details[count].id + '">' + section_details[count].section + '</option>';
+                    }
+                    $('#section_id2').html(html);
+                }
+            }
+        });
+    })
+
+
+
+
+
+
+
+
+
 
     function add_leave() {
         $('#title').html('<?php echo $this->lang->line('add') . " " . $this->lang->line('leave'); ?>');

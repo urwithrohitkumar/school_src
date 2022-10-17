@@ -4,18 +4,21 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Examresult extends Admin_Controller {
+class Examresult extends Admin_Controller
+{
 
     public $exam_type = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->exam_type = $this->config->item('exam_type');
         $this->attendence_exam = $this->config->item('attendence_exam');
         $this->sch_setting_detail = $this->setting_model->getSetting();
     }
 
-    public function printCard() {
+    public function printCard()
+    {
         $this->form_validation->set_error_delimiters('', '');
         $this->form_validation->set_rules('admitcard_template', $this->lang->line('template'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('post_exam_id', $this->lang->line('exam'), 'required|trim|xss_clean');
@@ -43,14 +46,15 @@ class Examresult extends Admin_Controller {
             $data['admitcard'] = $this->admitcard_model->get($this->input->post('admitcard_template'));
             $data['exam_subjects'] = $this->batchsubject_model->getExamSubjects($post_exam_id);
             $data['student_details'] = $this->examstudent_model->getStudentsAdmitCardByExamAndStudentID($students_array, $post_exam_id);
-            $data['sch_setting']= $this->sch_setting_detail;
+            $data['sch_setting'] = $this->sch_setting_detail;
             $student_admit_cards = $this->load->view('admin/admitcard/_printadmitcard', $data, true);
             $array = array('status' => '1', 'error' => '', 'page' => $student_admit_cards);
             echo json_encode($array);
         }
     }
 
-    public function admitcard() {
+    public function admitcard()
+    {
         if (!$this->rbac->hasPrivilege('print_admit_card', 'can_view')) {
             access_denied();
         }
@@ -62,14 +66,13 @@ class Examresult extends Admin_Controller {
 
         $admitcard_result = $this->admitcard_model->get();
         $data['admitcardlist'] = $admitcard_result;
-        $class = $this->class_model->get();
+
         $data['title'] = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
         $data['examType'] = $this->exam_type;
-        $data['classlist'] = $class;
         $session = $this->session_model->get();
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $data['sessionlist'] = $session;
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
@@ -79,7 +82,6 @@ class Examresult extends Admin_Controller {
         $this->form_validation->set_rules('admitcard', $this->lang->line('admit') . " " . $this->lang->line('card') . " " . $this->lang->line('template'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
             $exam_group_id = $this->input->post('exam_group_id');
             $exam_id = $this->input->post('exam_id');
@@ -91,10 +93,10 @@ class Examresult extends Admin_Controller {
 
             $data['admitcard_template'] = $admitcard_template;
 
-            $data['studentList'] = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id,$branch_id);
+            $data['studentList'] = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id, $branch_id);
 
             $data['examList'] = $this->examgroup_model->getExamByExamGroup($exam_group_id, true);
- 
+
             $data['exam_id'] = $exam_id;
             $data['exam_group_id'] = $exam_group_id;
         }
@@ -104,7 +106,8 @@ class Examresult extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function marksheet() {
+    public function marksheet()
+    {
         if (!$this->rbac->hasPrivilege('print_marksheet', 'can_view')) {
             access_denied();
         }
@@ -113,16 +116,15 @@ class Examresult extends Admin_Controller {
         $examgroup_result = $this->examgroup_model->get();
         $data['examgrouplist'] = $examgroup_result;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
 
         $marksheet_result = $this->marksheet_model->get();
         $data['marksheetlist'] = $marksheet_result;
 
-        $class = $this->class_model->get();
+
         $data['title'] = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
         $data['examType'] = $this->exam_type;
-        $data['classlist'] = $class;
         $session = $this->session_model->get();
         $data['sessionlist'] = $session;
         $this->form_validation->set_rules('marksheet', $this->lang->line('marksheet'), 'trim|required|xss_clean');
@@ -133,7 +135,6 @@ class Examresult extends Admin_Controller {
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
             $exam_group_id = $this->input->post('exam_group_id');
             $exam_id = $this->input->post('exam_id');
@@ -142,10 +143,24 @@ class Examresult extends Admin_Controller {
             $section_id = $this->input->post('section_id');
             $branch_id = $this->input->post('branch_id');
 
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $examGropup = $this->examgroup_model->getWithBranch($branch_id);
+
+
+
+
+            $data['examGroup']       = $examGropup;
+            $data['classlist']       = $classlist;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
+
+
+
             $marksheet_template = $this->input->post('marksheet');
             $data['marksheet_template'] = $marksheet_template;
 
-            $data['studentList'] = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id,$branch_id);
+            $data['studentList'] = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id, $branch_id);
 
             $data['examList'] = $this->examgroup_model->getExamByExamGroup($exam_group_id, true);
 
@@ -158,7 +173,8 @@ class Examresult extends Admin_Controller {
         $this->load->view('layout/footer', $data);
     }
 
-    public function printmarksheet() {
+    public function printmarksheet()
+    {
         $this->form_validation->set_error_delimiters('', '');
         $this->form_validation->set_rules('post_exam_id', $this->lang->line('exam'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('post_exam_group_id', $this->lang->line('exam') . " " . $this->lang->line('group'), 'required|trim|xss_clean');
@@ -185,13 +201,14 @@ class Examresult extends Admin_Controller {
             $data['exam_grades'] = $exam_grades;
             $data['marksheet'] = $this->examresult_model->getExamResults($post_exam_id, $post_exam_group_id, $students_array);
             $data['sch_setting'] = $this->sch_setting_detail;
-            $student_exam_page = $this->load->view('admin/examresult/_printmarksheet', $data, true); 
+            $student_exam_page = $this->load->view('admin/examresult/_printmarksheet', $data, true);
             $array = array('status' => '1', 'error' => '', 'page' => $student_exam_page);
             echo json_encode($array);
         }
     }
 
-    public function index() {
+    public function index()
+    {
         if (!$this->rbac->hasPrivilege('exam_result', 'can_view')) {
             access_denied();
         }
@@ -211,7 +228,7 @@ class Examresult extends Admin_Controller {
         $session = $this->session_model->get();
         $data['sessionlist'] = $session;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('session_id', $this->lang->line('session'), 'trim|required|xss_clean');
@@ -219,7 +236,6 @@ class Examresult extends Admin_Controller {
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
             $exam_group_id = $this->input->post('exam_group_id');
             $exam_id = $this->input->post('exam_id');
@@ -227,11 +243,20 @@ class Examresult extends Admin_Controller {
             $class_id = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
             $branch_id = $this->input->post('branch_id');
+            $examgroup_result = $this->examgroup_model->getWithBranch($branch_id);
+            $data['examgrouplist'] = $examgroup_result;
+
+            $classlist = $this->class_model->getBranchData($branch_id);
+            $data['classlist']       = $classlist;
+            $data['branch_id']       = $branch_id;
+            $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
+            $data['sectionlist']       = $sectionlist;
+
 
             $marksheet_template = $this->input->post('marksheet');
             $data['marksheet_template'] = $marksheet_template;
             $exam_details = $this->examgroup_model->getExamByID($exam_id);
-            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id,$branch_id);
+            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id, $branch_id);
 
             $exam_subjects = $this->batchsubject_model->getExamSubjects($exam_id);
             $data['subjectList'] = $exam_subjects;
@@ -241,7 +266,7 @@ class Examresult extends Admin_Controller {
                     $studentList[$student_key]->subject_results = $this->examresult_model->getStudentResultByExam($exam_id, $student_value->exam_group_class_batch_exam_student_id);
                 }
             }
- 
+
             $data['studentList'] = $studentList;
 
             $exam_grades = $this->grade_model->getByExamType($exam_details->exam_group_type);
@@ -249,14 +274,15 @@ class Examresult extends Admin_Controller {
             $data['exam_details'] = $exam_details;
             $data['exam_id'] = $exam_id;
             $data['exam_group_id'] = $exam_group_id;
-        }   
+        }
         $data['sch_setting'] = $this->sch_setting_detail;
         $this->load->view('layout/header', $data);
         $this->load->view('admin/examresult/index', $data);
         $this->load->view('layout/footer', $data);
     }
 
-    public function getStudentByClassBatch() {
+    public function getStudentByClassBatch()
+    {
         $class_id = $this->input->post('class_id');
         $section_id = $this->input->post('section_id');
         $session_id = $this->input->post('session_id');
@@ -264,14 +290,16 @@ class Examresult extends Admin_Controller {
         echo json_encode($data);
     }
 
-    public function getExamGroupByStudent() {
+    public function getExamGroupByStudent()
+    {
         $student_id = $this->input->post('student_id');
 
         $data['examgrouplist'] = $this->examgroup_model->getExamGroupByStudent($student_id);
         echo json_encode($data);
     }
 
-    public function studentresult() {
+    public function studentresult()
+    {
         $this->form_validation->set_error_delimiters('', '');
         $this->form_validation->set_rules('exam_group_id', 'exam_group_id', 'required|trim|xss_clean');
         $this->form_validation->set_rules('student_id', 'student_id', 'required|trim|xss_clean');
@@ -319,7 +347,8 @@ class Examresult extends Admin_Controller {
         }
     }
 
-    public function getStudentCurrentResult() {
+    public function getStudentCurrentResult()
+    {
         $this->form_validation->set_rules('student_session_id', $this->lang->line('student') . " " . $this->lang->line('id'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
@@ -341,7 +370,8 @@ class Examresult extends Admin_Controller {
         echo json_encode($array);
     }
 
-    public function generatemarksheet() {
+    public function generatemarksheet()
+    {
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam') . " " . $this->lang->line('id'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('check[]', $this->lang->line('students'), 'trim|required|xss_clean');
 
@@ -376,7 +406,8 @@ class Examresult extends Admin_Controller {
         echo json_encode($array);
     }
 
-    public function rankreport() {
+    public function rankreport()
+    {
         if (!$this->rbac->hasPrivilege('rank_report', 'can_view')) {
             access_denied();
         }
@@ -396,7 +427,7 @@ class Examresult extends Admin_Controller {
         $data['examType'] = $this->exam_type;
         $data['classlist'] = $class;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $session = $this->session_model->get();
         $data['sessionlist'] = $session;
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
@@ -406,7 +437,6 @@ class Examresult extends Admin_Controller {
         $this->form_validation->set_rules('exam_id', $this->lang->line('exam'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            
         } else {
             $exam_group_id = $this->input->post('exam_group_id');
             $exam_id = $this->input->post('exam_id');
@@ -419,7 +449,7 @@ class Examresult extends Admin_Controller {
             $data['marksheet_template'] = $marksheet_template;
             $exam_details = $this->examgroup_model->getExamByID($exam_id);
 
-            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id,$branch_id);
+            $studentList = $this->examgroupstudent_model->searchExamStudents($exam_group_id, $exam_id, $class_id, $section_id, $session_id, $branch_id);
             $exam_subjects = $this->batchsubject_model->getExamSubjects($exam_id);
             $data['subjectList'] = $exam_subjects;
 
@@ -445,13 +475,15 @@ class Examresult extends Admin_Controller {
 
 
 
-    public function branchgroupoption(){
+    public function branchgroupoption()
+    {
         $branch_id = $this->input->post('branch_id');
         $examgroup_result = $this->examgroup_model->getWithBranch($branch_id);
         echo json_encode($examgroup_result);
     }
 
-    public function optionData(){
+    public function optionData()
+    {
         $branch_id = $this->input->post('branch_id');
         $examgroup_result = $this->examgroup_model->getWithBranch($branch_id);
         $admintemplate_result = $this->admitcard_model->getBranchData($branch_id);
@@ -461,8 +493,9 @@ class Examresult extends Admin_Controller {
         );
         echo json_encode($result);
     }
-    
-    public function optionDatamarksheet(){
+
+    public function optionDatamarksheet()
+    {
         $branch_id = $this->input->post('branch_id');
         $examgroup_result = $this->examgroup_model->getWithBranch($branch_id);
         $marksheet_result = $this->marksheet_model->getBranchData($branch_id);
@@ -472,8 +505,4 @@ class Examresult extends Admin_Controller {
         );
         echo json_encode($result);
     }
-
-
-   
-
 }

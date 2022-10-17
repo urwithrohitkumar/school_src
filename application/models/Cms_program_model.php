@@ -43,7 +43,7 @@ class Cms_program_model extends MY_Model
         $this->db->order_by('created_at', 'desc');
         $this->db->where('type', $category);
        
-        if ($this->session->userdata['admin']['branch_id'] != 0) {
+        if (isset($this->session->userdata['admin']['branch_id']) != 0) {
             $this->db->where('branch_id', $this->session->userdata['admin']['branch_id']);
         }
         if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {

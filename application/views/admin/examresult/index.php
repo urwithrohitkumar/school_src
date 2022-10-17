@@ -22,7 +22,11 @@
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
                                             <option value="" selected disabled>Select</option>
                                             <?php foreach ($branch as $key => $value) {  ?>
-                                                <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                                <option value='<?php echo $value['id'] ?>' <?php
+                                                                                                if (set_value('branch_id') == $value['id']) {
+                                                                                                    echo "selected=selected";
+                                                                                                }
+                                                                                                ?>><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
                                         </select>
                                         <span class='text-danger'><?php echo form_error('branch'); ?></span>
@@ -32,7 +36,8 @@
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
                                         <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control ">
-                                            <option value="" selected disabled><?php echo $this->lang->line('select'); ?></option>
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                            
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_group_id'); ?></span>
                                     </div>
@@ -74,17 +79,15 @@
                                         <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                            ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php
-                                                                                            if (set_value('class_id') == $class['id']) {
+
+                                            <?php foreach ($classlist as $class) { ?>
+                                                <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
                                                                                                 echo "selected=selected";
-                                                                                            }
-                                                                                            ?>><?php echo $class['class'] ?></option>
-                                            <?php
-                                            }
-                                            ?>
+                                                                                            } ?>><?php echo $class['class'] ?></option>
+                                            <?php $count++;
+                                            } ?>
+
+
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
@@ -94,6 +97,13 @@
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
                                         <select id="section_id" name="section_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                            <?php foreach ($sectionlist as $section) { ?>
+                                                <option value="<?php echo $section['id'] ?>" <?php if (set_value('section_id') == $section['id']) {
+                                                                                                    echo "selected=selected";
+                                                                                                } ?>><?php echo $section['section'] ?></option>
+                                            <?php $count++;
+                                            } ?>
+
                                         </select>
                                         <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                     </div>
@@ -399,7 +409,6 @@ function findGradePoints($exam_grades, $percentage)
     var session_id = '<?php echo set_value('session_id') ?>';
     var exam_group_id = '<?php echo set_value('exam_group_id') ?>';
     var exam_id = '<?php echo set_value('exam_id') ?>';
-    getSectionByClass(class_id, section_id);
 
     // getExamgroupByClassSectionSession(class_id, section_id, session_id);
     getExamByExamgroup(exam_group_id, exam_id);
@@ -408,48 +417,6 @@ function findGradePoints($exam_grades, $percentage)
         var exam_group_id = $(this).val();
         getExamByExamgroup(exam_group_id, 0);
     });
-
-    $(document).on('change', '#class_id', function(e) {
-        $('#section_id').html("");
-        var class_id = $(this).val();
-        getSectionByClass(class_id, 0);
-    });
-
-    function getSectionByClass(class_id, section_id) {
-
-        if (class_id !== "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-
-
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#section_id').addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id === obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                },
-                complete: function() {
-                    $('#section_id').removeClass('dropdownloading');
-                }
-            });
-        }
-    }
-
 
     function getExamByExamgroup(exam_group_id, exam_id) {
 
@@ -487,6 +454,10 @@ function findGradePoints($exam_grades, $percentage)
             });
         }
     }
+
+    /**
+     * Fond Exam Group by Branch
+     */
 
     $("#branch_id").on('change', function() {
         let branch_id = $(this).val();
