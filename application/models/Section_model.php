@@ -195,4 +195,13 @@ class Section_model extends MY_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    public function getSEctionBranch($branch_id)
+    {
+        $this->db->select('tb_branch.branch_name,sections.*')->from('sections');
+        $this->db->join('class_sections', 'sections.id = class_sections.section_id ', 'left');
+        $this->db->join('tb_branch', 'sections.branch_id = tb_branch.id', 'left');
+        $this->db->where('sections.branch_id', $branch_id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

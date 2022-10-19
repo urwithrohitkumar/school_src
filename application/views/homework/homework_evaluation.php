@@ -27,6 +27,7 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
                                 <select id="branch_id" name="branch_id" placeholder="" type="text" class="form-control">
+                                    <option disabled selected><?php echo $this->lang->line('select'); ?></option>
                                     <?php foreach ($branch as $key => $value) {  ?>
                                         <option value="<?php echo $value["id"] ?>"><?php echo $value["branch_name"] ?></option>
                                     <?php } ?>
@@ -40,17 +41,7 @@
                                 <label><?php echo $this->lang->line('class'); ?><small class="req"> *</small></label>
                                 <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                    <?php
-                                    foreach ($classlist as $class) {
-                                    ?>
-                                        <option <?php
-                                                if ($class_id == $class["id"]) {
-                                                    echo "selected";
-                                                }
-                                                ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
+                                  
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
@@ -179,7 +170,6 @@
 
     $(document).ready(function(e) {
 
-        getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
 
         getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
         getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
@@ -190,38 +180,7 @@
     var save_method; //for save method string
     var update_id; //for save method string
 
-    function getSectionByClass(class_id, section_id, select_control) {
-        if (class_id != "") {
-            $('#' + select_control).html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#' + select_control).addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#' + select_control).append(div_data);
-                },
-                complete: function() {
-                    $('#' + select_control).removeClass('dropdownloading');
-                }
-            });
-        }
-    }
-
+   
 
 
 

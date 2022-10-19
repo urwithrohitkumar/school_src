@@ -32,8 +32,6 @@ class Homework extends Admin_Controller
         $this->session->set_userdata('sub_menu', 'homework');
         $data["title"] = "Create Homework";
 
-        $class             = $this->class_model->get();
-        $data['classlist'] = $class;
 
 
         $branch = $this->staff_model->getBranch();

@@ -24,6 +24,7 @@
                                     <div class='form-group'>
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option selected disabled><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($branch as $key => $value) {  ?>
                                                 <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
@@ -36,14 +37,7 @@
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select autofocus="" id="class_id" name="class_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                            ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) echo "selected=selected"; ?>><?php echo $class['class'] ?></option>
-                                            <?php
-                                                $count++;
-                                            }
-                                            ?>
+                                           
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_id'); ?></span>
                                     </div>
@@ -82,6 +76,7 @@
                                     <div class='form-group'>
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='promote_branch_id' name='promote_branch_id' placeholder='' type='text' class='form-control'>
+                                            <option selected disabled><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($branch as $key => $value) {  ?>
                                                 <option value='<?php echo $value['id'] ?>' <?php if (set_value('promote_branch_id') == $value['id']) echo "selected=selected"; ?>><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
@@ -94,14 +89,7 @@
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                         <select id="class_promote_id" name="class_promote_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                            ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_promote_id') == $class['id']) echo "selected=selected"; ?>><?php echo $class['class'] ?></option>
-                                            <?php
-                                                $count++;
-                                            }
-                                            ?>
+                                            
                                         </select>
                                         <span class="text-danger"><?php echo form_error('class_promote_id'); ?></span>
                                     </div>
@@ -260,40 +248,7 @@
 <!--===-->
 
 <script type="text/javascript">
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "" && section_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            var url = "<?php
-                        $userdata = $this->customlib->getUserData();
-                        if (($userdata["role_id"] == 2)) {
-                            echo "getClassTeacherSection";
-                        } else {
-                            echo "getByClass";
-                        }
-                        ?>";
-
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/" + url,
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        }
-    }
+  
     $(document).ready(function() {
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section_id') ?>';
@@ -305,38 +260,8 @@
 
         getPromotedSectionByClass(class_promote_id, section_promote_id);
 
-        getSectionByClass(class_id, section_id);
 
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            var url = "<?php
-                        $userdata = $this->customlib->getUserData();
-                        if (($userdata["role_id"] == 2)) {
-                            echo "getClassTeacherSection";
-                        } else {
-                            echo "getByClass";
-                        }
-                        ?>";
-
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/" + url,
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
-                    });
-
-                    $('#section_id').append(div_data);
-                }
-            });
-        });
+      
         $(document).on('change', '#feecategory_id', function(e) {
             $('#feetype_id').html("");
             var feecategory_id = $(this).val();
@@ -357,50 +282,6 @@
                 }
             });
         });
-    });
-
-
-
-
-    function getPromotedSectionByClass(class_id, section_id) {
-
-        if (class_id != "") {
-            $('#section_promote_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#section_promote_id').addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_promote_id').append(div_data);
-                },
-                complete: function() {
-                    $('#section_promote_id').removeClass('dropdownloading');
-                }
-            });
-        }
-    }
-
-
-
-    $(document).on('change', '#class_promote_id', function(e) {
-        $('#section_promote_id').html("");
-        var class_id = $(this).val();
-        getPromotedSectionByClass(class_id, 0);
     });
 </script>
 
@@ -457,4 +338,63 @@
         });
 
     });
+</script>
+<script>
+    /**
+ * On Change of branch Found Classes according to branch function
+ */
+$("#promote_branch_id").on('change', function() {
+        $('#section_promote_id').html('<option selected disabled >Select</option>');
+        let branch_id = $("#promote_branch_id").val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasss",
+            data: {
+                'branch_id': branch_id,
+            },
+            dataType: "json",
+            success: function(class_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (class_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < class_details.length; count++) {
+                        html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
+                    }
+                    $('#class_promote_id').html(html);
+                }
+            }
+        });
+    })
+    /**
+     * On Chanege of Classes Found Section according to branch And Classes function
+     */
+$("#class_promote_id").on('change', function() {
+    let branch_id = $("#promote_branch_id").val();
+    let class_id = $("#class_promote_id").val();
+    var base_url = '<?php echo base_url() ?>';
+    $.ajax({
+        type: "GET",
+        url: base_url + "classes/branchClasssSection",
+        data: {
+            'branch_id': branch_id,
+            'class_id': class_id,
+        },
+        dataType: "json",
+        success: function(section_details) {
+            /**
+             * Item Details Option data according to branch id
+             */
+            if (section_details.length > 0) {
+                var html = '<option selected disabled >Select</option>';
+                for (var count = 0; count < section_details.length; count++) {
+                    html += '<option value="' + section_details[count].id + '">' + section_details[count].section + '</option>';
+                }
+                $('#section_promote_id').html(html);
+            }
+        }
+    });
+})
 </script>

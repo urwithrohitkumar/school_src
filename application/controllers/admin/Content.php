@@ -30,10 +30,8 @@ class Content extends Admin_Controller
 
         $list = $this->content_model->getContentByRole($this->customlib->getStaffID(), $role->name);
 
-        $class = $this->class_model->get();
 
         $data['list']      = $list;
-        $data['classlist'] = $class;
         $userdata          = $this->customlib->getUserData();
         $carray            = array();
         $data['ght']       = $ght;

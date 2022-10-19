@@ -114,6 +114,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     <div class='form-group'>
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option disabled selected><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($branch as $key => $value) {  ?>
                                                 <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
@@ -123,8 +124,27 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label><?php echo $this->lang->line('class'); ?></label>
+                                        <select id="class_id" name="class_id" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label><?php echo $this->lang->line('section'); ?></label>
+                                        <select id="section_id" name="section_id" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') ?><small class="req"> *</small></label>
-                                        <select id="exam_id" name="exam_id" class="form-control select2">
+                                        <select id="exam_id" name="exam_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($examList as $exam_key => $exam_value) {
@@ -142,36 +162,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php echo $this->lang->line('class'); ?></label>
-                                        <select id="class_id" name="class_id" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                            ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php
-                                                                                            if (set_value('class_id') == $class['id']) {
-                                                                                                echo "selected=selected";
-                                                                                            }
-                                                                                            ?>><?php echo $class['class'] ?></option>
-                                            <?php
-                                                $count++;
-                                            }
-                                            ?>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php echo $this->lang->line('section'); ?></label>
-                                        <select id="section_id" name="section_id" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
-                                    </div>
-                                </div>
+                                
 
 
                                 <div class="col-sm-12">
@@ -383,51 +374,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         var hostel_id = $('#hostel_id').val();
         var hostel_room_id = '<?php echo set_value('hostel_room_id', 0) ?>';
 
-        getSectionByClass(class_id, section_id);
-    });
-
-    $(document).on('change', '#class_id', function(e) {
-        $('#section_id').html("<option><?php echo $this->lang->line('select'); ?></option>");
-        var class_id = $(this).val();
-        getSectionByClass(class_id, 0);
     });
 
 
-
-
-
-    function getSectionByClass(class_id, section_id) {
-
-        if (class_id != "") {
-            $('#section_id').html("<?php echo $this->lang->line('select'); ?>");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#section_id').addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                },
-                complete: function() {
-                    $('#section_id').removeClass('dropdownloading');
-                }
-            });
-        }
-    }
 </script>
 
 

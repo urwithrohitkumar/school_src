@@ -142,6 +142,9 @@ class Examresult extends Admin_Controller
             $class_id = $this->input->post('class_id');
             $section_id = $this->input->post('section_id');
             $branch_id = $this->input->post('branch_id');
+            $marksheet_result = $this->marksheet_model->getBranchData($branch_id);
+            $data['branch_id']       = $branch_id;
+            $data['marksheet_result']       = $marksheet_result;
 
             $classlist = $this->class_model->getBranchData($branch_id);
             $examGropup = $this->examgroup_model->getWithBranch($branch_id);

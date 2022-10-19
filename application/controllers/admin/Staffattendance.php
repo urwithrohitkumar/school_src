@@ -34,7 +34,7 @@ class Staffattendance extends Admin_Controller {
         $user_type = $this->staff_model->getStaffRole();
         $branch = $this->staff_model->getBranch();
         $data['branch']= $branch;
-        $data['classlist'] = $user_type;
+        $data['roleList'] = $user_type;
         $data['class_id'] = "";
         $data['section_id'] = "";
         $data['date'] = "";
@@ -115,9 +115,10 @@ class Staffattendance extends Admin_Controller {
                 redirect('admin/staffattendance/index');
             }
             $branch_id = $this->input->post('branch_id');
+           
             $attendencetypes = $this->attendencetype_model->getStaffAttendanceType();
             $data['attendencetypeslist'] = $attendencetypes;
-            $resultlist = $this->staffattendancemodel->searchAttendenceUserType($user_type, date('Y-m-d', $this->customlib->datetostrtotime($date)) ,$branch_id);
+            $resultlist = $this->staffattendancemodel->searchAttendenceUserType($user_type, date('Y-m-d', $this->customlib->datetostrtotime($date)),$branch_id);
             $data['resultlist'] = $resultlist;
             $this->load->view('layout/header', $data);
             $this->load->view('admin/staffattendance/staffattendancelist', $data);

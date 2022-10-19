@@ -113,7 +113,7 @@ class Studentfeemaster_model extends MY_Model
             'fee_session_group_id' => 0,
             'due_date'             => $due_date,
         );
-        $parentid = $this->feesessiongroup_model->group_exists($to_be_insert['fee_groups_id']);
+        $parentid = $this->feesessiongroup_model->group_exists($to_be_insert['fee_groups_id'] , '');
 
         $to_be_insert['fee_session_group_id'] = $parentid;
 

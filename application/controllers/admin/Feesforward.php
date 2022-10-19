@@ -44,8 +44,8 @@ class Feesforward extends Admin_Controller
             $data['classlist']       = $classlist;
             $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
             $data['sectionlist']       = $sectionlist;
-
-
+            
+            
             $setting_result = $this->setting_model->get();
             $current_session = $setting_result[0]['session_id'];
             $data['current_session'] = $current_session;
@@ -72,20 +72,20 @@ class Feesforward extends Admin_Controller
                     $data['student_due_fee'] = array();
                     if (!empty($pre_session)) {
                         $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $branch_id, $class_id, $section_id, $current_session));
-
+                        
                         $data['student_due_fee'] = $student_Array->student_Array;
                         $data['is_update'] = $student_Array->is_update;
                     }
                 }
             } else if ($action == 'fee_submit') {
                 $student_Array = json_decode($this->findPreviousBalanceFees($pre_session->id, $branch_id, $class_id, $section_id, $current_session));
-
+                
                 $data['student_due_fee'] = $student_Array->student_Array;
                 $data['is_update'] = $student_Array->is_update;
                 $this->form_validation->set_rules('due_date', $this->lang->line('date'), 'required');
                 $counter = $this->input->post('student_counter');
                 if ($this->form_validation->run() == TRUE) {
-
+                    
                     $due_date = date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('due_date')));
                     $student_data = array();
                     foreach ($counter as $count_key => $count_value) {
@@ -96,7 +96,7 @@ class Feesforward extends Admin_Controller
                         $student_array['fee_session_group_id'] = 0;
                         $student_data[] = $student_array;
                     }
-
+                    
                     $student_due_fee = $this->studentfeemaster_model->addPreviousBal($student_data, $due_date);
 
                     $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');

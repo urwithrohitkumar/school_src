@@ -1134,15 +1134,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
                 }
             });
 
-            $('.marksssss').each(function() {
-                $(this).rules("add", {
-                    required: true,
-                    uniqueUserName: true,
-                    messages: {
-                        required: "Required",
-                    }
-                });
-            });
+            // $('.marksssss').each(function() {
+            //     $(this).rules("add", {
+            //         required: true,
+            //         uniqueUserName: true,
+            //         messages: {
+            //             required: "Required",
+            //         }
+            //     });
+            // });
 
 
             // test if form is valid

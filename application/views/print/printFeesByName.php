@@ -341,7 +341,10 @@
                                         $fee    = json_decode($feeList->amount_detail);
                                         $record = $fee->{$sub_invoice_id};
                                         if (!empty($record->received_by)) {
-                                            echo $record->collected_by;
+                                            if(!empty($record->collected_by))
+                                            {
+                                                echo $record->collected_by;
+                                            }
                                         }
                                     }
                                     ?>

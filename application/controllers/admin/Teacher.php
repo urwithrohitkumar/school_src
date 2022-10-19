@@ -251,6 +251,7 @@ class Teacher extends Admin_Controller
             $allowedExts = array('jpg', 'jpeg', 'png');
             $temp = explode(".", $_FILES["file"]["name"]);
             $extension = end($temp);
+            $error = '';
             if ($_FILES["file"]["error"] > 0) {
                 $error .= "Error opening the file<br />";
             }

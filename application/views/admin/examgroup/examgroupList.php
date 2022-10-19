@@ -140,7 +140,7 @@
 
                                                 <td class="mailbox-date pull-right white-space-nowrap">
                                                     <?php if ($this->rbac->hasPrivilege('exam', 'can_view')) { ?>
-                                                        <a href="<?php echo base_url(); ?>admin/examgroup/addexam/<?php echo $examgroup->id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('add') . " " . $this->lang->line('exam') ?>">
+                                                        <a href="<?php echo base_url(); ?>admin/examgroup/addexam/<?php echo $examgroup->id ?>/<?php echo $examgroup->branch_id ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="<?php echo $this->lang->line('add') . " " . $this->lang->line('exam') ?>">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
                                                     <?php

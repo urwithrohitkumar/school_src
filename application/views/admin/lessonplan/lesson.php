@@ -40,17 +40,7 @@
                                     <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                     <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')"  class="form-control" >
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($classlist as $class) {
-                                            ?>
-                                            <option <?php
-                                            if ($class_id == $class["id"]) {
-                                                echo "selected";
-                                            }
-                                            ?> value="<?php echo $class['id'] ?>" ><?php echo $class['class'] ?></option>
-                                                <?php
-                                            }
-                                            ?>
+                                        
                                     </select>
                                     <input type="hidden" id="lesson_subjectid" name="lesson_subjectid"  >
                                     <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
@@ -166,42 +156,12 @@
 <script>
     $(document).ready(function (e) {
 
-        getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
 
         getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
         getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
 
     });
-    function getSectionByClass(class_id, section_id, select_control) {
-        if (class_id != "") {
-            $('#' + select_control).html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
-                dataType: "json",
-                beforeSend: function () {
-                    $('#' + select_control).addClass('dropdownloading');
-                },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#' + select_control).html(div_data);
-                },
-                complete: function () {
-                    $('#' + select_control).removeClass('dropdownloading');
-                }
-            });
-        }
-    }
+ 
     $(document).on('change', '#secid', function () {
         var class_id = $('#searchclassid').val();
         var section_id = $(this).val();
@@ -446,4 +406,64 @@
         initDatatable('topic-list','admin/lessonplan/getlessonlist',[],[],100);
     });
 } ( jQuery ) )
+</script>
+
+<script>
+    /**
+     * On Change of branch Found Classes according to branch function
+     */
+    $("#branch_id").on('change', function() {
+        $('#secid').html('<option selected disabled >Select</option>');
+        let branch_id = $("#branch_id").val();
+        // var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasss",
+            data: {
+                'branch_id': branch_id,
+            },
+            dataType: "json",
+            success: function(class_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (class_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < class_details.length; count++) {
+                        html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
+                    }
+                    $('#searchclassid').html(html);
+                }
+            }
+        });
+    })
+    /**
+     * On Chanege of Classes Found Section according to branch And Classes function
+     */
+    $("#searchclassid").on('change', function() {
+        let branch_id = $("#branch_id").val();
+        let class_id = $("#searchclassid").val();
+        // var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasssSection",
+            data: {
+                'branch_id': branch_id,
+                'class_id': class_id,
+            },
+            dataType: "json",
+            success: function(section_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (section_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < section_details.length; count++) {
+                        html += '<option value="' + section_details[count].id + '">' + section_details[count].section + '</option>';
+                    }
+                    $('#secid').html(html);
+                }
+            }
+        });
+    })
 </script>

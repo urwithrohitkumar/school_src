@@ -19,13 +19,14 @@ class FeeGroup extends Admin_Controller {
         $data['title_list'] = 'Recent FeeGroups';
         $branch = $this->staff_model->getBranch();
         $data['branch']= $branch;
+        $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
 
-        $this->form_validation->set_rules(
-                'name', $this->lang->line('name'), array(
-            'required',
-            array('check_exists', array($this->feegroup_model, 'check_exists'))
-                )
-        );
+        // $this->form_validation->set_rules(
+        //         'name', $this->lang->line('name'), array(
+        //     'required',
+        //     array('check_exists', array($this->feegroup_model, 'check_exists'))
+        //         )
+        // );
         if ($this->form_validation->run() == FALSE) {
             
         } else {

@@ -158,10 +158,10 @@
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('role'); ?></label>
 
-                                        <select autofocus="" id="class_id" name="user_id" class="form-control">
+                                        <select autofocus="" id="role_id" name="user_id" class="form-control">
                                             <option value="select"><?php echo $this->lang->line('select'); ?></option>
                                             <?php
-                                            foreach ($classlist as $key => $class) {
+                                            foreach ($roleList as $key => $class) {
                                             ?>
                                                 <option value="<?php echo $class["type"] ?>" <?php
                                                                                                 if ($class["type"] == $user_type_id) {
@@ -172,7 +172,7 @@
                                             }
                                             ?>
                                         </select>
-                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+                                        <span class="text-danger"><?php echo form_error('role_id'); ?></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">

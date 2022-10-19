@@ -169,7 +169,7 @@ class Classes extends Admin_Controller
     public function optionData()
     {
         $branch_id = $this->input->get('branch_id');
-        $class_details = $this->section_model->getBranchData($branch_id);
+        $class_details = $this->section_model->getSEctionBranch($branch_id);
         echo json_encode($class_details);
     }
 

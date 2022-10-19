@@ -394,7 +394,7 @@ class Student_model extends MY_Model
         return $query->row_array();
     }
 
-    public function search_student()
+    public function search_student($id = null)
     {
         $this->db->select('classes.id AS `class_id`,classes.class,sections.id AS `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,students.category_id,    students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.father_name,students.father_phone,students.father_occupation,students.mother_name,students.mother_phone,students.mother_occupation,students.guardian_occupation')->from('students');
         $this->db->join('student_session', 'student_session.student_id = students.id');
@@ -1079,6 +1079,14 @@ class Student_model extends MY_Model
     {
         $this->db->where('session_id', $data['session_id']);
         $q = $this->db->get('student_session');
+        if(isset($student_session))
+        {
+            $student_session = $student_session;
+        }
+        else{
+            
+            $student_session = "";
+        }
         if ($q->num_rows() > 0) {
             $this->db->where('session_id', $student_session);
             $this->db->update('student_session', $data);
@@ -1224,6 +1232,7 @@ class Student_model extends MY_Model
 
     public function searchByClassSectionWithSession($branch_id = null, $class_id = null, $section_id = null, $session_id = null)
     {
+       
         $this->db->select('classes.id AS `class_id`,student_session.id as student_session_id,students.id,classes.class,sections.id AS `section_id`,sections.section,students.id,students.admission_no , students.roll_no,students.admission_date,students.firstname,students.middlename,  students.lastname,students.image,    students.mobileno, students.email ,students.state ,   students.city , students.pincode ,     students.religion,     students.dob ,students.current_address,    students.permanent_address,IFNULL(students.category_id, 0) as `category_id`,IFNULL(categories.category, "") as `category`,students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name , students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active ,students.created_at ,students.updated_at,students.father_name,students.rte,students.gender')->from('students');
         $this->db->join('student_session', 'student_session.student_id = students.id');
         $this->db->join('classes', 'student_session.class_id = classes.id');

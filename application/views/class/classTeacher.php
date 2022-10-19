@@ -34,6 +34,7 @@
                                 <div class='form-group'>
                                     <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                     <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                        <option disabled selected><?php echo $this->lang->line('select') ?></option>
                                         <?php foreach ($branch as $key => $value) {  ?>
                                             <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                         <?php } ?>
@@ -44,14 +45,7 @@
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
                                     <select class="form-control" name="class" id="class_id">
                                         <option value=''><?php echo $this->lang->line('select') ?></option>
-                                        <?php
-                                        foreach ($classlist as $class_key => $class_value) {
-                                        ?>
-
-                                            <option value="<?php echo $class_value["id"] ?>" <?php echo set_select('class', $class_value["id"], set_value('class')); ?>><?php echo $class_value["class"] ?></option>
-                                        <?php
-                                        }
-                                        ?>
+                                       
                                     </select>
 
                                     <span class="text-danger"><?php echo form_error('class'); ?></span>
@@ -208,58 +202,12 @@
 </div><!-- /.content-wrapper -->
 
 <script type="text/javascript">
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-
-                    $('#section_id').append(div_data);
-                }
-            });
-        }
-    }
+  
     $(document).ready(function() {
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
-                    });
-
-                    $('#section_id').append(div_data);
-                }
-            });
-        });
+    
         var class_id = $('#class_id').val();
         var section_id = '<?php echo set_value('section') ?>';
 
-        getSectionByClass(class_id, section_id);
         $(document).on('change', '#feecategory_id', function(e) {
             $('#feetype_id').html("");
             var feecategory_id = $(this).val();

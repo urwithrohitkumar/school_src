@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                    <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
+                                    <select autofocus="" id="searchclassid" name="class_id"  class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
                                         foreach ($classlist as $class) {
@@ -164,37 +164,7 @@
     }
 </script>
 <script>
-    function getSectionByClass(class_id, section_id, select_control) {
-        if (class_id != "") {
-            $('#' + select_control).html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#' + select_control).addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#' + select_control).append(div_data);
-                },
-                complete: function() {
-                    $('#' + select_control).removeClass('dropdownloading');
-                }
-            });
-        }
-    }
+   
     $(document).on('change', '#secid', function() {
         var class_id = $('#searchclassid').val();
         $('#subid').html('<option selected disabled><?php echo $this->lang->line('select'); ?></option>');

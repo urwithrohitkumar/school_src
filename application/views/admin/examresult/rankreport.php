@@ -24,6 +24,7 @@
                                     <div class='form-group'>
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option disabled selected><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($branch as $key => $value) {  ?>
                                                 <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
@@ -31,10 +32,30 @@
                                         <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                     </div>
                                 </div>
+                                <div class="col-sm-6 col-lg-3 col-md-12 col20">
+                                    <div class="form-group">
+                                        <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
+                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                          
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-3 col-md-12 col20">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
+                                        <select id="section_id" name="section_id" class="form-control">
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
+                                    </div>
+                                </div>
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
-                                        <select id="exam_group_id" name="exam_group_id" class="form-control select2" >
+                                        <select id="exam_group_id" name="exam_group_id" class="form-control" >
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($examgrouplist as $ex_group_key => $ex_group_value) {
@@ -55,7 +76,7 @@
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('exam') ?></label><small class="req"> *</small>
-                                        <select id="exam_id" name="exam_id" class="form-control select2">
+                                        <select id="exam_id" name="exam_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         </select>
                                         <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
@@ -65,7 +86,7 @@
                                 <div class="col-sm-6 col-lg-3 col-md-3 col20">
                                     <div class="form-group">
                                         <label><?php echo $this->lang->line('session'); ?></label><small class="req"> *</small>
-                                        <select id="session_id" name="session_id" class="form-control select2">
+                                        <select id="session_id" name="session_id" class="form-control">
                                             <option value=""><?php echo $this->lang->line('select'); ?></option>
                                             <?php
                                             foreach ($sessionlist as $session) {
@@ -83,36 +104,7 @@
                                     </div>
                                 </div>
                                 <!--./col-md-3-->
-                                <div class="col-sm-6 col-lg-3 col-md-12 col20">
-                                    <div class="form-group">
-                                        <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                        <select autofocus="" id="class_id" name="class_id" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                            ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php
-                                                                                            if (set_value('class_id') == $class['id']) {
-                                                                                                echo "selected=selected";
-                                                                                            }
-                                                                                            ?>><?php echo $class['class'] ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-lg-3 col-md-12 col20">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                        <select id="section_id" name="section_id" class="form-control">
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
-                                    </div>
-                                </div>
+                                
 
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -481,7 +473,6 @@ function aasort_gpa(&$arr)
     var session_id = '<?php echo set_value('session_id') ?>';
     var exam_group_id = '<?php echo set_value('exam_group_id') ?>';
     var exam_id = '<?php echo set_value('exam_id') ?>';
-    getSectionByClass(class_id, section_id);
 
     getExamByExamgroup(exam_group_id, exam_id);
     $(document).on('change', '#exam_group_id', function(e) {
@@ -490,45 +481,8 @@ function aasort_gpa(&$arr)
         getExamByExamgroup(exam_group_id, 0);
     });
 
-    $(document).on('change', '#class_id', function(e) {
-        $('#section_id').html("");
-        var class_id = $(this).val();
-        getSectionByClass(class_id, 0);
-    });
+ 
 
-    function getSectionByClass(class_id, section_id) {
-
-        if (class_id !== "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#section_id').addClass('dropdownloading');
-                },
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id === obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                },
-                complete: function() {
-                    $('#section_id').removeClass('dropdownloading');
-                }
-            });
-        }
-    }
 
 
     function getExamByExamgroup(exam_group_id, exam_id) {

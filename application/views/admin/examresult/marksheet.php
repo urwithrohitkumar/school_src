@@ -1,3 +1,4 @@
+
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
@@ -23,7 +24,11 @@
                                     <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
                                         <option selected disabled>Select</option>
                                         <?php foreach ($branch as $key => $value) {  ?>
-                                            <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
+                                            <option value='<?php echo $value['id'] ?>' <?php
+                                                                                        if (set_value('branch_id') == $value['id']) {
+                                                                                            echo "selected=selected";
+                                                                                        }
+                                                                                        ?>><?php echo $value['branch_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                     <span class='text-danger'><?php echo form_error('branch'); ?></span>
@@ -36,14 +41,12 @@
                                     <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control ">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
                                         <?php
-                                        foreach ($examGroup as $examGp) {
-
-                                        ?>
-                                            <option value="<?php echo $examGp['id'] ?>" <?php
-                                                                                        if (set_value('exam_group_id') == $examGp['id']) {
+                                        foreach ($examGroup as $examGp) { ?>
+                                            <option value="<?php echo $examGp->id ?>" <?php
+                                                                                        if (set_value('exam_group_id') == $examGp->id) {
                                                                                             echo "selected=selected";
                                                                                         }
-                                                                                        ?>><?php echo $examGp['name'] ?></option>
+                                                                                        ?>><?php echo $examGp->name ?></option>
                                         <?php
                                         }
                                         ?>
@@ -131,6 +134,13 @@
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('marksheet') . " " . $this->lang->line('template') ?></label><small class="req"> *</small>
                                     <select id="marksheet" name="marksheet" class="form-control">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($marksheet_result as $key => $value) {  ?>
+                                            <option value='<?php echo $value->id ?>' <?php
+                                                                                        if ($marksheet_template == $value->id) {
+                                                                                            echo "selected=selected";
+                                                                                        }
+                                                                                        ?>><?php echo $value->template ?></option>
+                                        <?php } ?>
 
                                     </select>
                                     <span class="text-danger"><?php echo form_error('marksheet'); ?></span>

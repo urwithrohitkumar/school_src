@@ -39,7 +39,6 @@ class Lessonplan extends Admin_Controller
         $this->form_validation->set_rules('subject_id', $this->lang->line('subject'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             $data['class_id']               = $_POST['class_id'];
             $data['section_id']             = $_POST['section_id'];
@@ -117,8 +116,8 @@ class Lessonplan extends Admin_Controller
                 $condition = " and subject_timetable.id in(" . $timetableid . ") ";
             }
             $where_in = explode(',', $timetableid);
-        }  
-       
+        }
+
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/lesson', $data);
         $this->load->view('layout/footer');
@@ -160,6 +159,8 @@ class Lessonplan extends Admin_Controller
             foreach ($_POST['lessons'] as $key => $value) {
                 $data = array(
                     'subject_group_subject_id'        => $_POST['subject_id'],
+                    'class_id'        => $_POST['class_id'],
+                    'section_id'        => $_POST['section_id'],
                     'name'                            => $value,
                     'subject_group_class_sections_id' => $subject_group_class_sectionsId['id'],
                     'session_id'                      => $this->sch_current_session,
@@ -199,15 +200,23 @@ class Lessonplan extends Admin_Controller
         }
         $this->session->set_userdata('top_menu', 'lessonplan');
         $this->session->set_userdata('sub_menu', 'admin/lessonplan/lesson');
-        $class             = $this->class_model->get();
-        $data['classlist'] = $class;
+
+        $editresult = $this->lessonplan_model->get($this->sch_current_session, $id, $subject_group_subject_id);
+        $editlesson = $this->lessonplan_model->getlesson($editresult["subject_group_subject_id"], $editresult["subject_group_class_sections_id"], $this->sch_current_session);
+
+        $class = $this->class_model->getBranchData($editlesson[0]['branch_id']);
+        $data['classlist']       = $class;
+        $sectionlist                   = $this->section_model->getBranchData($editlesson[0]['branch_id'], $editlesson[0]['class_id']);
+        $data['sectionlist']       = $sectionlist;
+
+
 
         foreach ($class as $class_key => $class_value) {
             $data['class_array'][] = $class_value['id'];
         }
 
         $carray = array();
-		$result = $this->lessonplan_model->get($this->sch_current_session, '');		
+        $result = $this->lessonplan_model->get($this->sch_current_session, '');
         if (!empty($result)) {
             foreach ($result as $key => $value) {
                 $lesson = $this->lessonplan_model->getlesson($value["subject_group_subject_id"], $value["subject_group_class_sections_id"], $this->sch_current_session);
@@ -220,9 +229,8 @@ class Lessonplan extends Admin_Controller
         if (!empty($lessonname)) {
             $data['lessonname'] = $lessonname;
         }
-		
-		$editresult = $this->lessonplan_model->get($this->sch_current_session, $id, $subject_group_subject_id);
-        $editlesson = $this->lessonplan_model->getlesson($editresult["subject_group_subject_id"], $editresult["subject_group_class_sections_id"], $this->sch_current_session);
+
+
         $data['all_branch']      = $this->branch_model->getBranch();
         $data['editlessonname']                 = $editlesson;
         $data['branch_id']                      = $editresult['branch_id'];
@@ -230,7 +238,7 @@ class Lessonplan extends Admin_Controller
         $data['section_id']                     = $editresult['sectionid'];
         $data['subject_group_id']               = $editresult['subjectgroupsid'];
         $data['subject_id']                     = $editresult['subjectid'];
-        $data['lesson_subject_group_subjectid'] = $editresult['subject_group_subject_id'];        
+        $data['lesson_subject_group_subjectid'] = $editresult['subject_group_subject_id'];
         $this->load->view('layout/header');
         $this->load->view('admin/lessonplan/editlesson', $data);
         $this->load->view('layout/footer');
@@ -351,7 +359,7 @@ class Lessonplan extends Admin_Controller
         $class             = $this->class_model->get();
         $data['classlist'] = $class;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         foreach ($class as $class_key => $class_value) {
             $data['class_array'][] = $class_value['id'];
         }
@@ -423,9 +431,11 @@ class Lessonplan extends Admin_Controller
             foreach ($_POST['topic'] as $key => $value) {
                 $data = array(
                     'lesson_id'  => $_POST['lesson_id'],
+                    'class_id'  => $_POST['class_id'],
+                    'section_id'  => $_POST['section_id'],
                     'name'       => $value,
                     'session_id' => $this->sch_current_session,
-                    'branch_id' =>$this->input->post('branch_id'),
+                    'branch_id' => $this->input->post('branch_id'),
                 );
                 $this->lessonplan_model->add_topic($data);
             }
@@ -447,14 +457,22 @@ class Lessonplan extends Admin_Controller
     public function edittopic($id)
     {
 
-       
+
         if (!($this->rbac->hasPrivilege('topic', 'can_edit'))) {
             access_denied();
         }
         $this->session->set_userdata('top_menu', 'lessonplan');
         $this->session->set_userdata('sub_menu', 'admin/lessonplan/topic');
-        $class             = $this->class_model->get();
-        $data['classlist'] = $class;
+
+        $editresult                              = $this->lessonplan_model->gettopic($this->sch_current_session, $id);
+
+
+        $edittopic                               = $this->lessonplan_model->gettopicBylessonid($editresult["lesson_id"], $this->sch_current_session);
+       
+        $class = $this->class_model->getBranchData($editresult['branch_id']);
+        $data['classlist']       = $class;
+        $sectionlist                   = $this->section_model->getBranchData($editresult['branch_id'], $editresult['class_id']);
+        $data['sectionlist']       = $sectionlist;
         $data['all_branch']      = $this->branch_model->getBranch();
         foreach ($class as $class_key => $class_value) {
             $data['class_array'][] = $class_value['id'];
@@ -471,15 +489,12 @@ class Lessonplan extends Admin_Controller
         }
 
         $data['result'] = $result;
-        if (!empty($topicresult)) { 
+        if (!empty($topicresult)) {
             $data['topicresult'] = $topicresult;
         }
 
-        $editresult                              = $this->lessonplan_model->gettopic($this->sch_current_session,$id);
-        
-       
-        $edittopic                               = $this->lessonplan_model->gettopicBylessonid($editresult["lesson_id"], $this->sch_current_session);
-     
+
+
         $data['lesson_id']                       = $editresult["lesson_id"];
         $data['topic_lesson_id']                 = $id;
         $data['edittopicname']                   = $edittopic;
@@ -675,7 +690,7 @@ class Lessonplan extends Admin_Controller
                 $topic     = "";
                 $lesson_id = $key;
                 $topic     = $this->lessonplan_model->gettopicBylessonid($value->lesson_id, $this->sch_current_session);
-              
+
                 if ($this->rbac->hasPrivilege('topic', 'can_edit')) {
                     $editbtn = "<a href='" . base_url() . "admin/lessonplan/edittopic/" . $value->lesson_id . "'   class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='left' title='" . $this->lang->line('edit') . "'><i class='fa fa-pencil'></i></a>";
                 }
@@ -686,9 +701,8 @@ class Lessonplan extends Admin_Controller
                 $topic_name = "";
                 foreach ($topic as $rl_value) {
                     $topic_name .= $rl_value['name'] . '<br>';
-
                 }
-               
+
                 if (in_array($value->classid, $class_array)) {
                     $lesson_id = $key;
                     $row       = array();
@@ -721,7 +735,7 @@ class Lessonplan extends Admin_Controller
             $class_array[] = $class_value['id'];
         }
         $result  = $this->lessonplan_model->getlessonlist($this->sch_current_session, '');
-     
+
         $m       = json_decode($result);
         $dt_data = array();
         if (!empty($m->data)) {

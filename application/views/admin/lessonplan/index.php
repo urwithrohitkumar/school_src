@@ -1,5 +1,9 @@
 <style type="text/css">
-    .table .pull-right {text-align: initial; width: auto; margin-bottom: 3px}
+    .table .pull-right {
+        text-align: initial;
+        width: auto;
+        margin-bottom: 3px
+    }
 </style>
 <?php
 $language = $this->customlib->getLanguage();
@@ -9,7 +13,7 @@ $language_name = $language["short_code"];
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1> 
+        <h1>
             <i class="fa fa-flask"></i> <?php echo $this->lang->line('manage_lesson_plan'); ?>
         </h1>
     </section>
@@ -26,19 +30,21 @@ $language_name = $language["short_code"];
                                 <?php echo $this->session->flashdata('msg') ?>
                             <?php } ?>
                             <?php echo $this->customlib->getCSRF(); ?>
-                        </div> 
+                        </div>
                         <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label><small class="req"> *</small>
-                                    <select  id="branch_id" name="branch_id" class="form-control">
-                                    <?php $ids = $this->customlib->getLoggedInBranchId(); if($ids>0){  ?>
-                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                    <option value="<?php echo $ids; ?>" selected readonly ><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
+                                <select id="branch_id" name="branch_id" class="form-control">
+                                    <?php $ids = $this->customlib->getLoggedInBranchId();
+                                    if ($ids > 0) {  ?>
+                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <option value="<?php echo $ids; ?>" selected readonly><?php echo $this->customlib->getBranchNameOnly1($ids); ?></option>
                                     <?php  } else { ?>
-                                    <option value="" ><?php echo $this->lang->line('select'); ?></option>
-                                    <?php foreach ($all_branch as  $value) { ?>                                                        
-                                    <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
-                                    <?php } } ?>
+                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        <?php foreach ($all_branch as  $value) { ?>
+                                            <option value="<?php echo $value["id"] ?>" <?php if (set_value('branch_id') == $value['id']) echo "selected=selected" ?>><?php echo $value["branch_name"] ?></option>
+                                    <?php }
+                                    } ?>
                                 </select>
                                 <span class="text-danger"><?php echo form_error('branch_id'); ?></span>
                             </div>
@@ -46,19 +52,15 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label><small class="req"> *</small>
-                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')"  class="form-control" >
+                                <select autofocus="" id="searchclassid" name="class_id" onchange="getSectionByClass(this.value, 0, 'secid')" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                    <?php
-                                    foreach ($classlist as $class) {
-                                        ?>
-                                        <option <?php
-                                        if ($class_id == $class["id"]) {
-                                            echo "selected";
-                                        }
-                                        ?> value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
-                                            <?php
-                                        }
-                                        ?>
+                                    <?php foreach ($classlist as $class) { ?>
+                                        <option value="<?php echo $class['id'] ?>" <?php if (set_value('class_id') == $class['id']) {
+                                                                                        echo "selected=selected";
+                                                                                    } ?>><?php echo $class['class'] ?></option>
+                                    <?php $count++;
+                                    } ?>
+
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('class_id'); ?></span>
                             </div>
@@ -66,8 +68,15 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label><small class="req"> *</small>
-                                <select  id="secid" name="section_id" class="form-control" >
+                                <select id="secid" name="section_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                    <?php foreach ($sectionlist as $section) { ?>
+                                        <option value="<?php echo $section['id'] ?>" <?php if (set_value('section_id') == $section['id']) {
+                                                                                            echo "selected=selected";
+                                                                                        } ?>><?php echo $section['section'] ?></option>
+                                    <?php $count++;
+                                    } ?>
+
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('section_id'); ?></span>
                             </div>
@@ -75,7 +84,7 @@ $language_name = $language["short_code"];
                         <div class="col-md-2 col-lg-2 col-sm-2">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject') . " " . $this->lang->line('group') ?></label><small class="req"> *</small>
-                                <select  id="subject_group_id" name="subject_group_id" class="form-control" >
+                                <select id="subject_group_id" name="subject_group_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('subject_group_id'); ?></span>
@@ -84,7 +93,7 @@ $language_name = $language["short_code"];
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('subject'); ?></label><small class="req"> *</small>
-                                <select  id="subid" name="subject_id" class="form-control" >
+                                <select id="subid" name="subject_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
                                 </select>
                                 <span class="class_id_error text-danger"><?php echo form_error('subject_id'); ?></span>
@@ -100,18 +109,21 @@ $language_name = $language["short_code"];
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-search"></i> <?php echo $this->lang->line('syllabus') . " " . $this->lang->line('status') . " " . $this->lang->line('for') . ": " . $subject_name; ?></h3>
                 </div>
-                <div class="box-body" id="transfee">    
-                    <div class="table-responsive mailbox-messages"> 
+                <div class="box-body" id="transfee">
+                    <div class="table-responsive mailbox-messages">
 
 
-                    <p class="pull-right">
-                    <a class="btn btn-default btn-xs displayinline" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </a>  
-                        <a class="btn btn-default btn-xs displayinline" id="print" onclick="printDiv()" ><i class="fa fa-print"></i></a> </p>
+                        <p class="pull-right">
+                            <a class="btn btn-default btn-xs displayinline" id="btnExport" onclick="fnExcelReport();"> <i class="fa fa-file-excel-o"></i> </a>
+                            <a class="btn btn-default btn-xs displayinline" id="print" onclick="printDiv()"><i class="fa fa-print"></i></a>
+                        </p>
 
 
                         <table class="table table-bordered topictable ptt10" id="headerTable">
                             <tr class="hide" id="visible">
-                                <td colspan="5"><center><b><?php echo $this->lang->line('syllabus') . " " . $this->lang->line('status') . " " . $this->lang->line('for') . ": " . $subject_name; ?></b></center></td>
+                                <td colspan="5">
+                                    <center><b><?php echo $this->lang->line('syllabus') . " " . $this->lang->line('status') . " " . $this->lang->line('for') . ": " . $subject_name; ?></b></center>
+                                </td>
                             </tr>
                             <tr>
                                 <th width="30">#</th>
@@ -125,7 +137,7 @@ $language_name = $language["short_code"];
                             <?php
                             $losson_count = 1;
                             foreach ($lessons as $key => $value) {
-                                ?>
+                            ?>
                                 <tr>
                                     <td><?php echo $losson_count; ?></td>
                                     <td>
@@ -136,10 +148,10 @@ $language_name = $language["short_code"];
                                             if (isset($value['topic'])) {
                                                 $topic_count = 1;
                                                 foreach ($value['topic'] as $topic_key => $topic_value) {
-                                                    ?> 
+                                            ?>
                                                     <li><span><?php echo $losson_count . "." . $topic_count; ?></span><?php echo $topic_value['name']; ?></li>
 
-                                                    <?php
+                                            <?php
                                                     $topic_count++;
                                                 }
                                             }
@@ -153,12 +165,12 @@ $language_name = $language["short_code"];
                                             if (isset($value['topic'])) {
 
                                                 foreach ($value['topic'] as $topic_key => $topic_value) {
-                                                    ?>
+                                            ?>
                                                     <?php if ($topic_value['status'] == 1) { ?> <li><?php echo date($this->customlib->getSchoolDateFormat(), strtotime($topic_value['complete_date'])); ?> </li><?php } else { ?>
                                                         <li> &nbsp; </li>
                                                     <?php } ?>
 
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -171,10 +183,10 @@ $language_name = $language["short_code"];
                                             if (isset($value['topic'])) {
 
                                                 foreach ($value['topic'] as $topic_key => $topic_value) {
-                                                    ?>
+                                            ?>
                                                     <li><?php echo $status[$topic_value['status']]; ?></li>
 
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -188,7 +200,7 @@ $language_name = $language["short_code"];
                                                 if (isset($value['topic'])) {
 
                                                     foreach ($value['topic'] as $topic_key => $topic_value) {
-                                                        ?>
+                                                ?>
                                                         <li>
 
                                                             <div class="material-switch pull-right">
@@ -197,7 +209,7 @@ $language_name = $language["short_code"];
                                                             </div>
                                                         </li>
 
-                                                        <?php
+                                                <?php
                                                     }
                                                 }
                                                 ?>
@@ -206,24 +218,27 @@ $language_name = $language["short_code"];
                                         </td>
                                     <?php } ?>
                                 </tr>
-                                <?php
+                            <?php
                                 $losson_count++;
                             }
                             ?>
                         </table>
-                    </div><!--./table-responsive-->   
+                    </div>
+                    <!--./table-responsive-->
 
                 </div>
                 <?php
-            }else {
+            } else {
                 if ($no_record != 0) {
-                    ?>
+                ?>
 
 
                     <div class="box-header">
-                        <div class="alert alert-danger"> <center><?php echo $this->lang->line('no_record_found'); ?></center></div>
+                        <div class="alert alert-danger">
+                            <center><?php echo $this->lang->line('no_record_found'); ?></center>
+                        </div>
                     </div>
-                <?php
+            <?php
                 }
             } ?>
     </section>
@@ -232,8 +247,8 @@ $language_name = $language["short_code"];
     <div class="modal-dialog modal-dialog2 modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" onclick="close_modal()" >&times;</button>
-                <h4 class="modal-title" id="modal-title" ><?php echo $this->lang->line('topic_completion_date'); ?> <small style="color:red;"> *</small></h4>
+                <button type="button" class="close" onclick="close_modal()">&times;</button>
+                <h4 class="modal-title" id="modal-title"><?php echo $this->lang->line('topic_completion_date'); ?> <small style="color:red;"> *</small></h4>
             </div>
             <div class="modal-body">
 
@@ -245,29 +260,29 @@ $language_name = $language["short_code"];
 
                             <input type="hidden" id="topic_id" name="id">
 
-                            <input class="form-control date" id="date" name="date" type="text"  >
+                            <input class="form-control date" id="date" name="date" type="text">
                         </div>
 
 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <input type="submit" class="btn btn-primary pull-right"  value="<?php echo $this->lang->line('save'); ?>"></div> 
+                            <input type="submit" class="btn btn-primary pull-right" value="<?php echo $this->lang->line('save'); ?>">
+                        </div>
                     </form>
                 </div>
 
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 <script type="text/javascript">
-
     function close_modal() {
 
         window.location.reload(true);
     }
 
-    $(document).ready(function () {
-        $(document).on('click', '.chk', function () {
+    $(document).ready(function() {
+        $(document).on('click', '.chk', function() {
             var checked = $(this).is(':checked');
             var rowid = $(this).data('rowid');
 
@@ -297,9 +312,11 @@ $language_name = $language["short_code"];
         $.ajax({
             type: "POST",
             url: base_url + "admin/lessonplan/get_",
-            data: {'id': id},
+            data: {
+                'id': id
+            },
             dataType: "json",
-            success: function (data) {
+            success: function(data) {
                 successMsg(data.msg);
             }
         });
@@ -313,15 +330,18 @@ $language_name = $language["short_code"];
         $.ajax({
             type: "POST",
             url: base_url + "admin/lessonplan/changeTopicStatus",
-            data: {'id': rowid, 'status': status},
+            data: {
+                'id': rowid,
+                'status': status
+            },
             dataType: "json",
-            success: function (data) {
+            success: function(data) {
                 successMsg(data.msg);
                 window.location.reload(true);
             }
         });
     }
-    $("#addevent_form11").on('submit', (function (e) {
+    $("#addevent_form11").on('submit', (function(e) {
         e.preventDefault();
 
         var $this = $(this).find("button[type=submit]:focus");
@@ -334,17 +354,16 @@ $language_name = $language["short_code"];
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $this.button('loading');
 
             },
-            success: function (res)
-            {
+            success: function(res) {
 
                 if (res.status == "fail") {
 
                     var message = "";
-                    $.each(res.error, function (index, value) {
+                    $.each(res.error, function(index, value) {
 
                         message += value;
                     });
@@ -359,11 +378,11 @@ $language_name = $language["short_code"];
                     window.location.reload(true);
                 }
             },
-            error: function (xhr) { // if error occured
+            error: function(xhr) { // if error occured
                 alert("Error occured.please try again");
                 $this.button('reset');
             },
-            complete: function () {
+            complete: function() {
                 $this.button('reset');
             }
 
@@ -371,54 +390,25 @@ $language_name = $language["short_code"];
     }));
 </script>
 <script>
-    $(document).ready(function (e) {
+    $(document).ready(function(e) {
 
-        getSectionByClass("<?php echo $class_id ?>", "<?php echo $section_id ?>", 'secid');
 
         getSubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", 'subject_group_id')
         getsubjectBySubjectGroup("<?php echo $class_id ?>", "<?php echo $section_id ?>", "<?php echo $subject_group_id ?>", "<?php echo $subject_id ?>", 'subid');
 
     });
-    function getSectionByClass(class_id, section_id, select_control) {
-        if (class_id != "") {
-            $('#' + select_control).html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {'class_id': class_id},
-                dataType: "json",
-                beforeSend: function () {
-                    $('#' + select_control).addClass('dropdownloading');
-                },
-                success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#' + select_control).append(div_data);
-                },
-                complete: function () {
-                    $('#' + select_control).removeClass('dropdownloading');
-                }
-            });
-        }
-    }
-    $(document).on('change', '#secid', function () {
+
+    $(document).on('change', '#secid', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $(this).val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
     });
-    $(document).on('change', '#branch_id', function () {
+    $(document).on('change', '#branch_id', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $('#secid').val();
         getSubjectGroup(class_id, section_id, 0, 'subject_group_id');
     });
+
     function getSubjectGroup(class_id, section_id, subjectgroup_id, subject_group_target) {
         var branch_id = $('#branch_id').val();
         if (class_id != "" && section_id != "") {
@@ -429,19 +419,18 @@ $language_name = $language["short_code"];
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupByClassandSection',
                 data: {
-                    'class_id': class_id, 
+                    'class_id': class_id,
                     'section_id': section_id,
                     'branch_id': branch_id,
                 },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_group_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
 
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subjectgroup_id == obj.subject_group_id) {
                             sel = "selected";
@@ -450,11 +439,11 @@ $language_name = $language["short_code"];
                     });
                     $('#' + subject_group_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_group_target).removeClass('dropdownloading');
                 }
             });
@@ -463,7 +452,7 @@ $language_name = $language["short_code"];
     }
 
 
-    $(document).on('change', '#subject_group_id', function () {
+    $(document).on('change', '#subject_group_id', function() {
         var class_id = $('#searchclassid').val();
         var section_id = $('#secid').val();
         var subject_group_id = $(this).val();
@@ -480,16 +469,17 @@ $language_name = $language["short_code"];
             $.ajax({
                 type: 'POST',
                 url: base_url + 'admin/subjectgroup/getGroupsubjects',
-                data: {'subject_group_id': subject_group_id},
+                data: {
+                    'subject_group_id': subject_group_id
+                },
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     // setting a timeout
                     $('#' + subject_target).html("").addClass('dropdownloading');
                 },
-                success: function (data) {
+                success: function(data) {
                     console.log(data);
-                    $.each(data, function (i, obj)
-                    {
+                    $.each(data, function(i, obj) {
                         var sel = "";
                         if (subject_group_subject_id == obj.id) {
                             sel = "selected";
@@ -498,24 +488,18 @@ $language_name = $language["short_code"];
                     });
                     $('#' + subject_target).append(div_data);
                 },
-                error: function (xhr) { // if error occured
+                error: function(xhr) { // if error occured
                     alert("Error occured.please try again");
 
                 },
-                complete: function () {
+                complete: function() {
                     $('#' + subject_target).removeClass('dropdownloading');
                 }
             });
         }
     }
-
-
-
 </script>
 <script>
-
-
-
     document.getElementById("print").style.display = "block";
     document.getElementById("btnExport").style.display = "block";
 
@@ -529,44 +513,103 @@ $language_name = $language["short_code"];
         var divElements = document.getElementById('transfee').innerHTML;
         var oldPage = document.body.innerHTML;
         document.body.innerHTML =
-                "<html><head><title></title></head><body>" +
-                divElements + "</body>";
+            "<html><head><title></title></head><body>" +
+            divElements + "</body>";
         window.print();
         document.body.innerHTML = oldPage;
         location.reload(true);
     }
 
-    function fnExcelReport()
-    {
+    function fnExcelReport() {
         var tab_text = "<table border='2px'><tr >";
         var textRange;
         var j = 0;
         tab = document.getElementById('headerTable'); // id of table
 
-        for (j = 0; j < tab.rows.length; j++)
-        {
+        for (j = 0; j < tab.rows.length; j++) {
             tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
             //tab_text=tab_text+"</tr>";
         }
 
         tab_text = tab_text + "</table>";
-        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
         tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
         tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
         $("#visible").addClass("hide");
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
         {
             txtArea1.document.open("txt/html", "replace");
             txtArea1.document.write(tab_text);
             txtArea1.document.close();
             txtArea1.focus();
             sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-        } else                 //other browser not tested on IE 11
+        } else //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
         return (sa);
     }
+</script>
+
+
+<script>
+    /**
+     * On Change of branch Found Classes according to branch function
+     */
+    $("#branch_id").on('change', function() {
+        $('#secid').html('<option selected disabled >Select</option>');
+        let branch_id = $("#branch_id").val();
+        // var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasss",
+            data: {
+                'branch_id': branch_id,
+            },
+            dataType: "json",
+            success: function(class_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (class_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < class_details.length; count++) {
+                        html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
+                    }
+                    $('#searchclassid').html(html);
+                }
+            }
+        });
+    })
+    /**
+     * On Chanege of Classes Found Section according to branch And Classes function
+     */
+    $("#searchclassid").on('change', function() {
+        let branch_id = $("#branch_id").val();
+        let class_id = $("#searchclassid").val();
+        // var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "GET",
+            url: base_url + "classes/branchClasssSection",
+            data: {
+                'branch_id': branch_id,
+                'class_id': class_id,
+            },
+            dataType: "json",
+            success: function(section_details) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (section_details.length > 0) {
+                    var html = '<option selected disabled >Select</option>';
+                    for (var count = 0; count < section_details.length; count++) {
+                        html += '<option value="' + section_details[count].id + '">' + section_details[count].section + '</option>';
+                    }
+                    $('#secid').html(html);
+                }
+            }
+        });
+    })
 </script>

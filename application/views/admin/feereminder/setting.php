@@ -21,7 +21,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
                     <!-- Horizontal Form -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><?php echo $this->lang->line('add_fees_type'); ?></h3>
+                            <h3 class="box-title"><?php echo $this->lang->line('fees'); ?> <?php echo $this->lang->line('reminder'); ?></h3>
                         </div><!-- /.box-header -->
                         <?php
                         if (!empty($feereminder)) {  ?>
@@ -95,12 +95,12 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header ptbnull">
-                        <h3 class="box-title titlefix"><?php echo $this->lang->line('fees_type_list'); ?></h3>
+                        <h3 class="box-title titlefix"><?php echo $this->lang->line('fees'); ?> <?php echo $this->lang->line('reminder'); ?></h3>
                         <div class="box-tools pull-right">
                         </div><!-- /.box-tools -->
                     </div><!-- /.box-header -->
                     <div class="box-body">
-                        <div class="download_label"><?php echo $this->lang->line('fees_type_list'); ?></div>
+                        <div class="download_label"><?php echo $this->lang->line('fees'); ?> <?php echo $this->lang->line('reminder'); ?></div>
                         <div class="mailbox-messages table-responsive">
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>

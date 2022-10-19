@@ -318,7 +318,8 @@ class Studentfee extends Admin_Controller
                 $class_id                = $this->input->post('class_id');
                 $section_id              = $this->input->post('section_id');
                 $student_id              = $this->input->post('student_id');
-                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id, $section_id, $student_id);
+                $branch_id = $this->input->post('branch_id');
+                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id, $section_id, $student_id,$branch_id);
                 $data['student_due_fee']      = $student_due_fee;
                 $data['class_id']             = $class_id;
                 $data['section_id']           = $section_id;

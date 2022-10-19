@@ -292,9 +292,35 @@ function getSectionByClasses($classes, $class_selected, $section_selected)
         $newDiv.appendTo(container);
 
     });
+</script>
+<script type="text/template" id="class_dropdown">
 
+    <select name="class_id" class="form-control class_id">
+    <option value=""><?php echo $this->lang->line('select'); ?></option>
+    <?php
+    foreach ($classlist as $class) {
+    ?>
+        <option value="<?php echo $class['id'] ?>"><?php echo $class['class'] ?></option>
+        <?php
+    }
+        ?>
+    </select>
+</script>
+<script type="text/template" id="section_dropdown">
 
-
+    <select name="section_id" class="form-control section_id" autocomplete="off">
+    <option value=""><?php echo $this->lang->line("select"); ?></option>
+    <?php
+    foreach ($sectionlist as $section) {
+    ?>
+        <option value="<?php echo $section['id'] ?>"><?php echo $section['section'] ?></option>
+    <?php
+    }
+    
+    ?>
+    </select>
+</script>
+<script>
     $(".class_id").on('change', function() {
         let class_id = $(this).val();
         let branch_id = $("#branch_id").val();

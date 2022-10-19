@@ -318,9 +318,13 @@ class Question extends Admin_Controller
         $data['all_branch']          = $this->branch_model->getBranch();
         $data['recordid']            = $this->input->post('recordid');
         $question_result             = $this->question_model->get($data['recordid']);
+        
+        $classlist = $this->class_model->getBranchData($question_result->branch_id);
+        $data['classList']       = $classlist;
+        $sectionlist                   = $this->section_model->getBranchData($question_result->branch_id, $question_result->class_id);
+        $data['sectionList']       = $sectionlist;
         $data['question_result']     = $question_result;
-        $data['classList']           = $this->class_model->get();
-        $data['sectionList']         = $this->section_model->getClassBySection($question_result->class_id);
+       
         $subject_result              = $this->subject_model->get();
         $data['subjectlist']         = $subject_result;
         $data['question_true_false'] = $this->config->item('question_true_false');

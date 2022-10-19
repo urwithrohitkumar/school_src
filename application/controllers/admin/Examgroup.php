@@ -124,13 +124,12 @@ class Examgroup extends Admin_Controller
         $data['title_list'] = 'Recent Batch';
         $data['examType']   = $this->exam_type;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
         $this->form_validation->set_rules('branch_id', $this->lang->line('branch'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_type', $this->lang->line('exam') . " " . $this->lang->line('type'), 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
         } else {
             $is_active = 0;
 
@@ -270,7 +269,7 @@ class Examgroup extends Admin_Controller
         $examgroup_result      = $this->examgroup_model->get();
         $data['examgrouplist'] = $examgroup_result;
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
+        $data['branch'] = $branch;
 
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
 
@@ -303,7 +302,7 @@ class Examgroup extends Admin_Controller
         echo json_encode($data);
     }
 
-    public function addexam($id)
+    public function addexam($id, $branch_id)
     {
 
         if (!$this->rbac->hasPrivilege('exam', 'can_view')) {
@@ -314,9 +313,16 @@ class Examgroup extends Admin_Controller
         $data['title']      = 'Add Batch';
         $data['title_list'] = 'Recent Batch';
         $branch = $this->staff_model->getBranch();
-        $data['branch']= $branch;
-        $class               = $this->class_model->get();
-        $data['classlist']   = $class;
+        $data['branch'] = $branch;
+
+        $classlist = $this->class_model->getBranchData($branch_id);
+        $data['classlist']       = $classlist;
+
+
+
+
+
+
         $data['examType']    = $this->exam_type;
         $session             = $this->session_model->get();
         $data['sessionlist'] = $session;
@@ -325,7 +331,7 @@ class Examgroup extends Admin_Controller
 
         $data['current_session'] = $this->sch_current_session;
         $data['examgroup']       = $this->examgroup_model->get($id);
-        
+
 
         $this->load->view('layout/header', $data);
         $this->load->view('admin/examgroup/addexam', $data);
@@ -412,7 +418,7 @@ class Examgroup extends Admin_Controller
             $data['class_id']   = $this->input->post('class_id');
             $data['section_id'] = $this->input->post('section_id');
             $data['exam_id']    = $this->input->post('exam_id');
-            $resultlist         = $this->examstudent_model->searchExamStudents($data['class_id'], $data['section_id'], $data['exam_id'],$branch_id);
+            $resultlist         = $this->examstudent_model->searchExamStudents($data['class_id'], $data['section_id'], $data['exam_id'], $branch_id);
 
             $data['resultlist'] = $resultlist;
             $student_exam_page  = $this->load->view('admin/examgroup/_partialexamstudent', $data, true);
@@ -925,7 +931,7 @@ class Examgroup extends Admin_Controller
             }
 
             $this->examstudent_model->add_student($insert_array, $exam_group_class_batch_exam_id, $all_students);
-            $array = array('status' => '1', 'error' => '', 'message' => $this->lang->line('success_message'));            
+            $array = array('status' => '1', 'error' => '', 'message' => $this->lang->line('success_message'));
 
             echo json_encode($array);
         }
@@ -941,12 +947,11 @@ class Examgroup extends Admin_Controller
                     'id'             => $student_value,
                     'teacher_remark' => $this->input->post('remark_' . $student_value),
                 );
-            $batch_update_array[]=$update_array;
+                $batch_update_array[] = $update_array;
             }
             $this->examgroupstudent_model->updateExamStudent($batch_update_array);
         }
         $array = array('status' => '1', 'error' => '', 'message' => $this->lang->line('success_message'));
         echo json_encode($array);
     }
-
 }
