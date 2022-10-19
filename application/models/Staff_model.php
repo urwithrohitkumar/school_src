@@ -1036,4 +1036,18 @@ class Staff_model extends MY_Model
 
         return $query->result_array();
     }
+    public function getStaffbyBranch($branch_id)
+    {
+        $this->db->select('staff.*,staff_designation.designation as designation,staff_roles.role_id, department.department_name as department,roles.name as user_type');
+        $this->db->join("staff_designation", "staff_designation.id = staff.designation", "left");
+        $this->db->join("department", "department.id = staff.department", "left");
+        $this->db->join("staff_roles", "staff_roles.staff_id = staff.id", "left");
+        $this->db->join("roles", "staff_roles.role_id = roles.id", "left");
+        $this->db->where("staff.branch_id", $branch_id);
+        $this->db->where("staff.is_active", "1");
+        $this->db->from('staff');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 }

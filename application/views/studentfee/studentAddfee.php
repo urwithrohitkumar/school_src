@@ -895,7 +895,7 @@ $language_name   = $language["short_code"];
 
         return true;
     }
-    
+
     $(document).ready(function() {
         $('.delmodal').modal({
             backdrop: 'static',

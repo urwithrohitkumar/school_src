@@ -18,6 +18,7 @@
                                     <div class='form-group'>
                                         <label for='exampleInputEmail1'><?php echo $this->lang->line('branch'); ?></label><small class='req'> *</small>
                                         <select id='branch_id' name='branch_id' placeholder='' type='text' class='form-control'>
+                                            <option disabled selected><?php echo $this->lang->line('select'); ?></option>
                                             <?php foreach ($branch as $key => $value) {  ?>
                                                 <option value='<?php echo $value['id'] ?>'><?php echo $value['branch_name'] ?></option>
                                             <?php } ?>
@@ -205,59 +206,7 @@
             </div>
     </section>
 </div>
-<script type="text/javascript">
-    function getSectionByClass(class_id, section_id) {
-        if (class_id != "" && section_id != "") {
-            $('#section_id').html("");
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        var sel = "";
-                        if (section_id == obj.section_id) {
-                            sel = "selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + sel + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        }
-    }
 
-    $(document).ready(function() {
-        var class_id = $('#class_id').val();
-        var section_id = '<?php echo set_value('section_id') ?>';
-        getSectionByClass(class_id, section_id);
-        $(document).on('change', '#class_id', function(e) {
-            $('#section_id').html("");
-            var class_id = $(this).val();
-            var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
-            $.ajax({
-                type: "GET",
-                url: base_url + "sections/getByClass",
-                data: {
-                    'class_id': class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    $.each(data, function(i, obj) {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
-                    });
-                    $('#section_id').append(div_data);
-                }
-            });
-        });
-    });
-</script>
 <script type="text/javascript">
     $("#bulkmail").submit(function(e) {
         e.preventDefault(); // avoid to execute the actual submit of the form.

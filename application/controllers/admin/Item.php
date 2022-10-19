@@ -143,13 +143,13 @@ class Item extends Admin_Controller
         $data['title'] = 'Edit Fees Master';
         $data['id'] = $id;
         $item = $this->item_model->get($id);
-        $data['item'] = $item;
+                $data['item'] = $item;
         $item_result = $this->item_model->get();
         $data['itemlist'] = $item_result;
         $branch = $this->staff_model->getBranch();
         $data['branch']= $branch;
 
-        $itemcategory = $this->itemcategory_model->get();
+        $itemcategory = $this->itemcategory_model->branchOption($item['branch_id']);
         $data['itemcatlist'] = $itemcategory;
 
         $this->form_validation->set_rules('name', $this->lang->line('name'), 'trim|required|xss_clean');
@@ -189,5 +189,11 @@ class Item extends Admin_Controller
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
             redirect('admin/item/index');
         }
+    }
+
+    public function branchItemCatOption(){
+        $branch_id = $this->input->post('branch_id');
+        $itemcategory = $this->itemcategory_model->branchOption($branch_id);
+        echo json_encode($itemcategory);
     }
 }

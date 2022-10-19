@@ -38,6 +38,7 @@
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('branch'); ?></label>
 
                                         <select id="branch_id" name="branch" placeholder="" type="text" class="form-control">
+                                            <option selected disabled><?php echo $this->lang->line('select'); ?></option>
 
                                             <?php foreach ($branch as $key => $value) {
                                             ?>
@@ -88,15 +89,8 @@
                                 <div class="form-group col-md-4 col-sm-4">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('issue_by'); ?></label><small class="req"> *</small>
 
-                                    <select class="form-control " name="issue_by">
+                                    <select class="form-control " name="issue_by" id="issue_by">
                                         <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($staff as $key => $value) {
-                                        ?>
-                                            <option value="<?php echo $value['name'] . ' (' . $value['employee_id'] . ')'; ?>"><?php echo $value['name'] . ' (' . $value['employee_id'] . ')('. $value['branch_name'] .')'; ?></option>
-                                        <?php
-                                        }
-                                        ?>
                                     </select>
                                     <span class="text-danger"><?php echo form_error('issue_by'); ?></span>
 
@@ -118,7 +112,7 @@
 
                                 <div class="form-group col-md-4 col-sm-4">
                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('note'); ?></label>
-                                    <textarea name="note" class="form-control" id="note" /><?php echo set_value('note'); ?></textarea>
+                                    <textarea name="note" class="form-control" id="note" ><?php echo set_value('note'); ?></textarea>
                                     <span class="text-danger"><?php echo form_error('note'); ?></span>
                                 </div>
                                 <div class="clearfix"></div>
@@ -137,18 +131,7 @@
 
                                             <select id="item_category_id" name="item_category_id" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                <?php
-                                                foreach ($itemcatlist as $item_category) {
-                                                ?>
-                                                    <option value="<?php echo $item_category['id'] ?>" <?php
-                                                                                                        if (set_value('item_category_id') == $item_category['id']) {
-                                                                                                            echo "selected = selected";
-                                                                                                        }
-                                                                                                        ?>><?php echo $item_category['item_category'] ?></option>
-
-                                                <?php
-                                                }
-                                                ?>
+                                                
                                             </select>
                                             <span class="text-danger"><?php echo form_error('item_category_id'); ?></span>
                                         </div>
@@ -195,6 +178,39 @@
         </div> <!-- /.row -->
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
+
+
+
+
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "POST",
+            url: base_url + "admin/issueitem/onBranchChangeOption",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                        
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].name + ' ( '  + result[count].employee_id + ' )  ">' + result[count].name + ' (' + result[count].employee_id + ')</option>';
+                    }
+                    $('#issue_by').html(html);
+                }
+            }
+        });
+    })
+</script>
+
+
 
 
 <script type="text/javascript">
@@ -344,3 +360,30 @@
     });
 </script>
 <script type="text/javascript" src="<?php echo base_url(); ?>backend/dist/js/savemode.js"></script>
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "POST",
+            url: base_url + "admin/item/branchItemCatOption",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].item_category + '</option>';
+                    }
+                    $('#item_category_id').html(html);
+                }
+            }
+        });
+    })
+</script>

@@ -20,11 +20,12 @@ class Itemcategory_model extends MY_Model
      */
     public function get($id = null)
     {
-        $this->db->select()->from('item_category');
+        $this->db->select('item_category.*,tb_branch.branch_name')->from('item_category');
+        $this->db->join('tb_branch', 'item_category.branch_id = tb_branch.id', 'left');
         if ($id != null) {
-            $this->db->where('id', $id);
+            $this->db->where('item_category.id', $id);
         } else {
-            $this->db->order_by('id');
+            $this->db->order_by('item_category.id');
         }
         $query = $this->db->get();
         if ($id != null) {
@@ -125,6 +126,19 @@ class Itemcategory_model extends MY_Model
         $query = $this->db->get();
         return $query->row_array();
         
+    }
+
+
+
+    public function branchOption($branch_id)
+    {
+       
+        $this->db->select('item_category.*,tb_branch.branch_name')->from('item_category');
+        $this->db->join('tb_branch', 'item_category.branch_id = tb_branch.id', 'left');
+        $this->db->where('item_category.branch_id', $branch_id);
+        $query = $this->db->get();
+        return $query->result_array();
+       
     }
 
 }

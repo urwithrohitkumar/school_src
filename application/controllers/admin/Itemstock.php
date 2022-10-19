@@ -160,8 +160,12 @@ class Itemstock extends Admin_Controller
         $branch = $this->staff_model->getBranch();
         $data['branch'] = $branch;
         $data['itemlist']     = $item_result;
-        $itemcategory         = $this->itemcategory_model->get();
-        $data['itemcatlist']  = $itemcategory;
+
+        $itemcategory = $this->itemcategory_model->branchOption($item['branch_id']);
+        $data['itemcatlist'] = $itemcategory;
+
+        // $itemcategory         = $this->itemcategory_model->get();
+        // $data['itemcatlist']  = $itemcategory;
        
         // $itemstore            = $this->itemstore_model->get();
         $result          = $this->itemstock_model->get($id);

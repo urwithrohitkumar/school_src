@@ -206,4 +206,12 @@ class Issueitem extends Admin_Controller {
         echo json_encode($json_data);
     }
 
+
+
+    function onBranchChangeOption(){
+        $branch_id = $this->input->post('branch_id');
+        $staff = $this->staff_model->getStaffbyBranch($branch_id);
+        echo json_encode($staff);
+    }
+
 }

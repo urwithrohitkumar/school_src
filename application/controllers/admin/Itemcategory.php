@@ -17,6 +17,8 @@ class Itemcategory extends Admin_Controller {
         $this->session->set_userdata('top_menu', 'Inventory');
         $this->session->set_userdata('sub_menu', 'itemcategory/index');
         $data['title'] = 'Item Categorey List';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $category_result = $this->itemcategory_model->get();
         $data['categorylist'] = $category_result;
         $this->load->view('layout/header', $data);
@@ -49,6 +51,7 @@ class Itemcategory extends Admin_Controller {
             $data = array(
                 'item_category' => $this->input->post('itemcategory'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->itemcategory_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success text-left">' . $this->lang->line('success_message') . '</div>');
@@ -61,6 +64,8 @@ class Itemcategory extends Admin_Controller {
             access_denied();
         }
         $data['title'] = 'Edit Item Categorey';
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
         $category_result = $this->itemcategory_model->get();
         $data['categorylist'] = $category_result;
         $data['id'] = $id;
@@ -76,6 +81,7 @@ class Itemcategory extends Admin_Controller {
                 'id' => $id,
                 'item_category' => $this->input->post('itemcategory'),
                 'description' => $this->input->post('description'),
+                'branch_id' => $this->input->post('branch_id'),
             );
             $this->itemcategory_model->add($data);
             $this->session->set_flashdata('msg', '<div class="alert alert-success">' . $this->lang->line('update_message') . '</div>');

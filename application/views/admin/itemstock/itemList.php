@@ -52,18 +52,7 @@
 
                                     <select autofocus="" id="item_category_id" name="item_category_id" class="form-control">
                                         <option disabled selected><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($itemcatlist as $item_category) {
-                                        ?>
-                                            <option value="<?php echo $item_category['id'] ?>" <?php
-                                                                                                if (set_value('item_category_id') == $item_category['id']) {
-                                                                                                    echo "selected = selected";
-                                                                                                }
-                                                                                                ?>><?php echo $item_category['item_category'] ?></option>
-
-                                        <?php
-                                        }
-                                        ?>
+                                       
                                     </select>
                                     <span class="text-danger"><?php echo form_error('item_category_id'); ?></span>
                                 </div>
@@ -469,4 +458,33 @@
             }
         });
     }
+</script>
+
+
+<script>
+    $("#branch_id").on('change', function() {
+        let branch_id = $(this).val();
+        var base_url = '<?php echo base_url() ?>';
+        $.ajax({
+            type: "POST",
+            url: base_url + "admin/item/branchItemCatOption",
+            data: {
+                'branch_id': branch_id
+            },
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                /**
+                 * Item Details Option data according to branch id
+                 */
+                if (result) {
+                    var html = '<option selected disabled>Select</option>';
+                    for (var count = 0; count < result.length; count++) {
+                        html += '<option value="' + result[count].id + '">' + result[count].item_category + '</option>';
+                    }
+                    $('#item_category_id').html(html);
+                }
+            }
+        });
+    })
 </script>
