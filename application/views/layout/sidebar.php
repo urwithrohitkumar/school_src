@@ -705,7 +705,9 @@
 
                     $this->rbac->hasPrivilege('print_marksheet', 'can_view') ||
 
-                    $this->rbac->hasPrivilege('marks_grade', 'can_view')
+                    $this->rbac->hasPrivilege('marks_grade', 'can_view') ||
+
+                    $this->rbac->hasPrivilege('report_card', 'can_view')
 
                 )) {
 
@@ -783,18 +785,21 @@
 
                             }
 
-
-
                             if ($this->rbac->hasPrivilege('marks_grade', 'can_view')) {
 
                             ?>
 
-                                <li class="<?php echo set_Submenu('Examinations/grade'); ?>"><a href="<?php echo base_url(); ?>admin/grade"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('marks_grade'); ?></a></li> <?php } ?>
+                                <li class="<?php echo set_Submenu('Examinations/grade'); ?>"><a href="<?php echo base_url(); ?>admin/grade"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('marks_grade'); ?></a></li>
+                            <?php } 
+                            
+                            if ($this->rbac->hasPrivilege('report_card', 'can_view')) {
 
+                                ?>
+    
+                                <li class="<?php echo set_Submenu('Examinations/report_card'); ?>"><a href="<?php echo base_url(); ?>admin/reportCardController"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('report_card'); ?></a></li>
+                                <?php }
 
-
-
-
+                            ?>
 
 
                         </ul>

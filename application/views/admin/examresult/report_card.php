@@ -14,7 +14,7 @@
                     </div>
                     <div class="box-body">
 
-                        <form role="form" action="<?php echo site_url('admin/examresult/marksheet') ?>" method="post" class="row">
+                        <form role="form" action="<?php echo site_url('admin/reportCardController') ?>" method="post" class="row">
 
                             <?php echo $this->customlib->getCSRF(); ?>
                             <div class="col-sm-6 col-lg-3 col-md-3">
@@ -33,37 +33,7 @@
                                     <span class='text-danger'><?php echo form_error('branch'); ?></span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-3 col-md-3">
-
-                                <div class="form-group">
-                                    <label><?php echo $this->lang->line('exam') . " " . $this->lang->line('group'); ?></label><small class="req"> *</small>
-                                    <select autofocus="" id="exam_group_id" name="exam_group_id" class="form-control ">
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php
-                                        foreach ($examGroup as $examGp) { ?>
-                                            <option value="<?php echo $examGp->id ?>" <?php
-                                                                                        if (set_value('exam_group_id') == $examGp->id) {
-                                                                                            echo "selected=selected";
-                                                                                        }
-                                                                                        ?>><?php echo $examGp->name ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('exam_group_id'); ?></span>
-                                </div>
-                            </div>
-                            <!--./col-md-3-->
-                            <div class="col-sm-6 col-lg-3 col-md-3">
-
-                                <div class="form-group">
-                                    <label><?php echo $this->lang->line('exam'); ?></label><small class="req"> *</small>
-                                    <select id="exam_id" name="exam_id" class="form-control ">
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('exam_id'); ?></span>
-                                </div>
-                            </div>
+                      
                             <!--./col-md-3-->
                             <div class="col-sm-6 col-lg-3 col-md-3">
 
@@ -125,26 +95,6 @@
                                     <span class="text-danger"><?php echo form_error('section_id'); ?></span>
                                 </div>
                             </div>
-
-                            <div class="col-sm-6 col-lg-3 col-md-3">
-
-
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1"><?php echo $this->lang->line('marksheet') . " " . $this->lang->line('template') ?></label><small class="req"> *</small>
-                                    <select id="marksheet" name="marksheet" class="form-control">
-                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        <?php foreach ($marksheet_result as $key => $value) {  ?>
-                                            <option value='<?php echo $value->id ?>' <?php
-                                                                                        if ($marksheet_template == $value->id) {
-                                                                                            echo "selected=selected";
-                                                                                        }
-                                                                                        ?>><?php echo $value->template ?></option>
-                                        <?php } ?>
-
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('marksheet'); ?></span>
-                                </div>
-                            </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <button type="submit" name="search" value="search_filter" class="btn btn-primary pull-right btn-sm checkbox-toggle"><i class="fa fa-search"></i> <?php echo $this->lang->line('search'); ?></button>
@@ -167,13 +117,12 @@
                                 <button class="btn btn-info btn-sm printSelected pull-right" type="submit" name="generate" title="generate multiple certificate"><?php echo $this->lang->line('generate'); ?></button>
                             </div>
                             <div class="box-body">
-                                <input type="hidden" name="post_exam_id" value="<?php echo $exam_id; ?>">
-                                <input type="hidden" name="post_exam_group_id" value="<?php echo $exam_group_id; ?>">
+                                <!-- <input type="hidden" name="post_exam_id" value="<?php // echo $exam_id; ?>"> -->
+                                <!-- <input type="hidden" name="post_exam_group_id" value="<?php // echo $exam_group_id; ?>"> -->
                                 <div class="tab-pane active table-responsive no-padding" id="tab_1">
                                     <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="select_all" /></th>
                                                 <th><?php echo $this->lang->line('admission_no'); ?></th>
                                                 <th><?php echo $this->lang->line('student_name'); ?></th>
                                                 <th><?php echo $this->lang->line('father_name'); ?></th>
@@ -181,6 +130,7 @@
                                                 <th><?php echo $this->lang->line('gender'); ?></th>
                                                 <th><?php echo $this->lang->line('category'); ?></th>
                                                 <th class=""><?php echo $this->lang->line('mobile_no'); ?></th>
+                                                <th><?php echo $this->lang->line('download'); ?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -192,15 +142,16 @@
                                             } else {
                                                 $count = 1;
                                                 foreach ($studentList as $student_key => $student_value) {
-
+                                                    $student_value = (object) $student_value;
+                                                    // echo "<pre>";
+                                                    // print_r($student_value);
+                                                    // exit;
                                                 ?>
                                                     <tr>
-                                                        <td class="text-center"><input type="checkbox" class="checkbox center-block" name="exam_group_class_batch_exam_student_id[]" data-student_id="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>" value="<?php echo $student_value->exam_group_class_batch_exam_student_id; ?>">
-
-                                                        </td>
+                                                        
                                                         <td><?php echo $student_value->admission_no; ?></td>
                                                         <td>
-                                                            <a href="<?php echo base_url(); ?>student/view/<?php echo $student_value->student_id; ?>"><?php echo $this->customlib->getFullName($student_value->firstname, $student_value->middlename, $student_value->lastname, $sch_setting->middlename, $sch_setting->lastname); ?>
+                                                            <a href="<?php echo base_url(); ?>student/view/<?php echo $student_value->id; ?>"><?php echo $student_value->firstname .' '. $student_value->middlename; ?>
                                                             </a>
                                                         </td>
 
@@ -213,6 +164,7 @@
                                                         <td><?php echo $student_value->gender; ?></td>
                                                         <td><?php echo $student_value->category; ?></td>
                                                         <td><?php echo $student_value->mobileno; ?></td>
+                                                        <td> <a href='<?php echo base_url() ?>/admin/reportCardController/downlod/<?php echo $student_value->id; ?>' id="downlod"  target="blank" class="btn btn-info">Downlod</a></td>
                                                     </tr>
                                             <?php
                                                     $count++;
@@ -220,6 +172,7 @@
                                             }
                                             ?>
                                         </tbody>
+                                     
                                     </table>
                                 </div>
                             </div>
