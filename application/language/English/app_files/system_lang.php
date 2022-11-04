@@ -1799,3 +1799,5 @@ $lang['branch_name'] = "Branch Name.";
 $lang['branchs'] = "By Branch";
 $lang['Branch'] = "Branch";
 $lang['refund'] = "Refund";
+$lang['school_leaving_certificate'] = "School Leaving Certificate";
+$lang['school_leaving'] = "School Leaving Student";

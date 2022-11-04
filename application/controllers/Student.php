@@ -2526,9 +2526,10 @@ class Student extends Admin_Controller
         $class_id = $this->input->get('class_id');
         $section_id = $this->input->get('section_id');
         $branch_id = $this->input->get('branch_id');
-        $student_id     = $this->student_model->studentId($class_id, $section_id);
+        // $student_id     = $this->student_model->studentId($class_id, $section_id);
         // $data     = $this->student_model->getStudentsDetails($student_id);
-        $data     = $this->student_model->getStudentsDetails($branch_id);
+        $data     = $this->student_model->getStudentsDetailsBranchClassSection($class_id,$section_id,$branch_id);
+     
         echo json_encode($data);
     }
 
@@ -2588,5 +2589,22 @@ class Student extends Admin_Controller
             # code...
         }
         echo json_encode($resultlist);
+    }
+
+
+
+
+    public function studentLeaving()
+    {
+        if (!$this->rbac->hasPrivilege('student', 'can_add')) {
+            access_denied();
+        }
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
+        $this->session->set_userdata('top_menu', 'Certificate');
+        $this->session->set_userdata('sub_menu', 'admin/student_aadhar_card');
+        $this->load->view('layout/header', $data);
+        $this->load->view('student/studentStudentLeaving', $data);
+        $this->load->view('layout/footer', $data);
     }
 }

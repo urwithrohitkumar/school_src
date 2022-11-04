@@ -190,9 +190,37 @@ class Feesessiongroup_model extends MY_Model
         if ($branch_id != null) {
             $this->db->where('fee_session_groups.branch_id', $branch_id);
         }
+
+     
+
         $query = $this->db->get();
+
         $result = $query->result();
+        foreach ($result as $key => $value) {
+            $value->feetypes = $this->getfeeTypeByGroup($value->id, $value->fee_groups_id);
+        }
         return $result;
+
+
+
+
+
+
+
+
+        // $this->db->select('tb_branch.branch_name,fee_session_groups.*,fee_groups.name as `group_name`');
+        // $this->db->from('fee_session_groups');
+        // $this->db->join('fee_groups', 'fee_groups.id = fee_session_groups.fee_groups_id');
+        // $this->db->join('tb_branch', 'fee_session_groups.branch_id = tb_branch.id', 'left');
+
+        // $this->db->where('fee_session_groups.session_id', $this->current_session);
+        // $this->db->where('fee_groups.is_system', 0);
+        // if ($branch_id != null) {
+        //     $this->db->where('fee_session_groups.branch_id', $branch_id);
+        // }
+        // $query = $this->db->get();
+        // $result = $query->result();
+        // return $result;
     }
 
     public function getBranchFeesByGroupWIthType($branch_id = null)

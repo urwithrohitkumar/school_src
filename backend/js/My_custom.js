@@ -6,6 +6,8 @@ var base_url = $('script[data-base]').attr('data-base')
  * On Change of branch Found Classes according to branch function
  */
 $("#branch_id").on('change', function() {
+        $('#secid').html('<option selected disabled >Select</option>');
+
         $('#section_id').html('<option selected disabled >Select</option>');
         let branch_id = $("#branch_id").val();
         // var base_url = '<?php echo base_url() ?>';
@@ -26,6 +28,7 @@ $("#branch_id").on('change', function() {
                         html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
                     }
                     $('#class_id').html(html);
+                    $('#searchclassid').html(html);
                 }
             }
         });
@@ -105,34 +108,34 @@ $("#branch_id").on('change', function() {
 /**
  * On Change of branch Found Classes according to branch function
  */
-$("#branch_id").on('change', function() {
-        $('#secid').html('<option selected disabled >Select</option>');
-        let branch_id = $("#branch_id").val();
-        // var base_url = '<?php echo base_url() ?>';
-        $.ajax({
-            type: "GET",
-            url: base_url + "classes/branchClasss",
-            data: {
-                'branch_id': branch_id,
-            },
-            dataType: "json",
-            success: function(class_details) {
-                /**
-                 * Item Details Option data according to branch id
-                 */
-                if (class_details.length > 0) {
-                    var html = '<option selected disabled >Select</option>';
-                    for (var count = 0; count < class_details.length; count++) {
-                        html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
-                    }
-                    $('#searchclassid').html(html);
-                }
-            }
-        });
-    })
-    /**
-     * On Chanege of Classes Found Section according to branch And Classes function
-     */
+// $("#branch_id").on('change', function() {
+//         $('#secid').html('<option selected disabled >Select</option>');
+//         let branch_id = $("#branch_id").val();
+//         // var base_url = '<?php echo base_url() ?>';
+//         $.ajax({
+//             type: "GET",
+//             url: base_url + "classes/branchClasss",
+//             data: {
+//                 'branch_id': branch_id,
+//             },
+//             dataType: "json",
+//             success: function(class_details) {
+//                 /**
+//                  * Item Details Option data according to branch id
+//                  */
+//                 if (class_details.length > 0) {
+//                     var html = '<option selected disabled >Select</option>';
+//                     for (var count = 0; count < class_details.length; count++) {
+//                         html += '<option value="' + class_details[count].id + '">' + class_details[count].class + '</option>';
+//                     }
+//                     $('#searchclassid').html(html);
+//                 }
+//             }
+//         });
+//     })
+/**
+ * On Chanege of Classes Found Section according to branch And Classes function
+ */
 $("#searchclassid").on('change', function() {
     let branch_id = $("#branch_id").val();
     let class_id = $("#searchclassid").val();

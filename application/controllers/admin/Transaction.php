@@ -67,7 +67,6 @@ class Transaction extends Admin_Controller
 
     function studentacademicreport()
     {
-
         if (!$this->rbac->hasPrivilege('balance_fees_report', 'can_view')) {
             access_denied();
         }
@@ -83,7 +82,7 @@ class Transaction extends Admin_Controller
         $data['classlist'] = $class;
         $branch = $this->staff_model->getBranch();
         $data["branch"]         = $branch;
-
+        
         $class_id = $this->input->post('class_id');
         $branch_id = $this->input->post('branch_id');
         $section_id = $this->input->post('section_id');
@@ -92,8 +91,8 @@ class Transaction extends Admin_Controller
         $data['section_list'] = $this->section_model->getClassBySection($this->input->post('class_id'));
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'trim|required|xss_clean');
-
-
+        
+        
         if ($this->form_validation->run() == false) {
             $data['student_due_fee'] = array();
             $data['resultarray'] = array();
@@ -104,9 +103,9 @@ class Transaction extends Admin_Controller
             $data['feetype_arr'] = array();
         } else {
             $student_Array = array();
-
+            
             $section = array();
-
+            
             $classlist = $this->student_model->getAllClassSection($class_id, $section_id,$branch_id);
 
             foreach ($classlist as $key => $value) {

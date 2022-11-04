@@ -171,7 +171,12 @@
 
                     $this->rbac->hasPrivilege('student_houses', 'can_view') ||
 
-                    $this->rbac->hasPrivilege('disable_student', 'can_view') || $this->rbac->hasPrivilege('disable_reason', 'can_view') || $this->rbac->hasPrivilege('online_admission', 'can_view') || $this->rbac->hasPrivilege('multiclass_student', 'can_view') || $this->rbac->hasPrivilege('disable_reason', 'can_view'))) {
+                    $this->rbac->hasPrivilege('disable_student', 'can_view') ||
+                    $this->rbac->hasPrivilege('disable_reason', 'can_view') ||
+                    $this->rbac->hasPrivilege('online_admission', 'can_view') ||
+                    $this->rbac->hasPrivilege('multiclass_student', 'can_view') ||
+                    $this->rbac->hasPrivilege('disable_reason', 'can_view')
+                )) {
 
                 ?>
 
@@ -270,14 +275,14 @@
                         <?php } ?>
                         <?php if ($this->rbac->hasPrivilege('student_categories', 'can_view')) {
                         ?>
-                         <li class="<?php echo set_Submenu('category/index'); ?>"><a href="<?php echo base_url(); ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_categories'); ?></a></li>
+                            <li class="<?php echo set_Submenu('category/index'); ?>"><a href="<?php echo base_url(); ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_categories'); ?></a></li>
                         <?php } ?>
                         <?php if ($this->rbac->hasPrivilege('student_religion', 'can_view')) {
                         ?>
-                         <li class="<?php echo set_Submenu('religion/index'); ?>"><a href="<?php echo base_url(); ?>religion"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_religion'); ?></a></li>
+                            <li class="<?php echo set_Submenu('religion/index'); ?>"><a href="<?php echo base_url(); ?>religion"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_religion'); ?></a></li>
                         <?php } ?>
                         <!-- <?php if ($this->rbac->hasPrivilege('student_caste', 'can_view')) {
-                        ?>
+                                ?>
                          <li class="<?php echo set_Submenu('caste/index'); ?>"><a href="<?php echo base_url(); ?>caste"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('student_caste'); ?></a></li>
                         <?php } ?> -->
 
@@ -288,6 +293,16 @@
                         ?>
 
                             <li class="<?php echo set_Submenu('admin/schoolhouse'); ?>"><a href="<?php echo base_url(); ?>admin/schoolhouse"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('house'); ?></a></li>
+
+                        <?php
+
+                        }
+
+                        if ($this->rbac->hasPrivilege('school_leaving', 'can_view')) {
+
+                        ?>
+
+                            <li class="<?php echo set_Submenu('student/studentLeaving'); ?>"><a href="<?php echo base_url(); ?>student/studentLeaving"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('school_leaving'); ?></a></li>
 
                         <?php
 
@@ -1761,7 +1776,10 @@ online_course_offline_payment', 'can_view')) ||
 
                     $this->rbac->hasPrivilege('generate_staff_id_card', 'can_view') ||
 
-                    $this->rbac->hasPrivilege('aadhar_card', 'can_view'))) {
+                    $this->rbac->hasPrivilege('aadhar_card', 'can_view') ||
+
+                    $this->rbac->hasPrivilege('school_leaving_certificate', 'can_view')
+                )) {
 
                 ?>
 
@@ -1838,6 +1856,12 @@ online_course_offline_payment', 'can_view')) ||
                             if ($this->rbac->hasPrivilege('aadhar_card', 'can_view')) { ?>
 
                                 <li class="<?php echo set_Submenu('admin/student_aadhar_card'); ?>"><a href="<?php echo base_url('admin/student_aadhar_card/'); ?>"><i class="fa fa-angle-double-right"></i>Aadhaar Card</a></li>
+
+                            <?php  }
+
+                            if ($this->rbac->hasPrivilege('school_leaving_certificate', 'can_view')) { ?>
+
+                                <li class="<?php echo set_Submenu('admin/school_leaving_certificate'); ?>"><a href="<?php echo base_url('admin/school_leaving_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('school_leaving_certificate'); ?></a></li>
 
                             <?php  } ?>
 
@@ -2387,9 +2411,9 @@ online_course_offline_payment', 'can_view')) ||
 
                             <?php
 
-                            }?>
+                            } ?>
                             <?php if ($this->rbac->hasPrivilege('user_status')) { ?>
-                            <li class="<?php echo set_Submenu('users/index'); ?>"><a href="<?php echo base_url(); ?>admin/branch"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('branch'); ?></a></li>
+                                <li class="<?php echo set_Submenu('users/index'); ?>"><a href="<?php echo base_url(); ?>admin/branch"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('branch'); ?></a></li>
                             <?php  } ?>
 
                             <?php if ($this->rbac->hasPrivilege('session_setting', 'can_view')) {

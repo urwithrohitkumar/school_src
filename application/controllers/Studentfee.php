@@ -1152,17 +1152,19 @@ class Studentfee extends Admin_Controller
     {
         $branch_id = $this->input->post('branch_id');
         $feeGroupBranch = $this->feesessiongroup_model->getBranchFeesByGroup($branch_id);
+        
+        
 
-        $feetype = [];
-        foreach ($feeGroupBranch as $key => $value) {
-            $feetype = $this->feesessiongroup_model->getfeeTypeByGroup($value->id, $value->fee_groups_id);
-        }
-        $feeGroupBranch = $this->feesessiongroup_model->getBranchFeesByGroup($branch_id);
-        $result = array(
-            'feeGroupBranch' => $feeGroupBranch,
-            'feetype' => $feetype,
+        // $feetype = [];
+        // foreach ($feeGroupBranch as $key => $value) {
+        //     $feetype = $this->feesessiongroup_model->getfeeTypeByGroup($value->id, $value->fee_groups_id);
+        // }
+        // $feeGroupBranch = $this->feesessiongroup_model->getBranchFeesByGroup($branch_id);
+        // $result = array(
+        //     'feeGroupBranch' => $feeGroupBranch,
+        //     // 'feetype' => $feetype,
 
-        );
-        echo json_encode($result);
+        // );
+        echo json_encode($feeGroupBranch);
     }
 }
