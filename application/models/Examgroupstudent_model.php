@@ -173,4 +173,27 @@ class Examgroupstudent_model extends CI_Model {
         $this->db->update_batch('exam_group_class_batch_exam_students', $data, 'id');
     }
 
+
+
+    public function searchExamStudentsReportCard($exam_id, $class_id, $section_id, $session_id,$branch_id,$student_id) {
+        $sql = "SELECT  exam_group_class_batch_exam_students.id as `exam_group_class_batch_exam_student_id`,exam_group_class_batch_exam_students.roll_no as `exam_roll_no`,students.admission_no , students.id as `student_id`, students.roll_no,students.admission_date,students.firstname,students.middlename, students.lastname,students.image, students.mobileno, students.email ,students.state , students.city , students.pincode , students.religion,students.dob ,students.current_address, students.permanent_address,students.category_id, IFNULL(categories.category, '') as `category`, students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name, students.guardian_relation,students.guardian_phone,`classes`.`class`,students.guardian_address,students.is_active,`students`.`father_name`,`students`.`gender` 
+        FROM `exam_group_class_batch_exam_students`
+        INNER JOIN student_session on student_session.id=exam_group_class_batch_exam_students.student_session_id 
+        INNER join students on students.id=student_session.student_id  
+        INNER JOIN `classes` ON `student_session`.`class_id` = `classes`.`id` 
+        LEFT JOIN `categories` ON `students`.`category_id` = `categories`.`id` 
+        WHERE student_session.student_id=" . $this->db->escape($student_id) . " AND exam_group_class_batch_exam_id=" . $this->db->escape($exam_id) . " AND students.is_active='yes'
+        AND student_session.class_id=" . $this->db->escape($class_id) . " AND student_session.section_id=" . $this->db->escape($section_id) . " AND student_session.branch_id=" . $branch_id . " AND student_session.session_id=" . $this->db->escape($session_id);
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+
+
+
+
+
+
+
 }

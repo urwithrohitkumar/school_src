@@ -345,6 +345,7 @@ class Examgroup extends Admin_Controller
 
     public function subjectstudent()
     {
+     
         $this->form_validation->set_error_delimiters('<p>', '</p>');
         $this->form_validation->set_rules('class_id', $this->lang->line('class'), 'required|trim|xss_clean');
         $this->form_validation->set_rules('section_id', $this->lang->line('section'), 'required|trim|xss_clean');
@@ -374,12 +375,14 @@ class Examgroup extends Admin_Controller
         } else {
             $exam_subject_id                                = $this->input->post('subject_id');
             $data['exam_group_class_batch_exam_subject_id'] = $exam_subject_id;
+            $data['sub_id'] = $this->input->post('teachersubject_id');
             $class_id                                       = $this->input->post('class_id');
             $section_id                                     = $this->input->post('section_id');
             $session_id                                     = $this->input->post('session_id');
             $data['class_id']                               = $this->input->post('class_id');
             $data['section_id']                             = $this->input->post('section_id');
             $data['session_id']                             = $this->input->post('session_id');
+            $data['exam_group_class_batch_exams_id']                             = $this->input->post('exam_group_class_batch_exams_id');
             $resultlist                                     = $this->examgroupstudent_model->examGroupSubjectResult($exam_subject_id, $class_id, $section_id, $session_id);
             $subject_detail = $this->batchsubject_model->getExamSubject($exam_subject_id);
 
@@ -513,10 +516,15 @@ class Examgroup extends Admin_Controller
         } else {
 
             $exam_group_student_id = $this->input->post('exam_group_student_id');
+            $student_id = $this->input->post('student_id');
+           
             $insert_array          = array();
             $update_array          = array();
+            $insert_report_array          = array();
+            
             if (!empty($exam_group_student_id)) {
                 foreach ($exam_group_student_id as $exam_group_student_key => $exam_group_student_value) {
+                   
                     $attendance_post = $this->input->post('exam_group_student_attendance_' . $exam_group_student_value);
                     if (isset($attendance_post)) {
                         $attendance = $this->input->post('exam_group_student_attendance_' . $exam_group_student_value);
@@ -526,13 +534,50 @@ class Examgroup extends Admin_Controller
                     $array = array(
                         'exam_group_class_batch_exam_subject_id' => $this->input->post('exam_group_class_batch_exam_subject_id'),
                         'exam_group_class_batch_exam_student_id' => $exam_group_student_value,
+                        'student_id'                             => $student_id[$exam_group_student_key],
                         'attendence'                             => $attendance,
                         'get_marks'                              => $this->input->post('exam_group_student_mark_' . $exam_group_student_value),
                         'note'                                   => $this->input->post('exam_group_student_note_' . $exam_group_student_value),
                     );
                     $insert_array[] = $array;
+                    $reportarray = array(
+                        'session' => $this->input->post('session_id'),
+                        'class' => $this->input->post('class_id'),
+                        'section' => $this->input->post('section_id'),
+                        'exam_id' => $this->input->post('exam_group_class_batch_exams_id'),
+                        'subject_id' => $this->input->post('sub_id'),
+                        'student_id'                             => $student_id[$exam_group_student_key],
+                        'marks_get'                              => $this->input->post('exam_group_student_mark_' . $exam_group_student_value),
+                        
+                    );
+                    $insert_report_array[] = $reportarray;
                 }
             }
+            
+            $report_data = $this->Report_card_model->getdetails($insert_report_array[0]['class'],$insert_report_array[0]['section'] , $insert_report_array[0]['student_id'], $insert_report_array[0]['session'] ,  $insert_report_array[0]['subject_id']  , $insert_report_array[0]['exam_id']);
+            if(!empty($report_data)){
+                foreach ($insert_report_array as $key => $value) {
+                    $report_exist_data = $this->Report_card_model->getdetailsSingle($value['class'],$value['section'] , $value['student_id'], $value['session'] ,  $value['subject_id']  , $value['exam_id']);
+                    // $this->db->delete('tbl_user', array('id' => $id)); 
+                    $this->Report_card_model->delete($report_exist_data['id']);
+                }
+                $this->Report_card_model->add($insert_report_array);
+                
+                // echo "<pre>";
+                // print_r($report_exist_data['id']);
+                // exit;
+            }
+            else{
+                $this->Report_card_model->add($insert_report_array);
+            }
+
+            
+
+
+            // Report_card_model
+       
+            
+
 
             $this->examgroupstudent_model->add_result($insert_array);
             $array = array('status' => '1', 'error' => '', 'message' => $this->lang->line('success_message'));
@@ -601,6 +646,7 @@ class Examgroup extends Admin_Controller
 
         $class                   = $this->class_model->get();
         $data['classlist']       = $class;
+        $data['exam_id']       = $id;
         $session                 = $this->session_model->get();
         $data['sessionlist']     = $session;
         $data['current_session'] = $this->sch_current_session;
@@ -622,6 +668,7 @@ class Examgroup extends Admin_Controller
     public function addexamsubject()
     {
 
+        
         $student_id = '';
         $this->form_validation->set_rules('examgroup_id', $this->lang->line('exam') . " " . $this->lang->line('group'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('exam_group_class_batch_exam_id', $this->lang->line('exam') . " " . $this->lang->line('id'), 'trim|required|xss_clean');
@@ -680,6 +727,7 @@ class Examgroup extends Admin_Controller
                     );
                 }
             }
+            
 
             $this->examsubject_model->add($insert_array, $update_array, $not_be_del, $this->input->post('exam_group_class_batch_exam_id'));
 
@@ -901,6 +949,8 @@ class Examgroup extends Admin_Controller
 
     public function entrystudents()
     {
+      
+
         $this->form_validation->set_error_delimiters('', '');
         $this->form_validation->set_rules('exam_group_class_batch_exam_id', $this->lang->line('exam'), 'required|trim|xss_clean');
 
@@ -917,6 +967,9 @@ class Examgroup extends Admin_Controller
             $state                          = 1;
             $exam_group_class_batch_exam_id = $this->input->post('exam_group_class_batch_exam_id');
             $student_session                = $this->input->post('student_session_id');
+
+              $studentSession        = $this->student_model->getStudentSession($student_session[0]);
+
             $all_students                   = $this->input->post('all_students');
             $insert_array                   = array();
             if (isset($student_session) && !empty($student_session)) {
@@ -926,9 +979,12 @@ class Examgroup extends Admin_Controller
                         'exam_group_class_batch_exam_id' => $exam_group_class_batch_exam_id,
                         'student_id'                     => $this->input->post('student_' . $student_value),
                         'student_session_id'             => $student_value,
+                        'student_session'             => $studentSession['student_session_id'],
                     );
                 }
             }
+            
+   
 
             $this->examstudent_model->add_student($insert_array, $exam_group_class_batch_exam_id, $all_students);
             $array = array('status' => '1', 'error' => '', 'message' => $this->lang->line('success_message'));

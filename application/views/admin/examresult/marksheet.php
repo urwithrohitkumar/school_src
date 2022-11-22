@@ -186,12 +186,13 @@
                                         <tbody>
                                             <?php
                                             if (empty($studentList)) {
+
                                             ?>
 
                                                 <?php
                                             } else {
-                                                $count = 1;
                                                 foreach ($studentList as $student_key => $student_value) {
+
 
                                                 ?>
                                                     <tr>

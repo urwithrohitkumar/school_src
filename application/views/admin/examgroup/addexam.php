@@ -244,6 +244,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
                 <form role="form" id="searchStudentForm" action="<?php echo site_url('admin/examgroup/subjectstudent') ?>" method="post" class="mb10">
 
                     <input type="hidden" name="subject_id" value="0" class="subject_id">
+                    <input type="hidden" name="exam_group_class_batch_exams_id"  class="exam_group_class_batch_exams_id">
                     <input type="hidden" name="teachersubject_id" value="0" class="teachersubject_id">
 
                     <div class="row">
@@ -990,9 +991,11 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat(); ?>
         var subject_id = $(e.relatedTarget).data('subject_id');
         var subject_name = $(e.relatedTarget).data('subject_name');
         var teachersubject_id = $(e.relatedTarget).data('teachersubject_id');
+        var exam_group_class_batch_exams_id = $(e.relatedTarget).data('exam_group_class_batch_exams_id');
         $('.subjectmodal_header').html("").html(subject_name);
         $('.marksEntryForm').html("");
         $('.subject_id').val("").val(subject_id);
+        $('.exam_group_class_batch_exams_id').val(exam_group_class_batch_exams_id);
         $('.teachersubject_id').val("").val(teachersubject_id);
         $(e.currentTarget).find('input[name="subject_name"]').val(subject_name);
         var current_session = $('#current_session').val();

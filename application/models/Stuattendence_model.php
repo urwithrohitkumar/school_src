@@ -185,4 +185,31 @@ class Stuattendence_model extends MY_Model
 
         return $count_studentattendance;
     }
+
+
+    public function total_attendence_student($student_session_id,$branch_id)
+    {
+        $this->db->select('count(*) as total')->from('student_attendences');
+        $this->db->where('student_session_id', $student_session_id)->where('branch_id', $branch_id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+    public function attend_attendence_student($student_session_id,$branch_id)
+    {
+        $this->db->select('count(*) as total')->from('student_attendences');
+        $this->db->where('student_session_id', $student_session_id)->where('branch_id', $branch_id)->where('attendence_type_id', 1);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+
+
+
+
+
+
+
 }

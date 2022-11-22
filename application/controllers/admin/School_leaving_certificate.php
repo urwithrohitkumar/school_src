@@ -74,7 +74,6 @@ class School_leaving_certificate extends Admin_Controller
             'student_data' => $student_data,
             'student_aadhar_data' => $student_aadhar_data,
         );
-
         $this->load->library('Pdf');
         $html = $this->load->view('admin/certificate/school_leaving_certificate_downlod', $result, true);
         $this->pdf->createPDF($html, 'mypdf', false);

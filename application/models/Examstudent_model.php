@@ -182,7 +182,7 @@ class Examstudent_model extends CI_Model
     {
 
         $sql = "SELECT exam_group_class_batch_exam_students.*,students.admission_no , students.roll_no as `student_roll_no`,students.id as `student_id`,students.admission_date,students.firstname,students.middlename, students.lastname,students.image, students.mobileno, students.email ,students.state , students.city , students.pincode , students.religion,students.dob ,students.current_address, students.permanent_address,students.category_id, IFNULL(categories.category, '') as `category`, students.adhar_no,students.samagra_id,students.bank_account_no,students.bank_name, students.ifsc_code , students.guardian_name, students.guardian_relation,students.guardian_phone,students.guardian_address,students.is_active,`students`.`father_name`,`students`.`mother_name`,`students`.`gender`,student_session.class_id,student_session.section_id,classes.class,sections.section FROM `exam_group_class_batch_exam_students` INNER JOIN student_session on student_session.id=exam_group_class_batch_exam_students.student_session_id INNER JOIN students on students.id=student_session.student_id LEFT JOIN `categories` ON `students`.`category_id` = `categories`.`id` INNER JOIN classes on classes.id=student_session.class_id INNER JOIN sections on sections.id=student_session.section_id WHERE `exam_group_class_batch_exam_students`.`id` = " . $this->db->escape($exam_group_class_batch_exam_id);
-
+              
         $query = $this->db->query($sql);
         return $query->row_array();
     }

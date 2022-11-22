@@ -26,6 +26,9 @@
                                 <tbody>
                                     <?php
                                     if (!empty($exam_subjects)) {
+                                      // echo "<pre>";
+                                      // print_r($exam_subjects);
+                                      // exit;
                                        
                                         foreach ($exam_subjects as $exam_subject_key => $exam_subject_value) {
                                             ?>
@@ -38,7 +41,7 @@
                                                 <td><?php echo $exam_subject_value->max_marks; ?></td>
                                                 <td><?php echo $exam_subject_value->min_marks; ?></td>
                                                 <td class="col-sm-1 text-right">                                             
-                                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#subjectModal" data-subject_name="<?php echo $exam_subject_value->subject_name; ?>" data-subject_id="<?php echo $exam_subject_value->id; ?>" data-teachersubject_id="<?php echo $exam_subject_value->subject_id; ?>" ><i class="fa fa-newspaper-o" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#subjectModal" data-subject_name="<?php echo $exam_subject_value->subject_name; ?>" data-subject_id="<?php echo $exam_subject_value->id; ?>" data-teachersubject_id="<?php echo $exam_subject_value->subject_id; ?>"  data-exam_group_class_batch_exams_id="<?php echo $exam_subject_value->exam_group_class_batch_exams_id; ?>" ><i class="fa fa-newspaper-o" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
                                             <?php
