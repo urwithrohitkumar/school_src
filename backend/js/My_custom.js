@@ -83,6 +83,7 @@ $("#branch_id").on('change', function() {
             var feeGroupBranch = result.feeGroupBranch;
             var feetype = result.feetype;
 
+            console.log(result);
             /**
              * Item Details Option data according to branch id
              */

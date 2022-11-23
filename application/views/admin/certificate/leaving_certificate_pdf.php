@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,7 +155,8 @@ a {
 </head>
 <body>
     <?php 
-        
+
+      
         $student_image='';
         if($student_data->image!=''){
             $path = $student_data->image;

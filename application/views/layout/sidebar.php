@@ -1866,14 +1866,20 @@ online_course_offline_payment', 'can_view')) ||
                             <?php  }
 
                             if ($this->rbac->hasPrivilege('school_leaving_certificate', 'can_view')) { ?>
-
-                                <li class="<?php echo set_Submenu('admin/school_leaving_certificate'); ?>"><a href="<?php echo base_url('admin/school_leaving_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('school_leaving_certificate'); ?></a></li>
+                                    <!-- <li class="<?php echo set_Submenu('student/student_leaving'); ?>"><a href="<?php echo base_url(); ?>student/studentLeaving"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('school_leaving'); ?></a></li>
+                                <li class="<?php echo set_Submenu('admin/school_leaving_certificate'); ?>"><a href="<?php echo base_url('admin/school_leaving_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('school_leaving_certificate'); ?></a></li> -->
 
                             <?php  } ?>
 
                             <?php
                             if ($this->rbac->hasPrivilege('fee_certificate', 'can_view')) { ?>
                                 <li class="<?php echo set_Submenu('admin/student_fee_certificate'); ?>"><a href="<?php echo base_url('Studentfee/student_fee_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('fee_certificate'); ?></a></li>
+                            <?php  } ?>
+                            <?php  if ($this->rbac->hasPrivilege('bonafide_certificate', 'can_view')) { ?>
+                                <li class="<?php echo set_Submenu('admin/bonafide_certificate'); ?>"><a href="<?php echo base_url('Studentfee/bonafide_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('bonafide_certificate'); ?></a></li>
+                            <?php  } ?>
+                            <?php  if ($this->rbac->hasPrivilege('leaving_certificate', 'can_view')) { ?>
+                                <!-- <li class="<?php echo set_Submenu('admin/leaving_certificate'); ?>"><a href="<?php echo base_url('Studentfee/leaving_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('leaving_certificate'); ?></a></li> -->
                             <?php  } ?>
 
                         </ul>

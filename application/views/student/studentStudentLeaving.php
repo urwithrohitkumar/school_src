@@ -71,7 +71,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         <div class="box-body">
                             <div class="table-responsive mailbox-messages">
                                 <div class="download_label"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('list'); ?></div>
-                                <form id="adharCardForm" action="<?php echo base_url("student/create_student_leaving")?>" method="POST" enctype="multipart/form-data">
+                                <form id="adharCardForm" action="<?php echo base_url("student/create_student_leaving")?>" method="POST" enctype="multipart/form-data" target="_blank">
                                      
                                     <div class="bozero">
                                         <h6 class="pagetitleh-whitebg fs-6">Resident's Details</h6>
@@ -81,7 +81,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <input type="hidden" name="student_leaving_id" id="student_leaving_id" value="0">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="name">First Name</label> <input id="fname" name="fname" placeholder="" type="text" class="form-control">
+                                                        <label for="name">First Name</label>  <input id="fname" name="fname" placeholder="" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -103,7 +103,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="hno">Date of withdrawl</label> 
+                                                        <label for="hno">Date of withdrawl</label> <small class="req"> *</small>
                                                         <input id="withdrawl" name="withdrawl" placeholder="" type="text" class="form-control date">
                                                         <span class="text-danger"><?php echo form_error('withdrawl'); ?></span>
                                                     </div>
@@ -120,33 +120,35 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="landmark">Promoted To</label> 
+                                                        <label for="landmark">Promoted To</label> <small class="req"> *</small>
                                                         <input id="promoted_to" name="promoted_to" placeholder="" type="text" class="form-control">
                                                         <span class="text-danger"><?php echo form_error('promoted_to'); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="Village">Conduct</label>
+                                                        <label for="Village">Conduct</label><small class="req"> *</small>
                                                         <input id="conduct" name="conduct" placeholder="" type="text" class="form-control">
                                                         <span class="text-danger"><?php echo form_error('conduct'); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="gaurdianName">Student's UDISE ID</label> 
+                                                        <label for="gaurdianName">Student's UDISE ID</label> <small class="req"> *</small>
                                                         <input id="udise_no" name="udise_no" placeholder="" type="text" class="form-control">
+                                                        <span class="text-danger"><?php echo form_error('udise_no'); ?></span>
                                                      </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="gaurdianName">File No.</label> 
+                                                        <label for="gaurdianName">File No.</label> <small class="req"> *</small>
                                                         <input id="file_no" name="file_no" placeholder="" type="text" class="form-control">
+                                                        <span class="text-danger"><?php echo form_error('file_no'); ?></span>
                                                      </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="area">Reason for leaving the school</label> 
+                                                        <label for="area">Reason for leaving the school</label> <small class="req"> *</small>
                                                         <input id="reason" name="reason" placeholder="" type="text" class="form-control">
                                                         <span class="text-danger"><?php echo form_error('reason'); ?></span>
                                                     </div>
@@ -154,7 +156,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="postOffice">Remark</label> <input id="remark" name="remark" placeholder="" type="text" class="form-control">
+                                                        <label for="postOffice">Remark</label> <small class="req"> *</small> <input id="remark" name="remark" placeholder="" type="text" class="form-control">
                                                         <span class="text-danger"><?php echo form_error('remark'); ?></span>
                                                     </div>
                                                 </div> 
@@ -162,32 +164,36 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="signatureOfStudent" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('prepared_by'); ?></label>
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('prepared_by'); ?></label><small class="req"> *</small>
                                                         <div><input class="filestyle form-control" type='file' name='prepared_by' id="prepared_by" size='20' />
+                                                        <span class="text-danger"><?php echo form_error('prepared_by'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="studentImg" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('checked_by'); ?></label>
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('checked_by'); ?></label><small class="req"> *</small>
                                                         <div><input class="filestyle form-control" type='file' name='checked_by' id="checked_by" size='20' />
+                                                        <span class="text-danger"><?php echo form_error('checked_by'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="signatureOfStudent" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('counter_sign'); ?></label>
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('counter_sign'); ?></label><small class="req"> *</small>
                                                         <div><input class="filestyle form-control" type='file' name='counter_sign' id="counter_sign" size='20' />
+                                                        <span class="text-danger"><?php echo form_error('counter_sign'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="studentImg" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('principal'); ?></label>
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('principal'); ?></label><small class="req"> *</small>
                                                         <div><input class="filestyle form-control" type='file' name='principal' id="principal" size='20' />
+                                                        <span class="text-danger"><?php echo form_error('principal'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>

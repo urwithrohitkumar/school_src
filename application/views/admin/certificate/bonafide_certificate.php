@@ -12,7 +12,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
             if ($this->rbac->hasPrivilege('aadhar_card', 'can_add')) {
             ?>
                 <div class="col-md-6">  
-                    <form id="fee_certificate_form" action="<?php echo base_url('Studentfee/bonafide_certificate_download')?>" method="POST">                 
+                    <form id="fee_certificate_form" action="<?php echo base_url('Studentfee/bonafide_certificate_download')?>" method="POST" target="_blank">                 
                     <div class="box box-primary">   
                         <div class="box-header with-border">                       
                             <h3 class="box-title"><?php echo $this->lang->line('download'); ?> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('bonafide_certificate'); ?></h3>

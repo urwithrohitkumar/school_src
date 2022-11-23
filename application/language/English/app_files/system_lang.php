@@ -1811,3 +1811,5 @@ $lang['school_leaving'] = "School Leaving";
 $lang['checked_by'] = "Checked By";
 $lang['counter_sign'] = "Counter Sign";
 $lang['prepared_by'] = "Prepared By";
+// $lang['udise_no'] = "Studdent UDISE";
+// $lang['file_no'] = "File Number";

@@ -2623,6 +2623,13 @@ class Student extends Admin_Controller
         $this->form_validation->set_rules('conduct', $this->lang->line('conduct'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('promoted_to', $this->lang->line('promoted_to'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('reason', $this->lang->line('reason'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('udise_no', $this->lang->line('udise_no'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('file_no', $this->lang->line('file_no'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('remark', $this->lang->line('remark'), 'trim|required|xss_clean');
+        // $this->form_validation->set_rules('prepared_by', $this->lang->line('prepared_by'), 'trim|required|xss_clean');
+        // $this->form_validation->set_rules('checked_by', $this->lang->line('checked_by'), 'trim|required|xss_clean');
+        // $this->form_validation->set_rules('counter_sign', $this->lang->line('counter_sign'), 'trim|required|xss_clean');
+        // $this->form_validation->set_rules('principal', $this->lang->line('principal'), 'trim|required|xss_clean');
         
         $branch = $this->staff_model->getBranch();
         $data['branch'] = $branch;
@@ -2675,12 +2682,18 @@ class Student extends Admin_Controller
                 'counter_sign' => $counter_sign,
                 'principal'  => $principal,
             );    
+
+           
             $leaving_id = $this->input->post('student_leaving_id'); 
-            if($this->input->post('store_student_id')>0){              
+
+            if(!empty($leaving_id)){       
+                  
                $insert_id = $this->student_model->update_student_leaving($leaving_id,$inserted_data);
             }else{
+              
                 $insert_id = $this->student_model->add_student_leaving($inserted_data);
             }
+        
 
             if($insert_id>0){
                 $this->download_student_leaving($student_id);
@@ -2768,34 +2781,37 @@ class Student extends Admin_Controller
         $student_id = $this->input->get('student_id');
         $student_data     = $this->student_model->getStudentsById($student_id);
         $student_leaving  = $this->student_model->get_student_leaving($student_id);
-
-        if($student_leaving->prepared_by!=""){     
-            $filename = 'uploads/prepared_by_sign/'.$student_leaving->prepared_by;
-            if (file_exists($filename)) {
-                unlink('uploads/prepared_by_sign/' .$student_leaving->prepared_by);
+        if(!empty($student_leaving)){
+            if($student_leaving->prepared_by!=""){     
+                $filename = 'uploads/prepared_by_sign/'.$student_leaving->prepared_by;
+                if (file_exists($filename)) {
+                    unlink('uploads/prepared_by_sign/' .$student_leaving->prepared_by);
+                }
             }
+    
+            if($student_leaving->checked_by!=""){     
+                $filename = 'uploads/checked_by_sign/'.$student_leaving->checked_by;
+                if (file_exists($filename)) {
+                    unlink('uploads/checked_by_sign/' .$student_leaving->checked_by);
+                }
+            }
+    
+            if($student_leaving->counter_sign!=""){     
+                $filename = 'uploads/counter_sign/'.$student_leaving->counter_sign;
+                if (file_exists($filename)) {
+                    unlink('uploads/counter_sign/' .$student_leaving->counter_sign);
+                }
+            }
+    
+            if($student_leaving->principal!=""){     
+                $filename = 'uploads/principal_sign/'.$student_leaving->principal;
+                if (file_exists($filename)) {
+                    unlink('uploads/principal_sign/' .$student_leaving->principal);
+                }
+            }     
+
         }
 
-        if($student_leaving->checked_by!=""){     
-            $filename = 'uploads/checked_by_sign/'.$student_leaving->checked_by;
-            if (file_exists($filename)) {
-                unlink('uploads/checked_by_sign/' .$student_leaving->checked_by);
-            }
-        }
-
-        if($student_leaving->counter_sign!=""){     
-            $filename = 'uploads/counter_sign/'.$student_leaving->counter_sign;
-            if (file_exists($filename)) {
-                unlink('uploads/counter_sign/' .$student_leaving->counter_sign);
-            }
-        }
-
-        if($student_leaving->principal!=""){     
-            $filename = 'uploads/principal_sign/'.$student_leaving->principal;
-            if (file_exists($filename)) {
-                unlink('uploads/principal_sign/' .$student_leaving->principal);
-            }
-        }     
         $result = array(
             'student_data' => (!empty($student_data)?$student_data[0]:[]),
             'student_leaving' => (!empty($student_leaving)?$student_leaving:[]),
