@@ -176,7 +176,11 @@ class Feemaster extends Admin_Controller
         $feegroup_result = $this->feesessiongroup_model->getFeesByGroup($id);
         $data['feegroupList'] = $feegroup_result;
         $data['adm_auto_insert'] = $this->sch_setting_detail->adm_auto_insert;
-        $data['sch_setting'] = $this->sch_setting_detail;
+        $sch_setting = $this->sch_setting_detail;
+        $data['sch_setting'] = $sch_setting;
+
+        // $data['sch_setting'] = $this->sch_setting_detail;
+        
 
         $genderList = $this->customlib->getGender();
         $data['genderList'] = $genderList;
@@ -188,11 +192,66 @@ class Feemaster extends Admin_Controller
 
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
+          /**
+           * Create new fees session month
+           */
+            $session = $sch_setting->session;
+            $start_month = $sch_setting->start_month;
+            $sess = explode('-',$session);
+            $session_array = [];
+            if(!empty($sess)){
+                $first_sess =  substr($sess[0], 2);
+                $second_sess =  $sess[1];
+                $end_month  = $start_month+12;
+                for($start_month;$start_month<=$end_month; $start_month++){
+                    switch($start_month){
+                        case 4:
+                            $session_array[] = 'Apr-'.$first_sess;
+                            break;
+                        case 5:
+                            $session_array[] = 'May-'.$first_sess;
+                            break;
+                        case 6:
+                            $session_array[] = 'Jun-'.$first_sess;
+                            break;
+                        case 7:
+                            $session_array[] = 'Jul-'.$first_sess;
+                            break;
+                        case 8:
+                            $session_array[] = 'Aug-'.$first_sess;
+                            break;
+                        case 9:
+                            $session_array[] = 'Sep-'.$first_sess;
+                            break;
+                        case 10:
+                            $session_array[] = 'Oct-'.$first_sess;
+                            break;
+                        case 11:
+                            $session_array[] = 'Nov-'.$first_sess;
+                            break;
+                        case 12:
+                            $session_array[] = 'Dec-'.$first_sess;
+                            break;
+                        case 13:
+                            $session_array[] = 'Jan-'.$second_sess;
+                            break;
+                        case 14:
+                            $session_array[] = 'Feb-'.$second_sess;
+                            break;
+                        case 15:
+                            $session_array[] = 'Mar-'.$second_sess;
+                            break;
+                    }
+                }
+            }
+           
             $class_id = $this->input->post('class_id');
             $classlist = $this->class_model->getBranchData($branch_id);
             $data['classlist']       = $classlist;
             $sectionlist                   = $this->section_model->getBranchData($branch_id, $class_id);
             $data['sectionlist']       = $sectionlist;
+            $data['session_array'] = $session_array;
+
 
 
             $data['category_id'] = $this->input->post('category_id');

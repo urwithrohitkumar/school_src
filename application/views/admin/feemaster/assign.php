@@ -114,7 +114,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
                     </div>
 
-                    <form method="post" action="<?php echo site_url('studentfee/addfeegroup') ?>" id="assign_form">
+                    <!-- <form method="post" action="<?php echo site_url('studentfee/addfeegroup') ?>" id="assign_form">
 
 
                         <?php
@@ -245,6 +245,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                     </table>
 
                                                 </div>
+                                                            
                                                 <button type="submit" class="allot-fees btn btn-primary btn-sm pull-right" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please Wait.."><?php echo $this->lang->line('save'); ?>
                                                 </button>
 
@@ -260,7 +261,165 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                         }
                         ?>
 
+                    </form> -->
+
+                    <form method="post" action="<?php echo site_url('studentfee/addfeegroup') ?>" id="assign_form">
+                        <?php
+                        if (isset($resultlist)) {
+                        ?>
+                            <div class="box-header ptbnull"></div>
+                            <div class="">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-users"></i> <?php echo $this->lang->line('assign_fees_group'); ?>
+                                        <?php echo form_error('student'); ?></h3>
+                                    <div class="box-tools pull-right">
+                                </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="">
+                                            <div class="col-md-4">
+                                                <div class="table-responsive">
+                                                    <?php
+                                                    foreach ($feegroupList as $feegroup) {
+                                                    ?>
+                                                        <h4 class="mt2">
+                                                            <input type="hidden" name="fee_session_groups" value="<?php echo $feegroup->id; ?>">
+                                                            <a href="#" data-toggle="popover" class="detail_popover"><?php echo $feegroup->group_name; ?></a>
+                                                        </h4>
+
+                                                        <table class="table">
+                                                            <tbody>
+                                                                <?php
+                                                                if (empty($feegroup->feetypes)) {
+                                                                ?>
+
+                                                                    <td colspan="5" class="text-danger text-center"><?php echo $this->lang->line('no_record_found'); ?></td>
+                                                                    <?php
+                                                                } else {
+
+                                                                    foreach ($feegroup->feetypes as $feetype_key => $feetype_value) {
+                                                                    ?>
+                                                                        <tr class="mailbox-name">
+                                                                            <td>
+                                                                                <?php echo $feetype_value->code; ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                <?php echo $currency_symbol . $feetype_value->amount; ?>
+                                                                            </td>
+                                                                        </tr>
+                                                                <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                                </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    <?php
+                                                    }
+                                                    ?>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php echo "Session Months"; ?></label>
+                                                    <select autofocus="" id="session_month" name="session_month[]" class="form-control" multiple>
+                                                        <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                                        <?php foreach ($session_array as $session_months) {  ?>
+                                                            <option value="<?php echo $session_months ?>"><?php echo $session_months ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <span class="text-danger"><?php echo form_error('session_month'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class=" table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>
+                                                                    <div class="checkbox mb0 mt0">
+                                                                        <label class="labelbold"><input type="checkbox" id="select_all" /> <?php echo $this->lang->line('all'); ?></label>
+                                                                    </div>
+                                                                </th>
+                                                                <th><?php echo $this->lang->line('admission_no'); ?></th>
+                                                                <th><?php echo $this->lang->line('student_name'); ?></th>
+                                                                <th><?php echo $this->lang->line('class'); ?></th>
+                                                                <?php if ($sch_setting->father_name) { ?>
+                                                                    <th><?php echo $this->lang->line('father_name'); ?></th>
+                                                                <?php }
+                                                                if ($sch_setting->category) { ?>
+                                                                    <th><?php echo $this->lang->line('category'); ?></th>
+                                                                <?php } ?>
+                                                                <th><?php echo $this->lang->line('gender'); ?></th>
+
+                                                            </tr>
+                                                            <?php
+                                                            if (empty($resultlist)) {
+                                                            ?>
+                                                                <tr>
+                                                                    <td colspan="7" class="text-danger text-center"><?php echo $this->lang->line('no_record_found'); ?></td>
+                                                                </tr>
+                                                                <?php
+                                                            } else {
+                                                                $count = 1;
+                                                                foreach ($resultlist as $student) {
+                                                                ?>
+                                                                    <tr>
+
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($student['student_fees_master_id'] != 0) {
+                                                                                $sel = "checked='checked'";
+                                                                            } else {
+                                                                                $sel = "";
+                                                                            }
+                                                                            ?>
+                                                                            <input class="checkbox" type="checkbox" name="student_session_id[]" value="<?php echo $student['student_session_id']; ?>" <?php echo $sel; ?> />
+                                                                            <input type="hidden" name="student_fees_master_id_<?php echo $student['student_session_id']; ?>" value="<?php echo $student['student_fees_master_id']; ?>">
+                                                                            <input type="hidden" name="student_ids[]" value="<?php echo $student['student_session_id']; ?>">
+                                                                        </td>
+
+                                                                        <td><?php echo $student['admission_no']; ?></td>
+
+                                                                        <td><?php echo $this->customlib->getFullName($student['firstname'], $student['middlename'], $student['lastname'], $sch_setting->middlename, $sch_setting->lastname); ?></td>
+                                                                        <td><?php echo $student['class'] . "(" . $student['section'] . ")" ?></td>
+                                                                        <?php if ($sch_setting->father_name) { ?>
+                                                                            <td><?php echo $student['father_name']; ?></td>
+                                                                        <?php }
+                                                                        if ($sch_setting->category) { ?>
+                                                                            <td><?php echo $student['category']; ?></td>
+                                                                        <?php } ?>
+                                                                        <td><?php echo $student['gender']; ?></td>
+
+                                                                    </tr>
+                                                            <?php
+                                                                }
+                                                                $count++;
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <button type="submit" class="allot-fees btn btn-primary btn-sm pull-right" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please Wait.."><?php echo $this->lang->line('save'); ?>
+                                                </button>
+
+                                                <br />
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </form>
+
+
+
                 </div>
             </div>
 
@@ -269,7 +428,11 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     </section>
 </div>
 
+
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#session_month').select2();
+    });
     //select all checkboxes
     $("#select_all").change(function() { //"select all" change 
         $(".checkbox").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status

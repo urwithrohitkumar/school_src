@@ -180,6 +180,7 @@ $language_name   = $language["short_code"];
                                     <tr>
                                         <th style="width: 10px"><input type="checkbox" id="select_all" /></th>
                                         <th align="left"><?php echo $this->lang->line('fees_group'); ?></th>
+                                        <th align="left"><?php echo $this->lang->line('session_month'); ?></th>
                                         <th align="left"><?php echo $this->lang->line('fees_code'); ?></th>
                                         <th align="left" class="text text-left"><?php echo $this->lang->line('due_date'); ?></th>
                                         <th align="left" class="text text-left"><?php echo $this->lang->line('status'); ?></th>
@@ -246,6 +247,7 @@ $language_name   = $language["short_code"];
                                             }
                                                 ?>
                                                 <td><input class="checkbox" type="checkbox" name="fee_checkbox" data-fee_master_id="<?php echo $fee_value->id ?>" data-fee_session_group_id="<?php echo $fee_value->fee_session_group_id ?>" data-fee_groups_feetype_id="<?php echo $fee_value->fee_groups_feetype_id ?>"></td>
+                                                <td align="left"><?php echo $fee_value->session_month; ?></td>
                                                 <td align="left"><?php
                                                                     echo $fee_value->name . " (" . $fee_value->type . ")";
                                                                     ?></td>

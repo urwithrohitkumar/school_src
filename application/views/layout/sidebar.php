@@ -1870,6 +1870,11 @@ online_course_offline_payment', 'can_view')) ||
 
                             <?php  } ?>
 
+                            <?php
+                            if ($this->rbac->hasPrivilege('fee_certificate', 'can_view')) { ?>
+                                <li class="<?php echo set_Submenu('admin/student_fee_certificate'); ?>"><a href="<?php echo base_url('Studentfee/student_fee_certificate/'); ?>"><i class="fa fa-angle-double-right"></i><?php echo $this->lang->line('fee_certificate'); ?></a></li>
+                            <?php  } ?>
+
                         </ul>
 
                     </li>

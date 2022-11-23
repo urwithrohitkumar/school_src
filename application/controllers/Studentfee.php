@@ -319,7 +319,7 @@ class Studentfee extends Admin_Controller
                 $section_id              = $this->input->post('section_id');
                 $student_id              = $this->input->post('student_id');
                 $branch_id = $this->input->post('branch_id');
-                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id, $section_id, $student_id,$branch_id);
+                $student_due_fee              = $this->studentfeemaster_model->getStudentFeesByClassSectionStudent($class_id, $section_id, $student_id, $branch_id);
                 $data['student_due_fee']      = $student_due_fee;
                 $data['class_id']             = $class_id;
                 $data['section_id']           = $section_id;
@@ -647,7 +647,9 @@ class Studentfee extends Admin_Controller
             $fees_array[]          = $feeList;
         }
         $data['feearray'] = $fees_array;
-        $this->load->view('print/printFeesByGroupArray', $data);
+        $this->load->view('print/printFeesByGroup_new', $data);
+
+        // $this->load->view('print/printFeesByGroupArray', $data);
     }
 
     public function searchpayment()
@@ -682,10 +684,46 @@ class Studentfee extends Admin_Controller
         $this->load->view('layout/footer', $data);
     }
 
+    // public function addfeegroup()
+    // {
+    //     $this->form_validation->set_rules('fee_session_groups', $this->lang->line('fee_group'), 'required|trim|xss_clean');
+
+    //     if ($this->form_validation->run() == false) {
+    //         $data = array(
+    //             'fee_session_groups' => form_error('fee_session_groups'),
+    //         );
+    //         $array = array('status' => 'fail', 'error' => $data);
+    //         echo json_encode($array);
+    //     } else {
+    //         $student_session_id     = $this->input->post('student_session_id');
+    //         $fee_session_groups     = $this->input->post('fee_session_groups');
+    //         $student_sesssion_array = isset($student_session_id) ? $student_session_id : array();
+    //         $student_ids            = $this->input->post('student_ids');
+    //         $delete_student         = array_diff($student_ids, $student_sesssion_array);
+
+    //         $preserve_record = array();
+    //         if (!empty($student_sesssion_array)) {
+    //             foreach ($student_sesssion_array as $key => $value) {
+    //                 $insert_array = array(
+    //                     'student_session_id'   => $value,
+    //                     'fee_session_group_id' => $fee_session_groups,
+    //                 );
+    //                 $inserted_id = $this->studentfeemaster_model->add($insert_array);
+
+    //                 $preserve_record[] = $inserted_id;
+    //             }
+    //         }
+    //         if (!empty($delete_student)) {
+    //             $this->studentfeemaster_model->delete($fee_session_groups, $delete_student);
+    //         }
+
+    //         $array = array('status' => 'success', 'error' => '', 'message' => $this->lang->line('success_message'));
+    //         echo json_encode($array);
+    //     }
+    // }
     public function addfeegroup()
     {
         $this->form_validation->set_rules('fee_session_groups', $this->lang->line('fee_group'), 'required|trim|xss_clean');
-
         if ($this->form_validation->run() == false) {
             $data = array(
                 'fee_session_groups' => form_error('fee_session_groups'),
@@ -693,12 +731,12 @@ class Studentfee extends Admin_Controller
             $array = array('status' => 'fail', 'error' => $data);
             echo json_encode($array);
         } else {
+            $session_month          = $this->input->post('session_month');
             $student_session_id     = $this->input->post('student_session_id');
             $fee_session_groups     = $this->input->post('fee_session_groups');
             $student_sesssion_array = isset($student_session_id) ? $student_session_id : array();
             $student_ids            = $this->input->post('student_ids');
             $delete_student         = array_diff($student_ids, $student_sesssion_array);
-
             $preserve_record = array();
             if (!empty($student_sesssion_array)) {
                 foreach ($student_sesssion_array as $key => $value) {
@@ -706,15 +744,16 @@ class Studentfee extends Admin_Controller
                         'student_session_id'   => $value,
                         'fee_session_group_id' => $fee_session_groups,
                     );
-                    $inserted_id = $this->studentfeemaster_model->add($insert_array);
-
-                    $preserve_record[] = $inserted_id;
+                    foreach ($session_month as $month) {
+                        $insert_array['session_month'] = $month;
+                        $inserted_id = $this->studentfeemaster_model->add($insert_array);
+                        $preserve_record[] = $inserted_id;
+                    }
                 }
             }
             if (!empty($delete_student)) {
                 $this->studentfeemaster_model->delete($fee_session_groups, $delete_student);
             }
-
             $array = array('status' => 'success', 'error' => '', 'message' => $this->lang->line('success_message'));
             echo json_encode($array);
         }
@@ -1143,6 +1182,86 @@ class Studentfee extends Admin_Controller
         $this->load->view('print/printFeesRefund', $data);
     }
 
+    /**
+     * Student Fees Certificate Page
+     */
+    function student_fee_certificate()
+    {
+        if (!$this->rbac->hasPrivilege('fee_certificate', 'can_view')) {
+            access_denied();
+        }
+        $class                   = $this->class_model->get();
+        $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
+        $this->session->set_userdata('top_menu', 'Certificate');
+        $this->session->set_userdata('sub_menu', 'admin/student_fee_certificate');
+        $this->load->view('layout/header');
+        $this->load->view('admin/certificate/fee_certificate', $data);
+        $this->load->view('layout/footer');
+    }
+
+    /**
+     * Student Fees Certificate Download
+     */
+    public function stufee_certificate_download()
+    {
+        $student_id = $this->input->post('student_id');
+        $section_id = $this->input->post('section_id');
+        $class_id = $this->input->post('class_id');
+        $branch_id = $this->input->post('branch_id');
+        $student_data = $this->student_model->getStudentsById($student_id);
+        $school_logo = $this->setting_model->getAdminlogo2();
+        $school_logo = base_url() . 'uploads/school_content/admin_logo/' . $school_logo;
+        $resultlist['Paid_Amt'] = 0;
+        $resultlist['session_start_month'] = '';
+        $resultlist['session_end_month'] = '';
+        $resultlist['total_amount'] = 0;
+        $resultlist['school_logo'] = $school_logo;
+        if (!empty($student_data)) {
+            $student_data =  $student_data[0];
+            $student_session_id = $student_data->student_session_id;
+            $student_due_fee      = $this->studentfeemaster_model->getStudentFees($student_session_id);
+            $final_data = [];
+            $num = 1;
+            $total_amount = 0;
+            $Paid_Amt = 0;
+            $session_start_month = '';
+            $session_end_month = '';
+            $per_month = 0;
+            if (!empty($student_due_fee)) {
+                foreach ($student_due_fee as $student_fee) {
+                    $student_fee_details = $student_fee->fees[0];
+                    if ($session_start_month == '') {
+                        $session_start_month = ($student_fee_details->session_month) ? $student_fee_details->session_month : "--";
+                    }
+                    $per_month = $student_fee_details->amount;
+                    $amount_detail = json_decode($student_fee_details->amount_detail);
+                    if (!empty($amount_detail)) {
+                        $session_end_month = $student_fee_details->session_month;
+                        $total_amount += $student_fee_details->amount;
+                        foreach ($amount_detail as $key) {
+                            $Paid_Amt += $key->amount;
+                        }
+                    }
+                }
+            }
+            $resultlist['Paid_Amt'] = amountFormat($Paid_Amt);
+            $resultlist['session_start_month'] = $session_start_month;
+            $resultlist['session_end_month'] = $session_end_month;
+            $resultlist['total_amount'] = $total_amount;
+            $resultlist['per_month'] = $per_month;
+            $resultlist['current_session'] = $this->setting_model->getCurrentSessionName();
+        }
+        $result = array(
+            'student_data' => $student_data,
+            'resultlist' => $resultlist
+        );
+        $this->load->library('Pdf');
+        $html = $this->load->view('admin/certificate/fee_certificate_pdf', $result, true);
+        $this->pdf->createPDF($html, 'mypdf', false);
+    }
+
 
 
     /**
@@ -1152,8 +1271,8 @@ class Studentfee extends Admin_Controller
     {
         $branch_id = $this->input->post('branch_id');
         $feeGroupBranch = $this->feesessiongroup_model->getBranchFeesByGroup($branch_id);
-        
-        
+
+
 
         // $feetype = [];
         // foreach ($feeGroupBranch as $key => $value) {

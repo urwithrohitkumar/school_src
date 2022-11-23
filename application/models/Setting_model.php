@@ -365,4 +365,11 @@ class Setting_model extends MY_Model
         }
        
     }
+
+    public function getAdminlogo2()
+    {
+        $query = $this->db->select('admin_logo')->get('sch_settings');
+        $logo = $query->row_array();
+        return $logo['admin_logo'];
+    }
 }

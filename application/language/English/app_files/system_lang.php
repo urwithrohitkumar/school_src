@@ -1802,3 +1802,5 @@ $lang['refund'] = "Refund";
 $lang['school_leaving_certificate'] = "School Leaving Certificate";
 $lang['school_leaving'] = "School Leaving Student";
 $lang['report_card'] = "Report Card";
+$lang['session_month'] = "Session Month";
+$lang['fee_certificate'] = "Fee Certificate";
