@@ -14,7 +14,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><?php echo $this->lang->line('add'); ?> <?php echo $this->lang->line('school_leaving'); ?> <?php echo $this->lang->line('certificate'); ?></h3>
+                            <h3 class="box-title"><?php echo $this->lang->line('add'); ?> <?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('certificate'); ?></h3>
                         </div><!-- /.box-header -->
                         <div class="box-body">
                             <?php if ($this->session->flashdata('msg')) { ?>
@@ -40,7 +40,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('class'); ?></label> <select id="class_id" name="class_id" class="form-control">
                                     <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                    
                                 </select>
+
                             </div>
                             <div class="form-group">
                                 <label><?php echo $this->lang->line('section'); ?></label> <select id="section_id" name="section_id" class="form-control">
@@ -65,20 +67,19 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                     <div class="box box-primary" id="hroom">
                         <div class="box-header ptbnull">
                             <h3 class="box-title titlefix">
-                                <?php echo $this->lang->line('add'); ?> <?php echo $this->lang->line('school_leaving'); ?> <?php echo $this->lang->line('certificate'); ?>
+                                <?php echo $this->lang->line('certificateforaadhaaraadhaarupdate'); ?>
                             </h3>
                         </div><!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive mailbox-messages">
                                 <div class="download_label"><?php echo $this->lang->line('student'); ?> <?php echo $this->lang->line('certificate'); ?> <?php echo $this->lang->line('list'); ?></div>
-                                <form id="adharCardForm" action="<?php echo base_url("student/create_student_leaving")?>" method="POST" enctype="multipart/form-data">
-                                     
+                                <form id="adharCardForm">
+
                                     <div class="bozero">
                                         <h6 class="pagetitleh-whitebg fs-6">Resident's Details</h6>
                                         <div class="around10">
                                             <div class="row">
                                                 <input type="hidden" name="store_student_id" id="store_student_id">
-                                                <input type="hidden" name="student_leaving_id" id="student_leaving_id" value="0">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="name">First Name</label> <input id="fname" name="fname" placeholder="" type="text" class="form-control">
@@ -94,18 +95,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                         <label for="name">Last Name</label> <input id="lname" name="lname" placeholder="" type="text" class="form-control">
                                                     </div>
                                                 </div>
-                                               
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="gaurdianName">C/o</label> 
-                                                        <input id="gaurdianName" name="gaurdianName" placeholder="" type="text" class="form-control">
-                                                     </div>
+                                                        <label for="gaurdianName">C/o</label> <input id="gaurdianName" name="gaurdianName" placeholder="" type="text" class="form-control">
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="hno">Date of withdrawl</label> 
-                                                        <input id="withdrawl" name="withdrawl" placeholder="" type="text" class="form-control date">
-                                                        <span class="text-danger"><?php echo form_error('withdrawl'); ?></span>
+                                                        <label for="hno">Date of withdrawl</label> <input id="withdrawl" name="withdrawl" placeholder="" type="text" class="form-control date">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -115,88 +112,69 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                                             <option value="1">Pass</option>
                                                             <option value="2">Fail</option>
                                                         </select>
-                                                        <span class="text-danger"><?php echo form_error('result'); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="landmark">Promoted To</label> 
-                                                        <input id="promoted_to" name="promoted_to" placeholder="" type="text" class="form-control">
-                                                        <span class="text-danger"><?php echo form_error('promoted_to'); ?></span>
+                                                        <label for="landmark">Promoted To</label> <input id="landmark" name="landmark" placeholder="" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="Village">Conduct</label>
-                                                        <input id="conduct" name="conduct" placeholder="" type="text" class="form-control">
-                                                        <span class="text-danger"><?php echo form_error('conduct'); ?></span>
+                                                        <label for="Village">Conduct</label> <input id="city" name="city" placeholder="" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="gaurdianName">Student's UDISE ID</label> 
-                                                        <input id="udise_no" name="udise_no" placeholder="" type="text" class="form-control">
-                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="gaurdianName">File No.</label> 
-                                                        <input id="file_no" name="file_no" placeholder="" type="text" class="form-control">
-                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="area">Reason for leaving the school</label> 
-                                                        <input id="reason" name="reason" placeholder="" type="text" class="form-control">
-                                                        <span class="text-danger"><?php echo form_error('reason'); ?></span>
+                                                        <label for="area">Reason for leaving the school</label> <input id="area" name="area" placeholder="" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="postOffice">Remark</label> <input id="remark" name="remark" placeholder="" type="text" class="form-control">
-                                                        <span class="text-danger"><?php echo form_error('remark'); ?></span>
+                                                        <label for="postOffice">Remark</label> <input id="postOffice" name="postOffice" placeholder="" type="text" class="form-control">
                                                     </div>
-                                                </div> 
-                                                
+                                                </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="signatureOfStudent" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('prepared_by'); ?></label>
-                                                        <div><input class="filestyle form-control" type='file' name='prepared_by' id="prepared_by" size='20' />
+                                                        <label for="exampleInputFile">Signature of the Resident/Thumb/Finger Impression</label>
+                                                        <div><input class="filestyle form-control" type='file' name='file' id="file" size='20' />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="studentImg" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('checked_by'); ?></label>
-                                                        <div><input class="filestyle form-control" type='file' name='checked_by' id="checked_by" size='20' />
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('student') . " " . $this->lang->line('photo'); ?></label>
+                                                        <div><input class="filestyle form-control" type='file' name='student_img' id="student_img" size='20' />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="signatureOfStudent" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('counter_sign'); ?></label>
-                                                        <div><input class="filestyle form-control" type='file' name='counter_sign' id="counter_sign" size='20' />
+                                                        <label for="exampleInputFile">Signature of the Resident/Thumb/Finger Impression</label>
+                                                        <div><input class="filestyle form-control" type='file' name='file' id="file" size='20' />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <img src="" id="studentImg" style="height: 200px; width: 200px; display: none;">
-                                                        <label for="exampleInputFile"><?php echo $this->lang->line('principal'); ?></label>
-                                                        <div><input class="filestyle form-control" type='file' name='principal' id="principal" size='20' />
+                                                        <label for="exampleInputFile"><?php echo $this->lang->line('student') . " " . $this->lang->line('photo'); ?></label>
+                                                        <div><input class="filestyle form-control" type='file' name='student_img' id="student_img" size='20' />
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                            </div>                                           
+                                            </div>
+                                           
                                         </div>
                                     </div>
                                     <div class="box-footer">
-                                        <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save')." And Downlod"; ?></button>
+                                        <a href="#" id="downlod" class="btn btn-info pull-left" style="display:none ;">Downlod</a>
+                                        <!-- <button type="button" id="downlod" class="btn btn-info pull-left">Downlod</button> -->
+                                        <button type="submit" class="btn btn-info pull-right"><?php echo $this->lang->line('save'); ?></button>
                                     </div>
                                 </form>
                             </div><!-- /.mail-box-messages -->
@@ -244,21 +222,21 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     $(document).on('change', '#student_id', function(e) {
         $('#adharCardForm')[0].reset();
         var student_id = $(this).val();
-        // $("#downlod").attr("href", "<?php // echo base_url() ?>/admin/student/download_student_leaving/" + student_id);
-        // $("#downlod").attr("target", "blank")
-        // $("#downlod").attr("style", "display: block;")
+        $("#downlod").attr("href", "<?php echo base_url() ?>/admin/student_aadhar_card/downlod/" + student_id);
+        $("#downlod").attr("target", "blank")
+        $("#downlod").attr("style", "display: block;")
         var base_url = '<?php echo base_url() ?>';
         $("#houseNo").val('');
         $.ajax({
             type: "GET",
-            url: base_url + "student/getStudent_forLeavingSchool",
+            url: base_url + "student/getStudent",
             data: {
                 'student_id': student_id,
             },
             dataType: "json",
-            success: function(result) {                
-                let student_data = result.student_data;
-                let student_leaving = result.student_leaving;
+            success: function(result) {
+                let student_data = result.student_data[0];
+                let student_aadhar_data = result.student_aadhar_data[0];
                 $("#store_student_id").val(student_id);
                 $("#aadhar_card").val(student_data.adhar_no);
                 $("#fname").val(student_data.firstname);
@@ -269,17 +247,114 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 $("#state").val(student_data.state);
                 $("#pincode").val(student_data.pincode);
                 $("#dob").val(student_data.dob);
+                if (student_aadhar_data) {
+                    if (student_aadhar_data.house_no) {
+                        $("#houseNo").val(student_aadhar_data.house_no);
+                    }
 
-                if (student_leaving) {
-                    $("#student_leaving_id").val(student_leaving.id);
-                    $("#withdrawl").val(student_leaving.withdrawl);
-                    $("#result").val(student_leaving.result);
-                    $("#promoted_to").val(student_leaving.promoted_to);
-                    $("#conduct").val(student_leaving.conduct);
-                    $("#reason").val(student_leaving.reason_for_leaving);
-                    $("#remark").val(student_leaving.remark);    
-                    $("#file_no").val(student_leaving.file_no);    
-                    $("#udise_no").val(student_leaving.udise_no);                    
+                    if (student_aadhar_data.street) {
+                        $("#street").val(student_aadhar_data.street);
+                    }
+                    if (student_aadhar_data.landmark) {
+                        $("#landmark").val(student_aadhar_data.landmark);
+                    }
+                    if (student_aadhar_data.area) {
+                        $("#area").val(student_aadhar_data.area);
+                    }
+                    if (student_aadhar_data.post_office) {
+                        $("#postOffice").val(student_aadhar_data.post_office);
+                    }
+                    if (student_aadhar_data.district) {
+                        $("#district").val(student_aadhar_data.district);
+                    }
+                    if (student_aadhar_data.certifier_name) {
+                        $("#certifierName").val(student_aadhar_data.certifier_name);
+                    }
+                    if (student_aadhar_data.certifier_designation) {
+                        $("#designation").val(student_aadhar_data.certifier_designation);
+                    }
+                    if (student_aadhar_data.certifier_office_add) {
+                        $("#ofcAdd").val(student_aadhar_data.certifier_office_add);
+                    }
+                    if (student_aadhar_data.cerifier_contact) {
+                        $("#contactNo").val(student_aadhar_data.cerifier_contact);
+                    }
+                    if (student_aadhar_data.gajet_officer_group_A == 'on') {
+                        $("#gajet_officer_group_A").attr('checked', true);
+                    }
+                    if (student_aadhar_data.village_panchayat == 'on') {
+                        $("#village_panchayat").attr('checked', true);
+                    }
+                    if (student_aadhar_data.gajet_officer_group_B == 'on') {
+                        $("#gajet_officer_group_B").attr('checked', true);
+                    }
+                    if (student_aadhar_data.councilor == 'on') {
+                        $("#councilor").attr('checked', true);
+                    }
+                    if (student_aadhar_data.tehsildar == 'on') {
+                        $("#tehsildar").attr('checked', true);
+                    }
+                    if (student_aadhar_data.hrei == 'on') {
+                        $("#hrei").attr('checked', true);
+                    }
+                    if (student_aadhar_data.swmho == 'on') {
+                        $("#swmho").attr('checked', true);
+                    }
+                    if (student_aadhar_data.epfo == 'on') {
+                        $("#epfo").attr('checked', true);
+                    }
+                    if (student_aadhar_data.overwriting == 'on') {
+                        $("#overwriting").attr('checked', true);
+                    }
+                    if (student_aadhar_data.issue_date == 'on') {
+                        $("#issue_date").attr('checked', true);
+                    }
+                    if (student_aadhar_data.resident_sign == 'on') {
+                        $("#resident_sign").attr('checked', true);
+                    }
+                    if (student_aadhar_data.certifier_details == 'on') {
+                        $("#certifier_details").attr('checked', true);
+                    }
+                    if (student_aadhar_data.cross_stamp == 'on') {
+                        $("#cross_stamp").attr('checked', true);
+                    }
+                    if (student_aadhar_data.resident == 'on') {
+                        $("#resident").attr('checked', true);
+                    }
+                    if (student_aadhar_data.nri == 'on') {
+                        $("#nri").attr('checked', true);
+                    }
+                    if (student_aadhar_data.newenrolmment == 'on') {
+                        $("#newenrolmment").attr('checked', true);
+                    }
+                    if (student_aadhar_data.updaterequest == 'on') {
+                        $("#updaterequest").attr('checked', true);
+                    }
+
+                    if (student_aadhar_data.enterdate) {
+                        $("#enterdate").val(student_aadhar_data.enterdate);
+                    }
+
+
+
+
+
+
+
+                    if (student_aadhar_data.thumb_image) {
+                        $("#signatureOfStudent").attr("style", "height: 200px; width: 200px; display: block;")
+
+                        $("#signatureOfStudent").attr('src', '<?php echo base_url(); ?>/uploads/aadhar_card/student_sign/' + student_aadhar_data.thumb_image)
+                    }
+                    if (student_aadhar_data.stamp_img) {
+                        $("#studcerifierSign").attr("style", "height: 200px; width: 200px; display: block;")
+                        $("#studcerifierSign").attr('src', '<?php echo base_url(); ?>/uploads/aadhar_card/certifier_sign/' + student_aadhar_data.stamp_img)
+                    }
+                    if (student_aadhar_data.student_img) {
+                        $("#studentImg").attr("style", "height: 200px; width: 200px; display: block;")
+                        $("#studentImg").attr('src', '<?php echo base_url(); ?>/uploads/aadhar_card/student_img/' + student_aadhar_data.student_img)
+                    }
+
                 } else {
                     $(".resetcheckbox").attr('checked', false);
                     $("#signatureOfStudent").attr("style", "display:none;")
@@ -293,28 +368,29 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
 
 <script>
-    // $(document).ready(function() {
-    //     $('#adharCardForm').validate({
-    //         submitHandler: function(form) {
-    //             var base_url = '<?php echo base_url() ?>';
-    //             let formData = new FormData(document.getElementById('adharCardForm'));
-    //             $.ajax({
-    //                 type: "POST",
-    //                 url: base_url + "student/create_student_leaving",
-    //                 data: formData,
-    //                 async: false,
-    //                 cache: false,
-    //                 contentType: false,
-    //                 processData: false,
-    //                 success: function(respons) {
-    //                     $("#successmsg").attr("style", "display: block;");
-    //                     $("html, body").animate({
-    //                         scrollTop: 0
-    //                     }, "slow");
-    //                     return false;
-    //                 }
-    //             });
-    //         }
-    //     })
-    // })
+    $(document).ready(function() {
+        $('#adharCardForm').validate({
+            submitHandler: function(form) {
+                var base_url = '<?php echo base_url() ?>';
+                let formData = new FormData(document.getElementById('adharCardForm'));
+                $.ajax({
+                    type: "POST",
+                    url: base_url + "admin/student_aadhar_card/create",
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        $("#successmsg").attr("style", "display: block;");
+                        $("html, body").animate({
+                            scrollTop: 0
+                        }, "slow");
+                        return false;
+
+                    }
+                });
+            }
+        })
+    })
 </script>

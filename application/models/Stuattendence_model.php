@@ -204,6 +204,27 @@ class Stuattendence_model extends MY_Model
         return $query->result_array();
     }
 
+    public function get_stu_att_for_leaving($student_session_id = null){
+        $result = "";
+        $this->db->select('count(id) as total_number');
+        $this->db->where('student_session_id', $student_session_id);
+        $this->db->where('attendence_type_id', 1);
+        $query = $this->db->get('student_attendences');
+        if ($query->num_rows() > 0) {
+            $total_number = $query->row_array('total_number');
+            $result .= $total_number['total_number'];
+        }
+        $result .= " Out Of ";
+        $this->db->select('count(id) as total_number');
+        $this->db->where('student_session_id', $student_session_id);
+        $query = $this->db->get('student_attendences');
+        if ($query->num_rows() > 0) {
+            $total_number = $query->row_array('total_number');
+            $result .= $total_number['total_number'];
+        }
+        return $result;
+    }
+
 
 
 

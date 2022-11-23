@@ -1804,3 +1804,10 @@ $lang['school_leaving'] = "School Leaving Student";
 $lang['report_card'] = "Report Card";
 $lang['session_month'] = "Session Month";
 $lang['fee_certificate'] = "Fee Certificate";
+
+$lang['bonafide_certificate'] = "Bonafide Certificate";
+$lang['leaving_certificate'] = "Leaving Certificate";
+$lang['school_leaving'] = "School Leaving";
+$lang['checked_by'] = "Checked By";
+$lang['counter_sign'] = "Counter Sign";
+$lang['prepared_by'] = "Prepared By";

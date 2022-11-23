@@ -2590,21 +2590,233 @@ class Student extends Admin_Controller
         }
         echo json_encode($resultlist);
     }
-
-
-
-
-    public function studentLeaving()
-    {
+    /**
+     * Student school leaving
+     *
+     * @return void
+     */
+    public function studentLeaving(){
         if (!$this->rbac->hasPrivilege('student', 'can_add')) {
             access_denied();
         }
         $branch = $this->staff_model->getBranch();
         $data['branch'] = $branch;
-        $this->session->set_userdata('top_menu', 'Certificate');
-        $this->session->set_userdata('sub_menu', 'admin/student_aadhar_card');
+        $this->session->set_userdata('top_menu', 'Student Information');
+        $this->session->set_userdata('sub_menu', 'admin/student_leaving');
         $this->load->view('layout/header', $data);
         $this->load->view('student/studentStudentLeaving', $data);
         $this->load->view('layout/footer', $data);
     }
+
+    /**
+     * Create Student Leaving Function
+     *
+     * @return void
+     */
+    public function create_student_leaving(){
+       
+        $this->session->set_userdata('top_menu', 'Student Information');
+        $this->session->set_userdata('sub_menu', 'student/studentLeaving');
+        
+        $this->form_validation->set_rules('withdrawl', $this->lang->line('withdrawl'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('result', $this->lang->line('result'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('conduct', $this->lang->line('conduct'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('promoted_to', $this->lang->line('promoted_to'), 'trim|required|xss_clean');
+        $this->form_validation->set_rules('reason', $this->lang->line('reason'), 'trim|required|xss_clean');
+        
+        $branch = $this->staff_model->getBranch();
+        $data['branch'] = $branch;
+        $data['old_data'] = $_POST;
+        if ($this->form_validation->run() == false) {
+            $data['status']= false;            
+            $this->load->view('layout/header', $data);
+            $this->load->view('student/studentStudentLeaving', $data);
+            $this->load->view('layout/footer', $data);
+        } else {          
+            $student_id = $this->input->post('store_student_id');
+            $prepared_by ="";
+            if (isset($_FILES["prepared_by"]) && !empty($_FILES['prepared_by']['name'])) {
+                $fileInfo = pathinfo($_FILES["prepared_by"]["name"]);
+                $prepared_by = "prepared_by" . '.' . $fileInfo['extension'];
+                move_uploaded_file($_FILES["prepared_by"]["tmp_name"], "./uploads/prepared_by_sign/" . $prepared_by);
+            }
+            $checked_by = "";
+            if (isset($_FILES["checked_by"]) && !empty($_FILES['checked_by']['name'])) {
+                $fileInfo = pathinfo($_FILES["checked_by"]["name"]);
+                $checked_by = "checked_by" . '.' . $fileInfo['extension'];
+                move_uploaded_file($_FILES["checked_by"]["tmp_name"], "./uploads/checked_by_sign/" . $checked_by);
+            }
+            $counter_sign = "";
+            if (isset($_FILES["counter_sign"]) && !empty($_FILES['counter_sign']['name'])) {
+                $fileInfo = pathinfo($_FILES["counter_sign"]["name"]);
+                $counter_sign = "counter_sign" . '.' . $fileInfo['extension'];
+                move_uploaded_file($_FILES["counter_sign"]["tmp_name"], "./uploads/counter_sign/" . $counter_sign);
+            }
+            $principal = "";
+            if (isset($_FILES["principal"]) && !empty($_FILES['principal']['name'])) {
+                $fileInfo = pathinfo($_FILES["principal"]["name"]);
+                $principal = "principal" . '.' . $fileInfo['extension'];
+                move_uploaded_file($_FILES["principal"]["tmp_name"], "./uploads/principal_sign/" . $principal);
+            }
+
+            $inserted_data = array(
+                'withdrawl' => date('Y-m-d',strtotime($this->input->post('withdrawl'))),
+                'result' => $this->input->post('result'),
+                'promoted_to' => $this->input->post('promoted_to'),
+                'conduct' => $this->input->post('conduct'),
+                'reason_for_leaving' => $this->input->post('reason'),
+                'remark' => $this->input->post('remark'),
+                'student_id' => $this->input->post('store_student_id'),
+                'udise_no' => $this->input->post('udise_no'),
+                'file_no' => $this->input->post('file_no'),
+                'created_by' => $_SESSION['admin']['id'],
+                'prepared_by' => $prepared_by,
+                'checked_by' => $checked_by,
+                'counter_sign' => $counter_sign,
+                'principal'  => $principal,
+            );    
+            $leaving_id = $this->input->post('student_leaving_id'); 
+            if($this->input->post('store_student_id')>0){              
+               $insert_id = $this->student_model->update_student_leaving($leaving_id,$inserted_data);
+            }else{
+                $insert_id = $this->student_model->add_student_leaving($inserted_data);
+            }
+
+            if($insert_id>0){
+                $this->download_student_leaving($student_id);
+                $this->session->set_flashdata('msg', '<div class="alert alert-success">' . $this->lang->line('success_message') . '</div>');
+                redirect('student/studentLeaving');
+                if ($prepared_by!='') {
+                    $filename = 'uploads/prepared_by_sign/'.$prepared_by;
+                    if (file_exists($filename)) {
+                        unlink('uploads/prepared_by_sign/' .$prepared_by);
+                    }
+                }
+                if ($checked_by!='') {
+                    $filename = 'uploads/checked_by_sign/'.$checked_by;
+                    if (file_exists($filename)) {
+                        unlink('uploads/checked_by_sign/' .$checked_by);
+                    }
+                }
+                if ($counter_sign!='') {
+                    $filename = 'uploads/counter_sign/'.$counter_sign;
+                    if (file_exists($filename)) {
+                        unlink('uploads/counter_sign/' .$counter_sign);
+                    }
+                }
+                if ($principal!='') {
+                    $filename = 'uploads/principal_sign/'.$principal;
+                    if (file_exists($filename)) {
+                        unlink('uploads/principal_sign/' .$principal);
+                    }
+                }
+            }  else{
+                $this->load->view('layout/header', $data);
+                $this->load->view('student/studentStudentLeaving', $data);
+                $this->load->view('layout/footer', $data);
+            }
+        }
+    }
+
+    /**
+     * Download Student Leaving Function
+     *
+     * @return void
+     */
+    public function download_student_leaving($student_id){
+        $student_data     = $this->student_model->getStudentsById($student_id);
+        $student_leaving  = $this->student_model->get_student_leaving($student_id);
+        $setting_result   = $this->setting_model->getSetting();    
+        $school_logo      = $this->setting_model->getAdminlogo2(); 
+        $school_logo      = base_url().'uploads/school_content/admin_logo/'.$school_logo;
+        
+       
+        $student_session_id = $student_data[0]->student_session_id;
+        $student_due_fee      = $this->studentfeemaster_model->getStudentFees($student_session_id);
+    
+        $session_end_month='';
+        if(!empty($student_due_fee)){ 
+            foreach($student_due_fee as $student_fee){
+                $student_fee_details = $student_fee->fees[0];                 
+                $amount_detail = json_decode($student_fee_details->amount_detail);
+                if(!empty($amount_detail)){
+                    $session_end_month = $student_fee_details->session_month;
+                } 
+            }
+        } 
+        $attendence = $this->stuattendence_model->get_stu_att_for_leaving($student_session_id);     
+        $result = array(
+            'student_data'    => (!empty($student_data)?$student_data[0]:[]),
+            'student_leaving' => $student_leaving,
+            'school'          => $setting_result,
+            'school_logo'     => $school_logo,
+            'school_due'      => $session_end_month,
+            'attendence'      => $attendence,
+        );      
+
+        $this->load->library('Pdf');
+        $html = $this->load->view('admin/certificate/leaving_certificate_pdf',$result, true);       
+        $this->pdf->createPDF($html, 'mypdf', false);
+    }
+
+    /**
+     * get student data for School Leaving 
+     *
+     * @return void
+     */
+    public function getStudent_forLeavingSchool(){
+        $student_id = $this->input->get('student_id');
+        $student_data     = $this->student_model->getStudentsById($student_id);
+        $student_leaving  = $this->student_model->get_student_leaving($student_id);
+
+        if($student_leaving->prepared_by!=""){     
+            $filename = 'uploads/prepared_by_sign/'.$student_leaving->prepared_by;
+            if (file_exists($filename)) {
+                unlink('uploads/prepared_by_sign/' .$student_leaving->prepared_by);
+            }
+        }
+
+        if($student_leaving->checked_by!=""){     
+            $filename = 'uploads/checked_by_sign/'.$student_leaving->checked_by;
+            if (file_exists($filename)) {
+                unlink('uploads/checked_by_sign/' .$student_leaving->checked_by);
+            }
+        }
+
+        if($student_leaving->counter_sign!=""){     
+            $filename = 'uploads/counter_sign/'.$student_leaving->counter_sign;
+            if (file_exists($filename)) {
+                unlink('uploads/counter_sign/' .$student_leaving->counter_sign);
+            }
+        }
+
+        if($student_leaving->principal!=""){     
+            $filename = 'uploads/principal_sign/'.$student_leaving->principal;
+            if (file_exists($filename)) {
+                unlink('uploads/principal_sign/' .$student_leaving->principal);
+            }
+        }     
+        $result = array(
+            'student_data' => (!empty($student_data)?$student_data[0]:[]),
+            'student_leaving' => (!empty($student_leaving)?$student_leaving:[]),
+        );
+        echo json_encode($result);
+    }
+
+
+
+
+    // public function studentLeaving()
+    // {
+    //     if (!$this->rbac->hasPrivilege('student', 'can_add')) {
+    //         access_denied();
+    //     }
+    //     $branch = $this->staff_model->getBranch();
+    //     $data['branch'] = $branch;
+    //     $this->session->set_userdata('top_menu', 'Certificate');
+    //     $this->session->set_userdata('sub_menu', 'admin/student_aadhar_card');
+    //     $this->load->view('layout/header', $data);
+    //     $this->load->view('student/studentStudentLeaving', $data);
+    //     $this->load->view('layout/footer', $data);
+    // }
 }

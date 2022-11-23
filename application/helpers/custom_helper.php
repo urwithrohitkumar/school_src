@@ -269,7 +269,9 @@ function convert_number($number)
     if ($deca || $n) {
         if (!empty($result))
         {
-            $result .= " and ";
+            // $result .= " and ";
+            $result .= " ";
+
         }
         if ($deca < 2)
         {

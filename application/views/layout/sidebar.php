@@ -302,7 +302,8 @@
 
                         ?>
 
-                            <li class="<?php echo set_Submenu('student/studentLeaving'); ?>"><a href="<?php echo base_url(); ?>student/studentLeaving"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('school_leaving'); ?></a></li>
+                            <!-- <li class="<?php echo set_Submenu('student/studentLeaving'); ?>"><a href="<?php echo base_url(); ?>student/studentLeaving"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('school_leaving'); ?></a></li> -->
+                            <li class="<?php echo set_Submenu('student/student_leaving'); ?>"><a href="<?php echo base_url(); ?>student/studentLeaving"><i class="fa fa-angle-double-right"></i> <?php echo $this->lang->line('school_leaving'); ?></a></li>
 
                         <?php
 

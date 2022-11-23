@@ -1264,6 +1264,102 @@ class Studentfee extends Admin_Controller
 
 
 
+    
+    /**
+     * Bonafide Certificate function
+     *
+     * @return void
+     */
+    function bonafide_certificate(){
+        if (!$this->rbac->hasPrivilege('bonafide_certificate', 'can_view')) {
+            access_denied();    
+        }
+        $class                   = $this->class_model->get();
+        $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
+        $this->session->set_userdata('top_menu', 'Certificate');
+        $this->session->set_userdata('sub_menu', 'admin/bonafide_certificate');
+        $this->load->view('layout/header');
+        $this->load->view('admin/certificate/bonafide_certificate', $data);
+        $this->load->view('layout/footer');
+    }
+
+    /**
+     * Bonafide Certificate Download
+     *
+     * @return void
+     */
+    function bonafide_certificate_download(){
+        $student_id = $this->input->post('student_id');
+        $section_id = $this->input->post('section_id');
+        $class_id = $this->input->post('class_id');
+        $branch_id = $this->input->post('branch_id');
+       
+        $student_data = $this->student_model->getStudentsById($student_id);  
+        $school_logo = $this->setting_model->getAdminlogo2(); 
+        $school_logo = base_url().'uploads/school_content/admin_logo/'.$school_logo;
+       
+        $setting_result = $this->setting_model->getSetting();
+        $result = array(
+            'student_data' => $student_data[0],
+            'school' => $setting_result,
+            'school_logo'  => $school_logo,
+            'current_session' => $this->setting_model->getCurrentSessionName()   
+        ); 
+       
+        $this->load->library('Pdf');
+        $html = $this->load->view('admin/certificate/bonafide_certificate_pdf',$result, true);
+        $this->pdf->createPDF($html, 'mypdf', false);
+    }   
+
+    /**
+     * School Leaving Certificate Function
+     *
+     * @return void
+     */
+    function leaving_certificate(){
+        if (!$this->rbac->hasPrivilege('leaving_certificate', 'can_view')) {
+            access_denied();    
+        }
+        $class                   = $this->class_model->get();
+        $data['classlist']       = $class;
+        $branch = $this->staff_model->getBranch();
+        $data['branch']= $branch;
+        $this->session->set_userdata('top_menu', 'Certificate');
+        $this->session->set_userdata('sub_menu', 'admin/leaving_certificate');
+        $this->load->view('layout/header');
+        $this->load->view('admin/certificate/leaving_certificate', $data);
+        $this->load->view('layout/footer');
+    }
+
+    /**
+     * School Leaving Certificate Download
+     *
+     * @return void
+     */
+    function leaving_certificate_download(){
+        $student_id = $this->input->post('student_id');
+             
+        $student_data = $this->student_model->getStudentsById($student_id);  
+        $school_logo = $this->setting_model->getAdminlogo2(); 
+        $school_logo = base_url().'uploads/school_content/admin_logo/'.$school_logo;
+       
+        $setting_result = $this->setting_model->getSetting();
+        $result = array(
+            'student_data' => $student_data[0],
+            'school' => $setting_result,
+            'school_logo'  => $school_logo,
+            'current_session' => $this->setting_model->getCurrentSessionName()   
+        ); 
+     
+        $this->load->library('Pdf');
+        $html = $this->load->view('admin/certificate/leaving_certificate_pdf',$result, true);
+        $this->pdf->createPDF($html, 'mypdf', false);
+    }
+
+
+
     /**
      * Fee Group According to Branch
      */
